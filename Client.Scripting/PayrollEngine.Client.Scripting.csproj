@@ -1,0 +1,203 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyName>PayrollEngine.Client.Scripting</AssemblyName>
+		<RootNamespace>PayrollEngine.Client.Scripting</RootNamespace>
+		<Authors>Jani Giannoudis</Authors>
+		<Company>Software Consulting Giannoudis</Company>
+		<Product>Payroll Engine</Product>
+		<Description>Payroll Engine Client Scripting Services</Description>
+	</PropertyGroup>
+
+	<!-- help file generation -->
+	<PropertyGroup>
+		<DocumentationFile>$(AssemblyName).xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- script core -->
+		<EmbeddedResource Include="ClientScript.cs">
+			<LogicalName>ClientScript.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Cache\Cache.cs">
+			<LogicalName>Cache\Cache.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Extensions.cs">
+			<LogicalName>Extensions.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Date.cs">
+			<LogicalName>Date.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="DatePeriod.cs">
+			<LogicalName>DatePeriod.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Tools.cs">
+			<LogicalName>Tools.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Local\Locals.cs">
+			<LogicalName>Local\Locals.cs</LogicalName>
+		</EmbeddedResource>
+
+		<EmbeddedResource Include="PayrollValue.cs">
+			<LogicalName>PayrollValue.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="PeriodValue.cs">
+			<LogicalName>PeriodValue.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="CaseValue.cs">
+			<LogicalName>CaseValue.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="CasePayrollValue.cs">
+			<LogicalName>CasePayrollValue.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="PayrollResults.cs">
+			<LogicalName>PayrollResults.cs</LogicalName>
+		</EmbeddedResource>
+
+		<!-- functions -->
+		<EmbeddedResource Include="Function\Function.cs">
+			<LogicalName>Function\Function.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\PayrollFunction.cs">
+			<LogicalName>Function\PayrollFunction.cs</LogicalName>
+		</EmbeddedResource>
+
+		<!-- collector -->
+		<EmbeddedResource Include="Function\CollectorFunction.cs">
+			<LogicalName>Function\CollectorFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorStartFunction.cs">
+			<LogicalName>Function\CollectorStartFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorApplyFunction.cs">
+			<LogicalName>Function\CollectorApplyFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorEndFunction.cs">
+			<LogicalName>Function\CollectorEndFunction.cs</LogicalName>
+		</EmbeddedResource>
+
+		<!-- case -->
+		<EmbeddedResource Include="Function\CaseFunction.cs">
+			<LogicalName>Function\CaseFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseChangeFunction.cs">
+			<LogicalName>Function\CaseChangeFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseAvailableFunction.cs">
+			<LogicalName>Function\CaseAvailableFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseBuildFunction.cs">
+			<LogicalName>Function\CaseBuildFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseValidateFunction.cs">
+			<LogicalName>Function\CaseValidateFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseAction.cs">
+			<LogicalName>Function\CaseAction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseAvailableActions.cs">
+			<LogicalName>Function\CaseAvailableActions.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseBuildActions.cs">
+			<LogicalName>Function\CaseBuildActions.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseValidateActions.cs">
+			<LogicalName>Function\CaseValidateActions.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseInputActions.cs">
+			<LogicalName>Function\CaseInputActions.cs</LogicalName>
+		</EmbeddedResource>
+
+		<!-- case relation -->
+		<EmbeddedResource Include="Function\CaseRelationFunction.cs">
+			<LogicalName>Function\CaseRelationFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseRelationBuildFunction.cs">
+			<LogicalName>Function\CaseRelationBuildFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseRelationValidateFunction.cs">
+			<LogicalName>Function\CaseRelationValidateFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseRelationBuildActions.cs">
+			<LogicalName>Function\CaseRelationBuildActions.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseRelationValidateActions.cs">
+			<LogicalName>Function\CaseRelationValidateActions.cs</LogicalName>
+		</EmbeddedResource>
+
+		<!-- wage type -->
+		<EmbeddedResource Include="Function\WageTypeFunction.cs">
+			<LogicalName>Function\WageTypeFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\WageTypeValueFunction.cs">
+			<LogicalName>Function\WageTypeValueFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\WageTypeResultFunction.cs">
+			<LogicalName>Function\WageTypeResultFunction.cs</LogicalName>
+		</EmbeddedResource>
+
+		<!-- payrun -->
+		<EmbeddedResource Include="Function\PayrunFunction.cs">
+			<LogicalName>Function\PayrunFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\PayrunStartFunction.cs">
+			<LogicalName>Function\PayrunStartFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\PayrunEmployeeAvailableFunction.cs">
+			<LogicalName>Function\PayrunEmployeeAvailableFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\PayrunEmployeeStartFunction.cs">
+			<LogicalName>Function\PayrunEmployeeStartFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\PayrunEmployeeEndFunction.cs">
+			<LogicalName>Function\PayrunEmployeeEndFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\PayrunWageTypeAvailableFunction.cs">
+			<LogicalName>Function\PayrunWageTypeAvailableFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\PayrunEndFunction.cs">
+			<LogicalName>Function\PayrunEndFunction.cs</LogicalName>
+		</EmbeddedResource>
+
+		<!-- report -->
+		<EmbeddedResource Include="Function\ReportFunction.cs">
+			<LogicalName>Function\ReportFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\ReportBuildFunction.cs">
+			<LogicalName>Function\ReportBuildFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\ReportStartFunction.cs">
+			<LogicalName>Function\ReportStartFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\ReportEndFunction.cs">
+			<LogicalName>Function\ReportEndFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Report\Report.cs">
+			<LogicalName>Report\Report.cs</LogicalName>
+		</EmbeddedResource>
+
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
+		<PackageReference Include="PayrollEngine.Client.Core" Version="0.5.0-pre-230411" />
+	</ItemGroup>
+
+	<!-- include xml documention files to the nuget package -->
+	<ItemGroup>
+		<!-- ReSharper disable UnknownProperty -->
+		<None Include="$(OutputDir)*.xml" Pack="true">
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</None>
+		<!-- ReSharper restore UnknownProperty -->
+	</ItemGroup>
+
+	<!-- copy nuget to package folder -->
+	<Target Name="CopyPackage" AfterTargets="Pack">
+		<Message Importance="High" Text="Deploying package global" />
+		<!-- ReSharper disable UnknownProperty -->
+		<Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(ProjectDir)\..\..\.packages" />
+		<!-- ReSharper restore UnknownProperty -->
+	</Target>
+
+</Project>
