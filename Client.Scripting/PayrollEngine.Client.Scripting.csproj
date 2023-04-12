@@ -180,24 +180,23 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
-		<PackageReference Include="PayrollEngine.Client.Core" Version="0.5.0-pre-230411" />
+		<PackageReference Include="PayrollEngine.Client.Core" Version="0.5.0-pre-230412-2" />
 	</ItemGroup>
 
-	<!-- include xml documention files to the nuget package -->
+	<!-- include xml documention files and json schemas to the nuget package -->
 	<ItemGroup>
-		<!-- ReSharper disable UnknownProperty -->
 		<None Include="$(OutputDir)*.xml" Pack="true">
 			<PackageCopyToOutput>true</PackageCopyToOutput>
 		</None>
-		<!-- ReSharper restore UnknownProperty -->
+		<None Include="$(OutputDir)*.schema.json" Pack="true">
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</None>
 	</ItemGroup>
 
-	<!-- copy nuget to package folder -->
-	<Target Name="CopyPackage" AfterTargets="Pack">
-		<Message Importance="High" Text="Deploying package global" />
-		<!-- ReSharper disable UnknownProperty -->
-		<Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(ProjectDir)\..\..\.packages" />
-		<!-- ReSharper restore UnknownProperty -->
+	<!-- publish package -->
+	<Target Name="PublishPackage" AfterTargets="Pack" Condition="exists('$(PayrollEnginePackageDir)')">
+		<Message Importance="High" Text="Publish package..." />
+		<Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(PayrollEnginePackageDir)" />
 	</Target>
 
 </Project>
