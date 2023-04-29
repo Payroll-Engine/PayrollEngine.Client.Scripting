@@ -1176,7 +1176,7 @@ public abstract partial class PayrollFunction : Function
         var underlyingType = Nullable.GetUnderlyingType(type);
         // an underlying nullable type, so the type is nullable
         // apply logic for null or empty test
-        if (underlyingType != null && string.IsNullOrEmpty(value))
+        if (underlyingType != null && string.IsNullOrWhiteSpace(value))
         {
             return null;
         }
@@ -1254,7 +1254,7 @@ public abstract partial class PayrollFunction : Function
             // inverted condition action
             var invert = false;
             var action = node.ConditionAction;
-            if (node.IsCondition && node.ConditionAction.StartsWith("!"))
+            if (node.IsCondition && node.ConditionAction.StartsWith('!'))
             {
                 invert = true;
                 action = action.RemoveFromStart("!");

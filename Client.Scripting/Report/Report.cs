@@ -818,7 +818,7 @@ public class Filter : ExpressionBase
     /// <returns>Updated query filter</returns>
     public virtual Filter Group()
     {
-        if (Expression.StartsWith("(") && Expression.EndsWith(")"))
+        if (Expression.StartsWith('(') && Expression.EndsWith(')'))
         {
             return this;
         }
@@ -1427,7 +1427,7 @@ public static class DataRowExtensions
         {
             return defaultValue;
         }
-        if (type == typeof(string) && !json.StartsWith("\""))
+        if (type == typeof(string) && !json.StartsWith('"'))
         {
             return json;
         }

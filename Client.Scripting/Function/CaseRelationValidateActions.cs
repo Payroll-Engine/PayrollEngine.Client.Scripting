@@ -18,7 +18,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         valueTypes: new[] { BooleanType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("IsTrue", "Validate for true value", "Validate", "Compare")]
+    [CaseValidateAction("IsTrue", "Validate for true value", "Validation", "Compare")]
     public void IsTrue(CaseRelationActionContext context, object source, object compareDate = null)
     {
         // value compare date
@@ -46,7 +46,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         valueTypes: new[] { BooleanType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("IsFalse", "Validate for false value", "Validate", "Compare")]
+    [CaseValidateAction("IsFalse", "Validate for false value", "Validation", "Compare")]
     public void IsFalse(CaseRelationActionContext context, object source, object compareDate = null)
     {
         // value compare date
@@ -77,7 +77,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseRelationValidateAction("Equal", "Validate for equal value", "Validate", "Compare")]
+    [CaseRelationValidateAction("Equal", "Validate for equal value", "Validation", "Compare")]
     public void Equal(CaseRelationActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -155,7 +155,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseRelationValidateAction("NotEqual", "Validate for different value", "Validate", "Compare")]
+    [CaseRelationValidateAction("NotEqual", "Validate for different value", "Validation", "Compare")]
     public void NotEqual(CaseRelationActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -225,7 +225,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseRelationValidateAction("GreaterThan", "Validate for greater value", "Validate", "Compare")]
+    [CaseRelationValidateAction("GreaterThan", "Validate for greater value", "Validation", "Compare")]
     public void GreaterThan(CaseRelationActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -287,7 +287,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseRelationValidateAction("GreaterEqualThan", "Validate for greater or equal value", "Validate", "Compare")]
+    [CaseRelationValidateAction("GreaterEqualThan", "Validate for greater or equal value", "Validation", "Compare")]
     public void GreaterEqualThan(CaseRelationActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -349,7 +349,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseRelationValidateAction("LessThan", "Validate for smaller value", "Validate", "Compare")]
+    [CaseRelationValidateAction("LessThan", "Validate for smaller value", "Validation", "Compare")]
     public void LessThan(CaseRelationActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -411,7 +411,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseRelationValidateAction("LessEqualThan", "Validate for smaller or equal value", "Validate", "Compare")]
+    [CaseRelationValidateAction("LessEqualThan", "Validate for smaller or equal value", "Validation", "Compare")]
     public void LessEqualThan(CaseRelationActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -481,7 +481,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceValue })]
-    [CaseRelationValidateAction("Between", "Validate range value", "Validate", "Compare")]
+    [CaseRelationValidateAction("Between", "Validate range value", "Validation", "Compare")]
     public void Between(CaseRelationActionContext context, object source, object start, object end, object compareDate = null)
     {
         GreaterEqualThan(context, source, start, compareDate);

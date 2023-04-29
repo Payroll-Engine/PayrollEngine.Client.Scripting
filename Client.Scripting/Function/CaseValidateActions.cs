@@ -15,7 +15,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     [ActionIssue("MissingCaseValue", "Missing value (0)", 1)]
     [ActionIssue("InvalidEmail", "(0) with invalid E-Mail (1)", 2)]
-    [CaseValidateAction("Email", "Validate field email address", "Validate", "FieldValue")]
+    [CaseValidateAction("Email", "Validate field email address", "Validation", "FieldValue")]
     public void Email(CaseChangeActionContext context)
     {
         var sourceValue = NewCaseFieldActionValue<string>(context);
@@ -39,7 +39,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionIssue("InvalidRegexMatch", "(0) with invalid value (1)", 2)]
     [ActionParameter("pattern", "The regular expression test pattern",
         valueTypes: new[] { StringType })]
-    [CaseValidateAction("Regex", "Validate regular expression pattern", "Validate", "FieldValue")]
+    [CaseValidateAction("Regex", "Validate regular expression pattern", "Validation", "FieldValue")]
     public void Regex(CaseChangeActionContext context, string pattern)
     {
         if (string.IsNullOrWhiteSpace(pattern))
@@ -61,7 +61,7 @@ public class CaseValidateActions : CaseChangeActionsBase
 
     /// <summary>Validate for defined value</summary>
     [ActionIssue("UndefinedValue", "(0) should be not empty", 1)]
-    [CaseValidateAction("Defined", "Validate for available case value", "Validate", "FieldValue")]
+    [CaseValidateAction("Defined", "Validate for available case value", "Validation", "FieldValue")]
     public void Defined(CaseChangeActionContext context)
     {
         var sourceValue = NewCaseFieldActionValue<object>(context);
@@ -73,7 +73,7 @@ public class CaseValidateActions : CaseChangeActionsBase
 
     /// <summary>Validate for undefined value</summary>
     [ActionIssue("DefinedValue", "(0) should be empty", 1)]
-    [CaseValidateAction("Undefined", "Validate for unavailable case value", "Validate", "FieldValue")]
+    [CaseValidateAction("Undefined", "Validate for unavailable case value", "Validation", "FieldValue")]
     public void Undefined(CaseChangeActionContext context)
     {
         var sourceValue = NewCaseFieldActionValue<object>(context);
@@ -97,7 +97,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { BooleanType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("IsTrue", "Validate for true value", "Validate", "Compare")]
+    [CaseValidateAction("IsTrue", "Validate for true value", "Validation", "Compare")]
     public void IsTrue(CaseChangeActionContext context, object source, object compareDate = null)
     {
         // value compare date (maybe null)
@@ -125,7 +125,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { BooleanType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("IsFalse", "Validate for false value", "Validate", "Compare")]
+    [CaseValidateAction("IsFalse", "Validate for false value", "Validation", "Compare")]
     public void IsFalse(CaseChangeActionContext context, object source, object compareDate = null)
     {
         // value compare date (maybe null)
@@ -158,7 +158,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("Equal", "Validate for equal value", "Validate", "Compare")]
+    [CaseValidateAction("Equal", "Validate for equal value", "Validation", "Compare")]
     public void Equal(CaseChangeActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -239,7 +239,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("NotEqual", "Validate for different value", "Validate", "Compare")]
+    [CaseValidateAction("NotEqual", "Validate for different value", "Validation", "Compare")]
     public void NotEqual(CaseChangeActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -320,7 +320,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("GreaterThan", "Validate for greater value", "Validate", "Compare")]
+    [CaseValidateAction("GreaterThan", "Validate for greater value", "Validation", "Compare")]
     public void GreaterThan(CaseChangeActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -385,7 +385,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("GreaterEqualThan", "Validate for greater or equal value", "Validate", "Compare")]
+    [CaseValidateAction("GreaterEqualThan", "Validate for greater or equal value", "Validation", "Compare")]
     public void GreaterEqualThan(CaseChangeActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -450,7 +450,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("LessThan", "Validate for smaller value", "Validate", "Compare")]
+    [CaseValidateAction("LessThan", "Validate for smaller value", "Validation", "Compare")]
     public void LessThan(CaseChangeActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -515,7 +515,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("LessEqualThan", "Validate for smaller or equal value", "Validate", "Compare")]
+    [CaseValidateAction("LessEqualThan", "Validate for smaller or equal value", "Validation", "Compare")]
     public void LessEqualThan(CaseChangeActionContext context, object source, object compare, object compareDate = null)
     {
         // source type
@@ -589,7 +589,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceValue })]
-    [CaseValidateAction("Between", "Validate range value", "Validate", "Compare")]
+    [CaseValidateAction("Between", "Validate range value", "Validation", "Compare")]
     public void Between(CaseChangeActionContext context, object source, object start, object end, object compareDate = null)
     {
         GreaterEqualThan(context, source, start, compareDate);
@@ -614,7 +614,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceValue })]
-    [CaseValidateAction("ValueEqual", "Validate for equal case value", "Validate", "FieldValue")]
+    [CaseValidateAction("ValueEqual", "Validate for equal case value", "Validation", "FieldValue")]
     public void ValueEqual(CaseChangeActionContext context, object compare, object compareDate = null) =>
         Equal(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
@@ -629,7 +629,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceValue })]
-    [CaseValidateAction("ValueNotEqual", "Validate for different case value", "Validate", "FieldValue")]
+    [CaseValidateAction("ValueNotEqual", "Validate for different case value", "Validation", "FieldValue")]
     public void ValueNotEqual(CaseChangeActionContext context, object compare, object compareDate = null) =>
         NotEqual(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
@@ -644,7 +644,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceValue })]
-    [CaseValidateAction("ValueGreaterThan", "Validate for greater case value", "Validate", "FieldValue")]
+    [CaseValidateAction("ValueGreaterThan", "Validate for greater case value", "Validation", "FieldValue")]
     public void ValueGreaterThan(CaseChangeActionContext context, object compare, object compareDate = null) =>
         GreaterThan(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
@@ -659,7 +659,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceValue })]
-    [CaseValidateAction("ValueGreaterEqualThan", "Validate for greater or equal case value", "Validate", "FieldValue")]
+    [CaseValidateAction("ValueGreaterEqualThan", "Validate for greater or equal case value", "Validation", "FieldValue")]
     public void ValueGreaterEqualThan(CaseChangeActionContext context, object compare, object compareDate = null) =>
         GreaterEqualThan(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
@@ -674,7 +674,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceValue })]
-    [CaseValidateAction("ValueLessThan", "Validate for smaller case value", "Validate", "FieldValue")]
+    [CaseValidateAction("ValueLessThan", "Validate for smaller case value", "Validation", "FieldValue")]
     public void ValueLessThan(CaseChangeActionContext context, object compare, object compareDate = null) =>
         LessThan(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
@@ -709,7 +709,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compareDate", "The compare date for case values",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceValue })]
-    [CaseValidateAction("ValueBetween", "Validate range case value", "Validate", "FieldValue")]
+    [CaseValidateAction("ValueBetween", "Validate range case value", "Validation", "FieldValue")]
     public void ValueBetween(CaseChangeActionContext context, object start, object end, object compareDate = null) =>
         Between(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), start, end, compareDate);
 
@@ -724,7 +724,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceStart })]
-    [CaseValidateAction("StartEqual", "Validate for equal case value start", "Validate", "FieldStart")]
+    [CaseValidateAction("StartEqual", "Validate for equal case value start", "Validation", "FieldStart")]
     public void StartEqual(CaseChangeActionContext context, object compare) =>
         Equal(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
@@ -735,7 +735,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceStart })]
-    [CaseValidateAction("StartNotEqual", "Validate for different case value start", "Validate", "FieldStart")]
+    [CaseValidateAction("StartNotEqual", "Validate for different case value start", "Validation", "FieldStart")]
     public void StartNotEqual(CaseChangeActionContext context, object compare) =>
         NotEqual(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
@@ -746,7 +746,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceStart })]
-    [CaseValidateAction("StartGreaterThan", "Validate for greater case value start", "Validate", "FieldStart")]
+    [CaseValidateAction("StartGreaterThan", "Validate for greater case value start", "Validation", "FieldStart")]
     public void StartGreaterThan(CaseChangeActionContext context, object compare) =>
         GreaterThan(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
@@ -757,7 +757,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceStart })]
-    [CaseValidateAction("StartGreaterEqualThan", "Validate for greater or equal case value start", "Validate", "FieldStart")]
+    [CaseValidateAction("StartGreaterEqualThan", "Validate for greater or equal case value start", "Validation", "FieldStart")]
     public void StartGreaterEqualThan(CaseChangeActionContext context, object compare) =>
         GreaterEqualThan(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
@@ -768,7 +768,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceStart })]
-    [CaseValidateAction("StartLessThan", "Validate for smaller case value start", "Validate", "FieldStart")]
+    [CaseValidateAction("StartLessThan", "Validate for smaller case value start", "Validation", "FieldStart")]
     public void StartLessThan(CaseChangeActionContext context, object compare) =>
         LessThan(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
@@ -779,7 +779,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceStart })]
-    [CaseValidateAction("StartLessEqualThan", "Validate for smaller or equal case value start", "Validate", "FieldStart")]
+    [CaseValidateAction("StartLessEqualThan", "Validate for smaller or equal case value start", "Validation", "FieldStart")]
     public void StartLessEqualThan(CaseChangeActionContext context, object compare) =>
         LessEqualThan(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
@@ -795,7 +795,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("end", "The range end date",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceStart })]
-    [CaseValidateAction("StartBetween", "Validate range case value start", "Validate", "FieldStart")]
+    [CaseValidateAction("StartBetween", "Validate range case value start", "Validation", "FieldStart")]
     public void StartBetween(CaseChangeActionContext context, object start, object end) =>
         Between(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), start, end);
 
@@ -810,7 +810,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceEnd })]
-    [CaseValidateAction("EndEqual", "Validate for equal case value end", "Validate", "FieldEnd")]
+    [CaseValidateAction("EndEqual", "Validate for equal case value end", "Validation", "FieldEnd")]
     public void EndEqual(CaseChangeActionContext context, object compare) =>
         Equal(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
@@ -821,7 +821,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceEnd })]
-    [CaseValidateAction("EndNotEqual", "Validate for different case value end", "Validate", "FieldEnd")]
+    [CaseValidateAction("EndNotEqual", "Validate for different case value end", "Validation", "FieldEnd")]
     public void EndNotEqual(CaseChangeActionContext context, object compare) =>
         NotEqual(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
@@ -832,7 +832,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceEnd })]
-    [CaseValidateAction("EndGreaterThan", "Validate for greater case value end", "Validate", "FieldEnd")]
+    [CaseValidateAction("EndGreaterThan", "Validate for greater case value end", "Validation", "FieldEnd")]
     public void EndGreaterThan(CaseChangeActionContext context, object compare) =>
         GreaterThan(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
@@ -843,7 +843,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceEnd })]
-    [CaseValidateAction("EndGreaterEqualThan", "Validate for greater or equal case value end", "Validate", "FieldEnd")]
+    [CaseValidateAction("EndGreaterEqualThan", "Validate for greater or equal case value end", "Validation", "FieldEnd")]
     public void EndGreaterEqualThan(CaseChangeActionContext context, object compare) =>
         GreaterEqualThan(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
@@ -854,7 +854,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceEnd })]
-    [CaseValidateAction("EndLessThan", "Validate for smaller case value end", "Validate", "FieldEnd")]
+    [CaseValidateAction("EndLessThan", "Validate for smaller case value end", "Validation", "FieldEnd")]
     public void EndLessThan(CaseChangeActionContext context, object compare) =>
         LessThan(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
@@ -865,7 +865,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("compare", "The compare value",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceEnd })]
-    [CaseValidateAction("EndLessEqualThan", "Validate for smaller or equal case value end", "Validate", "FieldEnd")]
+    [CaseValidateAction("EndLessEqualThan", "Validate for smaller or equal case value end", "Validation", "FieldEnd")]
     public void EndLessEqualThan(CaseChangeActionContext context, object compare) =>
         LessEqualThan(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
@@ -881,7 +881,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionParameter("end", "The range end date",
         valueTypes: new[] { DateType },
         valueSources: new[] { ActionSourceEnd })]
-    [CaseValidateAction("EndBetween", "Validate range case value end", "Validate", "FieldEnd")]
+    [CaseValidateAction("EndBetween", "Validate range case value end", "Validation", "FieldEnd")]
     public void EndBetween(CaseChangeActionContext context, object start, object end) =>
         Between(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), start, end);
 
@@ -900,7 +900,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueReferences: new[] { ActionReferenceCaseChange, ActionReferenceCaseValue })]
     [ActionParameter("moment", "The moment to test",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("FieldPeriodBefore", "Validate for moment before field period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("FieldPeriodBefore", "Validate for moment before field period", "Validation", "FieldPeriod")]
     public void FieldPeriodBefore(CaseChangeActionContext context, string fieldName, object moment)
     {
         // period start
@@ -944,7 +944,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueReferences: new[] { ActionReferenceCaseChange, ActionReferenceCaseValue })]
     [ActionParameter("moment", "The moment to test",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("FieldPeriodNotBefore", "Validate for moment not before field period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("FieldPeriodNotBefore", "Validate for moment not before field period", "Validation", "FieldPeriod")]
     public void FieldPeriodNotBefore(CaseChangeActionContext context, string fieldName, object moment)
     {
         // period start
@@ -992,7 +992,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("FieldPeriodWithin", "Validate for moment within field period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("FieldPeriodWithin", "Validate for moment within field period", "Validation", "FieldPeriod")]
     public void FieldPeriodWithin(CaseChangeActionContext context, string fieldName, object moment, bool closedPeriod = false)
     {
         // period start
@@ -1043,7 +1043,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("FieldPeriodNotWithin", "Validate for moment not within field period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("FieldPeriodNotWithin", "Validate for moment not within field period", "Validation", "FieldPeriod")]
     public void FieldPeriodNotWithin(CaseChangeActionContext context, string fieldName, object moment, bool closedPeriod = false)
     {
         // period start
@@ -1094,7 +1094,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("FieldPeriodAfter", "Validate for moment after field period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("FieldPeriodAfter", "Validate for moment after field period", "Validation", "FieldPeriod")]
     public void FieldPeriodAfter(CaseChangeActionContext context, string fieldName, object moment, bool closedPeriod = false)
     {
         // period start
@@ -1145,7 +1145,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("FieldPeriodNotAfter", "Validate for moment not after field period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("FieldPeriodNotAfter", "Validate for moment not after field period", "Validation", "FieldPeriod")]
     public void FieldPeriodNotAfter(CaseChangeActionContext context, string fieldName, object moment, bool closedPeriod = false)
     {
         // period start
@@ -1201,7 +1201,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("FieldPeriodOverlap", "Validate for period overlapping the field period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("FieldPeriodOverlap", "Validate for period overlapping the field period", "Validation", "FieldPeriod")]
     public void FieldPeriodOverlap(CaseChangeActionContext context, string fieldName, object periodStart,
         object periodEnd, bool closedPeriod = false)
     {
@@ -1265,7 +1265,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("FieldPeriodNotOverlap", "Validate for period not overlapping the field period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("FieldPeriodNotOverlap", "Validate for period not overlapping the field period", "Validation", "FieldPeriod")]
     public void FieldPeriodNotOverlap(CaseChangeActionContext context, string fieldName, object periodStart,
         object periodEnd, bool closedPeriod = false)
     {
@@ -1326,7 +1326,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     /// <param name="moment">The moment to test</param>
     [ActionParameter("moment", "The moment to test",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("PeriodBefore", "Validate for moment before period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("PeriodBefore", "Validate for moment before period", "Validation", "FieldPeriod")]
     public void PeriodBefore(CaseChangeActionContext context, object moment) =>
         FieldPeriodBefore(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment);
 
@@ -1335,7 +1335,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     /// <param name="moment">The moment to test</param>
     [ActionParameter("moment", "The moment to test",
         valueTypes: new[] { DateType })]
-    [CaseValidateAction("PeriodNotBefore", "Validate for moment not before period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("PeriodNotBefore", "Validate for moment not before period", "Validation", "FieldPeriod")]
     public void PeriodNotBefore(CaseChangeActionContext context, object moment) =>
         FieldPeriodNotBefore(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment);
 
@@ -1347,7 +1347,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("PeriodWithin", "Validate for moment within period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("PeriodWithin", "Validate for moment within period", "Validation", "FieldPeriod")]
     public void PeriodWithin(CaseChangeActionContext context, object moment, bool closedPeriod = false) =>
         FieldPeriodWithin(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
 
@@ -1359,7 +1359,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("PeriodNotWithin", "Validate for moment not within period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("PeriodNotWithin", "Validate for moment not within period", "Validation", "FieldPeriod")]
     public void PeriodNotWithin(CaseChangeActionContext context, object moment, bool closedPeriod = false) =>
         FieldPeriodNotWithin(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
 
@@ -1371,7 +1371,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("PeriodAfter", "Validate for moment after period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("PeriodAfter", "Validate for moment after period", "Validation", "FieldPeriod")]
     public void PeriodAfter(CaseChangeActionContext context, object moment, bool closedPeriod = false) =>
         FieldPeriodAfter(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
 
@@ -1383,7 +1383,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("PeriodNotAfter", "Validate for moment not after period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("PeriodNotAfter", "Validate for moment not after period", "Validation", "FieldPeriod")]
     public void PeriodNotAfter(CaseChangeActionContext context, object moment, bool closedPeriod = false) =>
         FieldPeriodNotAfter(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
 
@@ -1398,7 +1398,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("PeriodOverlap", "Validate for period overlapping the period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("PeriodOverlap", "Validate for period overlapping the period", "Validation", "FieldPeriod")]
     public void PeriodOverlap(CaseChangeActionContext context, object periodStart, object periodEnd, bool closedPeriod = false) =>
         FieldPeriodOverlap(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), periodStart, periodEnd, closedPeriod);
 
@@ -1413,7 +1413,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [ActionParameter("closedPeriod", "Enforce closed period",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("PeriodNotOverlap", "Validate for period not overlapping the period", "Validate", "FieldPeriod")]
+    [CaseValidateAction("PeriodNotOverlap", "Validate for period not overlapping the period", "Validation", "FieldPeriod")]
     public void PeriodNotOverlap(CaseChangeActionContext context, object periodStart, object periodEnd, bool closedPeriod = false) =>
         FieldPeriodNotOverlap(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), periodStart, periodEnd, closedPeriod);
 
@@ -1428,7 +1428,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionIssue("StringMinLength", "(0) must be a at least (1) characters", 2)]
     [ActionParameter("minLength", "The minimum string length",
         valueTypes: new[] { IntType })]
-    [CaseValidateAction("MinLength", "Validate for minimum string length", "Validate", "FieldValue")]
+    [CaseValidateAction("MinLength", "Validate for minimum string length", "Validation", "FieldValue")]
     public void MinLength(CaseChangeActionContext context, object minLength)
     {
         var sourceValue = NewCaseFieldActionValue<string>(context);
@@ -1454,7 +1454,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionIssue("StringMaxLength", "(0) must be (1) characters or less", 2)]
     [ActionParameter("maxLength", "The maximum string length",
         valueTypes: new[] { IntType })]
-    [CaseValidateAction("MaxLength", "Validate for maximum string length", "Validate", "FieldValue")]
+    [CaseValidateAction("MaxLength", "Validate for maximum string length", "Validation", "FieldValue")]
     public void MaxLength(CaseChangeActionContext context, object maxLength)
     {
         var sourceValue = NewCaseFieldActionValue<string>(context);
@@ -1480,7 +1480,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [ActionIssue("StringLength", "(0) must be exactly (1) characters", 2)]
     [ActionParameter("length", "The string length",
         valueTypes: new[] { IntType })]
-    [CaseValidateAction("Length", "Validate string length", "Validate", "FieldValue")]
+    [CaseValidateAction("Length", "Validate string length", "Validation", "FieldValue")]
     public void Length(CaseChangeActionContext context, object length)
     {
         var sourceValue = NewCaseFieldActionValue<string>(context);
@@ -1509,7 +1509,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { IntType })]
     [ActionParameter("maxLength", "The maximum string length",
         valueTypes: new[] { IntType })]
-    [CaseValidateAction("LengthBetween", "Validate string length between a range", "Validate", "FieldValue")]
+    [CaseValidateAction("LengthBetween", "Validate string length between a range", "Validation", "FieldValue")]
     public void LengthBetween(CaseChangeActionContext context, object minLength, object maxLength)
     {
         var sourceValue = NewCaseFieldActionValue<string>(context);
@@ -1541,7 +1541,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { StringType })]
     [ActionParameter("ignoreCase", "Ignore the character case",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("EqualText", "Validate for equals text", "Validate", "FieldValue")]
+    [CaseValidateAction("EqualText", "Validate for equals text", "Validation", "FieldValue")]
     public void EqualText(CaseChangeActionContext context, object compare,
         bool ignoreCase = false)
     {
@@ -1571,7 +1571,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { StringType })]
     [ActionParameter("ignoreCase", "Ignore the character case",
         valueTypes: new[] { BooleanType })]
-    [CaseValidateAction("NotEqualText", "Validate for different text", "Validate", "FieldValue")]
+    [CaseValidateAction("NotEqualText", "Validate for different text", "Validation", "FieldValue")]
     public void NotEqualText(CaseChangeActionContext context, object compare,
         bool ignoreCase = false)
     {

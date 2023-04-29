@@ -1765,7 +1765,7 @@ public abstract class LookupActionMethodBase<TContext, TFunc> : ActionMethodBase
             throw new ArgumentException(nameof(objectKey));
         }
 
-        if (!lookupValue.StartsWith("{") || !lookupValue.EndsWith("}"))
+        if (!lookupValue.StartsWith('{') || !lookupValue.EndsWith('}'))
         {
             Context.Function.LogError($"Invalid lookup object value: {lookupValue}");
             return null;
@@ -2674,7 +2674,7 @@ public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
         method = reference.Substring(index + marker.Length);
 
         // method separator
-        if (string.IsNullOrWhiteSpace(method) || !method.StartsWith("."))
+        if (string.IsNullOrWhiteSpace(method) || !method.StartsWith('.'))
         {
             context.Function.LogError($"Invalid method expression: {reference} method={method} sourceMarker={marker}");
             result = reference;
