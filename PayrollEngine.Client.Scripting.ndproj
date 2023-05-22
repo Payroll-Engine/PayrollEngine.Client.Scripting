@@ -14,8 +14,8 @@
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <ZipSourceFiles>True</ZipSourceFiles>
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" NbItemsToUnfold="5" />
-  <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
-  <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
+  <BuildComparisonSetting ProjectMode="DontCompare" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
+  <BaselineInUISetting ProjectMode="DontCompare" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
   <CoverageFiles CoverageDir="" CoverageDirFilter="" UncoverableAttribute="" CoverageExclusionFile="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="" />
   <GitHub Account="" Repo="" />

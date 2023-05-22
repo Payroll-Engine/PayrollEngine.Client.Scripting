@@ -552,32 +552,20 @@
         <member name="F:PayrollEngine.Client.Scripting.ValueType.Date">
             <summary>Date (base type string)</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.ValueType.WebResource">
-            <summary>Web Resource e.g. Url (base type string)</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.ValueType.Money">
-            <summary>Money (base type numeric)</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.ValueType.Percent">
-            <summary>Percentage (base type numeric)</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.ValueType.Hour">
-            <summary>Hour (base type numeric)</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.ValueType.Day">
-            <summary>Day (base type numeric)</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.ValueType.Week">
-            <summary>Week (base type numeric)</summary>
+        <member name="F:PayrollEngine.Client.Scripting.ValueType.Weekday">
+            <summary>Day of week (base type integer 0..6)</summary>
         </member>
         <member name="F:PayrollEngine.Client.Scripting.ValueType.Month">
-            <summary>Month (base type numeric)</summary>
+            <summary>Month (base type integer 0..11)</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.ValueType.Year">
-            <summary>Year (base type numeric)</summary>
+        <member name="F:PayrollEngine.Client.Scripting.ValueType.Money">
+            <summary>Money (base type decimal)</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.ValueType.Distance">
-            <summary>Distance (base type numeric)</summary>
+        <member name="F:PayrollEngine.Client.Scripting.ValueType.Percent">
+            <summary>Percentage (base type decimal)</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.ValueType.WebResource">
+            <summary>Web Resource e.g. Url (base type string)</summary>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.PayrunExecutionPhase">
             <summary>The payrun execution stage</summary>
@@ -2016,20 +2004,35 @@
         <member name="T:PayrollEngine.Client.Scripting.ValueTypeExtensions">
             <summary>Value type extension methods</summary>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.IsBoolean(PayrollEngine.Client.Scripting.ValueType)">
+            <summary>Test if value type is a bool</summary>
+            <param name="valueType">The value type</param>
+            <returns>True for boolean value types</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.IsString(PayrollEngine.Client.Scripting.ValueType)">
+            <summary>Test if value type is a string</summary>
+            <param name="valueType">The value type</param>
+            <returns>True for string value types</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.IsDateTime(PayrollEngine.Client.Scripting.ValueType)">
+            <summary>Test if value type is a date time</summary>
+            <param name="valueType">The value type</param>
+            <returns>True for date time value types</returns>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.IsNumber(PayrollEngine.Client.Scripting.ValueType)">
             <summary>Test if value type is a number</summary>
             <param name="valueType">The value type</param>
             <returns>True for number value types</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.IsInteger(PayrollEngine.Client.Scripting.ValueType)">
+            <summary>Test if value type is a integer</summary>
+            <param name="valueType">The value type</param>
+            <returns>True for integer value types</returns>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.IsDecimal(PayrollEngine.Client.Scripting.ValueType)">
             <summary>Test if value type is a decimal number</summary>
             <param name="valueType">The value type</param>
             <returns>True for decimal number value types</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.IsDate(PayrollEngine.Client.Scripting.ValueType)">
-            <summary>Test if value type is a date value</summary>
-            <param name="valueType">The value type</param>
-            <returns>True for date value types</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.GetDataType(PayrollEngine.Client.Scripting.ValueType)">
             <summary>Get the data type</summary>
@@ -3766,104 +3769,167 @@
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseInputActions">
             <summary>Extension methods for case input actions</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.EnableFieldStart(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Enable field start input</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.DisableFieldStart(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Disable field start input</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.EnableFieldEnd(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Enable field end input</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.DisableFieldEnd(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Disable field end input</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.EnableFieldValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Enable field value input</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.DisableFieldValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Disable field value input</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.HideField(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.HiddenField(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
             <summary>Hide all field inputs</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ShowField(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Show all field inputs</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.HideFieldDescription(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Hide field description</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ShowFieldDescription(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Show all field inputs</summary>
+            <summary>Show field description</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldMultiLine(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field text multi line</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldSortOrder(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field sort order</summary>
+            <param name="context">The action context</param>
+            <param name="order">The sort order</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field start label</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="label">The field start label</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartHelp(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field start help</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="help">The field start help</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartRequired(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field start required</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldMultiLine(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field text multi line</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartReadOnly(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field start read only</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldSwitch(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field boolean switch</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartFormat(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field start format</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="format">The format string</param>
+            <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartPickerOpenDay(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field start day date picker</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldSwitch(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field boolean switch</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartPickerOpenMonth(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field start month date picker</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldMultiLookup(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field multi lookup selection</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartPickerOpenYear(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field start year date picker</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldMultiLookup(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field multi lookup selection</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartPickerTypeDateTime(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field start picker date time</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldCustomLookupValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field custom lookup value</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field end label</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="label">The field end label</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndHelp(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field end help</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="help">The field end help</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndRequired(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field end required</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldCustomLookupValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field custom lookup value</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndReadOnly(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field end read only</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndFormat(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field end format</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="format">The format string</param>
+            <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndPickerOpenDay(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field end day date picker</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndPickerOpenMonth(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field end month date picker</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndPickerOpenYear(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field end year date picker</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndPickerTypeDateTime(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field end time picker</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
             <summary>Set field value label</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
-            <param name="text">The label text</param>
+            <param name="label">The label text</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field value label</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueAdornment(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field value adornment</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="adornment">The adornment text</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueHelp(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field value help</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="help">The adornment text</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueMask(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field value mask</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+            <param name="mask">The text mask</param>
+            <remarks>see www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueRequired(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field value required</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueReadOnly(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field value read only</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValuePickerOpenDay(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field value day date picker</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValuePickerOpenMonth(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field value month date picker</summary>
+            <param name="context">The action context</param>
+            <param name="field">The target field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValuePickerOpenYear(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field value year date picker</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
@@ -3874,33 +3940,17 @@
             <param name="culture">The culture</param>
             <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldCulture(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field value culture</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldMinValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field minimum value</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
+            <param name="minimum">The minimum value</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldMask(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
-            <summary>Set field value mask</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldMaxValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field maximum value</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
-            <param name="mask">The text mask</param>
-            <remarks>see www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldMask(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field value mask</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldOrder(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
-            <summary>Set field sort order</summary>
-            <param name="context">The action context</param>
-            <param name="order">The sort order</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldOrder(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field sort order</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
+            <param name="maximum">The maximum value</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStepSize(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
             <summary>Set field numeric step size</summary>
@@ -3908,93 +3958,32 @@
             <param name="field">The target field</param>
             <param name="stepSize">The step size</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldStepSize(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field numeric step size</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldFormat(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field value format</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
+            <param name="format">The text format</param>
+            <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueDayPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field value day date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldLineCount(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field text line count</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
+            <param name="count">The line count</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueMonthPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field value month date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldMaxLength(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
+            <summary>Set field maximum text length</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
+            <param name="length">The maximum length</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldValueYearPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field value year date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldValuePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field value date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartDayPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field start day date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartMonthPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field start month date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartYearPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field start year date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldStartPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field start date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndDayPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field end day date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndMonthPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field end month date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndYearPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field end year date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldEndPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field end date picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartTimePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field start time picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldStartTimePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field start time picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldEndTimePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field end time picker</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldEndTimePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field end time picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldCheck(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set field boolean as checkbox</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldAttachmentNone(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field no file attachments</summary>
+            <summary>Set field without file attachments</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
@@ -4008,139 +3997,132 @@
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldAttachment(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field file attachments</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldAttachmentExtensions(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
             <summary>Set field attachments file extensions</summary>
             <param name="context">The action context</param>
             <param name="field">The target field</param>
             <param name="extensions">The file extensions</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetFieldAttachmentExtensions(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Reset field attachments file extensions</summary>
-            <param name="context">The action context</param>
-            <param name="field">The target field</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.EnableStart(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Enable start input</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.DisableStart(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Disable start input</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.EnableEnd(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Enable end input</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.DisableEnd(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Disable end input</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.EnableValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Enable value input</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.DisableValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Disable value input</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.Hide(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.Hidden(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
             <summary>Hide all inputs</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.Show(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Show all inputs</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.HideDescription(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Hide field description</summary>
             <param name="context">The action context</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ShowDescription(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
             <summary>Show description</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetMultiLine(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set text multi line</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetSortOrder(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set sort order</summary>
+            <param name="context">The action context</param>
+            <param name="order">The sort order</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set start label</summary>
+            <param name="context">The action context</param>
+            <param name="label">The start label</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartHelp(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set start help</summary>
+            <param name="context">The action context</param>
+            <param name="help">The start help</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartRequired(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set start required</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetMultiLine(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset text multi line</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartReadOnly(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set  start to read only</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetSwitch(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set boolean switch</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartFormat(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set start format</summary>
+            <param name="context">The action context</param>
+            <param name="format">The format string</param>
+            <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartPickerOpenDay(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set start day date picker</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetSwitch(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset boolean switch</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartPickerOpenMonth(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set start month date picker</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetMultiLookup(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set multi lookup selection</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartPickerOpenYear(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set start year date picker</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetMultiLookup(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset multi lookup selection</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartPickerTypeDateTime(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set start time picker</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetCustomLookupValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set custom lookup value</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set end label</summary>
+            <param name="context">The action context</param>
+            <param name="label">The end label</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndHelp(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set end help</summary>
+            <param name="context">The action context</param>
+            <param name="help">The end help</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndRequired(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set end required</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetCustomLookupValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset custom lookup value</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndReadOnly(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set end read only</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set value label</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndFormat(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set end format</summary>
             <param name="context">The action context</param>
-            <param name="text">The label text</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset value label</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetCulture(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set value culture</summary>
-            <param name="context">The action context</param>
-            <param name="culture">The culture</param>
+            <param name="format">The format string</param>
             <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetCulture(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset value culture</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndPickerOpenDay(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set end day date picker</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetMask(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndPickerOpenMonth(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set end month date picker</summary>
+            <param name="context">The action context</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndPickerOpenYear(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set end year date picker</summary>
+            <param name="context">The action context</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndPickerTypeDateTime(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set end time picker</summary>
+            <param name="context">The action context</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetValueLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set value label</summary>
+            <param name="context">The action context</param>
+            <param name="label">The label text</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetValueAdornment(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set value adornment</summary>
+            <param name="context">The action context</param>
+            <param name="adornment">The adornment text</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetValueHelp(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set value help</summary>
+            <param name="context">The action context</param>
+            <param name="help">The adornment text</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetValueMask(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
             <summary>Set value mask</summary>
             <param name="context">The action context</param>
             <param name="mask">The text mask</param>
             <remarks>see www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetMask(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset value mask</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetValueRequired(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set value required</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetOrder(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set field sort order</summary>
-            <param name="context">The action context</param>
-            <param name="order">The sort order</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetOrder(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset field sort order</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStepSize(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set numeric step size</summary>
-            <param name="context">The action context</param>
-            <param name="stepSize">The step size</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetStepSize(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset numeric step size</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetValueReadOnly(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set value read only</summary>
             <param name="context">The action context</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetValueDayPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
@@ -4155,63 +4137,52 @@
             <summary>Set value year date picker</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetValuePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset value date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetCulture(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set value culture</summary>
             <param name="context">The action context</param>
+            <param name="culture">The culture</param>
+            <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartDayPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set start day date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetMinValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set minimum value</summary>
             <param name="context">The action context</param>
+            <param name="minimum">The minimum value</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartMonthPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set start month date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetMaxValue(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set maximum value</summary>
             <param name="context">The action context</param>
+            <param name="maximum">The maximum value</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartYearPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set start year date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStepSize(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set numeric step size</summary>
             <param name="context">The action context</param>
+            <param name="stepSize">The step size</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetStartPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset start date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFormat(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set value format</summary>
             <param name="context">The action context</param>
+            <param name="format">The text format</param>
+            <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndDayPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set end day date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetLineCount(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set text line count</summary>
             <param name="context">The action context</param>
+            <param name="count">The line count</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndMonthPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set end month date picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetMaxLength(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set maximum text length</summary>
             <param name="context">The action context</param>
+            <param name="length">The maximum length</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndYearPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set end year date picker</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetEndPicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset end date picker</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartTimePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set start time picker</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetStartTimePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset start time picker</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetEndTimePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set end time picker</summary>
-            <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetEndTimePicker(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset end time picker</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetCheck(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+            <summary>Set boolean as checkbox</summary>
             <param name="context">The action context</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetAttachmentNone(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Set no file attachments</summary>
+            <summary>Set without file attachments</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetAttachmentOptional(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SeAttachmentOptional(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
             <summary>Set optional file attachments</summary>
             <param name="context">The action context</param>
         </member>
@@ -4219,18 +4190,10 @@
             <summary>Set mandatory file attachments</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetAttachment(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset file attachments</summary>
-            <param name="context">The action context</param>
-        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetAttachmentExtensions(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
             <summary>Set attachments file extensions</summary>
             <param name="context">The action context</param>
             <param name="extensions">The file extensions</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ResetAttachmentExtensions(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
-            <summary>Reset attachments file extensions</summary>
-            <param name="context">The action context</param>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseRelationBuildActions">
             <summary>Extension methods for the case change actions</summary>

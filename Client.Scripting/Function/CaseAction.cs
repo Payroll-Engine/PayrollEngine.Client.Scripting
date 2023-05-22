@@ -81,29 +81,27 @@ public static class ValueTypeExtensions
     /// <returns>The action value type</returns>
     public static ActionValueType ToActionValueType(this ValueType valueType)
     {
-        switch (valueType)
+        if (valueType.IsInteger())
         {
-            case ValueType.String:
-            case ValueType.WebResource:
-                return ActionValueType.String;
-            case ValueType.Date:
-            case ValueType.DateTime:
-                return ActionValueType.DateTime;
-            case ValueType.Integer:
-                return ActionValueType.Integer;
-            case ValueType.NumericBoolean:
-            case ValueType.Decimal:
-            case ValueType.Money:
-            case ValueType.Percent:
-            case ValueType.Hour:
-            case ValueType.Day:
-            case ValueType.Distance:
-                return ActionValueType.Decimal;
-            case ValueType.Boolean:
-                return ActionValueType.Boolean;
-            default:
-                return ActionValueType.None;
+            return ActionValueType.Integer;
         }
+        if (valueType.IsDecimal())
+        {
+            return ActionValueType.Decimal;
+        }
+        if (valueType.IsString())
+        {
+            return ActionValueType.String;
+        }
+        if (valueType.IsDateTime())
+        {
+            return ActionValueType.DateTime;
+        }
+        if (valueType.IsBoolean())
+        {
+            return ActionValueType.Boolean;
+        }
+        return ActionValueType.None;
     }
 }
 
@@ -2058,44 +2056,8 @@ public abstract class ActionCaseValue
     }
 
     /// <summary>Get case value type</summary>
-    public static ActionValueType? GetActionValueType(ValueType? valueType)
-    {
-        if (!valueType.HasValue)
-        {
-            return null;
-        }
-        switch (valueType.Value)
-        {
-            case ValueType.Integer:
-                return ActionValueType.Integer;
-            case ValueType.NumericBoolean:
-            case ValueType.Decimal:
-            case ValueType.Money:
-            case ValueType.Percent:
-            case ValueType.Hour:
-            case ValueType.Day:
-            case ValueType.Week:
-            case ValueType.Month:
-            case ValueType.Year:
-            case ValueType.Distance:
-                return ActionValueType.Decimal;
-
-            case ValueType.Boolean:
-                return ActionValueType.Boolean;
-
-            case ValueType.String:
-            case ValueType.WebResource:
-                return ActionValueType.String;
-
-            case ValueType.Date:
-            case ValueType.DateTime:
-                return ActionValueType.DateTime;
-
-            case ValueType.None:
-            default:
-                return ActionValueType.None;
-        }
-    }
+    public static ActionValueType? GetActionValueType(ValueType? valueType) =>
+        valueType?.ToActionValueType();
 }
 
 /// <summary>Action case value</summary>

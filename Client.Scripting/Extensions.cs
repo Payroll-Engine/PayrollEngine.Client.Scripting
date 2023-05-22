@@ -1937,57 +1937,77 @@ public static class PayrollResultsExtensions
 /// <summary>Value type extension methods</summary>
 public static class ValueTypeExtensions
 {
+    /// <summary>Test if value type is a bool</summary>
+    /// <param name="valueType">The value type</param>
+    /// <returns>True for boolean value types</returns>
+    public static bool IsBoolean(this ValueType valueType) =>
+        valueType == ValueType.Boolean;
+
+    /// <summary>Test if value type is a string</summary>
+    /// <param name="valueType">The value type</param>
+    /// <returns>True for string value types</returns>
+    public static bool IsString(this ValueType valueType) =>
+        valueType is ValueType.String or
+            ValueType.WebResource;
+
+    /// <summary>Test if value type is a date time</summary>
+    /// <param name="valueType">The value type</param>
+    /// <returns>True for date time value types</returns>
+    public static bool IsDateTime(this ValueType valueType) =>
+        valueType is ValueType.Date or
+            ValueType.DateTime;
+
     /// <summary>Test if value type is a number</summary>
     /// <param name="valueType">The value type</param>
     /// <returns>True for number value types</returns>
     public static bool IsNumber(this ValueType valueType) =>
-        IsDecimal(valueType) || valueType == ValueType.Integer;
+        IsInteger(valueType) || IsDecimal(valueType);
+
+    /// <summary>Test if value type is a integer</summary>
+    /// <param name="valueType">The value type</param>
+    /// <returns>True for integer value types</returns>
+    public static bool IsInteger(this ValueType valueType) =>
+        valueType is ValueType.Integer or
+            ValueType.Weekday or
+            ValueType.Month;
 
     /// <summary>Test if value type is a decimal number</summary>
     /// <param name="valueType">The value type</param>
     /// <returns>True for decimal number value types</returns>
     public static bool IsDecimal(this ValueType valueType) =>
-        valueType == ValueType.NumericBoolean ||
-        valueType == ValueType.Decimal ||
-        valueType == ValueType.Money ||
-        valueType == ValueType.Percent ||
-        valueType == ValueType.Hour ||
-        valueType == ValueType.Day ||
-        valueType == ValueType.Distance;
-
-    /// <summary>Test if value type is a date value</summary>
-    /// <param name="valueType">The value type</param>
-    /// <returns>True for date value types</returns>
-    public static bool IsDate(this ValueType valueType) =>
-        valueType == ValueType.Date ||
-        valueType == ValueType.DateTime;
+        valueType is ValueType.Decimal or
+            ValueType.Money or
+            ValueType.Percent or
+            ValueType.NumericBoolean;
 
     /// <summary>Get the data type</summary>
     /// <param name="valueType">The value type</param>
     /// <returns>The data type</returns>
     public static Type GetDataType(this ValueType valueType)
     {
-        switch (valueType)
+        if (valueType.IsString())
         {
-            case ValueType.String:
-            case ValueType.WebResource:
-            case ValueType.Date:
-            case ValueType.DateTime:
-                return typeof(string);
-            case ValueType.Integer:
-                return typeof(int);
-            case ValueType.NumericBoolean:
-            case ValueType.Decimal:
-            case ValueType.Money:
-            case ValueType.Percent:
-            case ValueType.Hour:
-            case ValueType.Day:
-            case ValueType.Distance:
-                return typeof(decimal);
-            case ValueType.Boolean:
-                return typeof(bool);
-            case ValueType.None:
-                return typeof(DBNull);
+            return typeof(string);
+        }
+        if (valueType.IsDateTime())
+        {
+            return typeof(DateTime);
+        }
+        if (valueType.IsInteger())
+        {
+            return typeof(int);
+        }
+        if (valueType.IsDecimal())
+        {
+            return typeof(decimal);
+        }
+        if (valueType.IsBoolean())
+        {
+            return typeof(bool);
+        }
+        if (valueType == ValueType.None)
+        {
+            return typeof(DBNull);
         }
         throw new ScriptException($"Unknown value type {valueType}");
     }
@@ -2030,37 +2050,36 @@ public static class ValueTypeExtensions
         {
             throw new ArgumentException(nameof(json));
         }
-        switch (valueType)
+
+        if (valueType.IsInteger())
         {
-            case ValueType.Integer:
-                return string.IsNullOrWhiteSpace(json) ? default : JsonSerializer.Deserialize<int>(json);
-
-            case ValueType.NumericBoolean:
-            case ValueType.Decimal:
-            case ValueType.Money:
-            case ValueType.Percent:
-            case ValueType.Hour:
-            case ValueType.Day:
-            case ValueType.Distance:
-                return string.IsNullOrWhiteSpace(json) ? default : JsonSerializer.Deserialize<decimal>(json);
-
-            case ValueType.String:
-            case ValueType.WebResource:
-                return string.IsNullOrWhiteSpace(json) ? default :
-                    json.StartsWith('"') ? JsonSerializer.Deserialize<string>(json) : json;
-
-            case ValueType.Date:
-            case ValueType.DateTime:
-                return string.IsNullOrWhiteSpace(json) ? default :
-                    json.StartsWith('"') ? JsonSerializer.Deserialize<DateTime>(json) : DateTime.Parse(json, null, DateTimeStyles.AdjustToUniversal);
-
-            case ValueType.Boolean:
-                return !string.IsNullOrWhiteSpace(json) && JsonSerializer.Deserialize<bool>(json);
-            case ValueType.None:
-                return null;
-            default:
-                throw new ScriptException($"unknown value type {valueType}");
+            return string.IsNullOrWhiteSpace(json) ? default : JsonSerializer.Deserialize<int>(json);
         }
+        if (valueType.IsDecimal())
+        {
+            return string.IsNullOrWhiteSpace(json) ? default : JsonSerializer.Deserialize<decimal>(json);
+        }
+        if (valueType.IsString())
+        {
+            return string.IsNullOrWhiteSpace(json) ? default :
+                json.StartsWith('"') ? JsonSerializer.Deserialize<string>(json) : json;
+        }
+        if (valueType.IsDateTime())
+        {
+            return string.IsNullOrWhiteSpace(json) ? default :
+                json.StartsWith('"') ?
+                    JsonSerializer.Deserialize<DateTime>(json) :
+                DateTime.Parse(json, null, DateTimeStyles.AdjustToUniversal);
+        }
+        if (valueType.IsBoolean())
+        {
+            return !string.IsNullOrWhiteSpace(json) && JsonSerializer.Deserialize<bool>(json);
+        }
+        if (valueType == ValueType.None)
+        {
+            return null;
+        }
+        throw new ScriptException($"unknown value type {valueType}");
     }
 }
 
