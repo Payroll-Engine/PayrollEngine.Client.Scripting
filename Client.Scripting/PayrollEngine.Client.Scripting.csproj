@@ -12,6 +12,7 @@
 	<!-- help file generation -->
 	<PropertyGroup>
 		<DocumentationFile>$(AssemblyName).xml</DocumentationFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -180,7 +181,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
-		<PackageReference Include="PayrollEngine.Client.Core" Version="0.5.0-pre-230523-2" />
+		<PackageReference Include="PayrollEngine.Client.Core" Version="0.5.0-pre-230526" />
 	</ItemGroup>
 
 	<!-- include xml documention files and json schemas to the nuget package -->
@@ -191,6 +192,12 @@
 		<None Include="$(OutputDir)*.schema.json" Pack="true">
 			<PackageCopyToOutput>true</PackageCopyToOutput>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 	<!-- publish package -->
