@@ -536,17 +536,59 @@ public static class DecimalExtensions
     public static decimal RoundDown(this decimal value, decimal stepSize) =>
         value == default || stepSize == 0 ? value : Math.Floor(value / stepSize) * stepSize;
 
-    /// <summary>Rounds a decimal value to a one-tenth</summary>
+    /// <summary>Rounds a decimal value wit predefined rounding type</summary>
     /// <param name="value">The decimal value to round</param>
-    /// <returns>The down-rounded value to one-tenth</returns>
+    /// <param name="rounding">The rounding type</param>
+    /// <returns>The rounded value</returns>
+    public static decimal Round(this decimal value, DecimalRounding rounding) =>
+        rounding switch
+        {
+            DecimalRounding.Integer => decimal.Round(value),
+            DecimalRounding.Half => RoundHalf(value),
+            DecimalRounding.Fifth => RoundFifth(value),
+            DecimalRounding.Tenth => RoundTenth(value),
+            DecimalRounding.Twentieth => RoundTwentieth(value),
+            DecimalRounding.Fiftieth => RoundFiftieth(value),
+            DecimalRounding.Hundredth => RoundHundredth(value),
+            DecimalRounding.None => value,
+            _ => value
+        };
+
+    /// <summary>Rounds a decimal value to a one-half (e.g. 50 cents)</summary>
+    /// <param name="value">The decimal value to round</param>
+    /// <returns>The rounded value to one-half</returns>
+    public static decimal RoundHalf(this decimal value) =>
+        RoundPartOfOne(value, 2);
+
+    /// <summary>Rounds a decimal value to a one-fifth (e.g. 20 cents)</summary>
+    /// <param name="value">The decimal value to round</param>
+    /// <returns>The rounded value to one-fifth</returns>
+    public static decimal RoundFifth(this decimal value) =>
+        RoundPartOfOne(value, 5);
+
+    /// <summary>Rounds a decimal value to a one-tenth (e.g. 10 cents)</summary>
+    /// <param name="value">The decimal value to round</param>
+    /// <returns>The rounded value to one-tenth</returns>
     public static decimal RoundTenth(this decimal value) =>
         RoundPartOfOne(value, 10);
 
-    /// <summary>Rounds a decimal value to a one-twentieth</summary>
+    /// <summary>Rounds a decimal value to a one-twentieth (e.g. 5 cents)</summary>
     /// <param name="value">The decimal value to round</param>
     /// <returns>The rounded value to one-twentieth</returns>
     public static decimal RoundTwentieth(this decimal value) =>
         RoundPartOfOne(value, 20);
+
+    /// <summary>Rounds a decimal value to a one-fiftieth (e.g. 2 cents)</summary>
+    /// <param name="value">The decimal value to round</param>
+    /// <returns>The rounded value to one-fiftieth</returns>
+    public static decimal RoundFiftieth(this decimal value) =>
+        RoundPartOfOne(value, 50);
+
+    /// <summary>Rounds a decimal value to a one-hundredth (e.g. 1 cents)</summary>
+    /// <param name="value">The decimal value to round</param>
+    /// <returns>The rounded value to one-hundredth</returns>
+    public static decimal RoundHundredth(this decimal value) =>
+        RoundPartOfOne(value, 100);
 
     /// <summary>Rounds a decimal value to a one-tenth</summary>
     /// <param name="value">The decimal value to round</param>
@@ -1651,6 +1693,48 @@ public static class CaseValueExtensions
         return (T)Convert.ChangeType(caseValue.Value, typeof(T));
     }
 
+    /// <summary>Convert case value to string/></summary>
+    public static string ToString(this CaseValue value) =>
+        ValueAs<string>(value);
+
+    /// <summary>Convert case value to int/></summary>
+    public static int ToInt(this CaseValue value) =>
+        ValueAs<int>(value);
+
+    /// <summary>Convert case value to nullable int/></summary>
+    public static int? ToNullableInt(this CaseValue value) =>
+        ValueAs<int?>(value);
+
+    /// <summary>Convert case value to decimal/></summary>
+    public static decimal ToDecimal(this CaseValue value) =>
+        ValueAs<decimal>(value);
+
+    /// <summary>Convert case value to decimal</summary>
+    /// <param name="value">The case value</param>
+    /// <param name="rounding">The rounding type</param>
+    /// <summary>Decimal case value</summary>
+    public static decimal ToDecimal(this CaseValue value, DecimalRounding rounding) =>
+        ToDecimal(value).Round(rounding);
+
+    /// <summary>Convert case value to nullable decimal/></summary>
+    public static decimal? ToNullableDecimal(this CaseValue value) =>
+        ValueAs<decimal?>(value);
+
+    /// <summary>Convert case value to nullable decimal/></summary>
+    /// <param name="value">The case value</param>
+    /// <param name="rounding">The rounding type</param>
+    /// <summary>Nullable decimal case value</summary>
+    public static decimal? ToNullableDecimal(this CaseValue value, DecimalRounding rounding) =>
+        ToNullableDecimal(value)?.Round(rounding);
+
+    /// <summary>Convert case value to date time/></summary>
+    public static DateTime ToDateTime(this CaseValue value) =>
+        ValueAs<DateTime>(value);
+
+    /// <summary>Convert case value to nullable date time/></summary>
+    public static DateTime? ToNullableDateTime(this CaseValue value) =>
+        ValueAs<DateTime?>(value);
+
     /// <summary>Extract date periods</summary>
     /// <param name="periodValues">The case period values</param>
     /// <returns>Accumulated total duration</returns>
@@ -1739,7 +1823,7 @@ public static class CaseValueExtensions
 public static class PayrollValueExtensions
 {
 
-    /// <summary>Convert the case value to custom type</summary>
+    /// <summary>Convert payroll case value to custom type</summary>
     /// <param name="payrollValue">The payroll value</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>Accumulated total duration</returns>
@@ -1751,6 +1835,48 @@ public static class PayrollValueExtensions
         }
         return (T)payrollValue.Value;
     }
+
+    /// <summary>Convert payroll case value to string/></summary>
+    public static string ToString(this PayrollValue value) =>
+        ValueAs<string>(value);
+
+    /// <summary>Convert payroll case value to int/></summary>
+    public static int ToInt(this PayrollValue value) =>
+        ValueAs<int>(value);
+
+    /// <summary>Convert payroll case value to nullable int/></summary>
+    public static int? ToNullableInt(this PayrollValue value) =>
+        ValueAs<int?>(value);
+
+    /// <summary>Convert payroll case value to decimal/></summary>
+    public static decimal ToDecimal(this PayrollValue value) =>
+        ValueAs<decimal>(value);
+
+    /// <summary>Convert payroll case value to decimal</summary>
+    /// <param name="value">The case value</param>
+    /// <param name="rounding">The rounding type</param>
+    /// <summary>Decimal payroll case value</summary>
+    public static decimal ToDecimal(this PayrollValue value, DecimalRounding rounding) =>
+        ToDecimal(value).Round(rounding);
+
+    /// <summary>Convert payroll case value to nullable decimal/></summary>
+    public static decimal? ToNullableDecimal(this PayrollValue value) =>
+        ValueAs<decimal?>(value);
+
+    /// <summary>Convert payroll case value to nullable decimal/></summary>
+    /// <param name="value">The case value</param>
+    /// <param name="rounding">The rounding type</param>
+    /// <summary>Nullable decimal payroll case value</summary>
+    public static decimal? ToNullableDecimal(this PayrollValue value, DecimalRounding rounding) =>
+        ToNullableDecimal(value)?.Round(rounding);
+
+    /// <summary>Convert payroll case value to date time/></summary>
+    public static DateTime ToDateTime(this PayrollValue value) =>
+        ValueAs<DateTime>(value);
+
+    /// <summary>Convert payroll case value to nullable date time/></summary>
+    public static DateTime? ToNullableDateTime(this PayrollValue value) =>
+        ValueAs<DateTime?>(value);
 
     /// <summary>Extract all decimal values</summary>
     /// <param name="values">The payroll values</param>
@@ -1868,6 +1994,61 @@ public static class PeriodValueExtensions
         }
         return totalDays;
     }
+
+    /// <summary>Convert case period value to custom type</summary>
+    /// <param name="periodValue">The case value</param>
+    /// <param name="defaultValue">The default value</param>
+    /// <returns>Accumulated total duration</returns>
+    public static T ValueAs<T>(this PeriodValue periodValue, T defaultValue = default)
+    {
+        if (periodValue == null || periodValue.Value == null)
+        {
+            return defaultValue;
+        }
+        return (T)Convert.ChangeType(periodValue.Value, typeof(T));
+    }
+
+    /// <summary>Convert case period value to string/></summary>
+    public static string ToString(this PeriodValue value) =>
+        ValueAs<string>(value);
+
+    /// <summary>Convert case period value to int/></summary>
+    public static int ToInt(this PeriodValue value) =>
+        ValueAs<int>(value);
+
+    /// <summary>Convert case period value to nullable int/></summary>
+    public static int? ToNullableInt(this PeriodValue value) =>
+        ValueAs<int?>(value);
+
+    /// <summary>Convert case period value to decimal/></summary>
+    public static decimal ToDecimal(this PeriodValue value) =>
+        ValueAs<decimal>(value);
+
+    /// <summary>Convert case period value to decimal</summary>
+    /// <param name="value">The case value</param>
+    /// <param name="rounding">The rounding type</param>
+    /// <summary>Decimal case period value</summary>
+    public static decimal ToDecimal(this PeriodValue value, DecimalRounding rounding) =>
+        ToDecimal(value).Round(rounding);
+
+    /// <summary>Convert case period value to nullable decimal/></summary>
+    public static decimal? ToNullableDecimal(this PeriodValue value) =>
+        ValueAs<decimal?>(value);
+
+    /// <summary>Convert case period value to nullable decimal/></summary>
+    /// <param name="value">The case value</param>
+    /// <param name="rounding">The rounding type</param>
+    /// <summary>Nullable decimal case period value</summary>
+    public static decimal? ToNullableDecimal(this PeriodValue value, DecimalRounding rounding) =>
+        ToNullableDecimal(value)?.Round(rounding);
+
+    /// <summary>Convert case period value to date time/></summary>
+    public static DateTime ToDateTime(this PeriodValue value) =>
+        ValueAs<DateTime>(value);
+
+    /// <summary>Convert case period value to nullable date time/></summary>
+    public static DateTime? ToNullableDateTime(this PeriodValue value) =>
+        ValueAs<DateTime?>(value);
 }
 
 /// <summary>Payroll results extension methods</summary>

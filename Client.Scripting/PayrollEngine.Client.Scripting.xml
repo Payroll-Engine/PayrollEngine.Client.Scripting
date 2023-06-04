@@ -294,6 +294,33 @@
             <summary>Returns a <see cref="T:System.String" /> that represents this instance</summary>
             <returns>A <see cref="T:System.String" /> that represents this instance</returns>
         </member>
+        <member name="T:PayrollEngine.Client.Scripting.DecimalRounding">
+            <summary>Decimal rounding types</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.DecimalRounding.None">
+            <summary>No rounding</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.DecimalRounding.Integer">
+            <summary>Round to nearest integer</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.DecimalRounding.Half">
+            <summary>Round to half (e.g. 50 cents)</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.DecimalRounding.Fifth">
+            <summary>Round to one-fifth (e.g. 20 cents)</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.DecimalRounding.Tenth">
+            <summary>Round to one-tenth (e.g. 10 cents)</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.DecimalRounding.Twentieth">
+            <summary>Round to one-twentieth (e.g. 5 cents)</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.DecimalRounding.Fiftieth">
+            <summary>Round to one-fiftieth (e.g. 2 cents)</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.DecimalRounding.Hundredth">
+            <summary>Round to one-hundredth (e.g. 1 cent)</summary>
+        </member>
         <member name="T:PayrollEngine.Client.Scripting.ObjectStatus">
             <summary>The object status</summary>
         </member>
@@ -1177,15 +1204,41 @@
             <param name="stepSize">The round step size</param>
             <returns>The rounded value</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.RoundTenth(System.Decimal)">
-            <summary>Rounds a decimal value to a one-tenth</summary>
+        <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.Round(System.Decimal,PayrollEngine.Client.Scripting.DecimalRounding)">
+            <summary>Rounds a decimal value wit predefined rounding type</summary>
             <param name="value">The decimal value to round</param>
-            <returns>The down-rounded value to one-tenth</returns>
+            <param name="rounding">The rounding type</param>
+            <returns>The rounded value</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.RoundHalf(System.Decimal)">
+            <summary>Rounds a decimal value to a one-half (e.g. 50 cents)</summary>
+            <param name="value">The decimal value to round</param>
+            <returns>The rounded value to one-half</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.RoundFifth(System.Decimal)">
+            <summary>Rounds a decimal value to a one-fifth (e.g. 20 cents)</summary>
+            <param name="value">The decimal value to round</param>
+            <returns>The rounded value to one-fifth</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.RoundTenth(System.Decimal)">
+            <summary>Rounds a decimal value to a one-tenth (e.g. 10 cents)</summary>
+            <param name="value">The decimal value to round</param>
+            <returns>The rounded value to one-tenth</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.RoundTwentieth(System.Decimal)">
-            <summary>Rounds a decimal value to a one-twentieth</summary>
+            <summary>Rounds a decimal value to a one-twentieth (e.g. 5 cents)</summary>
             <param name="value">The decimal value to round</param>
             <returns>The rounded value to one-twentieth</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.RoundFiftieth(System.Decimal)">
+            <summary>Rounds a decimal value to a one-fiftieth (e.g. 2 cents)</summary>
+            <param name="value">The decimal value to round</param>
+            <returns>The rounded value to one-fiftieth</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.RoundHundredth(System.Decimal)">
+            <summary>Rounds a decimal value to a one-hundredth (e.g. 1 cents)</summary>
+            <param name="value">The decimal value to round</param>
+            <returns>The rounded value to one-hundredth</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DecimalExtensions.RoundPartOfOne(System.Decimal,System.Int32)">
             <summary>Rounds a decimal value to a one-tenth</summary>
@@ -1829,6 +1882,39 @@
             <param name="defaultValue">The default value</param>
             <returns>Accumulated total duration</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToString(PayrollEngine.Client.Scripting.CaseValue)">
+            <summary>Convert case value to string/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToInt(PayrollEngine.Client.Scripting.CaseValue)">
+            <summary>Convert case value to int/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToNullableInt(PayrollEngine.Client.Scripting.CaseValue)">
+            <summary>Convert case value to nullable int/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToDecimal(PayrollEngine.Client.Scripting.CaseValue)">
+            <summary>Convert case value to decimal/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToDecimal(PayrollEngine.Client.Scripting.CaseValue,PayrollEngine.Client.Scripting.DecimalRounding)">
+            <summary>Convert case value to decimal</summary>
+            <param name="value">The case value</param>
+            <param name="rounding">The rounding type</param>
+            <summary>Decimal case value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToNullableDecimal(PayrollEngine.Client.Scripting.CaseValue)">
+            <summary>Convert case value to nullable decimal/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToNullableDecimal(PayrollEngine.Client.Scripting.CaseValue,PayrollEngine.Client.Scripting.DecimalRounding)">
+            <summary>Convert case value to nullable decimal/></summary>
+            <param name="value">The case value</param>
+            <param name="rounding">The rounding type</param>
+            <summary>Nullable decimal case value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToDateTime(PayrollEngine.Client.Scripting.CaseValue)">
+            <summary>Convert case value to date time/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToNullableDateTime(PayrollEngine.Client.Scripting.CaseValue)">
+            <summary>Convert case value to nullable date time/></summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.Periods(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.CaseValue})">
             <summary>Extract date periods</summary>
             <param name="periodValues">The case period values</param>
@@ -1884,10 +1970,43 @@
             <summary><see cref="T:PayrollEngine.Client.Scripting.PayrollValue">PayrollValue</see> extension methods</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ValueAs``1(PayrollEngine.Client.Scripting.PayrollValue,``0)">
-            <summary>Convert the case value to custom type</summary>
+            <summary>Convert payroll case value to custom type</summary>
             <param name="payrollValue">The payroll value</param>
             <param name="defaultValue">The default value</param>
             <returns>Accumulated total duration</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToString(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to string/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToInt(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to int/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToNullableInt(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to nullable int/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToDecimal(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to decimal/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToDecimal(PayrollEngine.Client.Scripting.PayrollValue,PayrollEngine.Client.Scripting.DecimalRounding)">
+            <summary>Convert payroll case value to decimal</summary>
+            <param name="value">The case value</param>
+            <param name="rounding">The rounding type</param>
+            <summary>Decimal payroll case value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToNullableDecimal(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to nullable decimal/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToNullableDecimal(PayrollEngine.Client.Scripting.PayrollValue,PayrollEngine.Client.Scripting.DecimalRounding)">
+            <summary>Convert payroll case value to nullable decimal/></summary>
+            <param name="value">The case value</param>
+            <param name="rounding">The rounding type</param>
+            <summary>Nullable decimal payroll case value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToDateTime(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to date time/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToNullableDateTime(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to nullable date time/></summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.GetDecimalValues(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.PayrollValue})">
             <summary>Extract all decimal values</summary>
@@ -1947,6 +2066,45 @@
             <param name="values">The period payroll values</param>
             <param name="includeEndDay">Include the end day</param>
             <returns>Total days by value as factor</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ValueAs``1(PayrollEngine.Client.Scripting.PeriodValue,``0)">
+            <summary>Convert case period value to custom type</summary>
+            <param name="periodValue">The case value</param>
+            <param name="defaultValue">The default value</param>
+            <returns>Accumulated total duration</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToString(PayrollEngine.Client.Scripting.PeriodValue)">
+            <summary>Convert case period value to string/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToInt(PayrollEngine.Client.Scripting.PeriodValue)">
+            <summary>Convert case period value to int/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToNullableInt(PayrollEngine.Client.Scripting.PeriodValue)">
+            <summary>Convert case period value to nullable int/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToDecimal(PayrollEngine.Client.Scripting.PeriodValue)">
+            <summary>Convert case period value to decimal/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToDecimal(PayrollEngine.Client.Scripting.PeriodValue,PayrollEngine.Client.Scripting.DecimalRounding)">
+            <summary>Convert case period value to decimal</summary>
+            <param name="value">The case value</param>
+            <param name="rounding">The rounding type</param>
+            <summary>Decimal case period value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToNullableDecimal(PayrollEngine.Client.Scripting.PeriodValue)">
+            <summary>Convert case period value to nullable decimal/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToNullableDecimal(PayrollEngine.Client.Scripting.PeriodValue,PayrollEngine.Client.Scripting.DecimalRounding)">
+            <summary>Convert case period value to nullable decimal/></summary>
+            <param name="value">The case value</param>
+            <param name="rounding">The rounding type</param>
+            <summary>Nullable decimal case period value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToDateTime(PayrollEngine.Client.Scripting.PeriodValue)">
+            <summary>Convert case period value to date time/></summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToNullableDateTime(PayrollEngine.Client.Scripting.PeriodValue)">
+            <summary>Convert case period value to nullable date time/></summary>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.PayrollResultsExtensions">
             <summary>Payroll results extension methods</summary>

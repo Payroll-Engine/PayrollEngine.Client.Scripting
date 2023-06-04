@@ -208,10 +208,16 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Addition of two case values</summary>
     public static PayrollValue operator +(CasePayrollValue left, CasePayrollValue right)
     {
-        PayrollValue result = null;
-        for (var i = 0; i < left.PeriodValues.Count; i++)
+        var result = Empty;
+        foreach (var leftValue in left.PeriodValues)
         {
-            var periodResult = left.PeriodValues[i] + right.PeriodValues[i];
+            // find matching period
+            var rightValue = right.PeriodValues.FirstOrDefault(x => Equals(x.Period, leftValue.Period));
+            if (rightValue == null)
+            {
+                continue;
+            }
+            var periodResult = leftValue + rightValue;
             result = AddToResult(result, periodResult);
         }
         return result;
@@ -220,8 +226,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Addition of a case value with a period value</summary>
     public static PayrollValue operator +(CasePayrollValue left, PeriodValue right)
     {
-
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value + right;
@@ -233,7 +238,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Addition of a case value with a payroll value</summary>
     public static PayrollValue operator +(CasePayrollValue left, PayrollValue right)
     {
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value + right;
@@ -245,10 +250,16 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Subtraction of two case values</summary>
     public static PayrollValue operator -(CasePayrollValue left, CasePayrollValue right)
     {
-        PayrollValue result = null;
-        for (var i = 0; i < left.PeriodValues.Count; i++)
+        var result = Empty;
+        // find matching period
+        foreach (var leftValue in left.PeriodValues)
         {
-            var periodResult = left.PeriodValues[i] - right.PeriodValues[i];
+            var rightValue = right.PeriodValues.FirstOrDefault(x => Equals(x.Period, leftValue.Period));
+            if (rightValue == null)
+            {
+                continue;
+            }
+            var periodResult = leftValue - rightValue;
             result = AddToResult(result, periodResult);
         }
         return result;
@@ -257,7 +268,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Subtraction of a case value with a period value</summary>
     public static PayrollValue operator -(CasePayrollValue left, PeriodValue right)
     {
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value - right;
@@ -269,7 +280,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Subtraction of a case value with a payroll value</summary>
     public static PayrollValue operator -(CasePayrollValue left, PayrollValue right)
     {
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value - right;
@@ -281,10 +292,16 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Multiplication of two case values</summary>
     public static PayrollValue operator *(CasePayrollValue left, CasePayrollValue right)
     {
-        PayrollValue result = null;
-        for (var i = 0; i < left.PeriodValues.Count; i++)
+        var result = Empty;
+        // find matching period
+        foreach (var leftValue in left.PeriodValues)
         {
-            var periodResult = left.PeriodValues[i] * right.PeriodValues[i];
+            var rightValue = right.PeriodValues.FirstOrDefault(x => Equals(x.Period, leftValue.Period));
+            if (rightValue == null)
+            {
+                continue;
+            }
+            var periodResult = leftValue * rightValue;
             result = AddToResult(result, periodResult);
         }
         return result;
@@ -293,7 +310,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Multiplication of a case value with a period value</summary>
     public static PayrollValue operator *(CasePayrollValue left, PeriodValue right)
     {
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value * right;
@@ -305,7 +322,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Multiplication of a case value with a payroll value</summary>
     public static PayrollValue operator *(CasePayrollValue left, PayrollValue right)
     {
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value * right;
@@ -317,10 +334,16 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Division of two case values</summary>
     public static PayrollValue operator /(CasePayrollValue left, CasePayrollValue right)
     {
-        PayrollValue result = null;
-        for (var i = 0; i < left.PeriodValues.Count; i++)
+        var result = Empty;
+        // find matching period
+        foreach (var leftValue in left.PeriodValues)
         {
-            var periodResult = left.PeriodValues[i] / right.PeriodValues[i];
+            var rightValue = right.PeriodValues.FirstOrDefault(x => Equals(x.Period, leftValue.Period));
+            if (rightValue == null)
+            {
+                continue;
+            }
+            var periodResult = leftValue / rightValue;
             result = AddToResult(result, periodResult);
         }
         return result;
@@ -329,8 +352,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Division of a case value with a period value</summary>
     public static PayrollValue operator /(CasePayrollValue left, PeriodValue right)
     {
-
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value / right;
@@ -342,7 +364,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Division of a case value with a payroll value</summary>
     public static PayrollValue operator /(CasePayrollValue left, PayrollValue right)
     {
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value / right;
@@ -354,7 +376,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Remainder of two case values</summary>
     public static PayrollValue operator %(CasePayrollValue left, CasePayrollValue right)
     {
-        PayrollValue result = null;
+        var result = Empty;
         for (var i = 0; i < left.PeriodValues.Count; i++)
         {
             var periodResult = left.PeriodValues[i] % right.PeriodValues[i];
@@ -366,8 +388,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Remainder of a case value with a period value</summary>
     public static PayrollValue operator %(CasePayrollValue left, PeriodValue right)
     {
-
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value % right;
@@ -379,7 +400,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Remainder of a case value with a payroll value</summary>
     public static PayrollValue operator %(CasePayrollValue left, PayrollValue right)
     {
-        PayrollValue result = null;
+        var result = Empty;
         foreach (var value in left.PeriodValues)
         {
             var periodResult = value % right;
