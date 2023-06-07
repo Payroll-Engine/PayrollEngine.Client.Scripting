@@ -4,6 +4,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>PayrollEngine.Client.Scripting.Tests</AssemblyName>
     <RootNamespace>PayrollEngine.Client.Scripting.Tests</RootNamespace>
+    <Product>Payroll Engine Client Scripting Tests</Product>
   </PropertyGroup>
 
   <ItemGroup>

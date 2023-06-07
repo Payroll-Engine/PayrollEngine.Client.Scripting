@@ -3,11 +3,7 @@
 	<PropertyGroup>
 		<AssemblyName>PayrollEngine.Client.Scripting</AssemblyName>
 		<RootNamespace>PayrollEngine.Client.Scripting</RootNamespace>
-		<Authors>Jani Giannoudis</Authors>
-		<Company>Software Consulting Giannoudis</Company>
-		<Copyright>2023 Software Consulting Giannoudis</Copyright>
-		<Product>Payroll Engine</Product>
-		<Description>Payroll Engine Client Scripting Services</Description>
+		<Description>Payroll Engine Client Scripting</Description>
 	</PropertyGroup>
 
 	<!-- help file generation -->
@@ -182,7 +178,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.6.0" />
-		<PackageReference Include="PayrollEngine.Client.Core" Version="0.5.0-pre-230606-3" />
+		<PackageReference Include="PayrollEngine.Client.Core" Version="0.5.0-pre-230606-4" />
 	</ItemGroup>
 
 	<!-- include xml documention files and json schemas to the nuget package -->
