@@ -5713,6 +5713,12 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeIdentifier">
             <summary>The employee identifier</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeCulture">
+            <summary>The employee culture</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeCalendar">
+            <summary>The employee calendar</summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetEmployeeAttribute(System.String)">
             <summary>Get employee attribute value</summary>
         </member>
@@ -7026,6 +7032,9 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.WageTypeFunction.WageTypeDescription">
             <summary>The wage type description</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.WageTypeFunction.WageTypeCalendar">
+            <summary>The wage type calendar</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.WageTypeFunction.Collectors">
             <summary>The wage type collectors</summary>
@@ -9185,6 +9194,12 @@
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.EmployeeIdentifier">
             <summary>The employee identifier</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.EmployeeCulture">
+            <summary>The employee culture</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.EmployeeCalendar">
+            <summary>The employee calendar</summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetEmployeeAttribute(System.String)">
             <summary>Get employee attribute value</summary>
             <param name="attributeName">Name of the attribute</param>
@@ -9731,6 +9746,9 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IWageTypeRuntime.WageTypeDescription">
             <summary>The wage type description</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IWageTypeRuntime.WageTypeCalendar">
+            <summary>The wage type calendar</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IWageTypeRuntime.Collectors">
             <summary>The wage type collectors</summary>

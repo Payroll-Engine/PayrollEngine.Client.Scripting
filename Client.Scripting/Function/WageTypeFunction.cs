@@ -20,6 +20,7 @@ public abstract partial class WageTypeFunction : PayrunFunction
         WageTypeNumber = Runtime.WageTypeNumber;
         WageTypeName = Runtime.WageTypeName;
         WageTypeDescription = Runtime.WageTypeDescription;
+        WageTypeCalendar = Runtime.WageTypeCalendar;
 
         // lookups
         Attribute = new(name => new PayrollValue(GetResultAttribute(name)), SetResultAttribute);
@@ -56,6 +57,9 @@ public abstract partial class WageTypeFunction : PayrunFunction
 
     /// <summary>The wage type description</summary>
     public string WageTypeDescription { get; }
+    
+    /// <summary>The wage type calendar</summary>
+    public string WageTypeCalendar { get; }
 
     /// <summary>The wage type collectors</summary>
     public string[] Collectors => Runtime.Collectors;

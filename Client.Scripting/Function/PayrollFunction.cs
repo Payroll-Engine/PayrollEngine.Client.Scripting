@@ -111,6 +111,8 @@ public abstract partial class PayrollFunction : Function
         // employee
         EmployeeId = Runtime.EmployeeId;
         EmployeeIdentifier = Runtime.EmployeeIdentifier;
+        EmployeeCulture = Runtime.EmployeeCulture;
+        EmployeeCalendar = Runtime.EmployeeCalendar;
 
         // evaluation
         EvaluationDate = Runtime.EvaluationDate;
@@ -163,6 +165,12 @@ public abstract partial class PayrollFunction : Function
 
     /// <summary>The employee identifier</summary>
     public string EmployeeIdentifier { get; }
+
+    /// <summary>The employee culture</summary>
+    public string EmployeeCulture { get; }
+
+    /// <summary>The employee calendar</summary>
+    public string EmployeeCalendar { get; }
 
     /// <summary>Get employee attribute value</summary>
     public object GetEmployeeAttribute(string attributeName) =>

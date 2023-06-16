@@ -15,6 +15,9 @@ public interface IWageTypeRuntime : IPayrunRuntime
     /// <summary>The wage type description</summary>
     string WageTypeDescription { get; }
 
+    /// <summary>The wage type calendar</summary>
+    string WageTypeCalendar { get; }
+
     /// <summary>The wage type collectors</summary>
     string[] Collectors { get; }
 

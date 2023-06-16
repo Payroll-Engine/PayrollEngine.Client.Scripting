@@ -15,6 +15,12 @@ public interface IPayrollRuntime : IRuntime
     /// <summary>The employee identifier</summary>
     string EmployeeIdentifier { get; }
 
+    /// <summary>The employee culture</summary>
+    string EmployeeCulture { get; }
+
+    /// <summary>The employee calendar</summary>
+    string EmployeeCalendar { get; }
+
     /// <summary>Get employee attribute value</summary>
     /// <param name="attributeName">Name of the attribute</param>
     /// <returns>The employee attribute value</returns>
@@ -66,7 +72,7 @@ public interface IPayrollRuntime : IRuntime
     /// <param name="attributeName">Name of the attribute</param>
     /// <returns>The case field attribute value</returns>
     object GetCaseFieldAttribute(string caseFieldName, string attributeName);
-    
+
     /// <summary>Get case field value attribute value</summary>
     /// <param name="caseFieldName">The name of the case field</param>
     /// <param name="attributeName">Name of the attribute</param>
