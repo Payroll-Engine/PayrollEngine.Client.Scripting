@@ -106,8 +106,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="label">The field start label</param>
-    [ActionParameter("label", "The field start label", valueTypes: new[] { StringType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("label", "The field start label", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartLabel", "Set field start label", "FieldInput", "FieldStart")]
     public void SetFieldStartLabel(CaseChangeActionContext context, object field, object label)
     {
@@ -123,8 +123,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="help">The field start help</param>
-    [ActionParameter("help", "The field start help", valueTypes: new[] { StringType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("help", "The field start help", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartHelp", "Set field start help", "FieldInput", "FieldStart")]
     public void SetFieldStartHelp(CaseChangeActionContext context, object field, object help)
     {
@@ -157,9 +157,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="field">The target field</param>
     /// <param name="format">The format string</param>
     /// <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
+    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [ActionParameter("format", "The format (www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: new[] { StringType })]
-    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartFormat", "Set field start format", "FieldInput", "FieldStart")]
     public void SetFieldStartFormat(CaseChangeActionContext context, object field, object format)
     {
@@ -211,8 +211,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="label">The field end label</param>
-    [ActionParameter("label", "The field end label", valueTypes: new[] { StringType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("label", "The field end label", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndLabel", "Set field end label", "FieldInput", "FieldEnd")]
     public void SetFieldEndLabel(CaseChangeActionContext context, object field, object label)
     {
@@ -228,8 +228,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="help">The field end help</param>
-    [ActionParameter("help", "The field end help", valueTypes: new[] { StringType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("help", "The field end help", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndHelp", "Set field end help", "FieldInput", "FieldEnd")]
     public void SetFieldEndHelp(CaseChangeActionContext context, object field, object help)
     {
@@ -262,9 +262,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="field">The target field</param>
     /// <param name="format">The format string</param>
     /// <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
+    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: new[] { StringType })]
-    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndFormat", "Set field end format", "FieldInput", "FieldEnd")]
     public void SetFieldEndFormat(CaseChangeActionContext context, object field, object format)
     {
@@ -316,8 +316,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="label">The label text</param>
-    [ActionParameter("label", "The label text", valueTypes: new[] { StringType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("label", "The label text", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValueLabel", "Set field value label", "FieldInput", "FieldValue")]
     public void SetFieldValueLabel(CaseChangeActionContext context, object field, object label)
     {
@@ -333,8 +333,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="adornment">The adornment text</param>
-    [ActionParameter("adornment", "The adornment text", valueTypes: new[] { StringType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("adornment", "The adornment text", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValueAdornment", "Set field value adornment", "FieldInput", "FieldValue")]
     public void SetFieldValueAdornment(CaseChangeActionContext context, object field, object adornment)
     {
@@ -350,8 +350,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="help">The adornment text</param>
-    [ActionParameter("help", "The help text", valueTypes: new[] { StringType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("help", "The help text", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValueHelp", "Set field value help", "FieldInput", "FieldValue")]
     public void SetFieldValueHelp(CaseChangeActionContext context, object field, object help)
     {
@@ -368,9 +368,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="field">The target field</param>
     /// <param name="mask">The text mask</param>
     /// <remarks>see www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
+    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [ActionParameter("mask", "The value mask (www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
         valueTypes: new[] { StringType })]
-    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValueMask", "Set field value mask", "FieldInput", "FieldValue")]
     public void SetFieldValueMask(CaseChangeActionContext context, object field, object mask)
     {
@@ -427,9 +427,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="field">The target field</param>
     /// <param name="culture">The culture</param>
     /// <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
+    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [ActionParameter("culture", "The culture (www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
         valueTypes: new[] { StringType })]
-    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldCulture", "Set field value culture", "FieldInput", "FieldValue")]
     public void SetFieldCulture(CaseChangeActionContext context, object field, object culture)
     {
@@ -445,8 +445,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="minimum">The minimum value</param>
-    [ActionParameter("minimum", "The minimum value", valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("minimum", "The minimum value", valueTypes: new[] { IntType, DecimalType, DateType })]
     [CaseBuildAction("SetFieldMinValue", "Set field minimum value", "FieldInput", "FieldValue")]
     public void SetFieldMinValue(CaseChangeActionContext context, object field, object minimum)
     {
@@ -473,8 +473,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="maximum">The maximum value</param>
-    [ActionParameter("maximum", "The maximum value", valueTypes: new[] { IntType, DecimalType, DateType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("maximum", "The maximum value", valueTypes: new[] { IntType, DecimalType, DateType })]
     [CaseBuildAction("SetFieldMaxValue", "Set field maximum value", "FieldInput", "FieldValue")]
     public void SetFieldMaxValue(CaseChangeActionContext context, object field, object maximum)
     {
@@ -501,8 +501,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="stepSize">The step size</param>
-    [ActionParameter("stepSize", "The step size", valueTypes: new[] { IntType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("stepSize", "The step size", valueTypes: new[] { IntType })]
     [CaseBuildAction("SetFieldStepSize", "Set field numeric step size", "FieldInput", "FieldValue")]
     public void SetFieldStepSize(CaseChangeActionContext context, object field, object stepSize)
     {
@@ -519,9 +519,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="field">The target field</param>
     /// <param name="format">The text format</param>
     /// <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
+    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [ActionParameter("format", "The value format (learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: new[] { StringType })]
-    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldFormat", "Set field value format", "FieldInput", "FieldValue")]
     public void SetFieldFormat(CaseChangeActionContext context, object field, object format)
     {
@@ -537,8 +537,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="count">The line count</param>
-    [ActionParameter("count", "The line count", valueTypes: new[] { IntType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("count", "The line count", valueTypes: new[] { IntType })]
     [CaseBuildAction("SetFieldLineCount", "Set field text line count", "FieldInput", "FieldValue")]
     public void SetFieldLineCount(CaseChangeActionContext context, object field, object count)
     {
@@ -554,8 +554,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="length">The maximum length</param>
-    [ActionParameter("length", "The length", valueTypes: new[] { IntType })]
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
+    [ActionParameter("length", "The length", valueTypes: new[] { IntType })]
     [CaseBuildAction("SetFieldMaxLength", "Set field maximum text length", "FieldInput", "FieldValue")]
     public void SetFieldMaxLength(CaseChangeActionContext context, object field, object length)
     {
