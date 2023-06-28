@@ -784,11 +784,10 @@ public abstract partial class PayrollFunction : Function
     /// <summary>Get lookup value</summary>
     /// <param name="lookupName">The lookup name</param>
     /// <param name="lookupKey">The lookup key</param>
-    /// <param name="language">The lookup language, null for the original value (optional)</param>
-    public T GetLookup<T>(string lookupName, string lookupKey, Language? language = null)
+    /// <param name="culture">The culture, null for the system culture (optional)</param>
+    public T GetLookup<T>(string lookupName, string lookupKey, string culture = null)
     {
-        var languageCode = language.HasValue ? (int)language.Value : (int?)null;
-        var value = Runtime.GetLookup(lookupName, lookupKey, languageCode) as string;
+        var value = Runtime.GetLookup(lookupName, lookupKey, culture) as string;
         if (string.IsNullOrWhiteSpace(value))
         {
             return default;
@@ -804,37 +803,24 @@ public abstract partial class PayrollFunction : Function
     /// <summary>Get lookup value with multiple keys</summary>
     /// <param name="lookupName">The lookup name</param>
     /// <param name="lookupKeyValues">The lookup key values (serialized to JSON string)</param>
-    /// <param name="language">The lookup language, null for the original value (optional)</param>
-    public T GetLookup<T>(string lookupName, object[] lookupKeyValues, Language? language = null)
+    /// <param name="culture">The culture, null for the system culture (optional)</param>
+    public T GetLookup<T>(string lookupName, object[] lookupKeyValues, string culture = null)
     {
         if (lookupKeyValues == null || lookupKeyValues.Length == 0)
         {
             throw new ArgumentException(nameof(lookupKeyValues));
         }
-        return GetLookup<T>(lookupName, JsonSerializer.Serialize(lookupKeyValues), language);
-    }
-
-    /// <summary>Get lookup value</summary>
-    /// <param name="lookupName">The lookup name</param>
-    /// <param name="lookupKey">The lookup key</param>
-    /// <param name="objectKey">The object key</param>
-    /// <param name="language">The lookup language, null for the original value (optional)</param>
-    public T GetLookup<T>(string lookupName, string lookupKey, string objectKey, Language? language = null)
-    {
-        var value = GetLookup<string>(lookupName, lookupKey, language);
-        return string.IsNullOrWhiteSpace(value) ? default : value.ObjectValueJson<T>(objectKey);
+        return GetLookup<T>(lookupName, JsonSerializer.Serialize(lookupKeyValues), culture);
     }
 
     /// <summary>Get lookup by range value</summary>
     /// <param name="lookupName">The lookup name</param>
     /// <param name="rangeValue">The range value</param>
     /// <param name="lookupKey">The lookup key (optional)</param>
-    /// <param name="language">The lookup language, null for the original value (optional)</param>
-    public T GetRangeLookup<T>(string lookupName, decimal rangeValue, string lookupKey = null, Language? language = null)
+    /// <param name="culture">The culture, null for the system culture (optional)</param>
+    public T GetRangeLookup<T>(string lookupName, decimal rangeValue, string lookupKey = null, string culture = null)
     {
-        var languageCode = language.HasValue ? (int)language.Value : (int?)null;
-
-        var value = Runtime.GetRangeLookup(lookupName, rangeValue, lookupKey, languageCode) as string;
+        var value = Runtime.GetRangeLookup(lookupName, rangeValue, lookupKey, culture) as string;
         if (string.IsNullOrWhiteSpace(value))
         {
             return default;
@@ -852,11 +838,11 @@ public abstract partial class PayrollFunction : Function
     /// <param name="rangeValue">The range value</param>
     /// <param name="objectKey">The object key</param>
     /// <param name="lookupKey">The lookup key (optional)</param>
-    /// <param name="language">The lookup language, null for the original value (optional)</param>
+    /// <param name="culture">The culture, null for the system culture (optional)</param>
     public T GetRangeObjectLookup<T>(string lookupName, decimal rangeValue, string objectKey,
-        string lookupKey = null, Language? language = null)
+        string lookupKey = null, string culture = null)
     {
-        var value = GetRangeLookup<string>(lookupName, rangeValue, lookupKey, language);
+        var value = GetRangeLookup<string>(lookupName, rangeValue, lookupKey, culture);
         return string.IsNullOrWhiteSpace(value) ? default : value.ObjectValueJson<T>(objectKey);
     }
 

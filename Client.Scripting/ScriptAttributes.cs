@@ -368,18 +368,18 @@ public abstract class PayrunScriptAttribute : ScriptAttribute
 public sealed class ReportBuildScriptAttribute : ReportScriptAttribute
 {
     /// <summary>Initializes a new instance of the <see cref="ReportBuildScriptAttribute"/> class</summary>
-    /// <param name="reportName">Name of the Report</param>
+    /// <param name="reportName">Name of the report</param>
     public ReportBuildScriptAttribute(string reportName) :
         base(reportName)
     {
     }
 
     /// <summary>Initializes a new instance of the <see cref="ReportBuildScriptAttribute"/> class</summary>
-    /// <param name="reportName">Name of the Report</param>
-    /// <param name="language">The Report language</param>
-    /// <param name="parameters">The Report parameters as JSON</param>
-    public ReportBuildScriptAttribute(string reportName, Language language, string parameters = null) :
-        base(reportName, language, parameters)
+    /// <param name="reportName">Name of the report</param>
+    /// <param name="culture">The report culture</param>
+    /// <param name="parameters">The report parameters as JSON</param>
+    public ReportBuildScriptAttribute(string reportName, string culture, string parameters = null) :
+        base(reportName, culture, parameters)
     {
     }
 }
@@ -389,18 +389,18 @@ public sealed class ReportBuildScriptAttribute : ReportScriptAttribute
 public sealed class ReportStartScriptAttribute : ReportScriptAttribute
 {
     /// <summary>Initializes a new instance of the <see cref="ReportStartScriptAttribute"/> class</summary>
-    /// <param name="reportName">Name of the Report</param>
+    /// <param name="reportName">Name of the report</param>
     public ReportStartScriptAttribute(string reportName) :
         base(reportName)
     {
     }
 
     /// <summary>Initializes a new instance of the <see cref="ReportStartScriptAttribute"/> class</summary>
-    /// <param name="reportName">Name of the Report</param>
-    /// <param name="language">The Report language</param>
-    /// <param name="parameters">The Report parameters as JSON</param>
-    public ReportStartScriptAttribute(string reportName, Language language, string parameters = null) :
-        base(reportName, language, parameters)
+    /// <param name="reportName">Name of the report</param>
+    /// <param name="culture">The report culture</param>
+    /// <param name="parameters">The report parameters as JSON</param>
+    public ReportStartScriptAttribute(string reportName, string culture, string parameters = null) :
+        base(reportName, culture, parameters)
     {
     }
 }
@@ -410,18 +410,18 @@ public sealed class ReportStartScriptAttribute : ReportScriptAttribute
 public sealed class ReportEndScriptAttribute : ReportScriptAttribute
 {
     /// <summary>Initializes a new instance of the <see cref="ReportEndScriptAttribute"/> class</summary>
-    /// <param name="reportName">Name of the Report</param>
+    /// <param name="reportName">Name of the report</param>
     public ReportEndScriptAttribute(string reportName) :
         base(reportName)
     {
     }
 
     /// <summary>Initializes a new instance of the <see cref="ReportEndScriptAttribute"/> class</summary>
-    /// <param name="reportName">Name of the Report</param>
-    /// <param name="language">The Report language</param>
+    /// <param name="reportName">Name of the report</param>
+    /// <param name="culture">The report culture</param>
     /// <param name="parameters">The Report parameters as JSON</param>
-    public ReportEndScriptAttribute(string reportName, Language language, string parameters = null) :
-        base(reportName, language, parameters)
+    public ReportEndScriptAttribute(string reportName, string culture, string parameters = null) :
+        base(reportName, culture, parameters)
     {
     }
 }
@@ -432,8 +432,8 @@ public abstract class ReportScriptAttribute : ScriptAttribute
     /// <summary>The report name</summary>
     public string ReportName { get; }
 
-    /// <summary>The report language</summary>
-    public Language Language { get; }
+    /// <summary>The report culture</summary>
+    public string Culture { get; }
 
     /// <summary>The report parameters</summary>
     public Dictionary<string, string> Parameters { get; set; }
@@ -442,7 +442,7 @@ public abstract class ReportScriptAttribute : ScriptAttribute
     public override string ScriptKey => ReportName;
 
     /// <summary>Initializes a new instance of the <see cref="ReportScriptAttribute"/> class</summary>
-    /// <param name="reportName">Name of the Report</param>
+    /// <param name="reportName">Name of the report</param>
     protected ReportScriptAttribute(string reportName)
     {
         if (string.IsNullOrWhiteSpace(reportName))
@@ -453,13 +453,13 @@ public abstract class ReportScriptAttribute : ScriptAttribute
     }
 
     /// <summary>Initializes a new instance of the <see cref="ReportScriptAttribute"/> class</summary>
-    /// <param name="reportName">Name of the Report</param>
-    /// <param name="language">The Report language</param>
-    /// <param name="parameters">The Report parameters as JSON</param>
-    protected ReportScriptAttribute(string reportName, Language language, string parameters = null) :
+    /// <param name="reportName">Name of the report</param>
+    /// <param name="culture">The report culture</param>
+    /// <param name="parameters">The report parameters as JSON</param>
+    protected ReportScriptAttribute(string reportName, string culture, string parameters = null) :
         this(reportName)
     {
-        Language = language;
+        Culture = culture;
         Parameters = parameters != null ? JsonSerializer.Deserialize<Dictionary<string, string>>(parameters) : null;
     }
 }

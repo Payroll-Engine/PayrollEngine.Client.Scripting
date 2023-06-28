@@ -122,17 +122,17 @@ public interface IPayrollRuntime : IRuntime
     /// <summary>Get lookup value by key</summary>
     /// <param name="lookupName">The name of the lookup</param>
     /// <param name="lookupKey">The lookup value key</param>
-    /// <param name="languageCode">The value language code</param>
+    /// <param name="culture">The value culture</param>
     /// <returns>The lookup value matching tho the lookup key</returns>
-    string GetLookup(string lookupName, string lookupKey, int? languageCode = null);
+    string GetLookup(string lookupName, string lookupKey, string culture = null);
 
     /// <summary>Get lookup value by range</summary>
     /// <param name="lookupName">The name of the lookup</param>
     /// <param name="rangeValue">The range value</param>
     /// <param name="lookupKey">The lookup key</param>
-    /// <param name="languageCode">The value language code</param>
+    /// <param name="culture">The value culture</param>
     /// <returns>The lookup value matching tho the lookup key</returns>
-    string GetRangeLookup(string lookupName, decimal rangeValue, string lookupKey = null, int? languageCode = null);
+    string GetRangeLookup(string lookupName, decimal rangeValue, string lookupKey = null, string culture = null);
 
     #endregion
 

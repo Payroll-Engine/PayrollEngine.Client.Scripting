@@ -330,153 +330,6 @@
         <member name="F:PayrollEngine.Client.Scripting.ObjectStatus.Inactive">
             <summary>Object is inactive</summary>
         </member>
-        <member name="T:PayrollEngine.Client.Scripting.Language">
-            <summary>The supported languages</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.English">
-            <summary>English (Default)</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Afrikaans">
-            <summary>Afrikaans</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Arabic">
-            <summary>Arabic</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Azerbaijani">
-            <summary>Azerbaijani</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Belarusian">
-            <summary>Belarusian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Bulgarian">
-            <summary>Bulgarian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Bosnian">
-            <summary>Bosnian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Czech">
-            <summary>Czech</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Danish">
-            <summary>Danish</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.German">
-            <summary>German</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Greek">
-            <summary>Greek</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Spanish">
-            <summary>Spanish</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Estonian">
-            <summary>Estonian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Persian">
-            <summary>Persian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Finnish">
-            <summary>Finnish</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.French">
-            <summary>French</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Irish">
-            <summary>Irish</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Hebrew">
-            <summary>Hebrew</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Hindi">
-            <summary>Hindi</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Croatian">
-            <summary>Croatian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Hungarian">
-            <summary>Hungarian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Armenian">
-            <summary>Armenian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Icelandic">
-            <summary>Icelandic</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Italian">
-            <summary>Italian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Japanese">
-            <summary>Japanese</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Georgian">
-            <summary>Georgian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Korean">
-            <summary>Korean</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Luxembourgish">
-            <summary>Luxembourgish</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Lithuanian">
-            <summary>Lithuanian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Latvian">
-            <summary>Latvian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Macedonian">
-            <summary>Macedonian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Dutch">
-            <summary>Dutch</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Norwegian">
-            <summary>Norwegian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Polish">
-            <summary>Polish</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Portuguese">
-            <summary>Portuguese</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Romanian">
-            <summary>Romanian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Russian">
-            <summary>Russian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Slovak">
-            <summary>Slovak</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Slovenian">
-            <summary>Slovenian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Albanian">
-            <summary>Albanian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Serbian">
-            <summary>Serbian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Swedish">
-            <summary>Swedish</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Thai">
-            <summary>Thai</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Turkish">
-            <summary>Turkish</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Ukrainian">
-            <summary>Ukrainian</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Uzbek">
-            <summary>Uzbek</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Vietnamese">
-            <summary>Vietnamese</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.Language.Chinese">
-            <summary>Chinese</summary>
-        </member>
         <member name="T:PayrollEngine.Client.Scripting.Month">
             <summary>The year months</summary>
         </member>
@@ -996,6 +849,13 @@
         <member name="T:PayrollEngine.Client.Scripting.StringExtensions">
             <summary><see cref="T:System.String">String</see> extension methods</summary>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.StringExtensions.GetLocalization(System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>Gets the localized text</summary>
+            <param name="culture">The culture name</param>
+            <param name="localizations">The localizations</param>
+            <param name="defaultValue">The default value</param>
+            <returns>The localized text, the default value in case of absent language</returns>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.StringExtensions.EnsureStart(System.String,System.String)">
             <summary>Ensures a start prefix</summary>
             <param name="source">The source value</param>
@@ -1128,29 +988,6 @@
             <param name="source">The source collection</param>
             <param name="test">The collection with the test items</param>
             <returns>True if any item of the test items is available in the source</returns>
-        </member>
-        <member name="T:PayrollEngine.Client.Scripting.LanguageExtensions">
-            <summary><see cref="T:PayrollEngine.Client.Scripting.Language">Language</see> extension methods</summary>
-        </member>
-        <member name="F:PayrollEngine.Client.Scripting.LanguageExtensions.LanguageCodes">
-            <summary>The ISO 639-1 language code</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.LanguageExtensions.GetLocalization(PayrollEngine.Client.Scripting.Language,System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
-            <summary>Gets the localized text from a dictionary</summary>
-            <param name="language">The language</param>
-            <param name="localizations">The localizations</param>
-            <param name="defaultValue">The default value</param>
-            <returns>The localized text, the default value in case of absent language</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.LanguageExtensions.GetIsoLanguage(System.String)">
-            <summary>Get the language from ISO 639-1 language code</summary>
-            <param name="isoCode">The ISO 639-1 language code</param>
-            <returns>The language</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.LanguageExtensions.GetIsoCode(PayrollEngine.Client.Scripting.Language)">
-            <summary>Get the ISO 639-1 language code</summary>
-            <param name="language">The language</param>
-            <returns>The ISO 639-1 language code</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.IntExtensions">
             <summary><see cref="T:System.Int32">Integer</see> extension methods</summary>
@@ -2883,6 +2720,9 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.ActionMethodBase`3.ParameterCount">
             <summary>The method parameter count</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionMethodBase`3.Culture">
+            <summary>The function culture</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionMethodBase`3.#ctor(`0,System.String,System.DateTime)">
             <summary>Constructor</summary>
@@ -5527,6 +5367,9 @@
             <summary>New function instance</summary>
             <param name="runtime">The function runtime</param>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.Function.Culture">
+            <summary>The culture</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.Function.TenantId">
             <summary>The tenant id</summary>
         </member>
@@ -5541,9 +5384,6 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.Function.UserId">
             <summary>The user id</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.Function.UserLanguage">
-            <summary>The user language</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.Function.UserIdentifier">
             <summary>The user identifier</summary>
@@ -6086,39 +5926,32 @@
             <param name="prefix">The slot prefix</param>
             <returns>The slot name matching the value and prefix, otherwise null</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookup``1(System.String,System.String,System.Nullable{PayrollEngine.Client.Scripting.Language})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookup``1(System.String,System.String,System.String)">
             <summary>Get lookup value</summary>
             <param name="lookupName">The lookup name</param>
             <param name="lookupKey">The lookup key</param>
-            <param name="language">The lookup language, null for the original value (optional)</param>
+            <param name="culture">The culture, null for the system culture (optional)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookup``1(System.String,System.Object[],System.Nullable{PayrollEngine.Client.Scripting.Language})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookup``1(System.String,System.Object[],System.String)">
             <summary>Get lookup value with multiple keys</summary>
             <param name="lookupName">The lookup name</param>
             <param name="lookupKeyValues">The lookup key values (serialized to JSON string)</param>
-            <param name="language">The lookup language, null for the original value (optional)</param>
+            <param name="culture">The culture, null for the system culture (optional)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookup``1(System.String,System.String,System.String,System.Nullable{PayrollEngine.Client.Scripting.Language})">
-            <summary>Get lookup value</summary>
-            <param name="lookupName">The lookup name</param>
-            <param name="lookupKey">The lookup key</param>
-            <param name="objectKey">The object key</param>
-            <param name="language">The lookup language, null for the original value (optional)</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRangeLookup``1(System.String,System.Decimal,System.String,System.Nullable{PayrollEngine.Client.Scripting.Language})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRangeLookup``1(System.String,System.Decimal,System.String,System.String)">
             <summary>Get lookup by range value</summary>
             <param name="lookupName">The lookup name</param>
             <param name="rangeValue">The range value</param>
             <param name="lookupKey">The lookup key (optional)</param>
-            <param name="language">The lookup language, null for the original value (optional)</param>
+            <param name="culture">The culture, null for the system culture (optional)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRangeObjectLookup``1(System.String,System.Decimal,System.String,System.String,System.Nullable{PayrollEngine.Client.Scripting.Language})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRangeObjectLookup``1(System.String,System.Decimal,System.String,System.String,System.String)">
             <summary>Get object lookup by range value</summary>
             <param name="lookupName">The lookup name</param>
             <param name="rangeValue">The range value</param>
             <param name="objectKey">The object key</param>
             <param name="lookupKey">The lookup key (optional)</param>
-            <param name="language">The lookup language, null for the original value (optional)</param>
+            <param name="culture">The culture, null for the system culture (optional)</param>
         </member>
         <member name="F:PayrollEngine.Client.Scripting.Function.PayrollFunction.ConditionConsequentMarker">
             <summary>Condition consequent marker</summary>
@@ -6586,11 +6419,11 @@
             <param name="parameters">The method parameters</param>
             <returns>New data table, null on empty collection</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ReportEndFunction.ExecuteResultQuery(System.String,System.String,PayrollEngine.Client.Scripting.Language,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportEndFunction.ExecuteResultQuery(System.String,System.String,System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>Execute a result query on the Api web method</summary>
             <param name="tableName">Target table name</param>
             <param name="methodName">The query name</param>
-            <param name="language">The content language</param>
+            <param name="culture">The content culture</param>
             <param name="resultQuery">Add query table to the data set</param>
             <param name="parameters">The method parameters</param>
             <returns>New data table, null on empty collection</returns>
@@ -6604,11 +6437,11 @@
             <param name="schemaChange">Action to take when the required data column is missing</param>
             <returns>New or expanded data table</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ReportEndFunction.ExecuteMergeQuery(System.String,System.String,PayrollEngine.Client.Scripting.Language,System.String,System.Collections.Generic.Dictionary{System.String,System.String},PayrollEngine.Client.Scripting.DataMergeSchemaChange)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportEndFunction.ExecuteMergeQuery(System.String,System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},PayrollEngine.Client.Scripting.DataMergeSchemaChange)">
             <summary>Execute a query on the Api web method and merge the table to the set</summary>
             <param name="tableName">Target table name</param>
             <param name="methodName">The query name</param>
-            <param name="language">The content language</param>
+            <param name="culture">The content culture</param>
             <param name="mergeColumn">The column used to merge (primary key column)</param>
             <param name="parameters">The method parameters</param>
             <param name="schemaChange">Action to take when the required data column is missing</param>
@@ -6679,9 +6512,6 @@
             <summary>Gets the report name</summary>
             <value>The name of the case</value>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.ReportFunction.Language">
-            <summary>Gets the report language</summary>
-        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.GetReportAttribute(System.String)">
             <summary>Get report attribute value</summary>
             <param name="attributeName">Name of the attribute</param>
@@ -6743,11 +6573,11 @@
             <param name="parameters">The method parameters</param>
             <returns>New data table, null on empty collection</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteQuery(System.String,System.String,PayrollEngine.Client.Scripting.Language,System.Collections.Generic.Dictionary{System.String,System.String})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteQuery(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>Query on Api web method</summary>
             <param name="tableName">Target table name</param>
             <param name="methodName">The query name</param>
-            <param name="language">The content language</param>
+            <param name="culture">The content culture</param>
             <param name="parameters">The method parameters</param>
             <returns>New data table, null on empty collection</returns>
         </member>
@@ -6875,10 +6705,10 @@
             <param name="defaultValue">The method parameters</param>
             <returns>Resulting data table, existing will be removed</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteLookupQuery(System.Int32,System.String,PayrollEngine.Client.Scripting.Language,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteLookupQuery(System.Int32,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>Get lookup values, grouped by lookup</summary>
             <param name="payrollId">The payroll id</param>
-            <param name="language">The language</param>
+            <param name="culture">The culture</param>
             <param name="lookupName">The lookup name</param>
             <param name="regulationDate">The regulation date</param>
             <param name="evaluationDate">The evaluation date</param>
@@ -6888,18 +6718,14 @@
             var lookupValue = lookup["MyLookupKey"];
             </code>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteLookupQuery(System.Int32,System.Collections.Generic.IEnumerable{System.String},PayrollEngine.Client.Scripting.Language,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteLookupQuery(System.Int32,System.Collections.Generic.IEnumerable{System.String},System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>Get lookup values, grouped by lookup</summary>
             <param name="payrollId">The payroll id</param>
-            <param name="language">The language</param>
+            <param name="culture">The culture</param>
             <param name="lookupNames">The lookup names</param>
             <param name="regulationDate">The regulation date</param>
             <param name="evaluationDate">The evaluation date</param>
             <returns>Lookup values dictionary by lookup name, value is a key/value dictionary</returns>
-            <code>
-            var lookups = ExecuteLookupQuery(1, new[] { "MyLookupName" }, Language.Italian);
-            var lookupValue = lookups["MyLookupName"]["MyLookupKey"];
-            </code>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteCaseFieldQuery(System.Int32,System.Collections.Generic.IEnumerable{System.String},System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>Get payroll case fields</summary>
@@ -6910,14 +6736,14 @@
             <param name="evaluationDate">The evaluation date</param>
             <returns>Payroll case fields</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteEmployeeTimeCaseValueQuery(System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.Function.CaseValueColumn},PayrollEngine.Client.Scripting.Language,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteEmployeeTimeCaseValueQuery(System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.Function.CaseValueColumn},System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>Get employees case values as table
             Table structure: first column is the employee id, and for any case field a column</summary>
             <param name="payrollId">The payroll id</param>
             <param name="employeeIds">The employee ids</param>
             <param name="tableName">The table name</param>
             <param name="columns">The table columns</param>
-            <param name="language">The language</param>
+            <param name="culture">The culture</param>
             <param name="valueDate">The value date</param>
             <param name="regulationDate">The regulation date</param>
             <param name="evaluationDate">The evaluation date</param>
@@ -8448,31 +8274,31 @@
             <param name="defaultValue">The default value</param>
             <returns>The payroll value</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalizedName(System.Data.DataRow,PayrollEngine.Client.Scripting.Language)">
+        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalizedName(System.Data.DataRow,System.String)">
             <summary>Get data row localized name</summary>
             <param name="dataRow">The data row</param>
-            <param name="language">The language</param>
+            <param name="culture">The culture</param>
             <returns>The localized data row name</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalizedIdentifier(System.Data.DataRow,PayrollEngine.Client.Scripting.Language)">
+        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalizedIdentifier(System.Data.DataRow,System.String)">
             <summary>Get data row localized identifier</summary>
             <param name="dataRow">The data row</param>
-            <param name="language">The language</param>
+            <param name="culture">The culture</param>
             <returns>The localized data row identifier</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalizedValue(System.Data.DataRow,System.String,PayrollEngine.Client.Scripting.Language)">
+        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalizedValue(System.Data.DataRow,System.String,System.String)">
             <summary>Get data row localized value using the ValueColumnLocalizations column</summary>
             <param name="dataRow">The data row</param>
             <param name="valueColumn">The value column name</param>
-            <param name="language">The language</param>
+            <param name="culture">The culture</param>
             <returns>The localized data row value</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalizedValue(System.Data.DataRow,System.String,System.String,PayrollEngine.Client.Scripting.Language)">
+        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalizedValue(System.Data.DataRow,System.String,System.String,System.String)">
             <summary>Get data row localized value</summary>
             <param name="dataRow">The data row</param>
             <param name="valueColumn">The value column name</param>
             <param name="localizationColumn">The localization column name</param>
-            <param name="language">The language</param>
+            <param name="culture">The culture</param>
             <returns>The localized data row value</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetValues``1(System.Collections.Generic.IEnumerable{System.Data.DataRow},System.String,``0)">
@@ -8541,11 +8367,11 @@
             <param name="column">The column name</param>
             <returns>The attributes dictionary</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalization(System.Data.DataRow,System.String,PayrollEngine.Client.Scripting.Language,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Report.DataRowExtensions.GetLocalization(System.Data.DataRow,System.String,System.String,System.String)">
             <summary>Get attribute from a data row json value</summary>
             <param name="dataRow">The data row</param>
             <param name="column">The column name</param>
-            <param name="language">The language</param>
+            <param name="culture">The culture</param>
             <param name="defaultValue">The default value</param>
             <returns>The attribute value</returns>
         </member>
@@ -9279,19 +9105,19 @@
             <param name="caseFieldNames">The name of the case fields</param>
             <returns>The period values of multiple cases</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetLookup(System.String,System.String,System.Nullable{System.Int32})">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetLookup(System.String,System.String,System.String)">
             <summary>Get lookup value by key</summary>
             <param name="lookupName">The name of the lookup</param>
             <param name="lookupKey">The lookup value key</param>
-            <param name="languageCode">The value language code</param>
+            <param name="culture">The value culture</param>
             <returns>The lookup value matching tho the lookup key</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetRangeLookup(System.String,System.Decimal,System.String,System.Nullable{System.Int32})">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetRangeLookup(System.String,System.Decimal,System.String,System.String)">
             <summary>Get lookup value by range</summary>
             <param name="lookupName">The name of the lookup</param>
             <param name="rangeValue">The range value</param>
             <param name="lookupKey">The lookup key</param>
-            <param name="languageCode">The value language code</param>
+            <param name="culture">The value culture</param>
             <returns>The lookup value matching tho the lookup key</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IPayrunEmployeeAvailableRuntime">
@@ -9512,20 +9338,20 @@
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IReportEndRuntime.DataSet">
             <summary>Gets the report data set</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportEndRuntime.ExecuteQuery(System.String,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean)">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportEndRuntime.ExecuteQuery(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean)">
             <summary>Execute a query on the Api web method and add the table to the set</summary>
             <param name="tableName">Target table name</param>
             <param name="methodName">The query name</param>
-            <param name="language">The content language</param>
+            <param name="culture">The content culture</param>
             <param name="parameters">The method parameters</param>
             <param name="resultQuery">Add query table to the data set</param>
             <returns>Resulting data table, existing will be removed</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportEndRuntime.ExecuteMergeQuery(System.String,System.String,System.Int32,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Int32)">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportEndRuntime.ExecuteMergeQuery(System.String,System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Int32)">
             <summary>Execute a query on the Api web method and merge the table to the set</summary>
             <param name="tableName">Target table name</param>
             <param name="methodName">The query name</param>
-            <param name="language">The content language</param>
+            <param name="culture">The content culture</param>
             <param name="mergeColumn">The column used to merge (primary key column)</param>
             <param name="parameters">The method parameters</param>
             <param name="schemaChange">Action to take when the required data column is missing <see cref="T:PayrollEngine.Client.Scripting.DataMergeSchemaChange"/></param>
@@ -9537,9 +9363,6 @@
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.ReportName">
             <summary>Gets the report name</summary>
             <value>The name of the case</value>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.Language">
-            <summary>Gets the report language</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.GetReportAttribute(System.String)">
             <summary>Get report attribute value</summary>
@@ -9561,11 +9384,11 @@
             <param name="attributeName">Name of the attribute</param>
             <returns>The report attribute value</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.ExecuteQuery(System.String,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.ExecuteQuery(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>Execute a query on the Api web method</summary>
             <param name="tableName">Target table name</param>
             <param name="methodName">The query name</param>
-            <param name="language">The content language</param>
+            <param name="culture">The content culture</param>
             <param name="parameters">The method parameters</param>
             <returns>Resulting data table, existing will be removed</returns>
         </member>
@@ -9689,6 +9512,9 @@
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IRuntime">
             <summary>Runtime  during the execution of a scripting function <see cref="N:PayrollEngine.Client.Scripting.Function"/></summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IRuntime.Culture">
+            <summary>The culture</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IRuntime.TenantId">
             <summary>The tenant id</summary>
         </member>
@@ -9702,9 +9528,6 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IRuntime.UserId">
             <summary>The user id</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.IRuntime.UserLanguage">
-            <summary>The user language</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IRuntime.UserIdentifier">
             <summary>The user identifier</summary>
@@ -10040,38 +9863,38 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.ReportBuildScriptAttribute.#ctor(System.String)">
             <summary>Initializes a new instance of the <see cref="T:PayrollEngine.Client.Scripting.ReportBuildScriptAttribute"/> class</summary>
-            <param name="reportName">Name of the Report</param>
+            <param name="reportName">Name of the report</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.ReportBuildScriptAttribute.#ctor(System.String,PayrollEngine.Client.Scripting.Language,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.ReportBuildScriptAttribute.#ctor(System.String,System.String,System.String)">
             <summary>Initializes a new instance of the <see cref="T:PayrollEngine.Client.Scripting.ReportBuildScriptAttribute"/> class</summary>
-            <param name="reportName">Name of the Report</param>
-            <param name="language">The Report language</param>
-            <param name="parameters">The Report parameters as JSON</param>
+            <param name="reportName">Name of the report</param>
+            <param name="culture">The report culture</param>
+            <param name="parameters">The report parameters as JSON</param>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.ReportStartScriptAttribute">
             <summary>Attribute for report start script</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.ReportStartScriptAttribute.#ctor(System.String)">
             <summary>Initializes a new instance of the <see cref="T:PayrollEngine.Client.Scripting.ReportStartScriptAttribute"/> class</summary>
-            <param name="reportName">Name of the Report</param>
+            <param name="reportName">Name of the report</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.ReportStartScriptAttribute.#ctor(System.String,PayrollEngine.Client.Scripting.Language,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.ReportStartScriptAttribute.#ctor(System.String,System.String,System.String)">
             <summary>Initializes a new instance of the <see cref="T:PayrollEngine.Client.Scripting.ReportStartScriptAttribute"/> class</summary>
-            <param name="reportName">Name of the Report</param>
-            <param name="language">The Report language</param>
-            <param name="parameters">The Report parameters as JSON</param>
+            <param name="reportName">Name of the report</param>
+            <param name="culture">The report culture</param>
+            <param name="parameters">The report parameters as JSON</param>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.ReportEndScriptAttribute">
             <summary>Attribute for report end script</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.ReportEndScriptAttribute.#ctor(System.String)">
             <summary>Initializes a new instance of the <see cref="T:PayrollEngine.Client.Scripting.ReportEndScriptAttribute"/> class</summary>
-            <param name="reportName">Name of the Report</param>
+            <param name="reportName">Name of the report</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.ReportEndScriptAttribute.#ctor(System.String,PayrollEngine.Client.Scripting.Language,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.ReportEndScriptAttribute.#ctor(System.String,System.String,System.String)">
             <summary>Initializes a new instance of the <see cref="T:PayrollEngine.Client.Scripting.ReportEndScriptAttribute"/> class</summary>
-            <param name="reportName">Name of the Report</param>
-            <param name="language">The Report language</param>
+            <param name="reportName">Name of the report</param>
+            <param name="culture">The report culture</param>
             <param name="parameters">The Report parameters as JSON</param>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.ReportScriptAttribute">
@@ -10080,8 +9903,8 @@
         <member name="P:PayrollEngine.Client.Scripting.ReportScriptAttribute.ReportName">
             <summary>The report name</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.ReportScriptAttribute.Language">
-            <summary>The report language</summary>
+        <member name="P:PayrollEngine.Client.Scripting.ReportScriptAttribute.Culture">
+            <summary>The report culture</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.ReportScriptAttribute.Parameters">
             <summary>The report parameters</summary>
@@ -10091,13 +9914,13 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.ReportScriptAttribute.#ctor(System.String)">
             <summary>Initializes a new instance of the <see cref="T:PayrollEngine.Client.Scripting.ReportScriptAttribute"/> class</summary>
-            <param name="reportName">Name of the Report</param>
+            <param name="reportName">Name of the report</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.ReportScriptAttribute.#ctor(System.String,PayrollEngine.Client.Scripting.Language,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.ReportScriptAttribute.#ctor(System.String,System.String,System.String)">
             <summary>Initializes a new instance of the <see cref="T:PayrollEngine.Client.Scripting.ReportScriptAttribute"/> class</summary>
-            <param name="reportName">Name of the Report</param>
-            <param name="language">The Report language</param>
-            <param name="parameters">The Report parameters as JSON</param>
+            <param name="reportName">Name of the report</param>
+            <param name="culture">The report culture</param>
+            <param name="parameters">The report parameters as JSON</param>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.ScriptAttribute">
             <summary>Attribute for script</summary>

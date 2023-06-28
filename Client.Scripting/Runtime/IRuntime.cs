@@ -6,6 +6,13 @@ namespace PayrollEngine.Client.Scripting.Runtime;
 /// <summary>Runtime  during the execution of a scripting function <see cref="Function"/></summary>
 public interface IRuntime
 {
+    #region Culture
+
+    /// <summary>The culture</summary>
+    string Culture { get; }
+
+    #endregion
+
     #region Tenant
 
     /// <summary>The tenant id</summary>
@@ -25,9 +32,6 @@ public interface IRuntime
 
     /// <summary>The user id</summary>
     int UserId { get; }
-
-    /// <summary>The user language</summary>
-    int UserLanguage { get; }
 
     /// <summary>The user identifier</summary>
     string UserIdentifier { get; }

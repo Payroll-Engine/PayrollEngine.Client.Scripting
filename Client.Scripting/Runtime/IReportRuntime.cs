@@ -11,9 +11,6 @@ public interface IReportRuntime : IRuntime
     /// <value>The name of the case</value>
     string ReportName { get; }
 
-    /// <summary>Gets the report language</summary>
-    Language Language { get; }
-
     /// <summary>Get report attribute value</summary>
     /// <param name="attributeName">Name of the attribute</param>
     /// <returns>The report attribute value</returns>
@@ -37,10 +34,10 @@ public interface IReportRuntime : IRuntime
     /// <summary>Execute a query on the Api web method</summary>
     /// <param name="tableName">Target table name</param>
     /// <param name="methodName">The query name</param>
-    /// <param name="language">The content language</param>
+    /// <param name="culture">The content culture</param>
     /// <param name="parameters">The method parameters</param>
     /// <returns>Resulting data table, existing will be removed</returns>
-    DataTable ExecuteQuery(string tableName, string methodName, int language, Dictionary<string, string> parameters);
+    DataTable ExecuteQuery(string tableName, string methodName, string culture, Dictionary<string, string> parameters);
 
     /// <summary>Query Json lookup values by lookup name</summary>
     /// <param name="regulationId">The regulation id</param>

@@ -178,7 +178,7 @@ public abstract class CaseChangeActionsBase : CaseActionsBase
     {
         var lookupName = Namespace.EnsureEnd(".Actions");
         //function.LogWarning($"GetIssueMessage: lookupName={lookupName}, localizationKey={key}");
-        var message = function.GetLookup<string>(lookupName, key, function.UserLanguage) ?? defaultMessage;
+        var message = function.GetLookup<string>(lookupName, key, function.Culture) ?? defaultMessage;
 
         // prepare parameter placeholders for string format
         for (var i = 0; i < 10; i++)

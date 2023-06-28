@@ -28,14 +28,24 @@ public abstract partial class Function : IDisposable
     {
         Runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
 
+        // culture
+        Culture = Runtime.Culture;
+
         // tenant
         TenantId = Runtime.TenantId;
         TenantIdentifier = Runtime.TenantIdentifier;
+
         // user
         UserId = Runtime.UserId;
         UserIdentifier = Runtime.UserIdentifier;
-        UserLanguage = (Language)Runtime.UserLanguage;
     }
+
+    #region Culture
+
+    /// <summary>The culture</summary>
+    public string Culture { get; }
+
+    #endregion
 
     #region Tenant
 
@@ -62,9 +72,6 @@ public abstract partial class Function : IDisposable
 
     /// <summary>The user id</summary>
     public int UserId { get; }
-
-    /// <summary>The user language</summary>
-    public Language UserLanguage { get; }
 
     /// <summary>The user identifier</summary>
     public string UserIdentifier { get; }

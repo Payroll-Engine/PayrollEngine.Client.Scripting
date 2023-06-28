@@ -64,6 +64,45 @@ public static class NullableExtensions
 public static class StringExtensions
 {
 
+    #region Localization
+
+    /// <summary>Gets the localized text</summary>
+    /// <param name="culture">The culture name</param>
+    /// <param name="localizations">The localizations</param>
+    /// <param name="defaultValue">The default value</param>
+    /// <returns>The localized text, the default value in case of absent language</returns>
+    public static string GetLocalization(this string culture, Dictionary<string, string> localizations, string defaultValue = null)
+    {
+        if (localizations == null)
+        {
+            return defaultValue;
+        }
+
+        // culture
+        culture ??= CultureInfo.CurrentCulture.Name;
+
+        // direct localization
+        if (localizations.TryGetValue(culture, out var localization))
+        {
+            return localization;
+        }
+
+        // base language localization
+        var index = culture.IndexOf('-');
+        if (index <= 0)
+        {
+            return defaultValue;
+        }
+        var baseCulture = culture.Substring(0, index);
+        if (localizations.TryGetValue(baseCulture, out var baseLocalization))
+        {
+            return baseLocalization;
+        }
+        return defaultValue;
+    }
+
+    #endregion
+
     #region Modification
 
     /// <summary>Ensures a start prefix</summary>
@@ -386,94 +425,6 @@ public static class EnumerableExtensions
     /// <returns>True if any item of the test items is available in the source</returns>
     public static bool ContainsAny<T>(this IEnumerable<T> source, IEnumerable<T> test) =>
         test.Any(source.Contains);
-}
-
-/// <summary><see cref="Language">Language</see> extension methods</summary>
-public static class LanguageExtensions
-{
-    /// <summary>The ISO 639-1 language code</summary>
-    private static readonly string[] LanguageCodes = {
-        // ReSharper disable CommentTypo
-        "en", // English (Default)
-
-        "af", // Afrikaans
-        "ar", // Arabic
-        "az", // Azerbaijani
-        "be", // Belarusian
-        "bg", // Bulgarian
-        "bs", // Bosnian
-        "cs", // Czech
-        "da", // Danish
-        "de", // German
-        "el", // Greek
-        "es", // Spanish
-        "et", // Estonian
-        "fa", // Persian
-        "fi", // Finnish
-        "fr", // French
-        "ga", // Irish
-        "he", // Hebrew
-        "hi", // Hindi
-        "hr", // Croatian
-        "hu", // Hungarian
-        "hy", // Armenian
-        "is", // Icelandic
-        "it", // Italian
-        "ja", // Japanese
-        "ka", // Georgian
-        "ko", // Korean
-        "lb", // Luxembourgish
-        "lt", // Lithuanian
-        "lv", // Latvian
-        "mk", // Macedonian
-        "nl", // Dutch
-        "no", // Norwegian
-        "pl", // Polish
-        "pt", // Portuguese
-        "ro", // Romanian
-        "ru", // Russian
-        "sk", // Slovak
-        "sl", // Slovenian
-        "sq", // Albanian
-        "sr", // Serbian
-        "sw", // Swedish
-        "th", // Thai
-        "tr", // Turkish
-        "uk", // Ukrainian
-        "uz", // Uzbek
-        "vi", // Vietnamese
-        "zh" // Chinese
-        // ReSharper restore CommentTypo
-    };
-
-    /// <summary>Gets the localized text from a dictionary</summary>
-    /// <param name="language">The language</param>
-    /// <param name="localizations">The localizations</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The localized text, the default value in case of absent language</returns>
-    public static string GetLocalization(this Language language, Dictionary<string, string> localizations, string defaultValue)
-    {
-        if (localizations != null && localizations.TryGetValue(language.GetIsoCode(), out var localization))
-        {
-            return localization;
-        }
-        return defaultValue;
-    }
-
-    /// <summary>Get the language from ISO 639-1 language code</summary>
-    /// <param name="isoCode">The ISO 639-1 language code</param>
-    /// <returns>The language</returns>
-    public static Language? GetIsoLanguage(this string isoCode)
-    {
-        var index = LanguageCodes.ToList().IndexOf(isoCode);
-        return index < 0 ? null : (Language)index;
-    }
-
-    /// <summary>Get the ISO 639-1 language code</summary>
-    /// <param name="language">The language</param>
-    /// <returns>The ISO 639-1 language code</returns>
-    public static string GetIsoCode(this Language language) =>
-        LanguageCodes[(int)language];
 }
 
 /// <summary><see cref="int">Integer</see> extension methods</summary>

@@ -72,7 +72,6 @@ public abstract partial class ReportFunction : Function
     {
         // report
         ReportName = Runtime.ReportName;
-        Language = (Language)Runtime.Language;
     }
 
     /// <summary>New function instance without runtime (scripting development)</summary>
@@ -88,9 +87,6 @@ public abstract partial class ReportFunction : Function
     /// <summary>Gets the report name</summary>
     /// <value>The name of the case</value>
     public string ReportName { get; }
-
-    /// <summary>Gets the report language</summary>
-    public Language Language { get; }
 
     /// <summary>Get report attribute value</summary>
     /// <param name="attributeName">Name of the attribute</param>
@@ -179,23 +175,23 @@ public abstract partial class ReportFunction : Function
     /// <param name="parameters">The method parameters</param>
     /// <returns>New data table, null on empty collection</returns>
     public DataTable ExecuteQuery(string tableName, string methodName, Dictionary<string, string> parameters = null) =>
-        ExecuteQuery(tableName, methodName, Language, parameters);
+        ExecuteQuery(tableName, methodName, Culture, parameters);
 
     /// <summary>Query on Api web method</summary>
     /// <param name="tableName">Target table name</param>
     /// <param name="methodName">The query name</param>
-    /// <param name="language">The content language</param>
+    /// <param name="culture">The content culture</param>
     /// <param name="parameters">The method parameters</param>
     /// <returns>New data table, null on empty collection</returns>
-    public DataTable ExecuteQuery(string tableName, string methodName, Language language, Dictionary<string, string> parameters = null) =>
-        Runtime.ExecuteQuery(tableName, methodName, (int)language, parameters);
+    public DataTable ExecuteQuery(string tableName, string methodName, string culture, Dictionary<string, string> parameters = null) =>
+        Runtime.ExecuteQuery(tableName, methodName, culture, parameters);
 
     /// <summary>Execute a query on the Api web method, table name extracted from method name</summary>
     /// <param name="methodName">The query name</param>
     /// <param name="parameters">The method parameters</param>
     /// <returns>New data table, null on empty collection</returns>
     public DataTable ExecuteQuery(string methodName, Dictionary<string, string> parameters = null) =>
-        ExecuteQuery(GetOperationBaseName(methodName), methodName, Language, parameters);
+        ExecuteQuery(GetOperationBaseName(methodName), methodName, Culture, parameters);
 
     /// <summary>Query the division by id</summary>
     /// <param name="divisionId">The division id</param>
@@ -410,7 +406,7 @@ public abstract partial class ReportFunction : Function
 
     /// <summary>Get lookup values, grouped by lookup</summary>
     /// <param name="payrollId">The payroll id</param>
-    /// <param name="language">The language</param>
+    /// <param name="culture">The culture</param>
     /// <param name="lookupName">The lookup name</param>
     /// <param name="regulationDate">The regulation date</param>
     /// <param name="evaluationDate">The evaluation date</param>
@@ -420,27 +416,23 @@ public abstract partial class ReportFunction : Function
     /// var lookupValue = lookup["MyLookupKey"];
     /// </code>
     public Dictionary<string, string> ExecuteLookupQuery(int payrollId,
-        string lookupName, Language language,
+        string lookupName, string culture,
         DateTime? regulationDate = null, DateTime? evaluationDate = null)
     {
         var lookups = ExecuteLookupQuery(payrollId, new[] { lookupName },
-            language, regulationDate, evaluationDate);
+            culture, regulationDate, evaluationDate);
         return lookups.TryGetValue(lookupName, out var lookup) ? lookup : new();
     }
 
     /// <summary>Get lookup values, grouped by lookup</summary>
     /// <param name="payrollId">The payroll id</param>
-    /// <param name="language">The language</param>
+    /// <param name="culture">The culture</param>
     /// <param name="lookupNames">The lookup names</param>
     /// <param name="regulationDate">The regulation date</param>
     /// <param name="evaluationDate">The evaluation date</param>
     /// <returns>Lookup values dictionary by lookup name, value is a key/value dictionary</returns>
-    /// <code>
-    /// var lookups = ExecuteLookupQuery(1, new[] { "MyLookupName" }, Language.Italian);
-    /// var lookupValue = lookups["MyLookupName"]["MyLookupKey"];
-    /// </code>
     public Dictionary<string, Dictionary<string, string>> ExecuteLookupQuery(int payrollId,
-        IEnumerable<string> lookupNames, Language language,
+        IEnumerable<string> lookupNames, string culture,
         DateTime? regulationDate = null, DateTime? evaluationDate = null)
     {
         if (payrollId <= 0)
@@ -462,7 +454,8 @@ public abstract partial class ReportFunction : Function
         {
             {"TenantId", TenantId.ToString()},
             {"PayrollId", payrollId.ToString()},
-            {"Language", language.ToString()},
+            // fallback culture
+            {"Culture", culture ?? Culture},
             {"LookupNames", JsonSerializer.Serialize(names)}
         };
         if (regulationDate.HasValue)
@@ -548,14 +541,14 @@ public abstract partial class ReportFunction : Function
     /// <param name="employeeIds">The employee ids</param>
     /// <param name="tableName">The table name</param>
     /// <param name="columns">The table columns</param>
-    /// <param name="language">The language</param>
+    /// <param name="culture">The culture</param>
     /// <param name="valueDate">The value date</param>
     /// <param name="regulationDate">The regulation date</param>
     /// <param name="evaluationDate">The evaluation date</param>
     /// <returns>Employees case values</returns>
     public DataTable ExecuteEmployeeTimeCaseValueQuery(string tableName, int payrollId,
         IEnumerable<int> employeeIds, IEnumerable<CaseValueColumn> columns,
-        Language language, DateTime? valueDate = null,
+        string culture, DateTime? valueDate = null,
         DateTime? regulationDate = null, DateTime? evaluationDate = null)
     {
         if (string.IsNullOrWhiteSpace(tableName))
@@ -580,11 +573,14 @@ public abstract partial class ReportFunction : Function
             throw new ArgumentException(nameof(columns));
         }
 
+        // fallback culture
+        culture ??= Culture;
+
         // columns
         var columnNames = new HashSet<string>(columnList.Select(x => x.Name));
 
         // lookups
-        var lookups = GetLookups(payrollId, language, columnList, regulationDate, evaluationDate);
+        var lookups = GetLookups(payrollId, culture, columnList, regulationDate, evaluationDate);
 
         // result table
         DataTable caseValuesTable = new(tableName);
@@ -605,7 +601,8 @@ public abstract partial class ReportFunction : Function
                 {"PayrollId", payrollId.ToString()},
                 {"EmployeeId", employeeId.ToString()},
                 {"CaseType", CaseType.Employee.ToString()},
-                {"Language", language.ToString()},
+                // fallback culture
+                {"Culture", culture ?? Culture},
                 {"CaseFieldNames", JsonSerializer.Serialize(columnNames)}
             };
             if (valueDate.HasValue)
@@ -634,14 +631,14 @@ public abstract partial class ReportFunction : Function
         return caseValuesTable;
     }
 
-    private Dictionary<string, Dictionary<string, string>> GetLookups(int payrollId, Language language, List<CaseValueColumn> columns,
+    private Dictionary<string, Dictionary<string, string>> GetLookups(int payrollId, string culture, List<CaseValueColumn> columns,
         DateTime? regulationDate, DateTime? evaluationDate)
     {
         var lookups = new Dictionary<string, Dictionary<string, string>>();
         var lookupNames = columns.Where(x => !string.IsNullOrWhiteSpace(x.LookupName)).Select(x => x.LookupName).ToList();
         if (lookupNames.Any())
         {
-            lookups = ExecuteLookupQuery(payrollId, lookupNames, language, regulationDate, evaluationDate);
+            lookups = ExecuteLookupQuery(payrollId, lookupNames, culture, regulationDate, evaluationDate);
         }
         return lookups;
     }

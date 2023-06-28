@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using PayrollEngine.Client.Scripting;
 using PayrollEngine.Client.Scripting.Report;
 // ReSharper restore RedundantUsingDirective
@@ -102,18 +103,18 @@ public partial class ReportEndFunction : ReportFunction
     /// <returns>New data table, null on empty collection</returns>
     public DataTable ExecuteResultQuery(string tableName, string methodName,
         Dictionary<string, string> parameters = null) =>
-        ExecuteResultQuery(tableName, methodName, Language, true, parameters);
+        ExecuteResultQuery(tableName, methodName, Culture, true, parameters);
 
     /// <summary>Execute a result query on the Api web method</summary>
     /// <param name="tableName">Target table name</param>
     /// <param name="methodName">The query name</param>
-    /// <param name="language">The content language</param>
+    /// <param name="culture">The content culture</param>
     /// <param name="resultQuery">Add query table to the data set</param>
     /// <param name="parameters">The method parameters</param>
     /// <returns>New data table, null on empty collection</returns>
-    public DataTable ExecuteResultQuery(string tableName, string methodName, Language language,
+    public DataTable ExecuteResultQuery(string tableName, string methodName, string culture,
         bool resultQuery, Dictionary<string, string> parameters = null) =>
-        Runtime.ExecuteQuery(tableName, methodName, (int)language, parameters, resultQuery);
+        Runtime.ExecuteQuery(tableName, methodName, culture, parameters, resultQuery);
 
     /// <summary>Execute a query on the Api web method and merge the table to the set</summary>
     /// <param name="tableName">Target table name</param>
@@ -124,19 +125,19 @@ public partial class ReportEndFunction : ReportFunction
     /// <returns>New or expanded data table</returns>
     public DataTable ExecuteMergeQuery(string tableName, string methodName, string mergeColumn,
         Dictionary<string, string> parameters = null, DataMergeSchemaChange schemaChange = DataMergeSchemaChange.Add) =>
-        ExecuteMergeQuery(tableName, methodName, Language, mergeColumn, parameters, schemaChange);
+        ExecuteMergeQuery(tableName, methodName, Culture, mergeColumn, parameters, schemaChange);
 
     /// <summary>Execute a query on the Api web method and merge the table to the set</summary>
     /// <param name="tableName">Target table name</param>
     /// <param name="methodName">The query name</param>
-    /// <param name="language">The content language</param>
+    /// <param name="culture">The content culture</param>
     /// <param name="mergeColumn">The column used to merge (primary key column)</param>
     /// <param name="parameters">The method parameters</param>
     /// <param name="schemaChange">Action to take when the required data column is missing</param>
     /// <returns>New or expanded data table</returns>
-    public DataTable ExecuteMergeQuery(string tableName, string methodName, Language language, string mergeColumn,
+    public DataTable ExecuteMergeQuery(string tableName, string methodName, string culture, string mergeColumn,
         Dictionary<string, string> parameters = null, DataMergeSchemaChange schemaChange = DataMergeSchemaChange.Add) =>
-        Runtime.ExecuteMergeQuery(tableName, methodName, (int)language, mergeColumn, parameters, (int)schemaChange);
+        Runtime.ExecuteMergeQuery(tableName, methodName, culture, mergeColumn, parameters, (int)schemaChange);
 
     #endregion
 
