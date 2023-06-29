@@ -33,9 +33,6 @@ public interface IPayrollRuntime : IRuntime
     /// <summary>The payroll id</summary>
     int PayrollId { get; }
 
-    /// <summary>The ISO 3166-1 numeric country code</summary>
-    int PayrollCountry { get; }
-
     #endregion
 
     #region Date/Periods

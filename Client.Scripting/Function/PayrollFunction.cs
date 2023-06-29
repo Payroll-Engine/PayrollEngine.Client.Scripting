@@ -106,7 +106,6 @@ public abstract partial class PayrollFunction : Function
     {
         // payroll
         PayrollId = Runtime.PayrollId;
-        PayrollCountry = Runtime.PayrollCountry;
 
         // employee
         EmployeeId = Runtime.EmployeeId;
@@ -152,9 +151,6 @@ public abstract partial class PayrollFunction : Function
 
     /// <summary>The payroll id</summary>
     public int PayrollId { get; }
-
-    /// <summary>The ISO 3166-1 numeric country code</summary>
-    public int PayrollCountry { get; }
 
     #endregion
 

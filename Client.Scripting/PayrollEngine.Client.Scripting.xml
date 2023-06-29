@@ -5544,9 +5544,6 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayrollId">
             <summary>The payroll id</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayrollCountry">
-            <summary>The ISO 3166-1 numeric country code</summary>
-        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeId">
             <summary>The employee id</summary>
         </member>
@@ -9033,9 +9030,6 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.PayrollId">
             <summary>The payroll id</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.PayrollCountry">
-            <summary>The ISO 3166-1 numeric country code</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.EvaluationDate">
             <summary>The evaluation date</summary>
