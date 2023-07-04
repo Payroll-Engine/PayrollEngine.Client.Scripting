@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="PayrollEngine.Client.Scripting" Platform="DotNet" FileWrittenByProductVersion="2023.1.0.9670">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <IDEFiles>
@@ -47,7 +47,8 @@
       <High2Critical_SeverityThreshold>72000000000</High2Critical_SeverityThreshold>
       <Critical2Blocker_SeverityThreshold>360000000000</Critical2Blocker_SeverityThreshold>
     </DebtSettings>
-  </ProjectDebtSettings><Queries>
+  </ProjectDebtSettings>
+  <Queries>
     <Group Name="Quality Gates" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Quality Gates Evolution$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Percentage Coverage$]]></Query>
@@ -63,6 +64,30 @@
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Debt Rating per Namespace$]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Annual Interest$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$New Annual Interest since Baseline$]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Non-Critical Rules violated</Name>
+from r in Rules
+where !r.IsCritical && r.IsViolated()
+orderby r.Debt().Value descending
+select new { 
+   r, 
+   Issues = r.Issues(), 
+   Debt = r.Debt(), 
+   AnnualInterest = r.AnnualInterest(), 
+   BreakingPoint = r.BreakingPoint(),
+   Category = r.Category
+}
+
+//<Description>
+// **Debt**: Estimated effort to fix all rule issues.
+//
+// **Annual Interest**: Estimated annual cost to leave all rule issues unfixed.
+//
+// **Breaking Point**: Estimated point in time from now, when leaving the rule issues unfixed cost as much as fixing the rule issues.
+// A low value indicates an a rule with easy-to-fix issue with high annual interest.
+// This value can be used to prioritize issues fix, to significantly reduce interest with minimum effort.
+//
+// More documentation: https://www.ndepend.com/docs/technical-debt
+//</Description>]]></Query>
     </Group>
     <Group Name="Hot Spots" Active="True" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Types Hot Spots$]]></Query>
@@ -478,4 +503,5 @@
         <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND9916$]]></Query>
       </Group>
     </Group>
-  </Queries></NDepend>
+  </Queries>
+</NDepend>
