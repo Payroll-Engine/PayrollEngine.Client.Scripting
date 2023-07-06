@@ -20,8 +20,8 @@ public class CaseBuildActions : CaseChangeActionsBase
         if (valueType == ActionValueType.Integer)
         {
             // integer
-            var sourceValue = NewCaseFieldActionValue<int>(context);
-            var minimumValue = NewActionValue<int?>(context, minimum);
+            var sourceValue = GetActionValue<int>(context);
+            var minimumValue = GetActionValue<int?>(context, minimum);
             if (sourceValue == null || minimumValue == null || !minimumValue.IsFulfilled)
             {
                 return;
@@ -34,8 +34,8 @@ public class CaseBuildActions : CaseChangeActionsBase
         else if (valueType == ActionValueType.Decimal)
         {
             // decimal
-            var sourceValue = NewCaseFieldActionValue<decimal>(context);
-            var minimumValue = NewActionValue<decimal?>(context, minimum);
+            var sourceValue = GetActionValue<decimal>(context);
+            var minimumValue = GetActionValue<decimal?>(context, minimum);
             if (sourceValue == null || minimumValue == null || !minimumValue.IsFulfilled)
             {
                 return;
@@ -48,8 +48,8 @@ public class CaseBuildActions : CaseChangeActionsBase
         else if (valueType == ActionValueType.DateTime)
         {
             // date time
-            var sourceValue = NewCaseFieldActionValue<DateTime>(context);
-            var minimumValue = NewActionValue<DateTime?>(context, minimum);
+            var sourceValue = GetActionValue<DateTime>(context);
+            var minimumValue = GetActionValue<DateTime?>(context, minimum);
             if (sourceValue == null || minimumValue?.ResolvedValue == null || !minimumValue.IsFulfilled)
             {
                 return;
@@ -73,8 +73,8 @@ public class CaseBuildActions : CaseChangeActionsBase
         if (valueType == ActionValueType.Integer)
         {
             // integer
-            var sourceValue = NewCaseFieldActionValue<int>(context);
-            var maximumValue = NewActionValue<int?>(context, maximum);
+            var sourceValue = GetActionValue<int>(context);
+            var maximumValue = GetActionValue<int?>(context, maximum);
             if (sourceValue == null || maximumValue == null || !maximumValue.IsFulfilled)
             {
                 return;
@@ -87,8 +87,8 @@ public class CaseBuildActions : CaseChangeActionsBase
         else if (valueType == ActionValueType.Decimal)
         {
             // decimal
-            var sourceValue = NewCaseFieldActionValue<decimal>(context);
-            var maximumValue = NewActionValue<decimal?>(context, maximum);
+            var sourceValue = GetActionValue<decimal>(context);
+            var maximumValue = GetActionValue<decimal?>(context, maximum);
             if (sourceValue == null || maximumValue == null || !maximumValue.IsFulfilled)
             {
                 return;
@@ -101,8 +101,8 @@ public class CaseBuildActions : CaseChangeActionsBase
         else if (valueType == ActionValueType.DateTime)
         {
             // date time
-            var sourceValue = NewCaseFieldActionValue<DateTime>(context);
-            var maximumValue = NewActionValue<DateTime?>(context, maximum);
+            var sourceValue = GetActionValue<DateTime>(context);
+            var maximumValue = GetActionValue<DateTime?>(context, maximum);
             if (sourceValue == null || maximumValue?.ResolvedValue == null || !maximumValue.IsFulfilled)
             {
                 return;
@@ -136,7 +136,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType })]
     [CaseBuildAction("SetValue", "Set the case change value")]
     public void SetValue(CaseChangeActionContext context, object value) =>
-        SetFieldValue(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), value);
+        SetFieldValue(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), value);
 
     /// <summary>Set the case change start date</summary>
     /// <param name="context">The action context</param>
@@ -145,7 +145,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [CaseBuildAction("SetStart", "Set the case change start date", "FieldStart")]
     public void SetStart(CaseChangeActionContext context, object start) =>
-        SetFieldStart(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), start);
+        SetFieldStart(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), start);
 
     /// <summary>Set the case change end date</summary>
     /// <param name="context">The action context</param>
@@ -154,7 +154,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [CaseBuildAction("SetEnd", "Set the case change end date", "FieldEnd")]
     public void SetEnd(CaseChangeActionContext context, object end) =>
-        SetFieldEnd(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), end);
+        SetFieldEnd(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), end);
 
     /// <summary>Set the case change start end end date</summary>
     /// <param name="context">The action context</param>
@@ -166,7 +166,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [CaseBuildAction("SetStartEnd", "Set the case change start end end date", "FieldStart", "FieldEnd")]
     public void SetStartEnd(CaseChangeActionContext context, object start, object end) =>
-        SetFieldStartEnd(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), start, end);
+        SetFieldStartEnd(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), start, end);
 
     /// <summary>Set the case change field attribute value</summary>
     /// <param name="context">The action context</param>
@@ -178,7 +178,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType })]
     [CaseBuildAction("SetAttribute", "Set the case change field attribute value", "Field")]
     public void SetAttribute(CaseChangeActionContext context, object attributeName, object value) =>
-        SetFieldAttribute(context, ActionCaseValue.ToCaseChangeFieldAttributeReference(context.CaseFieldName), attributeName, value);
+        SetFieldAttribute(context, ActionCaseValueBase.ToCaseChangeFieldAttributeReference(context.CaseFieldName), attributeName, value);
 
     /// <summary>Set the case value attribute value</summary>
     /// <param name="context">The action context</param>
@@ -190,7 +190,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType })]
     [CaseBuildAction("SetValueAttribute", "Set the case value attribute value", "FieldValue")]
     public void SetValueAttribute(CaseChangeActionContext context, object attributeName, object value) =>
-        SetFieldValueAttribute(context, ActionCaseValue.ToCaseChangeValueAttributeReference(context.CaseFieldName), attributeName, value);
+        SetFieldValueAttribute(context, ActionCaseValueBase.ToCaseChangeValueAttributeReference(context.CaseFieldName), attributeName, value);
 
     /// <summary>Set the case change field value</summary>
     /// <param name="context">The action context</param>
@@ -204,7 +204,7 @@ public class CaseBuildActions : CaseChangeActionsBase
     public void SetFieldValue(CaseChangeActionContext context, object target, object value)
     {
         // target, must be a case change reference
-        var typeValue = NewActionValue<object>(context, target);
+        var typeValue = GetActionValue<object>(context, target);
         if (typeValue == null || !typeValue.IsCaseChangeReference)
         {
             context.AddIssue($"Invalid target field reference {target}");
@@ -238,7 +238,7 @@ public class CaseBuildActions : CaseChangeActionsBase
 
     private static void SetValue<TValue>(CaseChangeActionContext context, object value, ActionCaseChangeValue<object> typeValue)
     {
-        var targetValue = NewActionValue<TValue>(context, value);
+        var targetValue = GetActionValue<TValue>(context, value);
         if (targetValue == null || !targetValue.IsFulfilled)
         {
             return;
@@ -258,7 +258,7 @@ public class CaseBuildActions : CaseChangeActionsBase
     public void SetFieldStart(CaseChangeActionContext context, object target, object start)
     {
         // target, must be a case change reference
-        var targetValue = NewActionValue<DateTime?>(context, target);
+        var targetValue = GetActionValue<DateTime?>(context, target);
         if (targetValue == null || !targetValue.IsCaseChangeReference)
         {
             context.AddIssue($"Invalid target field reference {target}");
@@ -266,7 +266,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         }
 
         // start
-        var startValue = NewActionValue<DateTime?>(context, start);
+        var startValue = GetActionValue<DateTime?>(context, start);
         if (startValue?.ResolvedValue == null || !startValue.IsFulfilled)
         {
             return;
@@ -292,7 +292,7 @@ public class CaseBuildActions : CaseChangeActionsBase
     public void SetFieldEnd(CaseChangeActionContext context, object target, object end)
     {
         // target, must be a case change reference
-        var targetValue = NewActionValue<DateTime?>(context, target);
+        var targetValue = GetActionValue<DateTime?>(context, target);
         if (targetValue == null || !targetValue.IsCaseChangeReference)
         {
             context.AddIssue($"Invalid target field reference {target}");
@@ -300,7 +300,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         }
 
         // end
-        var endValue = NewActionValue<DateTime?>(context, end);
+        var endValue = GetActionValue<DateTime?>(context, end);
         if (endValue?.ResolvedValue == null || !endValue.IsFulfilled)
         {
             return;
@@ -329,7 +329,7 @@ public class CaseBuildActions : CaseChangeActionsBase
     public void SetFieldStartEnd(CaseChangeActionContext context, object target, object start, object end)
     {
         // target, must be a case change reference
-        var targetValue = NewActionValue<DateTime?>(context, target);
+        var targetValue = GetActionValue<DateTime?>(context, target);
         if (!targetValue.IsCaseChangeReference)
         {
             context.AddIssue($"Invalid target field reference {target}");
@@ -337,14 +337,14 @@ public class CaseBuildActions : CaseChangeActionsBase
         }
 
         // start
-        var startValue = NewActionValue<DateTime?>(context, start);
+        var startValue = GetActionValue<DateTime?>(context, start);
         if (startValue?.ResolvedValue == null || !startValue.IsFulfilled)
         {
             return;
         }
 
         // end
-        var endValue = NewActionValue<DateTime?>(context, end);
+        var endValue = GetActionValue<DateTime?>(context, end);
         if (endValue?.ResolvedValue == null || !endValue.IsFulfilled)
         {
             return;
@@ -372,7 +372,7 @@ public class CaseBuildActions : CaseChangeActionsBase
     public void SetFieldAttribute(CaseChangeActionContext context, object target, object attributeName, object value)
     {
         // target, must be a case field attribute
-        var targetValue = NewActionValue<object>(context, target);
+        var targetValue = GetActionValue<object>(context, target);
         if (targetValue == null || !targetValue.IsCaseFieldAttribute)
         {
             context.AddIssue($"Invalid target attribute reference {target}");
@@ -380,7 +380,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         }
 
         // attribute
-        var attributeNameValue = NewActionValue<string>(context, attributeName);
+        var attributeNameValue = GetActionValue<string>(context, attributeName);
         if (string.IsNullOrWhiteSpace(attributeNameValue.ResolvedValue))
         {
             context.AddIssue($"Invalid attribute {attributeName}");
@@ -388,7 +388,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         }
 
         // remove attribute
-        var valueValue = NewActionValue<object>(context, value);
+        var valueValue = GetActionValue<object>(context, value);
         if (valueValue?.ResolvedValue == null)
         {
             context.Function.RemoveCaseFieldAttribute(targetValue.ReferenceField, attributeNameValue.ResolvedValue);
@@ -415,7 +415,7 @@ public class CaseBuildActions : CaseChangeActionsBase
     public void SetFieldValueAttribute(CaseChangeActionContext context, object target, object attributeName, object value)
     {
         // target, must be a case field attribute
-        var targetValue = NewActionValue<object>(context, target);
+        var targetValue = GetActionValue<object>(context, target);
         if (targetValue == null || !targetValue.IsCaseValueAttribute)
         {
             context.AddIssue($"Invalid target attribute reference {target}");
@@ -423,7 +423,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         }
 
         // attribute
-        var attributeNameValue = NewActionValue<string>(context, attributeName);
+        var attributeNameValue = GetActionValue<string>(context, attributeName);
         if (string.IsNullOrWhiteSpace(attributeNameValue.ResolvedValue))
         {
             context.AddIssue($"Invalid attribute {attributeName}");
@@ -431,7 +431,7 @@ public class CaseBuildActions : CaseChangeActionsBase
         }
 
         // remove attribute
-        var valueValue = NewActionValue<object>(context, value);
+        var valueValue = GetActionValue<object>(context, value);
         if (valueValue?.ResolvedValue == null)
         {
             context.Function.RemoveCaseValueAttribute(targetValue.ReferenceField, attributeNameValue.ResolvedValue);

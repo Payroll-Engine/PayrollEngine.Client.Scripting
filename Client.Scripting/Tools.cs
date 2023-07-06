@@ -57,19 +57,70 @@ public class Key
 
 #region CheckDigit
 
-/// <summary>Check value digits exception</summary>
-public class CheckDigitException : ScriptException
+/// <summary>Check digits exception</summary>
+public abstract class CheckDigitException : ScriptException
 {
-    /// <summary>Initializes a new instance of the exception</summary>
-    public CheckDigitException(string message) :
-        base(message)
-    {
-    }
+    /// <summary>The check value</summary>
+    public string CheckValue { get; }
 
     /// <summary>Initializes a new instance of the exception</summary>
-    public CheckDigitException(string message, Exception innerException) :
-        base(message, innerException)
+    /// <param name="message">The exception message</param>
+    /// <param name="checkValue">The check value</param>
+    protected CheckDigitException(string message, string checkValue) :
+        base(message)
     {
+        CheckValue = checkValue;
+    }
+}
+
+/// <summary>Check digits value length exception</summary>
+public class CheckDigitLengthException : CheckDigitException
+{
+    /// <summary>The minimum length</summary>
+    public int MinLength { get; }
+
+    /// <summary>Initializes a new instance of the exception</summary>
+    /// <param name="message">The exception message</param>
+    /// <param name="checkValue">The check value</param>
+    /// <param name="minLength">The minimum length</param>
+    public CheckDigitLengthException(string message, string checkValue, int minLength) :
+        base(message, checkValue)
+    {
+        MinLength = minLength;
+    }
+}
+
+/// <summary>Check digits value character exception</summary>
+public class CheckDigitCharException : CheckDigitException
+{
+    /// <summary>The invalid character</summary>
+    public char InvalidCharacter { get; }
+
+    /// <summary>Initializes a new instance of the exception</summary>
+    /// <param name="message">The exception message</param>
+    /// <param name="checkValue">The check value</param>
+    /// <param name="invalidCharacter">The invalid character</param>
+    public CheckDigitCharException(string message, string checkValue, char invalidCharacter) :
+        base(message, checkValue)
+    {
+        InvalidCharacter = invalidCharacter;
+    }
+}
+
+/// <summary>Check digits value mismatch exception</summary>
+public class CheckDigitMismatchException : CheckDigitException
+{
+    /// <summary>The checked value</summary>
+    public string CheckedValue { get; }
+
+    /// <summary>Initializes a new instance of the exception</summary>
+    /// <param name="message">The exception message</param>
+    /// <param name="checkValue">The check value</param>
+    /// <param name="checkedValue">The invalid character</param>
+    public CheckDigitMismatchException(string message, string checkValue, string checkedValue) :
+        base(message, checkValue)
+    {
+        CheckedValue = checkedValue;
     }
 }
 
@@ -80,21 +131,21 @@ public class CheckDigit
     private readonly int numCheckDigits;
 
     /// <summary>Check numeric strings with one check digit or the supplementary check character "X"</summary>
-    public static CheckDigit Mod11Radix2 => new(11, 2, false, "0123456789X");
+    public static CheckDigit Mod11Radix2 => new(11, 2, "0123456789X", false);
 
     /// <summary>Check alphanumeric strings with one check digit or letter or the supplementary check character "*"</summary>
     // ReSharper disable once StringLiteralTypo
-    public static CheckDigit Mod37Radix2 => new(137, 2, false, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ*");
+    public static CheckDigit Mod37Radix2 => new(137, 2, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ*", false);
 
     /// <summary>Check numeric strings with two check digits</summary>
-    public static CheckDigit Mod97Radix10 => new(97, 10, true, "0123456789");
+    public static CheckDigit Mod97Radix10 => new(97, 10, "0123456789", true);
 
     /// <summary>Check alphabetic strings with two check letters</summary>
     // ReSharper disable once StringLiteralTypo
-    public static CheckDigit Mod661Radix26 => new(661, 26, true, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    public static CheckDigit Mod661Radix26 => new(661, 26, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", true);
 
     /// <summary>Check alphabetic strings with two check letters</summary>
-    public static CheckDigit Mod1271Radix36 => new(1271, 36, true, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    public static CheckDigit Mod1271Radix36 => new(1271, 36, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", true);
 
     /// <summary>Check UPC-A digit</summary>
     public static bool IsValidUpcA(string value) => IsWeightedValid(value, 1);
@@ -108,9 +159,9 @@ public class CheckDigit
     /// <summary>Creates a new instance</summary>
     /// <param name="modulus">The modulus</param>
     /// <param name="radix">The radix</param>
-    /// <param name="doubleCheckDigit">Is the computed check digit composed by two characters?</param>
     /// <param name="characterSet">The supported character set</param>
-    public CheckDigit(int modulus, int radix, bool doubleCheckDigit, string characterSet)
+    /// <param name="doubleCheckDigit">Is the computed check digit composed by two characters?</param>
+    public CheckDigit(int modulus, int radix, string characterSet, bool doubleCheckDigit)
     {
         if (modulus <= 0)
         {
@@ -150,8 +201,10 @@ public class CheckDigit
 
     /// <summary>Checks if the given value contains a valid check digit</summary>
     /// <param name="value">The value to check</param>
-    /// <returns>True for a valid value</returns>
-    public bool IsValid(string value)
+    /// <exception cref="ArgumentException">Empty value exception</exception>
+    /// <exception cref="CheckDigitLengthException">Value length exception</exception>
+    /// <exception cref="CheckDigitMismatchException">Value with invalid character exception</exception>
+    public void Check(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -159,11 +212,16 @@ public class CheckDigit
         }
         if (value.Length <= numCheckDigits)
         {
-            throw new CheckDigitException($"Value length should be greater than {numCheckDigits}");
+            throw new CheckDigitLengthException($"Value '{value}': length should be greater than {numCheckDigits}",
+                value, numCheckDigits);
         }
 
         var checkedValue = AddCheckDigit(value.Substring(0, value.Length - numCheckDigits));
-        return string.Equals(value, checkedValue);
+        if (!string.Equals(value, checkedValue))
+        {
+            throw new CheckDigitMismatchException($"Value '{value}': length should equals to {checkedValue}",
+                value, checkedValue);
+        }
     }
 
     /// <summary>Adds the check digit to the given value</summary>
@@ -175,6 +233,8 @@ public class CheckDigit
     /// <summary>Calculates the check digit from a given value</summary>
     /// <param name="value">The value from which the check digit will be computed</param>
     /// <returns>The check digit</returns>
+    /// <exception cref="ArgumentException">Empty value exception</exception>
+    /// <exception cref="CheckDigitCharException">Invalid character exception</exception>
     public string CalculateCheckDigit(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -189,7 +249,8 @@ public class CheckDigit
             var indexToAdd = CharacterSet.IndexOf(valueDigit);
             if (indexToAdd < 0)
             {
-                throw new CheckDigitException($"Value with illegal character '{valueDigit}'");
+                throw new CheckDigitCharException($"Value '{value}': with illegal character '{valueDigit}'",
+                    value, valueDigit);
             }
             calculation = ((calculation + indexToAdd) * Radix) % Modulus;
         }

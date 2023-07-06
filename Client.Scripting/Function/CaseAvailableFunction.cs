@@ -48,7 +48,7 @@ public abstract class CaseAvailableActionsBase : CaseActionsBase
         ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
 
     /// <summary>New source action</summary>
-    protected static CaseAvailableActionValue<TValue> NewCaseActionValue<TValue>(CaseAvailableActionContext context,
+    protected static CaseAvailableActionValue<TValue> GetSourceActionValue<TValue>(CaseAvailableActionContext context,
         string source)
     {
         if (string.IsNullOrWhiteSpace(source))
@@ -58,7 +58,7 @@ public abstract class CaseAvailableActionsBase : CaseActionsBase
 
         try
         {
-            return new CaseAvailableActionValue<TValue>(new(context.Function), ActionCaseValue.ToCaseValueReference(source));
+            return new CaseAvailableActionValue<TValue>(new(context.Function), ActionCaseValueBase.ToCaseValueReference(source));
         }
         catch (Exception exception)
         {
@@ -68,7 +68,7 @@ public abstract class CaseAvailableActionsBase : CaseActionsBase
     }
 
     /// <summary>New action</summary>
-    protected static CaseAvailableActionValue<TValue> NewActionValue<TValue>(CaseAvailableActionContext context,
+    protected static CaseAvailableActionValue<TValue> GetActionValue<TValue>(CaseAvailableActionContext context,
         object value, DateTime? valueDate = null)
     {
         if (value == null)
@@ -89,7 +89,7 @@ public abstract class CaseAvailableActionsBase : CaseActionsBase
 
     /// <summary>Resolve action value</summary>
     protected static TValue ResolveActionValue<TValue>(CaseAvailableActionContext context, object value) =>
-        NewActionValue<TValue>(context, value).ResolvedValue;
+        GetActionValue<TValue>(context, value).ResolvedValue;
 }
 
 #endregion

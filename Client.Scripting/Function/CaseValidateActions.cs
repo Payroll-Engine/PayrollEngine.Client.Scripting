@@ -18,7 +18,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [CaseValidateAction("Email", "Validate field email address", "Validation", "FieldValue")]
     public void Email(CaseChangeActionContext context)
     {
-        var sourceValue = NewCaseFieldActionValue<string>(context);
+        var sourceValue = GetActionValue<string>(context);
         if (sourceValue?.ResolvedValue == null)
         {
             AddIssue(context, "MissingCaseValue", context.CaseFieldName);
@@ -46,7 +46,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         {
             throw new ScriptException(nameof(pattern));
         }
-        var sourceValue = NewCaseFieldActionValue<string>(context);
+        var sourceValue = GetActionValue<string>(context);
         if (sourceValue?.ResolvedValue == null)
         {
             AddIssue(context, "MissingCaseValue", context.CaseFieldName);
@@ -64,7 +64,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [CaseValidateAction("Defined", "Validate for available case value", "Validation", "FieldValue")]
     public void Defined(CaseChangeActionContext context)
     {
-        var sourceValue = NewCaseFieldActionValue<object>(context);
+        var sourceValue = GetActionValue<object>(context);
         if (sourceValue?.ResolvedValue == null)
         {
             AddIssue(context, "UndefinedValue", context.CaseFieldName);
@@ -76,7 +76,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     [CaseValidateAction("Undefined", "Validate for unavailable case value", "Validation", "FieldValue")]
     public void Undefined(CaseChangeActionContext context)
     {
-        var sourceValue = NewCaseFieldActionValue<object>(context);
+        var sourceValue = GetActionValue<object>(context);
         if (sourceValue?.ResolvedValue != null)
         {
             AddIssue(context, "DefinedValue", context.CaseFieldName);
@@ -104,7 +104,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         var valueDate = compareDate == null ? null : ResolveActionValue<DateTime?>(context, compareDate);
 
         // source value
-        var sourceValue = NewActionValue<bool?>(context, source, valueDate);
+        var sourceValue = GetActionValue<bool?>(context, source, valueDate);
         if (sourceValue?.ResolvedValue == null)
         {
             AddIssue(context, "CompareInvalidSource", sourceValue);
@@ -132,7 +132,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         var valueDate = compareDate == null ? null : ResolveActionValue<DateTime?>(context, compareDate);
 
         // source value
-        var sourceValue = NewActionValue<bool?>(context, source, valueDate);
+        var sourceValue = GetActionValue<bool?>(context, source, valueDate);
         if (sourceValue?.ResolvedValue == null)
         {
             AddIssue(context, "CompareInvalidSource", sourceValue);
@@ -182,40 +182,40 @@ public class CaseValidateActions : CaseChangeActionsBase
         switch (sourceType)
         {
             case ActionValueType.String:
-                var sourceString = NewActionValue<string>(context, source);
-                var compareString = NewActionValue<string>(context, compare, valueDate);
+                var sourceString = GetActionValue<string>(context, source);
+                var compareString = GetActionValue<string>(context, compare, valueDate);
                 if (sourceString != null && sourceString.ResolvedValue != compareString?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueNotEqual", sourceString, compareString);
                 }
                 break;
             case ActionValueType.Boolean:
-                var sourceBool = NewActionValue<bool>(context, source);
-                var compareBool = NewActionValue<bool?>(context, compare, valueDate);
+                var sourceBool = GetActionValue<bool>(context, source);
+                var compareBool = GetActionValue<bool?>(context, compare, valueDate);
                 if (sourceBool != null && sourceBool.ResolvedValue != compareBool?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueNotEqual", sourceBool, compareBool);
                 }
                 break;
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger != null && sourceInteger.ResolvedValue != compareInteger?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueNotEqual", sourceInteger, compareInteger);
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal != null && sourceDecimal.ResolvedValue != compareDecimal?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueNotEqual", sourceDecimal, compareDecimal);
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime != null && sourceDateTime.ResolvedValue != compareDateTime?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueNotEqual", sourceDateTime, compareDateTime);
@@ -263,40 +263,40 @@ public class CaseValidateActions : CaseChangeActionsBase
         switch (sourceType)
         {
             case ActionValueType.String:
-                var sourceString = NewActionValue<string>(context, source);
-                var compareString = NewActionValue<string>(context, compare, valueDate);
+                var sourceString = GetActionValue<string>(context, source);
+                var compareString = GetActionValue<string>(context, compare, valueDate);
                 if (sourceString != null && sourceString.ResolvedValue == compareString?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueEqual", sourceString, compareString);
                 }
                 break;
             case ActionValueType.Boolean:
-                var sourceBool = NewActionValue<bool>(context, source);
-                var compareBool = NewActionValue<bool?>(context, compare, valueDate);
+                var sourceBool = GetActionValue<bool>(context, source);
+                var compareBool = GetActionValue<bool?>(context, compare, valueDate);
                 if (sourceBool != null && sourceBool.ResolvedValue == compareBool?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueEqual", sourceBool, compareBool);
                 }
                 break;
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger != null && sourceInteger.ResolvedValue == compareInteger?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueEqual", sourceInteger, compareInteger);
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal != null && sourceDecimal.ResolvedValue == compareDecimal?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueEqual", sourceDecimal, compareDecimal);
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime != null && sourceDateTime.ResolvedValue == compareDateTime?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueEqual", sourceDateTime, compareDateTime);
@@ -344,24 +344,24 @@ public class CaseValidateActions : CaseChangeActionsBase
         switch (sourceType)
         {
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger != null && sourceInteger.ResolvedValue <= compareInteger?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueLessEqual", sourceInteger, compareInteger);
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal != null && sourceDecimal.ResolvedValue <= compareDecimal?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueLessEqual", sourceDecimal, compareDecimal);
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime != null && sourceDateTime.ResolvedValue <= compareDateTime?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueLessEqual", sourceDateTime, compareDateTime);
@@ -409,24 +409,24 @@ public class CaseValidateActions : CaseChangeActionsBase
         switch (sourceType)
         {
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger != null && sourceInteger.ResolvedValue < compareInteger?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueLess", sourceInteger, compareInteger);
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal != null && sourceDecimal.ResolvedValue < compareDecimal?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueLess", sourceDecimal, compareDecimal);
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime != null && sourceDateTime.ResolvedValue < compareDateTime?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueLess", sourceDateTime, compareDateTime);
@@ -474,24 +474,24 @@ public class CaseValidateActions : CaseChangeActionsBase
         switch (sourceType)
         {
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger != null && sourceInteger.ResolvedValue >= compareInteger?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueGreaterEqual", sourceInteger, compareInteger);
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal != null && sourceDecimal.ResolvedValue >= compareDecimal?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueGreaterEqual", sourceDecimal, compareDecimal);
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime != null && sourceDateTime.ResolvedValue >= compareDateTime?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueGreaterEqual", sourceDateTime, compareDateTime);
@@ -539,24 +539,24 @@ public class CaseValidateActions : CaseChangeActionsBase
         switch (sourceType)
         {
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger != null && sourceInteger.ResolvedValue > compareInteger?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueGreater", sourceInteger, compareInteger);
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal != null && sourceDecimal.ResolvedValue > compareDecimal?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueGreater", sourceDecimal, compareDecimal);
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime != null && sourceDateTime.ResolvedValue > compareDateTime?.ResolvedValue)
                 {
                     AddIssue(context, "CompareValueGreater", sourceDateTime, compareDateTime);
@@ -616,7 +616,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceValue })]
     [CaseValidateAction("ValueEqual", "Validate for equal case value", "Validation", "FieldValue")]
     public void ValueEqual(CaseChangeActionContext context, object compare, object compareDate = null) =>
-        Equal(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
+        Equal(context, ActionCaseValueBase.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
     /// <summary>Validate for not equal value</summary>
     /// <param name="context">The action context</param>
@@ -631,7 +631,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceValue })]
     [CaseValidateAction("ValueNotEqual", "Validate for different case value", "Validation", "FieldValue")]
     public void ValueNotEqual(CaseChangeActionContext context, object compare, object compareDate = null) =>
-        NotEqual(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
+        NotEqual(context, ActionCaseValueBase.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
     /// <summary>Validate value greater than a criteria</summary>
     /// <param name="context">The action context</param>
@@ -646,7 +646,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceValue })]
     [CaseValidateAction("ValueGreaterThan", "Validate for greater case value", "Validation", "FieldValue")]
     public void ValueGreaterThan(CaseChangeActionContext context, object compare, object compareDate = null) =>
-        GreaterThan(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
+        GreaterThan(context, ActionCaseValueBase.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
     /// <summary>Validate value greater equal than a criteria</summary>
     /// <param name="context">The action context</param>
@@ -661,7 +661,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceValue })]
     [CaseValidateAction("ValueGreaterEqualThan", "Validate for greater or equal case value", "Validation", "FieldValue")]
     public void ValueGreaterEqualThan(CaseChangeActionContext context, object compare, object compareDate = null) =>
-        GreaterEqualThan(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
+        GreaterEqualThan(context, ActionCaseValueBase.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
     /// <summary>Validate value less than a criteria</summary>
     /// <param name="context">The action context</param>
@@ -676,7 +676,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceValue })]
     [CaseValidateAction("ValueLessThan", "Validate for smaller case value", "Validation", "FieldValue")]
     public void ValueLessThan(CaseChangeActionContext context, object compare, object compareDate = null) =>
-        LessThan(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
+        LessThan(context, ActionCaseValueBase.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
     /// <summary>Validate value less equal than a criteria</summary>
     /// <param name="context">The action context</param>
@@ -691,7 +691,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceValue })]
     [CaseValidateAction("ValueLessEqualThan", "Validate for smaller or equal case value")]
     public void ValueLessEqualThan(CaseChangeActionContext context, object compare, object compareDate = null) =>
-        LessEqualThan(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
+        LessEqualThan(context, ActionCaseValueBase.ToCaseChangeValueReference(context.CaseFieldName), compare, compareDate);
 
     /// <summary>Validate range case value</summary>
     /// <param name="context">The action context</param>
@@ -711,7 +711,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceValue })]
     [CaseValidateAction("ValueBetween", "Validate range case value", "Validation", "FieldValue")]
     public void ValueBetween(CaseChangeActionContext context, object start, object end, object compareDate = null) =>
-        Between(context, ActionCaseValue.ToCaseChangeValueReference(context.CaseFieldName), start, end, compareDate);
+        Between(context, ActionCaseValueBase.ToCaseChangeValueReference(context.CaseFieldName), start, end, compareDate);
 
     #endregion
 
@@ -726,7 +726,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceStart })]
     [CaseValidateAction("StartEqual", "Validate for equal case value start", "Validation", "FieldStart")]
     public void StartEqual(CaseChangeActionContext context, object compare) =>
-        Equal(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
+        Equal(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for different case value start</summary>
     /// <param name="context">The action context</param>
@@ -737,7 +737,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceStart })]
     [CaseValidateAction("StartNotEqual", "Validate for different case value start", "Validation", "FieldStart")]
     public void StartNotEqual(CaseChangeActionContext context, object compare) =>
-        NotEqual(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
+        NotEqual(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for greater case value start</summary>
     /// <param name="context">The action context</param>
@@ -748,7 +748,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceStart })]
     [CaseValidateAction("StartGreaterThan", "Validate for greater case value start", "Validation", "FieldStart")]
     public void StartGreaterThan(CaseChangeActionContext context, object compare) =>
-        GreaterThan(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
+        GreaterThan(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for greater or equal case value start</summary>
     /// <param name="context">The action context</param>
@@ -759,7 +759,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceStart })]
     [CaseValidateAction("StartGreaterEqualThan", "Validate for greater or equal case value start", "Validation", "FieldStart")]
     public void StartGreaterEqualThan(CaseChangeActionContext context, object compare) =>
-        GreaterEqualThan(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
+        GreaterEqualThan(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for smaller case value start</summary>
     /// <param name="context">The action context</param>
@@ -770,7 +770,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceStart })]
     [CaseValidateAction("StartLessThan", "Validate for smaller case value start", "Validation", "FieldStart")]
     public void StartLessThan(CaseChangeActionContext context, object compare) =>
-        LessThan(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
+        LessThan(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for smaller or equal case value start</summary>
     /// <param name="context">The action context</param>
@@ -781,7 +781,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceStart })]
     [CaseValidateAction("StartLessEqualThan", "Validate for smaller or equal case value start", "Validation", "FieldStart")]
     public void StartLessEqualThan(CaseChangeActionContext context, object compare) =>
-        LessEqualThan(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), compare);
+        LessEqualThan(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), compare);
 
     /// <summary>Validate range case value start</summary>
     /// <param name="context">The action context</param>
@@ -797,7 +797,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceStart })]
     [CaseValidateAction("StartBetween", "Validate range case value start", "Validation", "FieldStart")]
     public void StartBetween(CaseChangeActionContext context, object start, object end) =>
-        Between(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), start, end);
+        Between(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), start, end);
 
     #endregion
 
@@ -812,7 +812,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceEnd })]
     [CaseValidateAction("EndEqual", "Validate for equal case value end", "Validation", "FieldEnd")]
     public void EndEqual(CaseChangeActionContext context, object compare) =>
-        Equal(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
+        Equal(context, ActionCaseValueBase.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for different case value end</summary>
     /// <param name="context">The action context</param>
@@ -823,7 +823,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceEnd })]
     [CaseValidateAction("EndNotEqual", "Validate for different case value end", "Validation", "FieldEnd")]
     public void EndNotEqual(CaseChangeActionContext context, object compare) =>
-        NotEqual(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
+        NotEqual(context, ActionCaseValueBase.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for greater case value end</summary>
     /// <param name="context">The action context</param>
@@ -834,7 +834,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceEnd })]
     [CaseValidateAction("EndGreaterThan", "Validate for greater case value end", "Validation", "FieldEnd")]
     public void EndGreaterThan(CaseChangeActionContext context, object compare) =>
-        GreaterThan(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
+        GreaterThan(context, ActionCaseValueBase.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for greater or equal case value end</summary>
     /// <param name="context">The action context</param>
@@ -845,7 +845,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceEnd })]
     [CaseValidateAction("EndGreaterEqualThan", "Validate for greater or equal case value end", "Validation", "FieldEnd")]
     public void EndGreaterEqualThan(CaseChangeActionContext context, object compare) =>
-        GreaterEqualThan(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
+        GreaterEqualThan(context, ActionCaseValueBase.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for smaller case value end</summary>
     /// <param name="context">The action context</param>
@@ -856,7 +856,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceEnd })]
     [CaseValidateAction("EndLessThan", "Validate for smaller case value end", "Validation", "FieldEnd")]
     public void EndLessThan(CaseChangeActionContext context, object compare) =>
-        LessThan(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
+        LessThan(context, ActionCaseValueBase.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
     /// <summary>Validate for smaller or equal case value end</summary>
     /// <param name="context">The action context</param>
@@ -867,7 +867,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceEnd })]
     [CaseValidateAction("EndLessEqualThan", "Validate for smaller or equal case value end", "Validation", "FieldEnd")]
     public void EndLessEqualThan(CaseChangeActionContext context, object compare) =>
-        LessEqualThan(context, ActionCaseValue.ToCaseChangeEndReference(context.CaseFieldName), compare);
+        LessEqualThan(context, ActionCaseValueBase.ToCaseChangeEndReference(context.CaseFieldName), compare);
 
     /// <summary>Validate range case value end</summary>
     /// <param name="context">The action context</param>
@@ -883,7 +883,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueSources: new[] { ActionSourceEnd })]
     [CaseValidateAction("EndBetween", "Validate range case value end", "Validation", "FieldEnd")]
     public void EndBetween(CaseChangeActionContext context, object start, object end) =>
-        Between(context, ActionCaseValue.ToCaseChangeStartReference(context.CaseFieldName), start, end);
+        Between(context, ActionCaseValueBase.ToCaseChangeStartReference(context.CaseFieldName), start, end);
 
     #endregion
 
@@ -904,7 +904,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     public void FieldPeriodBefore(CaseChangeActionContext context, string fieldName, object moment)
     {
         // period start
-        var startValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToStartReference(fieldName));
+        var startValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToStartReference(fieldName));
         var start = startValue?.ResolvedValue;
         if (!start.HasValue)
         {
@@ -912,14 +912,14 @@ public class CaseValidateActions : CaseChangeActionsBase
             return;
         }
         // period end
-        var endValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToEndReference(fieldName));
+        var endValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToEndReference(fieldName));
         if (endValue?.ResolvedValue == null)
         {
             return;
         }
 
         // test moment
-        var momentValue = NewActionValue<DateTime?>(context, moment);
+        var momentValue = GetActionValue<DateTime?>(context, moment);
         if (momentValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidTestDate", fieldName, moment);
@@ -948,7 +948,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     public void FieldPeriodNotBefore(CaseChangeActionContext context, string fieldName, object moment)
     {
         // period start
-        var startValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToStartReference(fieldName));
+        var startValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToStartReference(fieldName));
         var start = startValue?.ResolvedValue;
         if (!start.HasValue)
         {
@@ -956,14 +956,14 @@ public class CaseValidateActions : CaseChangeActionsBase
             return;
         }
         // period end
-        var endValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToEndReference(fieldName));
+        var endValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToEndReference(fieldName));
         if (endValue?.ResolvedValue == null)
         {
             return;
         }
 
         // test moment
-        var momentValue = NewActionValue<DateTime?>(context, moment);
+        var momentValue = GetActionValue<DateTime?>(context, moment);
         if (momentValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidTestDate", fieldName, moment);
@@ -996,7 +996,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     public void FieldPeriodWithin(CaseChangeActionContext context, string fieldName, object moment, bool closedPeriod = false)
     {
         // period start
-        var startValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToStartReference(fieldName));
+        var startValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToStartReference(fieldName));
         var start = startValue?.ResolvedValue;
         if (!start.HasValue)
         {
@@ -1004,7 +1004,7 @@ public class CaseValidateActions : CaseChangeActionsBase
             return;
         }
         // period end
-        var endValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToEndReference(fieldName));
+        var endValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToEndReference(fieldName));
         var end = endValue?.ResolvedValue;
         if (closedPeriod && !end.HasValue)
         {
@@ -1014,7 +1014,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         end ??= Date.MaxValue;
 
         // test moment
-        var momentValue = NewActionValue<DateTime?>(context, moment);
+        var momentValue = GetActionValue<DateTime?>(context, moment);
         if (momentValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidTestDate", fieldName, moment);
@@ -1047,7 +1047,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     public void FieldPeriodNotWithin(CaseChangeActionContext context, string fieldName, object moment, bool closedPeriod = false)
     {
         // period start
-        var startValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToStartReference(fieldName));
+        var startValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToStartReference(fieldName));
         var start = startValue?.ResolvedValue;
         if (!start.HasValue)
         {
@@ -1055,7 +1055,7 @@ public class CaseValidateActions : CaseChangeActionsBase
             return;
         }
         // period end
-        var endValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToEndReference(fieldName));
+        var endValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToEndReference(fieldName));
         var end = endValue?.ResolvedValue;
         if (closedPeriod && !end.HasValue)
         {
@@ -1065,7 +1065,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         end ??= Date.MaxValue;
 
         // test moment
-        var momentValue = NewActionValue<DateTime?>(context, moment);
+        var momentValue = GetActionValue<DateTime?>(context, moment);
         if (momentValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidTestDate", fieldName, moment);
@@ -1098,7 +1098,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     public void FieldPeriodAfter(CaseChangeActionContext context, string fieldName, object moment, bool closedPeriod = false)
     {
         // period start
-        var startValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToStartReference(fieldName));
+        var startValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToStartReference(fieldName));
         var start = startValue?.ResolvedValue;
         if (!start.HasValue)
         {
@@ -1106,7 +1106,7 @@ public class CaseValidateActions : CaseChangeActionsBase
             return;
         }
         // period end
-        var endValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToEndReference(fieldName));
+        var endValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToEndReference(fieldName));
         var end = endValue?.ResolvedValue;
         if (closedPeriod && !end.HasValue)
         {
@@ -1116,7 +1116,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         end ??= Date.MaxValue;
 
         // test moment
-        var momentValue = NewActionValue<DateTime?>(context, moment);
+        var momentValue = GetActionValue<DateTime?>(context, moment);
         if (momentValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidTestDate", fieldName, moment);
@@ -1149,7 +1149,7 @@ public class CaseValidateActions : CaseChangeActionsBase
     public void FieldPeriodNotAfter(CaseChangeActionContext context, string fieldName, object moment, bool closedPeriod = false)
     {
         // period start
-        var startValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToStartReference(fieldName));
+        var startValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToStartReference(fieldName));
         var start = startValue?.ResolvedValue;
         if (!start.HasValue)
         {
@@ -1157,7 +1157,7 @@ public class CaseValidateActions : CaseChangeActionsBase
             return;
         }
         // period end
-        var endValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToEndReference(fieldName));
+        var endValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToEndReference(fieldName));
         var end = endValue?.ResolvedValue;
         if (closedPeriod && !end.HasValue)
         {
@@ -1167,7 +1167,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         end ??= Date.MaxValue;
 
         // test moment
-        var momentValue = NewActionValue<DateTime?>(context, moment);
+        var momentValue = GetActionValue<DateTime?>(context, moment);
         if (momentValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidTestDate", fieldName, moment);
@@ -1206,7 +1206,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         object periodEnd, bool closedPeriod = false)
     {
         // period start
-        var startValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToStartReference(fieldName));
+        var startValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToStartReference(fieldName));
         var start = startValue?.ResolvedValue;
         if (!start.HasValue)
         {
@@ -1214,7 +1214,7 @@ public class CaseValidateActions : CaseChangeActionsBase
             return;
         }
         // period end
-        var endValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToEndReference(fieldName));
+        var endValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToEndReference(fieldName));
         var end = endValue?.ResolvedValue;
         if (closedPeriod && !end.HasValue)
         {
@@ -1224,13 +1224,13 @@ public class CaseValidateActions : CaseChangeActionsBase
         end ??= Date.MaxValue;
 
         // test period
-        var periodStartValue = NewActionValue<DateTime?>(context, periodStart);
+        var periodStartValue = GetActionValue<DateTime?>(context, periodStart);
         if (periodStartValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidPeriodStart", fieldName, periodStart);
             return;
         }
-        var periodEndValue = NewActionValue<DateTime?>(context, periodEnd);
+        var periodEndValue = GetActionValue<DateTime?>(context, periodEnd);
         if (periodEndValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidPeriodEnd", fieldName, periodEnd);
@@ -1270,7 +1270,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         object periodEnd, bool closedPeriod = false)
     {
         // period start
-        var startValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToStartReference(fieldName));
+        var startValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToStartReference(fieldName));
         var start = startValue?.ResolvedValue;
         if (!start.HasValue)
         {
@@ -1278,7 +1278,7 @@ public class CaseValidateActions : CaseChangeActionsBase
             return;
         }
         // period end
-        var endValue = NewActionValue<DateTime?>(context, ActionCaseValue.ToEndReference(fieldName));
+        var endValue = GetActionValue<DateTime?>(context, ActionCaseValueBase.ToEndReference(fieldName));
         var end = endValue?.ResolvedValue;
         if (closedPeriod && !end.HasValue)
         {
@@ -1288,13 +1288,13 @@ public class CaseValidateActions : CaseChangeActionsBase
         end ??= Date.MaxValue;
 
         // test period
-        var periodStartValue = NewActionValue<DateTime?>(context, periodStart);
+        var periodStartValue = GetActionValue<DateTime?>(context, periodStart);
         if (periodStartValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidPeriodStart", fieldName, periodStart);
             return;
         }
-        var periodEndValue = NewActionValue<DateTime?>(context, periodEnd);
+        var periodEndValue = GetActionValue<DateTime?>(context, periodEnd);
         if (periodEndValue?.ResolvedValue == null)
         {
             AddIssue(context, "ComparePeriodInvalidPeriodEnd", fieldName, periodEnd);
@@ -1328,7 +1328,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [CaseValidateAction("PeriodBefore", "Validate for moment before period", "Validation", "FieldPeriod")]
     public void PeriodBefore(CaseChangeActionContext context, object moment) =>
-        FieldPeriodBefore(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment);
+        FieldPeriodBefore(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), moment);
 
     /// <summary>Validate for moment not before period</summary>
     /// <param name="context">The action context</param>
@@ -1337,7 +1337,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { DateType })]
     [CaseValidateAction("PeriodNotBefore", "Validate for moment not before period", "Validation", "FieldPeriod")]
     public void PeriodNotBefore(CaseChangeActionContext context, object moment) =>
-        FieldPeriodNotBefore(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment);
+        FieldPeriodNotBefore(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), moment);
 
     /// <summary>Validate for moment within period</summary>
     /// <param name="context">The action context</param>
@@ -1349,7 +1349,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { BooleanType })]
     [CaseValidateAction("PeriodWithin", "Validate for moment within period", "Validation", "FieldPeriod")]
     public void PeriodWithin(CaseChangeActionContext context, object moment, bool closedPeriod = false) =>
-        FieldPeriodWithin(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
+        FieldPeriodWithin(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
 
     /// <summary>Validate for moment not within period</summary>
     /// <param name="context">The action context</param>
@@ -1361,7 +1361,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { BooleanType })]
     [CaseValidateAction("PeriodNotWithin", "Validate for moment not within period", "Validation", "FieldPeriod")]
     public void PeriodNotWithin(CaseChangeActionContext context, object moment, bool closedPeriod = false) =>
-        FieldPeriodNotWithin(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
+        FieldPeriodNotWithin(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
 
     /// <summary>Validate for moment after period</summary>
     /// <param name="context">The action context</param>
@@ -1373,7 +1373,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { BooleanType })]
     [CaseValidateAction("PeriodAfter", "Validate for moment after period", "Validation", "FieldPeriod")]
     public void PeriodAfter(CaseChangeActionContext context, object moment, bool closedPeriod = false) =>
-        FieldPeriodAfter(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
+        FieldPeriodAfter(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
 
     /// <summary>Validate for moment not after period</summary>
     /// <param name="context">The action context</param>
@@ -1385,7 +1385,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { BooleanType })]
     [CaseValidateAction("PeriodNotAfter", "Validate for moment not after period", "Validation", "FieldPeriod")]
     public void PeriodNotAfter(CaseChangeActionContext context, object moment, bool closedPeriod = false) =>
-        FieldPeriodNotAfter(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
+        FieldPeriodNotAfter(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), moment, closedPeriod);
 
     /// <summary>Validate for period overlapping the period</summary>
     /// <param name="context">The action context</param>
@@ -1400,7 +1400,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { BooleanType })]
     [CaseValidateAction("PeriodOverlap", "Validate for period overlapping the period", "Validation", "FieldPeriod")]
     public void PeriodOverlap(CaseChangeActionContext context, object periodStart, object periodEnd, bool closedPeriod = false) =>
-        FieldPeriodOverlap(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), periodStart, periodEnd, closedPeriod);
+        FieldPeriodOverlap(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), periodStart, periodEnd, closedPeriod);
 
     /// <summary>Validate for period not overlapping the period</summary>
     /// <param name="context">The action context</param>
@@ -1415,7 +1415,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         valueTypes: new[] { BooleanType })]
     [CaseValidateAction("PeriodNotOverlap", "Validate for period not overlapping the period", "Validation", "FieldPeriod")]
     public void PeriodNotOverlap(CaseChangeActionContext context, object periodStart, object periodEnd, bool closedPeriod = false) =>
-        FieldPeriodNotOverlap(context, ActionCaseValue.ToCaseChangeReference(context.CaseFieldName), periodStart, periodEnd, closedPeriod);
+        FieldPeriodNotOverlap(context, ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName), periodStart, periodEnd, closedPeriod);
 
     #endregion
 
@@ -1431,8 +1431,8 @@ public class CaseValidateActions : CaseChangeActionsBase
     [CaseValidateAction("MinLength", "Validate for minimum string length", "Validation", "FieldValue")]
     public void MinLength(CaseChangeActionContext context, object minLength)
     {
-        var sourceValue = NewCaseFieldActionValue<string>(context);
-        var minLengthValue = NewActionValue<int?>(context, minLength);
+        var sourceValue = GetActionValue<string>(context);
+        var minLengthValue = GetActionValue<int?>(context, minLength);
         if (sourceValue == null || minLengthValue == null || !minLengthValue.IsFulfilled)
         {
             return;
@@ -1457,8 +1457,8 @@ public class CaseValidateActions : CaseChangeActionsBase
     [CaseValidateAction("MaxLength", "Validate for maximum string length", "Validation", "FieldValue")]
     public void MaxLength(CaseChangeActionContext context, object maxLength)
     {
-        var sourceValue = NewCaseFieldActionValue<string>(context);
-        var maxLengthValue = NewActionValue<int?>(context, maxLength);
+        var sourceValue = GetActionValue<string>(context);
+        var maxLengthValue = GetActionValue<int?>(context, maxLength);
         if (sourceValue == null || maxLengthValue == null || !maxLengthValue.IsFulfilled)
         {
             return;
@@ -1483,8 +1483,8 @@ public class CaseValidateActions : CaseChangeActionsBase
     [CaseValidateAction("Length", "Validate string length", "Validation", "FieldValue")]
     public void Length(CaseChangeActionContext context, object length)
     {
-        var sourceValue = NewCaseFieldActionValue<string>(context);
-        var lengthValue = NewActionValue<int?>(context, length);
+        var sourceValue = GetActionValue<string>(context);
+        var lengthValue = GetActionValue<int?>(context, length);
         if (sourceValue == null || lengthValue == null || !lengthValue.IsFulfilled)
         {
             return;
@@ -1512,9 +1512,9 @@ public class CaseValidateActions : CaseChangeActionsBase
     [CaseValidateAction("LengthBetween", "Validate string length between a range", "Validation", "FieldValue")]
     public void LengthBetween(CaseChangeActionContext context, object minLength, object maxLength)
     {
-        var sourceValue = NewCaseFieldActionValue<string>(context);
-        var minLengthValue = NewActionValue<int?>(context, minLength);
-        var maxLengthValue = NewActionValue<int?>(context, maxLength);
+        var sourceValue = GetActionValue<string>(context);
+        var minLengthValue = GetActionValue<int?>(context, minLength);
+        var maxLengthValue = GetActionValue<int?>(context, maxLength);
         if (sourceValue == null || minLengthValue == null || maxLengthValue == null ||
             !minLengthValue.IsFulfilled || !maxLengthValue.IsFulfilled)
         {
@@ -1545,8 +1545,8 @@ public class CaseValidateActions : CaseChangeActionsBase
     public void EqualText(CaseChangeActionContext context, object compare,
         bool ignoreCase = false)
     {
-        var sourceValue = NewCaseFieldActionValue<string>(context);
-        var compareValue = NewActionValue<string>(context, compare);
+        var sourceValue = GetActionValue<string>(context);
+        var compareValue = GetActionValue<string>(context, compare);
         if (sourceValue == null || compareValue == null || !compareValue.IsFulfilled)
         {
             return;
@@ -1575,8 +1575,8 @@ public class CaseValidateActions : CaseChangeActionsBase
     public void NotEqualText(CaseChangeActionContext context, object compare,
         bool ignoreCase = false)
     {
-        var sourceValue = NewCaseFieldActionValue<string>(context);
-        var compareValue = NewActionValue<string>(context, compare);
+        var sourceValue = GetActionValue<string>(context);
+        var compareValue = GetActionValue<string>(context, compare);
         if (sourceValue == null || compareValue == null || !compareValue.IsFulfilled)
         {
             return;
@@ -1595,7 +1595,7 @@ public class CaseValidateActions : CaseChangeActionsBase
 
     private ActionValueType? ResolveCaseValueType(CaseChangeActionContext context, object source)
     {
-        var caseValue = NewActionValue<object>(context, source);
+        var caseValue = GetActionValue<object>(context, source);
         if (caseValue == null || !caseValue.IsReference)
         {
             AddIssue(context, "CompareInvalidSourceValue", context.CaseFieldName, source);
@@ -1616,7 +1616,7 @@ public class CaseValidateActions : CaseChangeActionsBase
 
     private ActionValueType? ResolveCompareValueType(CaseChangeActionContext context, object compare)
     {
-        var compareValue = NewActionValue<object>(context, compare);
+        var compareValue = GetActionValue<object>(context, compare);
         if (compareValue == null || !compareValue.IsFulfilled)
         {
             AddIssue(context, "CompareInvalidCompareValue", context.CaseFieldName, compare);

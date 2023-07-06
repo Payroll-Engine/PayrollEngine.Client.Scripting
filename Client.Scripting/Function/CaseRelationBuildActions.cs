@@ -21,7 +21,7 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     public void SetTargetFieldValue(CaseRelationActionContext context, object target, object value)
     {
         // target, must be a case change reference
-        var targetValue = NewActionValue<object>(context, target);
+        var targetValue = GetActionValue<object>(context, target);
         if (!targetValue.IsCaseChangeReference)
         {
             context.AddIssue($"Invalid target field {target}");
@@ -62,7 +62,7 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
 
     private static void SetValue<TValue>(CaseRelationActionContext context, object value)
     {
-        var targetStringValue = NewActionValue<TValue>(context, value);
+        var targetStringValue = GetActionValue<TValue>(context, value);
         if (targetStringValue == null || !targetStringValue.IsFulfilled)
         {
             return;
@@ -83,7 +83,7 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     public void SetTargetFieldStart(CaseRelationActionContext context, object target, object start)
     {
         // target, must be a case change reference
-        var targetValue = NewActionValue<DateTime?>(context, target);
+        var targetValue = GetActionValue<DateTime?>(context, target);
         if (!targetValue.IsCaseChangeReference)
         {
             context.AddIssue($"Invalid target field reference {target}");
@@ -96,7 +96,7 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
         }
 
         // start
-        var startValue = NewActionValue<DateTime?>(context, start);
+        var startValue = GetActionValue<DateTime?>(context, start);
         if (startValue?.ResolvedValue == null || !startValue.IsFulfilled)
         {
             return;
@@ -122,7 +122,7 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     public void SetTargetFieldEnd(CaseRelationActionContext context, object target, object end)
     {
         // target, must be a case change reference
-        var targetValue = NewActionValue<DateTime?>(context, target);
+        var targetValue = GetActionValue<DateTime?>(context, target);
         if (!targetValue.IsCaseChangeReference)
         {
             context.AddIssue($"Invalid target field reference {target}");
@@ -130,7 +130,7 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
         }
 
         // end
-        var endValue = NewActionValue<DateTime?>(context, end);
+        var endValue = GetActionValue<DateTime?>(context, end);
         if (endValue?.ResolvedValue == null || !endValue.IsFulfilled)
         {
             return;
@@ -159,7 +159,7 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     public void SetTargetFieldStartEnd(CaseRelationActionContext context, object target, object start, object end)
     {
         // target, must be a case change reference
-        var targetValue = NewActionValue<DateTime?>(context, target);
+        var targetValue = GetActionValue<DateTime?>(context, target);
         if (!targetValue.IsCaseChangeReference)
         {
             context.AddIssue($"Invalid target field reference {target}");
@@ -167,14 +167,14 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
         }
 
         // start
-        var startValue = NewActionValue<DateTime?>(context, start);
+        var startValue = GetActionValue<DateTime?>(context, start);
         if (startValue?.ResolvedValue == null || !startValue.IsFulfilled)
         {
             return;
         }
 
         // end
-        var endValue = NewActionValue<DateTime?>(context, end);
+        var endValue = GetActionValue<DateTime?>(context, end);
         if (endValue?.ResolvedValue == null || !endValue.IsFulfilled)
         {
             return;

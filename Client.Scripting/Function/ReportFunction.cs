@@ -175,7 +175,7 @@ public abstract partial class ReportFunction : Function
     /// <param name="parameters">The method parameters</param>
     /// <returns>New data table, null on empty collection</returns>
     public DataTable ExecuteQuery(string tableName, string methodName, Dictionary<string, string> parameters = null) =>
-        ExecuteQuery(tableName, methodName, Culture, parameters);
+        ExecuteQuery(tableName, methodName, UserCulture, parameters);
 
     /// <summary>Query on Api web method</summary>
     /// <param name="tableName">Target table name</param>
@@ -191,7 +191,7 @@ public abstract partial class ReportFunction : Function
     /// <param name="parameters">The method parameters</param>
     /// <returns>New data table, null on empty collection</returns>
     public DataTable ExecuteQuery(string methodName, Dictionary<string, string> parameters = null) =>
-        ExecuteQuery(GetOperationBaseName(methodName), methodName, Culture, parameters);
+        ExecuteQuery(GetOperationBaseName(methodName), methodName, UserCulture, parameters);
 
     /// <summary>Query the division by id</summary>
     /// <param name="divisionId">The division id</param>
@@ -455,7 +455,7 @@ public abstract partial class ReportFunction : Function
             {"TenantId", TenantId.ToString()},
             {"PayrollId", payrollId.ToString()},
             // fallback culture
-            {"Culture", culture ?? Culture},
+            {"Culture", culture ?? UserCulture},
             {"LookupNames", JsonSerializer.Serialize(names)}
         };
         if (regulationDate.HasValue)
@@ -574,7 +574,7 @@ public abstract partial class ReportFunction : Function
         }
 
         // fallback culture
-        culture ??= Culture;
+        culture ??= UserCulture;
 
         // columns
         var columnNames = new HashSet<string>(columnList.Select(x => x.Name));
@@ -602,7 +602,7 @@ public abstract partial class ReportFunction : Function
                 {"EmployeeId", employeeId.ToString()},
                 {"CaseType", CaseType.Employee.ToString()},
                 // fallback culture
-                {"Culture", culture ?? Culture},
+                {"Culture", culture ?? UserCulture},
                 {"CaseFieldNames", JsonSerializer.Serialize(columnNames)}
             };
             if (valueDate.HasValue)

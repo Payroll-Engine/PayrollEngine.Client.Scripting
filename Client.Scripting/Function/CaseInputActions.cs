@@ -9,7 +9,6 @@ internal static class InputAttributes
     // general
     internal static readonly string Hidden = $"{Prefix}hidden";
     internal static readonly string ShowDescription = $"{Prefix}showDescription";
-    internal static readonly string SortOrder = $"{Prefix}sortOrder";
 
     // start
     internal static readonly string StartLabel = $"{Prefix}startLabel";
@@ -80,24 +79,6 @@ public class CaseInputActions : CaseChangeActionsBase
     public void ShowFieldDescription(CaseChangeActionContext context, object field) =>
         SetInputAttribute(context, field, InputAttributes.ShowDescription, true);
 
-
-    /// <summary>Set field sort order</summary>
-    /// <param name="context">The action context</param>
-    /// <param name="order">The sort order</param>
-    /// <param name="field">The target field</param>
-    [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
-    [ActionParameter("order", "The sort order", valueTypes: new[] { IntType })]
-    [CaseBuildAction("SetFieldSortOrder", "Set field sort order", "FieldInput", "Field")]
-    public void SetFieldSortOrder(CaseChangeActionContext context, object field, object order)
-    {
-        var orderValue = NewActionValue<int>(context, order);
-        if (orderValue == null || !orderValue.IsFulfilled)
-        {
-            return;
-        }
-        SetInputAttribute(context, field, InputAttributes.SortOrder, orderValue.ResolvedValue);
-    }
-
     #endregion
 
     #region Field Start
@@ -111,7 +92,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldStartLabel", "Set field start label", "FieldInput", "FieldStart")]
     public void SetFieldStartLabel(CaseChangeActionContext context, object field, object label)
     {
-        var labelValue = NewActionValue<string>(context, label);
+        var labelValue = GetActionValue<string>(context, label);
         if (labelValue == null || !labelValue.IsFulfilled)
         {
             return;
@@ -128,7 +109,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldStartHelp", "Set field start help", "FieldInput", "FieldStart")]
     public void SetFieldStartHelp(CaseChangeActionContext context, object field, object help)
     {
-        var helpValue = NewActionValue<string>(context, help);
+        var helpValue = GetActionValue<string>(context, help);
         if (helpValue == null || !helpValue.IsFulfilled)
         {
             return;
@@ -163,7 +144,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldStartFormat", "Set field start format", "FieldInput", "FieldStart")]
     public void SetFieldStartFormat(CaseChangeActionContext context, object field, object format)
     {
-        var formatValue = NewActionValue<string>(context, format);
+        var formatValue = GetActionValue<string>(context, format);
         if (formatValue == null || !formatValue.IsFulfilled)
         {
             return;
@@ -216,7 +197,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldEndLabel", "Set field end label", "FieldInput", "FieldEnd")]
     public void SetFieldEndLabel(CaseChangeActionContext context, object field, object label)
     {
-        var labelValue = NewActionValue<string>(context, label);
+        var labelValue = GetActionValue<string>(context, label);
         if (labelValue == null || !labelValue.IsFulfilled)
         {
             return;
@@ -233,7 +214,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldEndHelp", "Set field end help", "FieldInput", "FieldEnd")]
     public void SetFieldEndHelp(CaseChangeActionContext context, object field, object help)
     {
-        var helpValue = NewActionValue<string>(context, help);
+        var helpValue = GetActionValue<string>(context, help);
         if (helpValue == null || !helpValue.IsFulfilled)
         {
             return;
@@ -268,7 +249,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldEndFormat", "Set field end format", "FieldInput", "FieldEnd")]
     public void SetFieldEndFormat(CaseChangeActionContext context, object field, object format)
     {
-        var formatValue = NewActionValue<string>(context, format);
+        var formatValue = GetActionValue<string>(context, format);
         if (formatValue == null || !formatValue.IsFulfilled)
         {
             return;
@@ -321,7 +302,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldValueLabel", "Set field value label", "FieldInput", "FieldValue")]
     public void SetFieldValueLabel(CaseChangeActionContext context, object field, object label)
     {
-        var textValue = NewActionValue<string>(context, label);
+        var textValue = GetActionValue<string>(context, label);
         if (textValue == null || !textValue.IsFulfilled)
         {
             return;
@@ -338,7 +319,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldValueAdornment", "Set field value adornment", "FieldInput", "FieldValue")]
     public void SetFieldValueAdornment(CaseChangeActionContext context, object field, object adornment)
     {
-        var adornmentValue = NewActionValue<string>(context, adornment);
+        var adornmentValue = GetActionValue<string>(context, adornment);
         if (adornmentValue == null || !adornmentValue.IsFulfilled)
         {
             return;
@@ -355,7 +336,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldValueHelp", "Set field value help", "FieldInput", "FieldValue")]
     public void SetFieldValueHelp(CaseChangeActionContext context, object field, object help)
     {
-        var helpValue = NewActionValue<string>(context, help);
+        var helpValue = GetActionValue<string>(context, help);
         if (helpValue == null || !helpValue.IsFulfilled)
         {
             return;
@@ -374,7 +355,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldValueMask", "Set field value mask", "FieldInput", "FieldValue")]
     public void SetFieldValueMask(CaseChangeActionContext context, object field, object mask)
     {
-        var maskValue = NewActionValue<string>(context, mask);
+        var maskValue = GetActionValue<string>(context, mask);
         if (maskValue == null || !maskValue.IsFulfilled)
         {
             return;
@@ -433,7 +414,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldCulture", "Set field value culture", "FieldInput", "FieldValue")]
     public void SetFieldCulture(CaseChangeActionContext context, object field, object culture)
     {
-        var cultureValue = NewActionValue<string>(context, culture);
+        var cultureValue = GetActionValue<string>(context, culture);
         if (cultureValue == null || !cultureValue.IsFulfilled)
         {
             return;
@@ -450,19 +431,19 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldMinValue", "Set field minimum value", "FieldInput", "FieldValue")]
     public void SetFieldMinValue(CaseChangeActionContext context, object field, object minimum)
     {
-        var intValue = NewActionValue<int>(context, minimum);
+        var intValue = GetActionValue<int>(context, minimum);
         if (intValue != null && intValue.IsFulfilled)
         {
             SetInputAttribute(context, field, InputAttributes.MinValue, intValue.ResolvedValue);
             return;
         }
-        var decimalValue = NewActionValue<int>(context, minimum);
+        var decimalValue = GetActionValue<int>(context, minimum);
         if (decimalValue != null && decimalValue.IsFulfilled)
         {
             SetInputAttribute(context, field, InputAttributes.MinValue, decimalValue.ResolvedValue);
             return;
         }
-        var dateTimeValue = NewActionValue<int>(context, minimum);
+        var dateTimeValue = GetActionValue<int>(context, minimum);
         if (dateTimeValue != null && dateTimeValue.IsFulfilled)
         {
             SetInputAttribute(context, field, InputAttributes.MinValue, dateTimeValue.ResolvedValue);
@@ -478,19 +459,19 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldMaxValue", "Set field maximum value", "FieldInput", "FieldValue")]
     public void SetFieldMaxValue(CaseChangeActionContext context, object field, object maximum)
     {
-        var intValue = NewActionValue<int>(context, maximum);
+        var intValue = GetActionValue<int>(context, maximum);
         if (intValue != null && intValue.IsFulfilled)
         {
             SetInputAttribute(context, field, InputAttributes.MaxValue, intValue.ResolvedValue);
             return;
         }
-        var decimalValue = NewActionValue<int>(context, maximum);
+        var decimalValue = GetActionValue<int>(context, maximum);
         if (decimalValue != null && decimalValue.IsFulfilled)
         {
             SetInputAttribute(context, field, InputAttributes.MaxValue, decimalValue.ResolvedValue);
             return;
         }
-        var dateTimeValue = NewActionValue<int>(context, maximum);
+        var dateTimeValue = GetActionValue<int>(context, maximum);
         if (dateTimeValue != null && dateTimeValue.IsFulfilled)
         {
             SetInputAttribute(context, field, InputAttributes.MaxValue, dateTimeValue.ResolvedValue);
@@ -506,7 +487,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldStepSize", "Set field numeric step size", "FieldInput", "FieldValue")]
     public void SetFieldStepSize(CaseChangeActionContext context, object field, object stepSize)
     {
-        var stepSizeValue = NewActionValue<int>(context, stepSize);
+        var stepSizeValue = GetActionValue<int>(context, stepSize);
         if (stepSizeValue == null || !stepSizeValue.IsFulfilled)
         {
             return;
@@ -525,7 +506,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldFormat", "Set field value format", "FieldInput", "FieldValue")]
     public void SetFieldFormat(CaseChangeActionContext context, object field, object format)
     {
-        var formatValue = NewActionValue<string>(context, format);
+        var formatValue = GetActionValue<string>(context, format);
         if (formatValue == null || !formatValue.IsFulfilled)
         {
             return;
@@ -542,7 +523,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldLineCount", "Set field text line count", "FieldInput", "FieldValue")]
     public void SetFieldLineCount(CaseChangeActionContext context, object field, object count)
     {
-        var countValue = NewActionValue<int>(context, count);
+        var countValue = GetActionValue<int>(context, count);
         if (countValue == null || !countValue.IsFulfilled)
         {
             return;
@@ -559,7 +540,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldMaxLength", "Set field maximum text length", "FieldInput", "FieldValue")]
     public void SetFieldMaxLength(CaseChangeActionContext context, object field, object length)
     {
-        var lengthValue = NewActionValue<int>(context, length);
+        var lengthValue = GetActionValue<int>(context, length);
         if (lengthValue == null || !lengthValue.IsFulfilled)
         {
             return;
@@ -613,7 +594,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetFieldAttachmentExtensions", "Set field attachments file extensions", "FieldInput", "Field")]
     public void SetFieldAttachmentExtensions(CaseChangeActionContext context, object field, object extensions)
     {
-        var extensionsValue = NewActionValue<string>(context, extensions);
+        var extensionsValue = GetActionValue<string>(context, extensions);
         if (extensionsValue == null || !extensionsValue.IsFulfilled)
         {
             return;
@@ -636,14 +617,6 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("ShowDescription", "Show description", "FieldInput", "Field")]
     public void ShowDescription(CaseChangeActionContext context) =>
         ShowFieldDescription(context, context.CaseFieldName);
-
-    /// <summary>Set sort order</summary>
-    /// <param name="context">The action context</param>
-    /// <param name="order">The sort order</param>
-    [ActionParameter("order", "The sort order", valueTypes: new[] { IntType })]
-    [CaseBuildAction("SetSortOrder", "Set sort order", "FieldInput", "Field")]
-    public void SetSortOrder(CaseChangeActionContext context, object order) =>
-        SetFieldSortOrder(context, context.CaseFieldName, order);
 
     #endregion
 
@@ -946,7 +919,7 @@ public class CaseInputActions : CaseChangeActionsBase
 
     private static void SetInputAttribute(CaseChangeActionContext context, object field, string attribute, object value)
     {
-        var fieldValue = NewActionValue<string>(context, field);
+        var fieldValue = GetActionValue<string>(context, field);
         if (fieldValue == null || !fieldValue.IsReference || string.IsNullOrWhiteSpace(fieldValue.ResolvedValue))
         {
             return;

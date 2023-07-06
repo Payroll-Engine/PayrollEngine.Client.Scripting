@@ -6,7 +6,7 @@ namespace PayrollEngine.Client.Scripting.Runtime;
 /// <summary>Runtime  during the execution of a payroll scripting function</summary>
 public interface IPayrollRuntime : IRuntime
 {
-
+   
     #region Employee
 
     /// <summary>The employee id</summary>
@@ -15,16 +15,17 @@ public interface IPayrollRuntime : IRuntime
     /// <summary>The employee identifier</summary>
     string EmployeeIdentifier { get; }
 
-    /// <summary>The employee culture</summary>
-    string EmployeeCulture { get; }
-
-    /// <summary>The employee calendar</summary>
-    string EmployeeCalendar { get; }
-
     /// <summary>Get employee attribute value</summary>
     /// <param name="attributeName">Name of the attribute</param>
     /// <returns>The employee attribute value</returns>
     object GetEmployeeAttribute(string attributeName);
+
+    #endregion
+
+    #region Culture
+
+    /// <summary>The payroll culture</summary>
+    string PayrollCulture { get; }
 
     #endregion
 

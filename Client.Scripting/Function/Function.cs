@@ -29,7 +29,7 @@ public abstract partial class Function : IDisposable
         Runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
 
         // culture
-        Culture = Runtime.Culture;
+        UserCulture = Runtime.UserCulture;
 
         // tenant
         TenantId = Runtime.TenantId;
@@ -42,8 +42,8 @@ public abstract partial class Function : IDisposable
 
     #region Culture
 
-    /// <summary>The culture</summary>
-    public string Culture { get; }
+    /// <summary>The user culture</summary>
+    public string UserCulture { get; }
 
     #endregion
 

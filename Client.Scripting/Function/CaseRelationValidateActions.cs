@@ -26,7 +26,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
             ResolveActionValue<DateTime?>(context, compareDate);
 
         // source value
-        var sourceValue = NewActionValue<bool?>(context, source, valueDate);
+        var sourceValue = GetActionValue<bool?>(context, source, valueDate);
         if (sourceValue.ResolvedValue == null)
         {
             context.AddIssue($"Invalid compare source {sourceValue}");
@@ -54,7 +54,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
             ResolveActionValue<DateTime?>(context, compareDate);
 
         // source value
-        var sourceValue = NewActionValue<bool?>(context, source, valueDate);
+        var sourceValue = GetActionValue<bool?>(context, source, valueDate);
         if (sourceValue.ResolvedValue == null)
         {
             context.AddIssue($"Invalid compare source {sourceValue}");
@@ -102,40 +102,40 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         switch (sourceType)
         {
             case ActionValueType.String:
-                var sourceString = NewActionValue<string>(context, source);
-                var compareString = NewActionValue<string>(context, compare, valueDate);
+                var sourceString = GetActionValue<string>(context, source);
+                var compareString = GetActionValue<string>(context, compare, valueDate);
                 if (sourceString.ResolvedValue != compareString.ResolvedValue)
                 {
                     context.AddIssue($"{sourceString} is not equal {compareString}");
                 }
                 break;
             case ActionValueType.Boolean:
-                var sourceBool = NewActionValue<bool>(context, source);
-                var compareBool = NewActionValue<bool?>(context, compare, valueDate);
+                var sourceBool = GetActionValue<bool>(context, source);
+                var compareBool = GetActionValue<bool?>(context, compare, valueDate);
                 if (sourceBool.ResolvedValue != compareBool.ResolvedValue)
                 {
                     context.AddIssue($"{sourceBool} is not equal {compareBool}");
                 }
                 break;
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger.ResolvedValue != compareInteger.ResolvedValue)
                 {
                     context.AddIssue($"{sourceInteger} is not equal {compareInteger}");
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal.ResolvedValue != compareDecimal.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDecimal} is not equal {compareDecimal}");
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime.ResolvedValue != compareDateTime.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDateTime} is not equal {compareDateTime}");
@@ -180,32 +180,32 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         switch (sourceType)
         {
             case ActionValueType.String:
-                var sourceString = NewActionValue<string>(context, source);
-                var compareString = NewActionValue<string>(context, compare, valueDate);
+                var sourceString = GetActionValue<string>(context, source);
+                var compareString = GetActionValue<string>(context, compare, valueDate);
                 if (sourceString.ResolvedValue == compareString.ResolvedValue)
                 {
                     context.AddIssue($"{sourceString} is equal {compareString}");
                 }
                 break;
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger.ResolvedValue == compareInteger.ResolvedValue)
                 {
                     context.AddIssue($"{sourceInteger} is equal {compareInteger}");
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal.ResolvedValue == compareDecimal.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDecimal} is equal {compareDecimal}");
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime.ResolvedValue == compareDateTime.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDateTime} is equal {compareDateTime}");
@@ -250,24 +250,24 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         switch (sourceType)
         {
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger.ResolvedValue <= compareInteger.ResolvedValue)
                 {
                     context.AddIssue($"{sourceInteger} is less/equal than {compareInteger}");
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal.ResolvedValue <= compareDecimal.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDecimal} is less/equal than {compareDecimal}");
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime.ResolvedValue <= compareDateTime.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDateTime} is less/equal than {compareDateTime}");
@@ -312,24 +312,24 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         switch (sourceType)
         {
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger.ResolvedValue < compareInteger.ResolvedValue)
                 {
                     context.AddIssue($"{sourceInteger} is less than {compareInteger}");
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal.ResolvedValue < compareDecimal.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDecimal} is less than {compareDecimal}");
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime.ResolvedValue < compareDateTime.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDateTime} is less than {compareDateTime}");
@@ -374,24 +374,24 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         switch (sourceType)
         {
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger.ResolvedValue >= compareInteger.ResolvedValue)
                 {
                     context.AddIssue($"{sourceInteger} is greater/equal than {compareInteger}");
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal.ResolvedValue >= compareDecimal.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDecimal} is greater/equal than {compareDecimal}");
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime.ResolvedValue >= compareDateTime.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDateTime} is greater/equal than {compareDateTime}");
@@ -436,24 +436,24 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
         switch (sourceType)
         {
             case ActionValueType.Integer:
-                var sourceInteger = NewActionValue<int>(context, source);
-                var compareInteger = NewActionValue<int?>(context, compare, valueDate);
+                var sourceInteger = GetActionValue<int>(context, source);
+                var compareInteger = GetActionValue<int?>(context, compare, valueDate);
                 if (sourceInteger.ResolvedValue > compareInteger.ResolvedValue)
                 {
                     context.AddIssue($"{sourceInteger} is greater than {compareInteger}");
                 }
                 break;
             case ActionValueType.Decimal:
-                var sourceDecimal = NewActionValue<decimal>(context, source);
-                var compareDecimal = NewActionValue<decimal?>(context, compare, valueDate);
+                var sourceDecimal = GetActionValue<decimal>(context, source);
+                var compareDecimal = GetActionValue<decimal?>(context, compare, valueDate);
                 if (sourceDecimal.ResolvedValue > compareDecimal.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDecimal} is greater than {compareDecimal}");
                 }
                 break;
             case ActionValueType.DateTime:
-                var sourceDateTime = NewActionValue<DateTime>(context, source);
-                var compareDateTime = NewActionValue<DateTime?>(context, compare, valueDate);
+                var sourceDateTime = GetActionValue<DateTime>(context, source);
+                var compareDateTime = GetActionValue<DateTime?>(context, compare, valueDate);
                 if (sourceDateTime.ResolvedValue > compareDateTime.ResolvedValue)
                 {
                     context.AddIssue($"{sourceDateTime} is greater than {compareDateTime}");
@@ -496,7 +496,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
 
     private static ActionValueType? ResolveCaseValueType(CaseRelationActionContext context, object source)
     {
-        var caseValue = NewActionValue<object>(context, source);
+        var caseValue = GetActionValue<object>(context, source);
         if (!caseValue.IsReference)
         {
             context.AddIssue($"Invalid compare source value: {source}");
@@ -517,7 +517,7 @@ public class CaseRelationValidateActions : CaseRelationActionsBase
 
     private static ActionValueType? ResolveCompareValueType(CaseRelationActionContext context, object compare)
     {
-        var compareValue = NewActionValue<object>(context, compare);
+        var compareValue = GetActionValue<object>(context, compare);
         if (compareValue == null || !compareValue.IsFulfilled ||
             compareValue.IsCaseChangeReference)
         {

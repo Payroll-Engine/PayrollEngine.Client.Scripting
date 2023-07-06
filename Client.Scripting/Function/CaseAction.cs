@@ -390,7 +390,7 @@ public abstract class ActionMethodBase<TContext, TFunc, TValue> : IActionMethod<
     public int ParameterCount => Parameters.Count;
 
     /// <summary>The function culture</summary>
-    public string Culture => Context.Function.Culture;
+    public string UserCulture => Context.Function.UserCulture;
 
     /// <summary>Constructor</summary>
     protected ActionMethodBase(TContext context, string expression, DateTime caseValueDate)
@@ -1819,7 +1819,7 @@ public class LookupActionMethod<TContext, TFunc> : LookupActionMethodBase<TConte
         // object value
         if (!string.IsNullOrWhiteSpace(ObjectKey))
         {
-            var lookupValue = Context.Function.GetLookup<string>(LookupName, LookupKey, Context.Function.Culture);
+            var lookupValue = Context.Function.GetLookup<string>(LookupName, LookupKey, Context.Function.UserCulture);
             if (string.IsNullOrWhiteSpace(lookupValue))
             {
                 return null;
@@ -1831,15 +1831,15 @@ public class LookupActionMethod<TContext, TFunc> : LookupActionMethodBase<TConte
         switch (ValueType)
         {
             case ActionValueType.String:
-                return Context.Function.GetLookup<string>(LookupName, LookupKey, Culture);
+                return Context.Function.GetLookup<string>(LookupName, LookupKey, UserCulture);
             case ActionValueType.Boolean:
-                return Context.Function.GetLookup<bool>(LookupName, LookupKey, Culture);
+                return Context.Function.GetLookup<bool>(LookupName, LookupKey, UserCulture);
             case ActionValueType.Integer:
-                return Context.Function.GetLookup<int>(LookupName, LookupKey, Culture);
+                return Context.Function.GetLookup<int>(LookupName, LookupKey, UserCulture);
             case ActionValueType.Decimal:
-                return Context.Function.GetLookup<decimal>(LookupName, LookupKey, Culture);
+                return Context.Function.GetLookup<decimal>(LookupName, LookupKey, UserCulture);
             case ActionValueType.DateTime:
-                return Context.Function.GetLookup<DateTime>(LookupName, LookupKey, Culture);
+                return Context.Function.GetLookup<DateTime>(LookupName, LookupKey, UserCulture);
             default:
                 return null;
         }
@@ -1883,7 +1883,7 @@ public class RangeLookupActionMethod<TContext, TFunc> : LookupActionMethodBase<T
         // object value
         if (!string.IsNullOrWhiteSpace(ObjectKey))
         {
-            var lookupValue = Context.Function.GetRangeLookup<string>(LookupName, RangeValue, Culture);
+            var lookupValue = Context.Function.GetRangeLookup<string>(LookupName, RangeValue, UserCulture);
             if (string.IsNullOrWhiteSpace(lookupValue))
             {
                 return null;
@@ -1894,11 +1894,11 @@ public class RangeLookupActionMethod<TContext, TFunc> : LookupActionMethodBase<T
         // type lookup value
         return ValueType switch
         {
-            ActionValueType.String => Context.Function.GetRangeLookup<string>(LookupName, RangeValue, Culture),
-            ActionValueType.Boolean => Context.Function.GetRangeLookup<bool>(LookupName, RangeValue, Culture),
-            ActionValueType.Integer => Context.Function.GetRangeLookup<int>(LookupName, RangeValue, Culture),
-            ActionValueType.Decimal => Context.Function.GetRangeLookup<decimal>(LookupName, RangeValue, Culture),
-            ActionValueType.DateTime => Context.Function.GetRangeLookup<DateTime>(LookupName, RangeValue, Culture),
+            ActionValueType.String => Context.Function.GetRangeLookup<string>(LookupName, RangeValue, UserCulture),
+            ActionValueType.Boolean => Context.Function.GetRangeLookup<bool>(LookupName, RangeValue, UserCulture),
+            ActionValueType.Integer => Context.Function.GetRangeLookup<int>(LookupName, RangeValue, UserCulture),
+            ActionValueType.Decimal => Context.Function.GetRangeLookup<decimal>(LookupName, RangeValue, UserCulture),
+            ActionValueType.DateTime => Context.Function.GetRangeLookup<DateTime>(LookupName, RangeValue, UserCulture),
             _ => null
         };
     }
@@ -1909,7 +1909,7 @@ public class RangeLookupActionMethod<TContext, TFunc> : LookupActionMethodBase<T
 #region Action Case Value
 
 /// <summary>Action case value</summary>
-public abstract class ActionCaseValue
+public abstract class ActionCaseValueBase
 {
     /// <summary>Value mode postfix</summary>
     protected static readonly string ValueModePostfix = ".Value";
@@ -2055,7 +2055,7 @@ public abstract class ActionCaseValue
 }
 
 /// <summary>Action case value</summary>
-public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
+public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValueBase
     where TContext : IActionCaseValueContext<TFunc>
     where TFunc : PayrollFunction
 {

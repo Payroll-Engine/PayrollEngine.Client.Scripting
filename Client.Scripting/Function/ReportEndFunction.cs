@@ -103,7 +103,7 @@ public partial class ReportEndFunction : ReportFunction
     /// <returns>New data table, null on empty collection</returns>
     public DataTable ExecuteResultQuery(string tableName, string methodName,
         Dictionary<string, string> parameters = null) =>
-        ExecuteResultQuery(tableName, methodName, Culture, true, parameters);
+        ExecuteResultQuery(tableName, methodName, UserCulture, true, parameters);
 
     /// <summary>Execute a result query on the Api web method</summary>
     /// <param name="tableName">Target table name</param>
@@ -125,7 +125,7 @@ public partial class ReportEndFunction : ReportFunction
     /// <returns>New or expanded data table</returns>
     public DataTable ExecuteMergeQuery(string tableName, string methodName, string mergeColumn,
         Dictionary<string, string> parameters = null, DataMergeSchemaChange schemaChange = DataMergeSchemaChange.Add) =>
-        ExecuteMergeQuery(tableName, methodName, Culture, mergeColumn, parameters, schemaChange);
+        ExecuteMergeQuery(tableName, methodName, UserCulture, mergeColumn, parameters, schemaChange);
 
     /// <summary>Execute a query on the Api web method and merge the table to the set</summary>
     /// <param name="tableName">Target table name</param>

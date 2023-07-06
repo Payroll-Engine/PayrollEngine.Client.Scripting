@@ -73,7 +73,7 @@ public abstract class CaseRelationActionsBase : CaseActionsBase
 
     
     /// <summary>New source action</summary>
-    protected static CaseRelationActionCaseValue<TValue> NewCaseActionValue<TValue>(CaseRelationActionContext context,
+    protected static CaseRelationActionCaseValue<TValue> GetSourceActionValue<TValue>(CaseRelationActionContext context,
         string source)
     {
         if (string.IsNullOrWhiteSpace(source))
@@ -83,7 +83,7 @@ public abstract class CaseRelationActionsBase : CaseActionsBase
 
         try
         {
-            return new CaseRelationActionCaseValue<TValue>(new(context.Function), ActionCaseValue.ToCaseValueReference(source));
+            return new CaseRelationActionCaseValue<TValue>(new(context.Function), ActionCaseValueBase.ToCaseValueReference(source));
         }
         catch (Exception exception)
         {
@@ -93,7 +93,7 @@ public abstract class CaseRelationActionsBase : CaseActionsBase
     }
 
     /// <summary>New action</summary>
-    protected static CaseRelationActionCaseValue<TValue> NewActionValue<TValue>(CaseRelationActionContext context,
+    protected static CaseRelationActionCaseValue<TValue> GetActionValue<TValue>(CaseRelationActionContext context,
         object value, DateTime? valueDate = null)
     {
         try
@@ -109,7 +109,7 @@ public abstract class CaseRelationActionsBase : CaseActionsBase
 
     /// <summary>Resolve action value</summary>
     protected static TValue ResolveActionValue<TValue>(CaseRelationActionContext context, object value) =>
-        NewActionValue<TValue>(context, value).ResolvedValue;
+        GetActionValue<TValue>(context, value).ResolvedValue;
 }
 
 #endregion

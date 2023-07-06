@@ -95,12 +95,12 @@ public abstract class CaseChangeActionsBase : CaseActionsBase
         ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
 
     /// <summary>New source action</summary>
-    protected static ActionCaseChangeValue<TValue> NewCaseFieldActionValue<TValue>(CaseChangeActionContext context)
+    protected static ActionCaseChangeValue<TValue> GetActionValue<TValue>(CaseChangeActionContext context)
     {
         try
         {
             return new ActionCaseChangeValue<TValue>(new(context.Function, context.CaseFieldName),
-                ActionCaseValue.ToCaseChangeReference(context.CaseFieldName));
+                ActionCaseValueBase.ToCaseChangeReference(context.CaseFieldName));
         }
         catch (Exception exception)
         {
@@ -110,7 +110,7 @@ public abstract class CaseChangeActionsBase : CaseActionsBase
     }
 
     /// <summary>New action</summary>
-    protected static ActionCaseChangeValue<TValue> NewActionValue<TValue>(CaseChangeActionContext context,
+    protected static ActionCaseChangeValue<TValue> GetActionValue<TValue>(CaseChangeActionContext context,
         object value, DateTime? valueDate = null)
     {
         try
@@ -126,7 +126,7 @@ public abstract class CaseChangeActionsBase : CaseActionsBase
 
     /// <summary>Resolve action value</summary>
     protected static TValue ResolveActionValue<TValue>(CaseChangeActionContext context, object value) =>
-        NewActionValue<TValue>(context, value).ResolvedValue;
+        GetActionValue<TValue>(context, value).ResolvedValue;
 
     /// <summary>Add issue</summary>
     protected void AddIssue(CaseChangeActionContext context, string message) =>
@@ -178,7 +178,7 @@ public abstract class CaseChangeActionsBase : CaseActionsBase
     {
         var lookupName = Namespace.EnsureEnd(".Actions");
         //function.LogWarning($"GetIssueMessage: lookupName={lookupName}, localizationKey={key}");
-        var message = function.GetLookup<string>(lookupName, key, function.Culture) ?? defaultMessage;
+        var message = function.GetLookup<string>(lookupName, key, function.UserCulture) ?? defaultMessage;
 
         // prepare parameter placeholders for string format
         for (var i = 0; i < 10; i++)

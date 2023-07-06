@@ -2721,7 +2721,7 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.ActionMethodBase`3.ParameterCount">
             <summary>The method parameter count</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.ActionMethodBase`3.Culture">
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionMethodBase`3.UserCulture">
             <summary>The function culture</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionMethodBase`3.#ctor(`0,System.String,System.DateTime)">
@@ -2888,103 +2888,103 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.RangeLookupActionMethod`2.EvaluateValue(System.Object)">
             <summary>Get the resolved value</summary>
         </member>
-        <member name="T:PayrollEngine.Client.Scripting.Function.ActionCaseValue">
+        <member name="T:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase">
             <summary>Action case value</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ValueModePostfix">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ValueModePostfix">
             <summary>Value mode postfix</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.StartModePostfix">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.StartModePostfix">
             <summary>Start mode postfix</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.EndModePostfix">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.EndModePostfix">
             <summary>End mode postfix</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.PeriodModePostfix">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.PeriodModePostfix">
             <summary>Period mode postfix</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.FieldAttributeModePostfix">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.FieldAttributeModePostfix">
             <summary>Case field attribute mode postfix</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ValueAttributeModePostfix">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ValueAttributeModePostfix">
             <summary>Case value attribute mode postfix</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.LookupModePostfix">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.LookupModePostfix">
             <summary>Lookup value attribute mode postfix</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.RangeLookupModePostfix">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.RangeLookupModePostfix">
             <summary>Range lookup value attribute mode postfix</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.CaseChangeReference">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.CaseChangeReference">
             <summary>Case change reference</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.CaseValueReference">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.CaseValueReference">
             <summary>Case value reference</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.LookupValueReference">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.LookupValueReference">
             <summary>Lookup value reference</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValue.OptionalFieldMarker">
+        <member name="F:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.OptionalFieldMarker">
             <summary>Value optional marker</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToValueReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToValueReference(System.String)">
             <summary>Convert to case change value reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToFieldAttributeReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToFieldAttributeReference(System.String)">
             <summary>Convert to case change field attribute reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToValueAttributeReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToValueAttributeReference(System.String)">
             <summary>Convert to case change value attribute reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseChangeReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseChangeReference(System.String)">
             <summary>Convert to case change reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseValueReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseValueReference(System.String)">
             <summary>Convert to case value reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToStartReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToStartReference(System.String)">
             <summary>Convert to case change value start reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToEndReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToEndReference(System.String)">
             <summary>Convert to case change value end reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseChangeValueReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseChangeValueReference(System.String)">
             <summary>Convert to case change value reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseChangeStartReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseChangeStartReference(System.String)">
             <summary>Convert to case change value start reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseChangeEndReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseChangeEndReference(System.String)">
             <summary>Convert to case change value end reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseChangeFieldAttributeReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseChangeFieldAttributeReference(System.String)">
             <summary>Convert to case change field attribute value reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseChangeValueAttributeReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseChangeValueAttributeReference(System.String)">
             <summary>Convert to case change value attribute value reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseValueValueReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseValueValueReference(System.String)">
             <summary>Convert to case value reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseValueStartReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseValueStartReference(System.String)">
             <summary>Convert to case value start reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseValueEndReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseValueEndReference(System.String)">
             <summary>Convert to case value end reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseValueFieldAttributeReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseValueFieldAttributeReference(System.String)">
             <summary>Convert to case value field attribute value reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.ToCaseValueValueAttributeReference(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.ToCaseValueValueAttributeReference(System.String)">
             <summary>Convert to case value attribute value reference</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.GetMarkerIndex(System.String,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.GetMarkerIndex(System.String,System.String)">
             <summary>Get the marker index</summary>
             <param name="expression"></param>
             <param name="marker"></param>
             <returns></returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValue.GetActionValueType(System.Nullable{PayrollEngine.Client.Scripting.ValueType})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionCaseValueBase.GetActionValueType(System.Nullable{PayrollEngine.Client.Scripting.ValueType})">
             <summary>Get case value type</summary>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.ActionCaseValue`3">
@@ -3266,10 +3266,10 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseAvailableActionsBase.GetCompareCulture(System.Boolean)">
             <summary>Compare culture</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseAvailableActionsBase.NewCaseActionValue``1(PayrollEngine.Client.Scripting.Function.CaseAvailableActionContext,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseAvailableActionsBase.GetSourceActionValue``1(PayrollEngine.Client.Scripting.Function.CaseAvailableActionContext,System.String)">
             <summary>New source action</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseAvailableActionsBase.NewActionValue``1(PayrollEngine.Client.Scripting.Function.CaseAvailableActionContext,System.Object,System.Nullable{System.DateTime})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseAvailableActionsBase.GetActionValue``1(PayrollEngine.Client.Scripting.Function.CaseAvailableActionContext,System.Object,System.Nullable{System.DateTime})">
             <summary>New action</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseAvailableActionsBase.ResolveActionValue``1(PayrollEngine.Client.Scripting.Function.CaseAvailableActionContext,System.Object)">
@@ -3491,10 +3491,10 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeActionsBase.GetCompareCulture(System.Boolean)">
             <summary>Compare culture</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeActionsBase.NewCaseFieldActionValue``1(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeActionsBase.GetActionValue``1(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
             <summary>New source action</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeActionsBase.NewActionValue``1(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Nullable{System.DateTime})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeActionsBase.GetActionValue``1(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Nullable{System.DateTime})">
             <summary>New action</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeActionsBase.ResolveActionValue``1(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
@@ -3777,12 +3777,6 @@
             <param name="context">The action context</param>
             <param name="field">The target field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldSortOrder(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
-            <summary>Set field sort order</summary>
-            <param name="context">The action context</param>
-            <param name="order">The sort order</param>
-            <param name="field">The target field</param>
-        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetFieldStartLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
             <summary>Set field start label</summary>
             <param name="context">The action context</param>
@@ -4008,11 +4002,6 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.ShowDescription(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
             <summary>Show description</summary>
             <param name="context">The action context</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetSortOrder(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
-            <summary>Set sort order</summary>
-            <param name="context">The action context</param>
-            <param name="order">The sort order</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetStartLabel(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
             <summary>Set start label</summary>
@@ -4291,10 +4280,10 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationActionsBase.GetCompareCulture(System.Boolean)">
             <summary>Compare culture</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationActionsBase.NewCaseActionValue``1(PayrollEngine.Client.Scripting.Function.CaseRelationActionContext,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationActionsBase.GetSourceActionValue``1(PayrollEngine.Client.Scripting.Function.CaseRelationActionContext,System.String)">
             <summary>New source action</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationActionsBase.NewActionValue``1(PayrollEngine.Client.Scripting.Function.CaseRelationActionContext,System.Object,System.Nullable{System.DateTime})">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationActionsBase.GetActionValue``1(PayrollEngine.Client.Scripting.Function.CaseRelationActionContext,System.Object,System.Nullable{System.DateTime})">
             <summary>New action</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationActionsBase.ResolveActionValue``1(PayrollEngine.Client.Scripting.Function.CaseRelationActionContext,System.Object)">
@@ -5367,8 +5356,8 @@
             <summary>New function instance</summary>
             <param name="runtime">The function runtime</param>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.Function.Culture">
-            <summary>The culture</summary>
+        <member name="P:PayrollEngine.Client.Scripting.Function.Function.UserCulture">
+            <summary>The user culture</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.Function.TenantId">
             <summary>The tenant id</summary>
@@ -5544,17 +5533,14 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayrollId">
             <summary>The payroll id</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayrollCulture">
+            <summary>The payroll culture</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeId">
             <summary>The employee id</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeIdentifier">
             <summary>The employee identifier</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeCulture">
-            <summary>The employee culture</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeCalendar">
-            <summary>The employee calendar</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetEmployeeAttribute(System.String)">
             <summary>Get employee attribute value</summary>
@@ -7048,18 +7034,6 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.GetValue">
             <exclude />
-        </member>
-        <member name="T:PayrollEngine.Client.Scripting.Local.Switzerland">
-            <summary>Switzerland country tools</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Local.Switzerland.IsValidUidBfs(System.String)">
-            <summary>Check numeric strings for the swiss UID/BFS (modulus 11, radix 1)</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Local.Switzerland.IsValidBur(System.String)">
-            <summary>Check numeric strings for the swiss BUR number (modulus 11, radix 2)</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Local.Switzerland.IsValidSocialSecurity(System.String)">
-            <summary>Check numeric strings for the swiss social security number (modulus 13, radix 6)</summary>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.CaseValueResult">
             <summary>Case value result</summary>
@@ -9017,16 +8991,13 @@
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.EmployeeIdentifier">
             <summary>The employee identifier</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.EmployeeCulture">
-            <summary>The employee culture</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.EmployeeCalendar">
-            <summary>The employee calendar</summary>
-        </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetEmployeeAttribute(System.String)">
             <summary>Get employee attribute value</summary>
             <param name="attributeName">Name of the attribute</param>
             <returns>The employee attribute value</returns>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.PayrollCulture">
+            <summary>The payroll culture</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.PayrollId">
             <summary>The payroll id</summary>
@@ -9506,8 +9477,8 @@
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IRuntime">
             <summary>Runtime  during the execution of a scripting function <see cref="N:PayrollEngine.Client.Scripting.Function"/></summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.IRuntime.Culture">
-            <summary>The culture</summary>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IRuntime.UserCulture">
+            <summary>The user culture</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IRuntime.TenantId">
             <summary>The tenant id</summary>
@@ -10019,13 +9990,51 @@
             <summary>Returns a key as string</summary>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.CheckDigitException">
-            <summary>Check value digits exception</summary>
+            <summary>Check digits exception</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.CheckDigitException.#ctor(System.String)">
-            <summary>Initializes a new instance of the exception</summary>
+        <member name="P:PayrollEngine.Client.Scripting.CheckDigitException.CheckValue">
+            <summary>The check value</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.CheckDigitException.#ctor(System.String,System.Exception)">
+        <member name="M:PayrollEngine.Client.Scripting.CheckDigitException.#ctor(System.String,System.String)">
             <summary>Initializes a new instance of the exception</summary>
+            <param name="message">The exception message</param>
+            <param name="checkValue">The check value</param>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.CheckDigitLengthException">
+            <summary>Check digits value length exception</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.CheckDigitLengthException.MinLength">
+            <summary>The minimum length</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CheckDigitLengthException.#ctor(System.String,System.String,System.Int32)">
+            <summary>Initializes a new instance of the exception</summary>
+            <param name="message">The exception message</param>
+            <param name="checkValue">The check value</param>
+            <param name="minLength">The minimum length</param>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.CheckDigitCharException">
+            <summary>Check digits value character exception</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.CheckDigitCharException.InvalidCharacter">
+            <summary>The invalid character</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CheckDigitCharException.#ctor(System.String,System.String,System.Char)">
+            <summary>Initializes a new instance of the exception</summary>
+            <param name="message">The exception message</param>
+            <param name="checkValue">The check value</param>
+            <param name="invalidCharacter">The invalid character</param>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.CheckDigitMismatchException">
+            <summary>Check digits value mismatch exception</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.CheckDigitMismatchException.CheckedValue">
+            <summary>The checked value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CheckDigitMismatchException.#ctor(System.String,System.String,System.String)">
+            <summary>Initializes a new instance of the exception</summary>
+            <param name="message">The exception message</param>
+            <param name="checkValue">The check value</param>
+            <param name="checkedValue">The invalid character</param>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.CheckDigit">
             <summary>Compute and validate text value digits (ISO 7064 compatible)</summary>
@@ -10055,12 +10064,12 @@
         <member name="M:PayrollEngine.Client.Scripting.CheckDigit.IsValidItf(System.String)">
             <summary>Check ITF digit</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.CheckDigit.#ctor(System.Int32,System.Int32,System.Boolean,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.CheckDigit.#ctor(System.Int32,System.Int32,System.String,System.Boolean)">
             <summary>Creates a new instance</summary>
             <param name="modulus">The modulus</param>
             <param name="radix">The radix</param>
-            <param name="doubleCheckDigit">Is the computed check digit composed by two characters?</param>
             <param name="characterSet">The supported character set</param>
+            <param name="doubleCheckDigit">Is the computed check digit composed by two characters?</param>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.CheckDigit.Modulus">
             <summary>The modulus</summary>
@@ -10074,10 +10083,12 @@
         <member name="P:PayrollEngine.Client.Scripting.CheckDigit.CharacterSet">
             <summary>The supported character set</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.CheckDigit.IsValid(System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.CheckDigit.Check(System.String)">
             <summary>Checks if the given value contains a valid check digit</summary>
             <param name="value">The value to check</param>
-            <returns>True for a valid value</returns>
+            <exception cref="T:System.ArgumentException">Empty value exception</exception>
+            <exception cref="T:PayrollEngine.Client.Scripting.CheckDigitLengthException">Value length exception</exception>
+            <exception cref="T:PayrollEngine.Client.Scripting.CheckDigitMismatchException">Value with invalid character exception</exception>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CheckDigit.AddCheckDigit(System.String)">
             <summary>Adds the check digit to the given value</summary>
@@ -10088,6 +10099,8 @@
             <summary>Calculates the check digit from a given value</summary>
             <param name="value">The value from which the check digit will be computed</param>
             <returns>The check digit</returns>
+            <exception cref="T:System.ArgumentException">Empty value exception</exception>
+            <exception cref="T:PayrollEngine.Client.Scripting.CheckDigitCharException">Invalid character exception</exception>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CheckDigit.IsWeightedValid(System.String,System.Int32)">
             <summary>Checks if the given value contains a valid check digit</summary>

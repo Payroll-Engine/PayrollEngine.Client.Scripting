@@ -8,8 +8,8 @@ public interface IRuntime
 {
     #region Culture
 
-    /// <summary>The culture</summary>
-    string Culture { get; }
+    /// <summary>The user culture</summary>
+    string UserCulture { get; }
 
     #endregion
 
