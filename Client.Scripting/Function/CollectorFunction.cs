@@ -25,9 +25,9 @@ public abstract partial class CollectorFunction : PayrunFunction
         CollectorMaxResult = Runtime.CollectorMaxResult;
         CollectorResult = Runtime.CollectorResult;
         CollectorCount = Runtime.CollectorCount;
-        CollectorSum = Runtime.CollectorSum;
-        CollectorMin = Runtime.CollectorMin;
-        CollectorMax = Runtime.CollectorMax;
+        CollectorSummary = Runtime.CollectorSummary;
+        CollectorMinimum = Runtime.CollectorMinimum;
+        CollectorMaximum = Runtime.CollectorMaximum;
         CollectorAverage = Runtime.CollectorAverage;
 
         // lookups
@@ -79,13 +79,13 @@ public abstract partial class CollectorFunction : PayrunFunction
     public decimal CollectorCount { get; }
 
     /// <summary>The summary of the collected value</summary>
-    public decimal CollectorSum { get; }
+    public decimal CollectorSummary { get; }
 
     /// <summary>The minimum collected value</summary>
-    public decimal CollectorMin { get; }
+    public decimal CollectorMinimum { get; }
 
     /// <summary>The maximum collected value</summary>
-    public decimal CollectorMax { get; }
+    public decimal CollectorMaximum { get; }
 
     /// <summary>The average of the collected value</summary>
     public decimal CollectorAverage { get; }

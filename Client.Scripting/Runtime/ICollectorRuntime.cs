@@ -30,17 +30,20 @@ public interface ICollectorRuntime : IPayrunRuntime
     /// <summary>Collected values count</summary>
     decimal CollectorCount { get; }
 
-    /// <summary>The summary of the collected value</summary>
-    decimal CollectorSum { get; }
+    /// <summary>The summary of the collected values</summary>
+    decimal CollectorSummary { get; }
 
-    /// <summary>The minimum collected value</summary>
-    decimal CollectorMin { get; }
+    /// <summary>The minimum collected values</summary>
+    decimal CollectorMinimum { get; }
 
-    /// <summary>The maximum collected value</summary>
-    decimal CollectorMax { get; }
+    /// <summary>The maximum collected values</summary>
+    decimal CollectorMaximum { get; }
 
-    /// <summary>The average of the collected value</summary>
+    /// <summary>The average of the collected values</summary>
     decimal CollectorAverage { get; }
+
+    /// <summary>The range of the collected values</summary>
+    decimal CollectorRange { get; }
 
     /// <summary>Get the wage type result tags</summary>
     /// <returns>The wage type result tags</returns>
@@ -102,7 +105,7 @@ public interface ICollectorRuntime : IPayrunRuntime
     /// <param name="valueType">The result value type (numeric), default is the collector value type</param>
     void AddCustomResult(string source, decimal value, DateTime startDate, DateTime endDate,
         List<string> tags, Dictionary<string, object> attributes, int? valueType);
-        
+
     #endregion
 
     #region Retro

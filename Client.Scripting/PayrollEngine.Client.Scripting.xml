@@ -5236,13 +5236,13 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorCount">
             <summary>Collected values count</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorSum">
+        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorSummary">
             <summary>The summary of the collected value</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorMin">
+        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorMinimum">
             <summary>The minimum collected value</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorMax">
+        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorMaximum">
             <summary>The maximum collected value</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorAverage">
@@ -8902,17 +8902,20 @@
         <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorCount">
             <summary>Collected values count</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorSum">
-            <summary>The summary of the collected value</summary>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorSummary">
+            <summary>The summary of the collected values</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorMin">
-            <summary>The minimum collected value</summary>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorMinimum">
+            <summary>The minimum collected values</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorMax">
-            <summary>The maximum collected value</summary>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorMaximum">
+            <summary>The maximum collected values</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorAverage">
-            <summary>The average of the collected value</summary>
+            <summary>The average of the collected values</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorRange">
+            <summary>The range of the collected values</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.GetResultTags">
             <summary>Get the wage type result tags</summary>
