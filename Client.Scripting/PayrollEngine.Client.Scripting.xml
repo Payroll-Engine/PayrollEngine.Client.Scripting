@@ -5218,8 +5218,11 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorGroups">
             <summary>The collector groups</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectType">
-            <summary>The collect type</summary>
+        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectMode">
+            <summary>The collect mode</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.Negated">
+            <summary>Negated collector result</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.CollectorFunction.CollectorThreshold">
             <summary>The threshold value</summary>
@@ -8884,8 +8887,11 @@
         <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorGroups">
             <summary>The collector groups</summary>
         </member>
-        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectType">
-            <summary>The collect type</summary>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectMode">
+            <summary>The collect mode</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.Negated">
+            <summary>Negated collector result</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.CollectorThreshold">
             <summary>The threshold value</summary>

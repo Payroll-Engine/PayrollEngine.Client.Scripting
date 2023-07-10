@@ -12,8 +12,11 @@ public interface ICollectorRuntime : IPayrunRuntime
     /// <summary>The collector groups</summary>
     string[] CollectorGroups { get; }
 
-    /// <summary>The collect type</summary>
-    string CollectType { get; }
+    /// <summary>The collect mode</summary>
+    string CollectMode { get; }
+
+    /// <summary>Negated collector result</summary>
+    bool  Negated{ get; }
 
     /// <summary>The threshold value</summary>
     decimal? CollectorThreshold { get; }

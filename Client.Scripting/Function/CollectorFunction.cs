@@ -19,7 +19,8 @@ public abstract partial class CollectorFunction : PayrunFunction
         // collector
         CollectorName = Runtime.CollectorName;
         CollectorGroups = Runtime.CollectorGroups;
-        CollectType = Runtime.CollectType;
+        CollectMode = Runtime.CollectMode;
+        Negated = Runtime.Negated;
         CollectorThreshold = Runtime.CollectorThreshold;
         CollectorMinResult = Runtime.CollectorMinResult;
         CollectorMaxResult = Runtime.CollectorMaxResult;
@@ -60,8 +61,11 @@ public abstract partial class CollectorFunction : PayrunFunction
     /// <summary>The collector groups</summary>
     public string[] CollectorGroups { get; }
 
-    /// <summary>The collect type</summary>
-    public string CollectType { get; }
+    /// <summary>The collect mode</summary>
+    public string CollectMode { get; }
+
+    /// <summary>Negated collector result</summary>
+    public bool Negated { get; }
 
     /// <summary>The threshold value</summary>
     public decimal? CollectorThreshold { get; }
