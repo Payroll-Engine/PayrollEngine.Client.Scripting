@@ -3767,6 +3767,11 @@
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseInputActions">
             <summary>Extension methods for case input actions</summary>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetIcon(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
+            <summary>Set case icon</summary>
+            <param name="context">The action context</param>
+            <param name="icon">The icon name</param>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.HiddenField(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object)">
             <summary>Hide all field inputs</summary>
             <param name="context">The action context</param>

@@ -6,11 +6,14 @@ internal static class InputAttributes
 {
     private static readonly string Prefix = "input.";
 
-    // general
+    // case general
+    internal static readonly string Icon = $"{Prefix}icon";
+
+    // case field general
     internal static readonly string Hidden = $"{Prefix}hidden";
     internal static readonly string ShowDescription = $"{Prefix}showDescription";
 
-    // start
+    // case field start
     internal static readonly string StartLabel = $"{Prefix}startLabel";
     internal static readonly string StartHelp = $"{Prefix}startHelp";
     internal static readonly string StartRequired = $"{Prefix}startRequired";
@@ -19,7 +22,7 @@ internal static class InputAttributes
     internal static readonly string StartPickerOpen = $"{Prefix}startPickerOpen";
     internal static readonly string StartPickerType = $"{Prefix}startPickerType";
 
-    // end
+    // case field end
     internal static readonly string EndLabel = $"{Prefix}endLabel";
     internal static readonly string EndHelp = $"{Prefix}endHelp";
     internal static readonly string EndRequired = $"{Prefix}endRequired";
@@ -28,7 +31,7 @@ internal static class InputAttributes
     internal static readonly string EndPickerOpen = $"{Prefix}endPickerOpen";
     internal static readonly string EndPickerType = $"{Prefix}endPickerType";
 
-    // value
+    // case field value
     internal static readonly string ValueLabel = $"{Prefix}valueLabel";
     internal static readonly string ValueAdornment = $"{Prefix}valueAdornment";
     internal static readonly string ValueHelp = $"{Prefix}valueHelp";
@@ -45,7 +48,7 @@ internal static class InputAttributes
     internal static readonly string MaxLength = $"{Prefix}maxLength";
     internal static readonly string Check = $"{Prefix}check";
 
-    // attachments
+    // case field attachments
     internal static readonly string Attachment = $"{Prefix}attachment";
     internal static readonly string AttachmentExtensions = $"{Prefix}attachmentExtensions";
 
@@ -61,7 +64,26 @@ internal static class InputAttributes
 public class CaseInputActions : CaseChangeActionsBase
 {
 
-    #region Field General
+    #region Casse General
+
+    /// <summary>Set case icon</summary>
+    /// <param name="context">The action context</param>
+    /// <param name="icon">The icon name</param>
+    [ActionParameter("icon", "The icon name", valueTypes: new[] { StringType })]
+    [CaseBuildAction("SetIcon", "Set case icon", "Case")]
+    public void SetIcon(CaseChangeActionContext context, object icon)
+    {
+        var iconValue = GetActionValue<string>(context, icon);
+        if (iconValue == null || !iconValue.IsFulfilled)
+        {
+            return;
+        }
+        SetCaseAttribute(context, InputAttributes.Icon, iconValue.ResolvedValue);
+    }
+
+    #endregion
+
+    #region Case Field General
 
     /// <summary>Hide all field inputs</summary>
     /// <param name="context">The action context</param>
@@ -69,7 +91,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("HiddenField", "Hide all field inputs", "FieldInput", "Field")]
     public void HiddenField(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.Hidden, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.Hidden, true);
 
     /// <summary>Show field description</summary>
     /// <param name="context">The action context</param>
@@ -77,11 +99,11 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("ShowFieldDescription", "Show field description", "FieldInput", "Field")]
     public void ShowFieldDescription(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.ShowDescription, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.ShowDescription, true);
 
     #endregion
 
-    #region Field Start
+    #region Case Field Start
 
     /// <summary>Set field start label</summary>
     /// <param name="context">The action context</param>
@@ -97,7 +119,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.StartLabel, labelValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.StartLabel, labelValue.ResolvedValue);
     }
 
     /// <summary>Set field start help</summary>
@@ -114,7 +136,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.StartHelp, helpValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.StartHelp, helpValue.ResolvedValue);
     }
 
     /// <summary>Set field start required</summary>
@@ -123,7 +145,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartRequired", "Set field start required", "FieldInput", "FieldStart")]
     public void SetFieldStartRequired(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.StartRequired, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.StartRequired, true);
 
     /// <summary>Set field start read only</summary>
     /// <param name="context">The action context</param>
@@ -131,7 +153,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartReadOnly", "Set field start read only", "FieldInput", "FieldStart")]
     public void SetFieldStartReadOnly(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.StartReadOnly, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.StartReadOnly, true);
 
     /// <summary>Set field start format</summary>
     /// <param name="context">The action context</param>
@@ -149,7 +171,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.StartFormat, formatValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.StartFormat, formatValue.ResolvedValue);
     }
 
     /// <summary>Set field start day date picker</summary>
@@ -158,7 +180,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartPickerOpenDay", "Set field start day date picker", "FieldInput", "FieldStart")]
     public void SetFieldStartPickerOpenDay(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.StartPickerOpen, "day");
+        SetCaseFieldAttribute(context, field, InputAttributes.StartPickerOpen, "day");
 
     /// <summary>Set field start month date picker</summary>
     /// <param name="context">The action context</param>
@@ -166,7 +188,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartPickerOpenMonth", "Set field start month date picker", "FieldInput", "FieldStart")]
     public void SetFieldStartPickerOpenMonth(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.StartPickerOpen, "month");
+        SetCaseFieldAttribute(context, field, InputAttributes.StartPickerOpen, "month");
 
     /// <summary>Set field start year date picker</summary>
     /// <param name="context">The action context</param>
@@ -174,7 +196,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartPickerOpenYear", "Set field start year date picker", "FieldInput", "FieldStart")]
     public void SetFieldStartPickerOpenYear(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.StartPickerOpen, "year");
+        SetCaseFieldAttribute(context, field, InputAttributes.StartPickerOpen, "year");
 
     /// <summary>Set field start picker date time</summary>
     /// <param name="context">The action context</param>
@@ -182,11 +204,11 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldStartPickerTypeDateTime", "Set field start picker date time", "FieldInput", "FieldStart")]
     public void SetFieldStartPickerTypeDateTime(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.StartPickerType, "DateTimePicker");
+        SetCaseFieldAttribute(context, field, InputAttributes.StartPickerType, "DateTimePicker");
 
     #endregion
 
-    #region Field End
+    #region Case Field End
 
     /// <summary>Set field end label</summary>
     /// <param name="context">The action context</param>
@@ -202,7 +224,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.EndLabel, labelValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.EndLabel, labelValue.ResolvedValue);
     }
 
     /// <summary>Set field end help</summary>
@@ -219,7 +241,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.EndHelp, helpValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.EndHelp, helpValue.ResolvedValue);
     }
 
     /// <summary>Set field end required</summary>
@@ -228,7 +250,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndRequired", "Set field end required", "FieldInput", "FieldEnd")]
     public void SetFieldEndRequired(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.EndRequired, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.EndRequired, true);
 
     /// <summary>Set field end read only</summary>
     /// <param name="context">The action context</param>
@@ -236,7 +258,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndReadOnly", "Set field end read only", "FieldInput", "FieldEnd")]
     public void SetFieldEndReadOnly(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.EndReadOnly, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.EndReadOnly, true);
 
     /// <summary>Set field end format</summary>
     /// <param name="context">The action context</param>
@@ -254,7 +276,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.EndFormat, formatValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.EndFormat, formatValue.ResolvedValue);
     }
 
     /// <summary>Set field end day date picker</summary>
@@ -263,7 +285,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndPickerOpenDay", "Set field end day date picker", "FieldInput", "FieldEnd")]
     public void SetFieldEndPickerOpenDay(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.EndPickerOpen, "day");
+        SetCaseFieldAttribute(context, field, InputAttributes.EndPickerOpen, "day");
 
     /// <summary>Set field end month date picker</summary>
     /// <param name="context">The action context</param>
@@ -271,7 +293,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndPickerOpenMonth", "Set field end month date picker", "FieldInput", "FieldEnd")]
     public void SetFieldEndPickerOpenMonth(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.EndPickerOpen, "month");
+        SetCaseFieldAttribute(context, field, InputAttributes.EndPickerOpen, "month");
 
     /// <summary>Set field end year date picker</summary>
     /// <param name="context">The action context</param>
@@ -279,7 +301,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndPickerOpenYear", "Set field end year date picker", "FieldInput", "FieldEnd")]
     public void SetFieldEndPickerOpenYear(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.EndPickerOpen, "year");
+        SetCaseFieldAttribute(context, field, InputAttributes.EndPickerOpen, "year");
 
     /// <summary>Set field end time picker</summary>
     /// <param name="context">The action context</param>
@@ -287,11 +309,11 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldEndPickerTypeDateTime", "Set field end time picker", "FieldInput", "FieldEnd")]
     public void SetFieldEndPickerTypeDateTime(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.EndPickerType, "DateTimePicker");
+        SetCaseFieldAttribute(context, field, InputAttributes.EndPickerType, "DateTimePicker");
 
     #endregion
 
-    #region Field Value
+    #region Case Field Value
 
     /// <summary>Set field value label</summary>
     /// <param name="context">The action context</param>
@@ -307,7 +329,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.ValueLabel, textValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.ValueLabel, textValue.ResolvedValue);
     }
 
     /// <summary>Set field value adornment</summary>
@@ -324,7 +346,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.ValueAdornment, adornmentValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.ValueAdornment, adornmentValue.ResolvedValue);
     }
 
     /// <summary>Set field value help</summary>
@@ -341,7 +363,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.ValueHelp, helpValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.ValueHelp, helpValue.ResolvedValue);
     }
 
     /// <summary>Set field value mask</summary>
@@ -360,7 +382,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.ValueMask, maskValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.ValueMask, maskValue.ResolvedValue);
     }
 
     /// <summary>Set field value required</summary>
@@ -369,7 +391,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValueRequired", "Set field value required", "FieldInput", "FieldValue")]
     public void SetFieldValueRequired(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.ValueRequired, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.ValueRequired, true);
 
     /// <summary>Set field value read only</summary>
     /// <param name="context">The action context</param>
@@ -377,7 +399,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValueReadOnly", "Set field value read only", "FieldInput", "FieldValue")]
     public void SetFieldValueReadOnly(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.ValueReadOnly, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.ValueReadOnly, true);
 
     /// <summary>Set field value day date picker</summary>
     /// <param name="context">The action context</param>
@@ -385,7 +407,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValuePickerOpenDay", "Set field value day date picker", "FieldInput", "FieldValue")]
     public void SetFieldValuePickerOpenDay(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.ValuePickerOpen, "day");
+        SetCaseFieldAttribute(context, field, InputAttributes.ValuePickerOpen, "day");
 
     /// <summary>Set field value month date picker</summary>
     /// <param name="context">The action context</param>
@@ -393,7 +415,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValuePickerOpenMonth", "Set field value month date picker", "FieldInput", "FieldValue")]
     public void SetFieldValuePickerOpenMonth(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.ValuePickerOpen, "month");
+        SetCaseFieldAttribute(context, field, InputAttributes.ValuePickerOpen, "month");
 
     /// <summary>Set field value year date picker</summary>
     /// <param name="context">The action context</param>
@@ -401,7 +423,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldValuePickerOpenYear", "Set field value year date picker", "FieldInput", "FieldValue")]
     public void SetFieldValuePickerOpenYear(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.ValuePickerOpen, "year");
+        SetCaseFieldAttribute(context, field, InputAttributes.ValuePickerOpen, "year");
 
     /// <summary>Set field value culture</summary>
     /// <param name="context">The action context</param>
@@ -419,7 +441,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.Culture, cultureValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.Culture, cultureValue.ResolvedValue);
     }
 
     /// <summary>Set field minimum value</summary>
@@ -434,19 +456,19 @@ public class CaseInputActions : CaseChangeActionsBase
         var intValue = GetActionValue<int>(context, minimum);
         if (intValue != null && intValue.IsFulfilled)
         {
-            SetInputAttribute(context, field, InputAttributes.MinValue, intValue.ResolvedValue);
+            SetCaseFieldAttribute(context, field, InputAttributes.MinValue, intValue.ResolvedValue);
             return;
         }
         var decimalValue = GetActionValue<int>(context, minimum);
         if (decimalValue != null && decimalValue.IsFulfilled)
         {
-            SetInputAttribute(context, field, InputAttributes.MinValue, decimalValue.ResolvedValue);
+            SetCaseFieldAttribute(context, field, InputAttributes.MinValue, decimalValue.ResolvedValue);
             return;
         }
         var dateTimeValue = GetActionValue<int>(context, minimum);
         if (dateTimeValue != null && dateTimeValue.IsFulfilled)
         {
-            SetInputAttribute(context, field, InputAttributes.MinValue, dateTimeValue.ResolvedValue);
+            SetCaseFieldAttribute(context, field, InputAttributes.MinValue, dateTimeValue.ResolvedValue);
         }
     }
 
@@ -462,19 +484,19 @@ public class CaseInputActions : CaseChangeActionsBase
         var intValue = GetActionValue<int>(context, maximum);
         if (intValue != null && intValue.IsFulfilled)
         {
-            SetInputAttribute(context, field, InputAttributes.MaxValue, intValue.ResolvedValue);
+            SetCaseFieldAttribute(context, field, InputAttributes.MaxValue, intValue.ResolvedValue);
             return;
         }
         var decimalValue = GetActionValue<int>(context, maximum);
         if (decimalValue != null && decimalValue.IsFulfilled)
         {
-            SetInputAttribute(context, field, InputAttributes.MaxValue, decimalValue.ResolvedValue);
+            SetCaseFieldAttribute(context, field, InputAttributes.MaxValue, decimalValue.ResolvedValue);
             return;
         }
         var dateTimeValue = GetActionValue<int>(context, maximum);
         if (dateTimeValue != null && dateTimeValue.IsFulfilled)
         {
-            SetInputAttribute(context, field, InputAttributes.MaxValue, dateTimeValue.ResolvedValue);
+            SetCaseFieldAttribute(context, field, InputAttributes.MaxValue, dateTimeValue.ResolvedValue);
         }
     }
 
@@ -492,7 +514,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.StepSize, stepSizeValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.StepSize, stepSizeValue.ResolvedValue);
     }
 
     /// <summary>Set field value format</summary>
@@ -511,7 +533,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.Format, formatValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.Format, formatValue.ResolvedValue);
     }
 
     /// <summary>Set field text line count</summary>
@@ -528,7 +550,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.LineCount, countValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.LineCount, countValue.ResolvedValue);
     }
 
     /// <summary>Set field maximum text length</summary>
@@ -545,7 +567,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.MaxLength, lengthValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.MaxLength, lengthValue.ResolvedValue);
     }
 
     /// <summary>Set field boolean as checkbox</summary>
@@ -554,12 +576,12 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldCheck", "Set field boolean as checkbox", "FieldInput", "FieldValue")]
     public void SetFieldCheck(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.Check, true);
+        SetCaseFieldAttribute(context, field, InputAttributes.Check, true);
 
 
     #endregion
 
-    #region Field Attachment
+    #region Case Field Attachment
 
     /// <summary>Set field without file attachments</summary>
     /// <param name="context">The action context</param>
@@ -567,7 +589,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldAttachmentNone", "Set field without file attachments", "FieldInput", "Field")]
     public void SetFieldAttachmentNone(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.Attachment, "none");
+        SetCaseFieldAttribute(context, field, InputAttributes.Attachment, "none");
 
     /// <summary>Set field optional file attachments</summary>
     /// <param name="context">The action context</param>
@@ -575,7 +597,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldAttachmentOptional", "Set field optional file attachments", "FieldInput", "Field")]
     public void SetFieldAttachmentOptional(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.Attachment, "optional");
+        SetCaseFieldAttribute(context, field, InputAttributes.Attachment, "optional");
 
     /// <summary>Set field mandatory file attachments</summary>
     /// <param name="context">The action context</param>
@@ -583,7 +605,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [ActionParameter("field", "The target field", valueTypes: new[] { StringType })]
     [CaseBuildAction("SetFieldAttachmentMandatory", "Set field mandatory file attachments", "FieldInput", "Field")]
     public void SetFieldAttachmentMandatory(CaseChangeActionContext context, object field) =>
-        SetInputAttribute(context, field, InputAttributes.Attachment, "mandatory");
+        SetCaseFieldAttribute(context, field, InputAttributes.Attachment, "mandatory");
 
     /// <summary>Set field attachments file extensions</summary>
     /// <param name="context">The action context</param>
@@ -599,12 +621,12 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
-        SetInputAttribute(context, field, InputAttributes.AttachmentExtensions, extensionsValue.ResolvedValue);
+        SetCaseFieldAttribute(context, field, InputAttributes.AttachmentExtensions, extensionsValue.ResolvedValue);
     }
 
     #endregion
 
-    #region General
+    #region Current Case Field General
 
     /// <summary>Hide all inputs</summary>
     /// <param name="context">The action context</param>
@@ -620,7 +642,7 @@ public class CaseInputActions : CaseChangeActionsBase
 
     #endregion
 
-    #region Start
+    #region Current Case Field Start
 
     /// <summary>Set start label</summary>
     /// <param name="context">The action context</param>
@@ -685,7 +707,7 @@ public class CaseInputActions : CaseChangeActionsBase
 
     #endregion
 
-    #region End
+    #region Current Case Field End
 
     /// <summary>Set end label</summary>
     /// <param name="context">The action context</param>
@@ -751,7 +773,7 @@ public class CaseInputActions : CaseChangeActionsBase
 
     #endregion
 
-    #region Value
+    #region Current Case Field Value
 
     /// <summary>Set value label</summary>
     /// <param name="context">The action context</param>
@@ -887,7 +909,7 @@ public class CaseInputActions : CaseChangeActionsBase
 
     #endregion
 
-    #region Attachment
+    #region Current Case Field Attachment
 
     /// <summary>Set without file attachments</summary>
     /// <param name="context">The action context</param>
@@ -917,7 +939,17 @@ public class CaseInputActions : CaseChangeActionsBase
 
     #endregion
 
-    private static void SetInputAttribute(CaseChangeActionContext context, object field, string attribute, object value)
+    private static void SetCaseAttribute(CaseChangeActionContext context, string attribute, object value)
+    {
+        var fieldValue = GetActionValue<string>(context, value);
+        if (fieldValue == null || !fieldValue.IsReference || string.IsNullOrWhiteSpace(fieldValue.ResolvedValue))
+        {
+            return;
+        }
+        context.Function.SetCaseAttribute(context.Function.CaseName, attribute, fieldValue.ResolvedValue);
+    }
+
+    private static void SetCaseFieldAttribute(CaseChangeActionContext context, object field, string attribute, object value)
     {
         var fieldValue = GetActionValue<string>(context, field);
         if (fieldValue == null || !fieldValue.IsReference || string.IsNullOrWhiteSpace(fieldValue.ResolvedValue))
