@@ -50,6 +50,12 @@ public partial class ReportBuildFunction : ReportFunction
     /// <returns>The report attribute value</returns>
     public void SetParameterAttribute(string parameterName, string attributeName, object value) =>
         Runtime.SetParameterAttribute(parameterName, attributeName, value);
+    
+    /// <summary>Set the report parameter hidden state</summary>
+    /// <param name="parameterName">The parameter name</param>
+    /// <param name="hidden">The hidden state</param>
+    public void SetParameterHidden(string parameterName, bool hidden)=>
+        Runtime.SetParameterHidden(parameterName, hidden);
 
     /// <exclude />
     public bool? Build()

@@ -31,6 +31,11 @@ public interface IReportRuntime : IRuntime
     /// <returns>The report attribute value</returns>
     object GetParameterAttribute(string parameterName, string attributeName);
 
+    /// <summary>Test for hidden report parameter</summary>
+    /// <param name="parameterName">The parameter name</param>
+    /// <returns>True for hidden report attribute</returns>
+    bool ParameterHidden(string parameterName);
+
     /// <summary>Execute a query on the Api web method</summary>
     /// <param name="tableName">Target table name</param>
     /// <param name="methodName">The query name</param>

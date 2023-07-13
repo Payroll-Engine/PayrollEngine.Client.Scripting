@@ -143,6 +143,12 @@ public abstract partial class ReportFunction : Function
         return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
     }
 
+    /// <summary>Test for hidden report parameter</summary>
+    /// <param name="parameterName">The parameter name</param>
+    /// <returns>True for hidden report attribute</returns>
+    public bool ParameterHidden(string parameterName) =>
+        Runtime.ParameterHidden(parameterName);
+
     /// <summary>Add report log</summary>
     /// <param name="message">The log message</param>
     /// <param name="key">The log key</param>
@@ -469,7 +475,7 @@ public abstract partial class ReportFunction : Function
 
         // lookup values
         var lookups = new Dictionary<string, Dictionary<string, string>>();
-        DataTable lookupValueTable = ExecuteQuery("LookupValues", "GetPayrollLookupValues", parameters);
+        DataTable lookupValueTable = ExecuteQuery("LookupValues", "GetPayrollLookupData", parameters);
         foreach (var lookupValuesRow in lookupValueTable.AsEnumerable())
         {
             var lookupName = lookupValuesRow.GetValue<string>("Name");

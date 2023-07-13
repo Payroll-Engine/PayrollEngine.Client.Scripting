@@ -15,4 +15,9 @@ public interface IReportBuildRuntime : IReportRuntime
     /// <param name="value">The attribute value</param>
     /// <returns>The report attribute value</returns>
     void SetParameterAttribute(string parameterName, string attributeName, object value);
+
+    /// <summary>Set the report parameter hidden state</summary>
+    /// <param name="parameterName">The parameter name</param>
+    /// <param name="hidden">The hidden state</param>
+    void SetParameterHidden(string parameterName, bool hidden);
 }

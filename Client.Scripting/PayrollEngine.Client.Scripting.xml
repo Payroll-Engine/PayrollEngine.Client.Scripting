@@ -6342,6 +6342,11 @@
             <param name="value">The attribute value</param>
             <returns>The report attribute value</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportBuildFunction.SetParameterHidden(System.String,System.Boolean)">
+            <summary>Set the report parameter hidden state</summary>
+            <param name="parameterName">The parameter name</param>
+            <param name="hidden">The hidden state</param>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportBuildFunction.Build">
             <exclude />
         </member>
@@ -6541,6 +6546,11 @@
             <param name="attributeName">Name of the attribute</param>
             <param name="defaultValue">The default value</param>
             <returns>The report attribute value</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ParameterHidden(System.String)">
+            <summary>Test for hidden report parameter</summary>
+            <param name="parameterName">The parameter name</param>
+            <returns>True for hidden report attribute</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.AddReportLog(System.String,System.String,System.Nullable{System.DateTime})">
             <summary>Add report log</summary>
@@ -9311,6 +9321,11 @@
             <param name="value">The attribute value</param>
             <returns>The report attribute value</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportBuildRuntime.SetParameterHidden(System.String,System.Boolean)">
+            <summary>Set the report parameter hidden state</summary>
+            <param name="parameterName">The parameter name</param>
+            <param name="hidden">The hidden state</param>
+        </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IReportEndRuntime">
             <summary>Runtime for the report end function <see cref="T:PayrollEngine.Client.Scripting.Function.ReportEndFunction"/></summary>
         </member>
@@ -9362,6 +9377,11 @@
             <param name="parameterName">The parameter name</param>
             <param name="attributeName">Name of the attribute</param>
             <returns>The report attribute value</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.ParameterHidden(System.String)">
+            <summary>Test for hidden report parameter</summary>
+            <param name="parameterName">The parameter name</param>
+            <returns>True for hidden report attribute</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.ExecuteQuery(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>Execute a query on the Api web method</summary>
