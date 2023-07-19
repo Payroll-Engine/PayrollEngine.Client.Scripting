@@ -879,30 +879,4 @@ public abstract partial class ReportFunction : Function
 
     #endregion
 
-    #region Webhooks
-
-    /// <summary>Invoke report webhook</summary>
-    /// <param name="requestOperation">The request operation</param>
-    /// <param name="requestMessage">The webhook request message</param>
-    /// <returns>The webhook response object</returns>
-    public T InvokeWebhook<T>(string requestOperation, object requestMessage = null)
-    {
-        if (string.IsNullOrWhiteSpace(requestOperation))
-        {
-            throw new ArgumentException(nameof(requestOperation));
-        }
-
-        // webhook request
-        var jsonRequest = requestMessage != null ? JsonSerializer.Serialize(requestMessage) : null;
-        var jsonResponse = Runtime.InvokeWebhook(requestOperation, jsonRequest);
-        if (string.IsNullOrWhiteSpace(jsonResponse))
-        {
-            return default;
-        }
-        var response = JsonSerializer.Deserialize<T>(jsonResponse);
-        return response;
-    }
-
-    #endregion
-
 }

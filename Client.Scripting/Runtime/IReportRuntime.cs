@@ -134,10 +134,4 @@ public interface IReportRuntime : IRuntime
     /// <param name="key">The log key</param>
     /// <param name="reportDate">The report date (default: now)</param>
     void AddReportLog(string message, string key = null, DateTime? reportDate = null);
-
-    /// <summary>Invoke report webhook and receive the response JSON data</summary>
-    /// <param name="requestOperation">The request operation</param>
-    /// <param name="requestMessage">The JSON request message</param>
-    /// <returns>The webhook response object as JSON</returns>
-    string InvokeWebhook(string requestOperation, string requestMessage = null);
 }

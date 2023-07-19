@@ -6,6 +6,7 @@ namespace PayrollEngine.Client.Scripting.Runtime;
 /// <summary>Runtime  during the execution of a scripting function <see cref="Function"/></summary>
 public interface IRuntime
 {
+
     #region Culture
 
     /// <summary>The user culture</summary>
@@ -60,6 +61,16 @@ public interface IRuntime
     /// <param name="attributes">The task attributes</param>
     void AddTask(string name, string instruction, DateTime scheduleDate, string category,
         Dictionary<string, object> attributes = null);
+
+    #endregion
+
+    #region Webhook
+
+    /// <summary>Invoke case relation webhook and receive the response JSON data</summary>
+    /// <param name="requestOperation">The request operation</param>
+    /// <param name="requestMessage">The JSON request message</param>
+    /// <returns>The webhook response object as JSON</returns>
+    string InvokeWebhook(string requestOperation, string requestMessage = null);
 
     #endregion
 

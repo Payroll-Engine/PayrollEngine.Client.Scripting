@@ -3758,12 +3758,6 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseFunction.GetCaseAttribute``1(System.String,``0)">
             <summary>Get case attribute typed value</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseFunction.InvokeWebhook``1(System.String,System.Object)">
-            <summary>Invoke case webhook</summary>
-            <param name="requestOperation">The request operation</param>
-            <param name="requestMessage">The webhook request message</param>
-            <returns>The webhook response object</returns>
-        </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseInputActions">
             <summary>Extension methods for case input actions</summary>
         </member>
@@ -4659,12 +4653,6 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationFunction.CopyValue(System.String,System.String)">
             <summary>Copy the case value from source to target</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationFunction.InvokeWebhook``1(System.String,System.Object)">
-            <summary>Invoke case webhook</summary>
-            <param name="requestOperation">The request operation</param>
-            <param name="requestMessage">The webhook request message</param>
-            <returns>The webhook response object</returns>
-        </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseRelationValidateActions">
             <summary>Extension methods for the case change actions</summary>
         </member>
@@ -5453,6 +5441,12 @@
             <param name="scheduleDate">The task schedule date</param>
             <param name="category">The task category</param>
             <param name="attributes">The task attributes</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.InvokeWebhook``1(System.String,System.Object)">
+            <summary>Invoke report webhook</summary>
+            <param name="requestOperation">The request operation</param>
+            <param name="requestMessage">The webhook request message</param>
+            <returns>The webhook response object</returns>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.Function.SourceFileName">
             <summary>The name of the source file (scripting development)</summary>
@@ -6261,12 +6255,6 @@
             <param name="query">The result query</param>
             <returns>Consolidated employee collector custom results</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.InvokeWebhook``1(System.String,System.Object)">
-            <summary>Invoke payrun webhook</summary>
-            <param name="requestOperation">The request operation</param>
-            <param name="requestMessage">The webhook request message</param>
-            <returns>The webhook response object</returns>
-        </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.PayrunStartFunction">
             <summary>Payrun start function</summary>
         </member>
@@ -6782,12 +6770,6 @@
             <param name="queryName">The query name</param>
             <param name="parameterName">The parameter name</param>
             <returns>The object id, null for unknown payrun</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.InvokeWebhook``1(System.String,System.Object)">
-            <summary>Invoke report webhook</summary>
-            <param name="requestOperation">The request operation</param>
-            <param name="requestMessage">The webhook request message</param>
-            <returns>The webhook response object</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.ReportStartFunction">
             <summary>Report start function</summary>
@@ -8803,12 +8785,6 @@
             <param name="sourceFieldName">The name of the source case field</param>
             <param name="targetFieldName">The name of the target case field</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.ICaseRelationRuntime.InvokeWebhook(System.String,System.String)">
-            <summary>Invoke case relation webhook and receive the response JSON data</summary>
-            <param name="requestOperation">The request operation</param>
-            <param name="requestMessage">The JSON request message</param>
-            <returns>The webhook response object as JSON</returns>
-        </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.ICaseRelationValidateRuntime">
             <summary>Runtime for the case relation validate function <see cref="T:PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction"/></summary>
         </member>
@@ -8842,12 +8818,6 @@
             <summary>Get case attribute value</summary>
             <param name="attributeName">Name of the attribute</param>
             <returns>The case attribute value</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.ICaseRuntime.InvokeWebhook(System.String,System.String)">
-            <summary>Invoke case webhook and receive the response JSON data</summary>
-            <param name="requestOperation">The request operation</param>
-            <param name="requestMessage">The JSON request message</param>
-            <returns>The webhook response object as JSON</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.ICaseValidateRuntime">
             <summary>Runtime for the case validate function <see cref="T:PayrollEngine.Client.Scripting.Function.CaseFunction"/></summary>
@@ -9286,12 +9256,6 @@
             <param name="tags">The result tags</param>
             <returns>The consolidated collector custom results</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.InvokeWebhook(System.String,System.String)">
-            <summary>Invoke payrun webhook and receive the response JSON data</summary>
-            <param name="requestOperation">The request operation</param>
-            <param name="requestMessage">The JSON request message</param>
-            <returns>The webhook response object as JSON</returns>
-        </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IPayrunStartRuntime">
             <summary>Runtime for the payrun employee available function <see cref="T:PayrollEngine.Client.Scripting.Function.PayrunStartFunction"/></summary>
         </member>
@@ -9480,12 +9444,6 @@
             <param name="key">The log key</param>
             <param name="reportDate">The report date (default: now)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.InvokeWebhook(System.String,System.String)">
-            <summary>Invoke report webhook and receive the response JSON data</summary>
-            <param name="requestOperation">The request operation</param>
-            <param name="requestMessage">The JSON request message</param>
-            <returns>The webhook response object as JSON</returns>
-        </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IReportStartRuntime">
             <summary>Runtime for the report start function <see cref="T:PayrollEngine.Client.Scripting.Function.ReportStartFunction"/></summary>
         </member>
@@ -9550,6 +9508,12 @@
             <param name="scheduleDate">The task schedule date</param>
             <param name="category">The task category</param>
             <param name="attributes">The task attributes</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IRuntime.InvokeWebhook(System.String,System.String)">
+            <summary>Invoke case relation webhook and receive the response JSON data</summary>
+            <param name="requestOperation">The request operation</param>
+            <param name="requestMessage">The JSON request message</param>
+            <returns>The webhook response object as JSON</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IWageTypeResultRuntime">
             <summary>Runtime for the wage type result function <see cref="T:PayrollEngine.Client.Scripting.Function.WageTypeResultFunction"/></summary>

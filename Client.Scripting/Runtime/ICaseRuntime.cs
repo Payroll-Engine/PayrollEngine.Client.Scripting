@@ -14,10 +14,4 @@ public interface ICaseRuntime : IPayrollRuntime
     /// <param name="attributeName">Name of the attribute</param>
     /// <returns>The case attribute value</returns>
     object GetCaseAttribute(string attributeName);
-
-    /// <summary>Invoke case webhook and receive the response JSON data</summary>
-    /// <param name="requestOperation">The request operation</param>
-    /// <param name="requestMessage">The JSON request message</param>
-    /// <returns>The webhook response object as JSON</returns>
-    string InvokeWebhook(string requestOperation, string requestMessage = null);
 }
