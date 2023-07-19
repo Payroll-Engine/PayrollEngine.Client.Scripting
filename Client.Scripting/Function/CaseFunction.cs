@@ -1,7 +1,6 @@
 ﻿/* CaseFunction */
 
 using System;
-using System.Text.Json;
 
 namespace PayrollEngine.Client.Scripting.Function;
 

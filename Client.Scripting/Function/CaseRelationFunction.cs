@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using System.Text.Json;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
