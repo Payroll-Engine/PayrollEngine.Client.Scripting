@@ -1,0 +1,20 @@
+apiRules:
+- exclude:
+    uidRegex: ^PayrollEngine.Client.Scripting\.Runtime
+    type: Type
+- exclude:
+    uidRegex: ^PayrollEngine.Client.Scripting\.Script
+    type: Type
+- exclude:
+    uidRegex: ^PayrollEngine.Client.Scripting\.Cache
+    type: Type
+- exclude:
+    uidRegex: ^$FunctionAttribute
+    type: Type
+- exclude:
+    uidRegex: ^$ScriptAttribute
+    type: Type
+- exclude:
+    uidRegex: ^SystemActionProvider
+    type: Type
+
