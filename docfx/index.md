@@ -1,15 +1,5 @@
 # Payroll Engine Script Reference
 
-## Core
-- [Date](xref:PayrollEngine.Client.Scripting.Function.Date)
-- [DatePeriod](xref:PayrollEngine.Client.Scripting.Function.DatePeirod)
-
-## Data
-- [Data Set](xref:PayrollEngine.Client.Scripting.Function.DataSet)
-- [Data Table](xref:PayrollEngine.Client.Scripting.Function.DataTable)
-- [Data Row](xref:PayrollEngine.Client.Scripting.Function.DataRow)
-- [Data Column](xref:PayrollEngine.Client.Scripting.Function.DataColumn)
-
 ## Case Functions
 - [Case Available](xref:PayrollEngine.Client.Scripting.Function.CaseAvailableFunction)
 - [Case Build](xref:PayrollEngine.Client.Scripting.Function.CaseBuildFunction)
