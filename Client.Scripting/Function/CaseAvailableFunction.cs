@@ -131,7 +131,8 @@ public partial class CaseAvailableFunction : CaseFunction
     public string[] GetAvailableActions() =>
         Runtime.GetAvailableActions();
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? IsAvailable()
     {
         // case available actions

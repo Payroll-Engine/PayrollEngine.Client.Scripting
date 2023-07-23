@@ -191,7 +191,8 @@ public partial class ReportEndFunction : ReportFunction
 
     #endregion
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public object End()
     {
         // ReSharper disable EmptyRegion

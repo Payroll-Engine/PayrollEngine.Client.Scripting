@@ -71,7 +71,8 @@ public partial class WageTypeValueFunction : WageTypeFunction
     /// <summary>Restart execution of wage type calculation</summary>
     public void RestartExecution() => Runtime.RestartExecution();
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public object GetValue()
     {
         // ReSharper disable EmptyRegion

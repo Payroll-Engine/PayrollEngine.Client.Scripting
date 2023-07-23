@@ -49,7 +49,8 @@ public partial class PayrunWageTypeAvailableFunction : PayrunFunction
         return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
     }
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? IsAvailable()
     {
         // ReSharper disable EmptyRegion

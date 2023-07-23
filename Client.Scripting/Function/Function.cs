@@ -11,15 +11,12 @@ namespace PayrollEngine.Client.Scripting.Function;
 // ReSharper disable once PartialTypeWithSinglePart
 public abstract partial class Function : IDisposable
 {
-    /// <exclude />
     /// <summary>The function runtime</summary>
     protected dynamic Runtime { get; }
 
-    /// <exclude />
     /// <summary>The default namespace name for function actions</summary>
     public const string DefaultActionNamespace = "System";
 
-    /// <exclude />
     /// <summary>The input namespace name for function actions</summary>
     public const string InputActionNamespace = "Input";
 

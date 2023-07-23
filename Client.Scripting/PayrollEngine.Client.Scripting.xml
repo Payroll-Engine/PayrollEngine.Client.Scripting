@@ -2046,60 +2046,50 @@
             <returns>Object value</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.TupleExtensions">
-            <exclude />
             <summary><see cref="T:System.Tuple">Tuple</see> extension methods (internal usage)</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToPeriodValues(System.Collections.Generic.List{System.Tuple{System.DateTime,System.Nullable{System.DateTime},System.Object}})">
-            <exclude />
             <summary>Convert tuple values to case period values</summary>
             <param name="values">The tuple values</param>
             <returns>The period values</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToCasePeriodValue(System.Collections.Generic.List{System.Tuple{System.DateTime,System.Nullable{System.DateTime},System.Object}},System.String)">
-            <exclude />
             <summary>Convert tuple values to a case value</summary>
             <param name="values">The tuple values</param>
             <param name="caseFieldName">The case field name</param>
             <returns>The case values</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToCaseValue(System.Tuple{System.String,System.DateTime,System.Tuple{System.Nullable{System.DateTime},System.Nullable{System.DateTime}},System.Object,System.Nullable{System.DateTime},System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object}})">
-            <exclude />
             <summary>Convert tuple values to case value</summary>
             <param name="value">The tuple value</param>
             <returns>The case period values</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToCaseValues(System.Collections.Generic.List{System.Tuple{System.String,System.DateTime,System.Tuple{System.Nullable{System.DateTime},System.Nullable{System.DateTime}},System.Object,System.Nullable{System.DateTime},System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object}}})">
-            <exclude />
             <summary>Convert tuple values to case values</summary>
             <param name="values">The tuple values</param>
             <returns>The case period values</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToCaseValuesDictionary(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Tuple{System.DateTime,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Object}}})">
-            <exclude />
             <summary>Convert tuple values to a case value dictionary</summary>
             <param name="values">The values</param>
             <returns>The case values grouped by case field name</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToCollectorResults(System.Collections.Generic.List{System.Tuple{System.String,System.Tuple{System.DateTime,System.DateTime},System.Decimal,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object}}})">
-            <exclude />
             <summary>Convert tuple values to a collector result</summary>
             <param name="values">The tuple values</param>
             <returns>The collector results</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToCollectorCustomResults(System.Collections.Generic.List{System.Tuple{System.String,System.String,System.Tuple{System.DateTime,System.DateTime},System.Decimal,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object}}})">
-            <exclude />
             <summary>Convert tuple values to a collector custom result</summary>
             <param name="values">The tuple values</param>
             <returns>The collector custom results</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToWageTypeResults(System.Collections.Generic.List{System.Tuple{System.Decimal,System.String,System.Tuple{System.DateTime,System.DateTime},System.Decimal,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object}}})">
-            <exclude />
             <summary>Convert tuple values to a wage type result</summary>
             <param name="values">The tuple values</param>
             <returns>The wage type results</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.TupleExtensions.TupleToWageTypeCustomResults(System.Collections.Generic.List{System.Tuple{System.Decimal,System.String,System.String,System.Tuple{System.DateTime,System.DateTime},System.Decimal,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object}}})">
-            <exclude />
             <summary>Convert tuple values to a wage type custom result</summary>
             <param name="values">The tuple values</param>
             <returns>The wage type custom results</returns>
@@ -3305,7 +3295,8 @@
             <summary>Get case available actions</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseAvailableFunction.IsAvailable">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseBuildActions">
             <summary>Extension methods for the case change actions</summary>
@@ -3444,7 +3435,8 @@
             <summary>Get case field build actions</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseBuildFunction.Build">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseChangeActionContext">
             <summary>Case change action context</summary>
@@ -4248,7 +4240,8 @@
             <summary>Get case relation build actions</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationBuildFunction.Build">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseRelationActionContext">
             <summary>Case relation action context </summary>
@@ -4748,7 +4741,8 @@
             <param name="number">The issue number</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction.Validate">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CaseValidateActions">
             <summary>Extension methods for the case change actions</summary>
@@ -5124,7 +5118,8 @@
             <summary>Add a new case field issue</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.Validate">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CollectorApplyFunction">
             <summary>Apply value to a collector (default: wage type value)</summary>
@@ -5162,7 +5157,8 @@
             <summary>The wage type result value</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CollectorApplyFunction.GetValue">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CollectorEndFunction">
             <summary>End the collector</summary>
@@ -5183,7 +5179,8 @@
             <summary>Set collector values</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CollectorEndFunction.End">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.CollectorFunction">
             <summary>Base class for collector functions</summary>
@@ -5331,21 +5328,19 @@
             <summary>Set collector values</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CollectorStartFunction.Start">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.Function">
             <summary>Base class for any scripting function</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.Function.Runtime">
-            <exclude />
             <summary>The function runtime</summary>
         </member>
         <member name="F:PayrollEngine.Client.Scripting.Function.Function.DefaultActionNamespace">
-            <exclude />
             <summary>The default namespace name for function actions</summary>
         </member>
         <member name="F:PayrollEngine.Client.Scripting.Function.Function.InputActionNamespace">
-            <exclude />
             <summary>The input namespace name for function actions</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.Function.#ctor(System.Object)">
@@ -6003,7 +5998,8 @@
             <param name="sourceFileName">The name of the source file</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunEmployeeAvailableFunction.IsAvailable">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.PayrunEmployeeEndFunction">
             <summary>Payrun employee start function</summary>
@@ -6018,7 +6014,8 @@
             <param name="sourceFileName">The name of the source file</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunEmployeeEndFunction.End">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.PayrunEmployeeStartFunction">
             <summary>Payrun employee start function</summary>
@@ -6033,7 +6030,8 @@
             <param name="sourceFileName">The name of the source file</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunEmployeeStartFunction.Start">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.PayrunEndFunction">
             <summary>Payrun end function</summary>
@@ -6062,7 +6060,8 @@
             <returns>Employee runtime values</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunEndFunction.End">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.PayrunFunction">
             <summary>Base class for Payrun functions</summary>
@@ -6268,7 +6267,8 @@
             <param name="sourceFileName">The name of the source file</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunStartFunction.Start">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.PayrunWageTypeAvailableFunction">
             <summary>Test if a wage type is available (default: true) for a payrun</summary>
@@ -6299,7 +6299,8 @@
             <summary>Get wage type attribute typed value</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunWageTypeAvailableFunction.IsAvailable">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.ReportBuildFunction">
             <summary>Report build function</summary>
@@ -6336,7 +6337,8 @@
             <param name="hidden">The hidden state</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportBuildFunction.Build">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.ReportEndFunction">
             <summary>Report end function</summary>
@@ -6447,7 +6449,8 @@
             <param name="childColumnName">The relation child table column name</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportEndFunction.End">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.LookupValueData">
             <summary>Represents the API LookupValueData object</summary>
@@ -6808,7 +6811,8 @@
             <param name="value">The query value as JSON</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportStartFunction.Start">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.WageTypeFunction">
             <summary>Base class for wage type functions</summary>
@@ -6973,7 +6977,8 @@
             <summary>The wage type value</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeResultFunction.Result">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction">
             <summary>Calculate the wage type value</summary>
@@ -7033,7 +7038,8 @@
             <summary>Restart execution of wage type calculation</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.GetValue">
-            <exclude />
+            <summary>Entry point for the runtime</summary>
+            <remarks>Internal usage only, do not call this method</remarks>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.CaseValueResult">
             <summary>Case value result</summary>

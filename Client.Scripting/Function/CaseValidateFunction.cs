@@ -59,7 +59,8 @@ public partial class CaseValidateFunction : CaseChangeFunction
     public void AddIssue(string caseFieldName, string message) =>
         Runtime.AddIssue(caseFieldName, message);
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Validate()
     {
         // case field validation

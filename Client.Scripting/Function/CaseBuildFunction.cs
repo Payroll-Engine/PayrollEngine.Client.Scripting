@@ -48,7 +48,8 @@ public partial class CaseBuildFunction : CaseChangeFunction
     public string[] GetFieldBuildActions(string caseFieldName) =>
         Runtime.GetFieldBuildActions(caseFieldName);
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Build()
     {
         InvokeCaseFieldActions();

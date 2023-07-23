@@ -2215,11 +2215,9 @@ public static class ValueTypeExtensions
     }
 }
 
-/// <exclude />
 /// <summary><see cref="Tuple">Tuple</see> extension methods (internal usage)</summary>
 public static class TupleExtensions
 {
-    /// <exclude />
     /// <summary>Convert tuple values to case period values</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The period values</returns>
@@ -2239,7 +2237,6 @@ public static class TupleExtensions
         return periodValues;
     }
 
-    /// <exclude />
     /// <summary>Convert tuple values to a case value</summary>
     /// <param name="values">The tuple values</param>
     /// <param name="caseFieldName">The case field name</param>
@@ -2253,7 +2250,6 @@ public static class TupleExtensions
         return new(caseFieldName, values.Select(x => new PeriodValue(x.Item1, x.Item2, x.Item3)));
     }
 
-    /// <exclude />
     /// <summary>Convert tuple values to case value</summary>
     /// <param name="value">The tuple value</param>
     /// <returns>The case period values</returns>
@@ -2266,7 +2262,6 @@ public static class TupleExtensions
         return new(value.Item1, value.Item2, value.Item3.Item1, value.Item3.Item2, new(value.Item4), value.Item5, value.Item6, value.Item7);
     }
 
-    /// <exclude />
     /// <summary>Convert tuple values to case values</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The case period values</returns>
@@ -2286,7 +2281,6 @@ public static class TupleExtensions
         return caseValues;
     }
 
-    /// <exclude />
     /// <summary>Convert tuple values to a case value dictionary</summary>
     /// <param name="values">The values</param>
     /// <returns>The case values grouped by case field name</returns>
@@ -2301,7 +2295,6 @@ public static class TupleExtensions
         return new(caseValues);
     }
 
-    /// <exclude />
     /// <summary>Convert tuple values to a collector result</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The collector results</returns>
@@ -2316,7 +2309,6 @@ public static class TupleExtensions
             Attributes = x.Item5
         }));
 
-    /// <exclude />
     /// <summary>Convert tuple values to a collector custom result</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The collector custom results</returns>
@@ -2332,7 +2324,6 @@ public static class TupleExtensions
             Attributes = x.Item6
         }));
 
-    /// <exclude />
     /// <summary>Convert tuple values to a wage type result</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The wage type results</returns>
@@ -2348,7 +2339,6 @@ public static class TupleExtensions
             Attributes = x.Item6
         }));
 
-    /// <exclude />
     /// <summary>Convert tuple values to a wage type custom result</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The wage type custom results</returns>

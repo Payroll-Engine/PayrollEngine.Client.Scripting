@@ -57,7 +57,8 @@ public partial class ReportBuildFunction : ReportFunction
     public void SetParameterHidden(string parameterName, bool hidden)=>
         Runtime.SetParameterHidden(parameterName, hidden);
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Build()
     {
         // ReSharper disable EmptyRegion

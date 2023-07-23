@@ -46,7 +46,8 @@ public partial class CaseRelationValidateFunction : CaseRelationFunction
     public void AddIssue(string caseFieldName, string message, int number = 0) =>
         Runtime.AddIssue(caseFieldName, message, number);
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Validate()
     {
         if (!InvokeValidateActions())

@@ -40,7 +40,8 @@ public partial class CaseRelationBuildFunction : CaseRelationFunction
     public string[] GetBuildActions() =>
         Runtime.GetBuildActions();
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Build()
     {
         InvokeBuildActions();

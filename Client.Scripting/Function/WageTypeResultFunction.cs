@@ -32,7 +32,8 @@ public partial class WageTypeResultFunction : WageTypeFunction
     /// <summary>The wage type value</summary>
     public decimal WageTypeValue { get; }
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public object Result()
     {
         // ReSharper disable EmptyRegion

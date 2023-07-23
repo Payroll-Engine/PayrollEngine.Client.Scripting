@@ -26,7 +26,8 @@ public partial class PayrunEmployeeEndFunction : PayrunFunction
     {
     }
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public void End()
     {
         // ReSharper disable EmptyRegion

@@ -53,7 +53,8 @@ public partial class CollectorApplyFunction : CollectorFunction
     /// <summary>The wage type result value</summary>
     public decimal WageTypeValue { get; }
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public decimal? GetValue()
     {
         // ReSharper disable EmptyRegion

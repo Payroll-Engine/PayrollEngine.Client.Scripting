@@ -37,7 +37,8 @@ public partial class PayrunEmployeeAvailableFunction : PayrunFunction
     {
     }
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? IsAvailable()
     {
         // ReSharper disable EmptyRegion

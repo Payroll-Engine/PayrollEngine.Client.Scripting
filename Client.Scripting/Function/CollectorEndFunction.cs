@@ -32,7 +32,8 @@ public partial class CollectorEndFunction : CollectorFunction
     /// <summary>Set collector values</summary>
     public void SetValues(decimal[] values) => Runtime.SetValues(values);
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public object End()
     {
         // ReSharper disable EmptyRegion

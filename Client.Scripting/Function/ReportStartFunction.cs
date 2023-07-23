@@ -60,7 +60,8 @@ public partial class ReportStartFunction : ReportFunction
     public void SetQuery(string queryName, string value) =>
         Runtime.SetQuery(queryName, value);
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public object Start()
     {
         // ReSharper disable EmptyRegion

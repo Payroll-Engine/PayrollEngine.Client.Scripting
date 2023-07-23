@@ -26,7 +26,8 @@ public partial class PayrunEmployeeStartFunction : PayrunFunction
     {
     }
 
-    /// <exclude />
+    /// <summary>Entry point for the runtime</summary>
+    /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Start()
     {
         // ReSharper disable EmptyRegion
