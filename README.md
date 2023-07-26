@@ -12,6 +12,10 @@ The client scripting library contains static HTML documentation for scripting de
 - `Static.Static` - opens the static help (`_site\index.html`)
 - `Server.Start` - start the static help on http://localhost:5865/ (dark mode support)
 
+## Third party components
+- Documentation generation with [docfx](https://github.com/dotnet/docfx/) - licence `MIT`
+- Tests with [xunit](https://github.com/xunit) - licence `Apache 2.0`
+
 ## Build
 Supported runtime environment variables:
 - *PayrollEnginePackageDir* - the NuGet package destination directory (optional)
