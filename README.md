@@ -1,4 +1,4 @@
-<h1>Payroll Engine Client Scripting</h1>
+# Payroll Engine Client Scripting
 
 The scripting library that defines the commonality between the backend and the clients:
 - Scripting functions
