@@ -26,7 +26,7 @@ public class CaseValidateActions : CaseChangeActionsBase
         }
         // net core email regex expression
         // https://learn.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
-        if (!System.Text.RegularExpressions.Regex.IsMatch(sourceValue.ResolvedValue, @"^(.+)@(.+)$"))
+        if (!System.Text.RegularExpressions.Regex.IsMatch(sourceValue.ResolvedValue, "^(.+)@(.+)$"))
         {
             AddIssue(context, "InvalidEmail", context.CaseFieldName, sourceValue.ResolvedValue);
         }
