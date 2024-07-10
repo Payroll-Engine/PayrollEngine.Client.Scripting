@@ -9,7 +9,7 @@ namespace PayrollEngine.Client.Scripting.Script;
 public class ScriptMethodParser
 {
     private static readonly string[] ScriptAttributeNames =
-    {
+    [
         nameof(CaseAvailableScriptAttribute),
         nameof(CaseBuildScriptAttribute),
         nameof(CaseValidateScriptAttribute),
@@ -32,7 +32,7 @@ public class ScriptMethodParser
         nameof(ReportBuildScriptAttribute),
         nameof(ReportStartScriptAttribute),
         nameof(ReportEndScriptAttribute)
-    };
+    ];
 
     /// <summary>The syntax tree</summary>
     public ClassDeclarationSyntax ClassSyntax { get; }
@@ -105,30 +105,32 @@ public class ScriptMethodParser
         private static readonly Dictionary<Type, ScriptAttributeInfo> ScriptAttributes = new()
         {
             // case
-            { typeof(CaseAvailableScriptAttribute), new(new[] { "caseName" }) },
-            { typeof(CaseBuildScriptAttribute), new(new[] { "caseName" }) },
-            { typeof(CaseValidateScriptAttribute), new(new[] { "caseName" }) },
+            { typeof(CaseAvailableScriptAttribute), new(["caseName"]) },
+            { typeof(CaseBuildScriptAttribute), new(["caseName"]) },
+            { typeof(CaseValidateScriptAttribute), new(["caseName"]) },
             // case relation
-            { typeof(CaseRelationBuildScriptAttribute), new(new[] { "sourceCaseName", "targetCaseName", "sourceCaseSlot", "targetCaseSlot" }) },
-            { typeof(CaseRelationValidateScriptAttribute), new(new[] { "sourceCaseName", "targetCaseName", "sourceCaseSlot", "targetCaseSlot" }) },
+            { typeof(CaseRelationBuildScriptAttribute), new(["sourceCaseName", "targetCaseName", "sourceCaseSlot", "targetCaseSlot"
+            ]) },
+            { typeof(CaseRelationValidateScriptAttribute), new(["sourceCaseName", "targetCaseName", "sourceCaseSlot", "targetCaseSlot"
+            ]) },
             // collector
-            { typeof(CollectorStartScriptAttribute), new(new[] { "collectorName" }) },
-            { typeof(CollectorApplyScriptAttribute), new(new[] { "collectorName" }) },
-            { typeof(CollectorEndScriptAttribute), new(new[] { "collectorName" }) },
+            { typeof(CollectorStartScriptAttribute), new(["collectorName"]) },
+            { typeof(CollectorApplyScriptAttribute), new(["collectorName"]) },
+            { typeof(CollectorEndScriptAttribute), new(["collectorName"]) },
             // wage type
-            { typeof(WageTypeValueScriptAttribute), new(new[] { "wageTypeNumber" }) },
-            { typeof(WageTypeResultScriptAttribute), new(new[] { "wageTypeNumber" }) },
+            { typeof(WageTypeValueScriptAttribute), new(["wageTypeNumber"]) },
+            { typeof(WageTypeResultScriptAttribute), new(["wageTypeNumber"]) },
             // payrun
-            { typeof(PayrunStartScriptAttribute), new(new[] { "payrunName" }) },
-            { typeof(PayrunEmployeeAvailableScriptAttribute), new(new[] { "payrunName" }) },
-            { typeof(PayrunEmployeeStartScriptAttribute), new(new[] { "payrunName" }) },
-            { typeof(PayrunWageTypeAvailableScriptAttribute), new(new[] { "payrunName" }) },
-            { typeof(PayrunEmployeeEndScriptAttribute), new(new[] { "payrunName" }) },
-            { typeof(PayrunEndScriptAttribute), new(new[] { "payrunName" }) },
+            { typeof(PayrunStartScriptAttribute), new(["payrunName"]) },
+            { typeof(PayrunEmployeeAvailableScriptAttribute), new(["payrunName"]) },
+            { typeof(PayrunEmployeeStartScriptAttribute), new(["payrunName"]) },
+            { typeof(PayrunWageTypeAvailableScriptAttribute), new(["payrunName"]) },
+            { typeof(PayrunEmployeeEndScriptAttribute), new(["payrunName"]) },
+            { typeof(PayrunEndScriptAttribute), new(["payrunName"]) },
             // report
-            { typeof(ReportBuildScriptAttribute), new(new[] { "reportName" }) },
-            { typeof(ReportStartScriptAttribute), new(new[] { "reportName" }) },
-            { typeof(ReportEndScriptAttribute), new(new[] { "reportName" }) }
+            { typeof(ReportBuildScriptAttribute), new(["reportName"]) },
+            { typeof(ReportStartScriptAttribute), new(["reportName"]) },
+            { typeof(ReportEndScriptAttribute), new(["reportName"]) }
         };
 
         internal static ScriptAttribute CreateScriptAttribute(string attributeName, IDictionary<string, string> parameters)
@@ -145,11 +147,11 @@ public class ScriptMethodParser
             var typeParameters = new List<object>();
             foreach (var parameterName in attributeInfo.Parameters)
             {
-                if (!parameters.ContainsKey(parameterName))
+                if (!parameters.TryGetValue(parameterName, out var parameter))
                 {
                     throw new NotSupportedException($"Missing parameter {parameterName} in script function {attributeName}");
                 }
-                typeParameters.Add(parameters[parameterName]);
+                typeParameters.Add(parameter);
             }
 
             // create type

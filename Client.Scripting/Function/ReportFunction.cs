@@ -541,7 +541,7 @@ public abstract partial class ReportFunction : Function
         return ExecuteQuery("CaseFields", "GetPayrollCaseFields", parameters);
     }
 
-    /// <summary>Get employees case values as table
+    /// <summary>Get employees case values as table.
     /// Table structure: first column is the employee id, and for any case field a column</summary>
     /// <param name="payrollId">The payroll id</param>
     /// <param name="employeeIds">The employee ids</param>

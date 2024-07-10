@@ -14,7 +14,7 @@ namespace PayrollEngine.Client.Scripting;
 /// <summary>Dictionary of case value grouped by date period</summary>
 public class PeriodCasePayrollValueDictionary : Dictionary<DatePeriod, CasePayrollValue>, IEnumerable<PeriodValue>
 {
-    private readonly List<PeriodValue> periodValues = new();
+    private readonly List<PeriodValue> periodValues = [];
 
     /// <inheritdoc />
     public PeriodCasePayrollValueDictionary(IDictionary<DatePeriod, CasePayrollValue> values) :
@@ -33,7 +33,7 @@ public class PeriodCasePayrollValueDictionary : Dictionary<DatePeriod, CasePayro
 /// <summary>Dictionary of multiple case values grouped by case field name</summary>
 public class CasePayrollValueDictionary : Dictionary<string, CasePayrollValue>, IEnumerable<PeriodValue>
 {
-    private readonly List<PeriodValue> periodValues = new();
+    private readonly List<PeriodValue> periodValues = [];
 
     /// <inheritdoc />
     public CasePayrollValueDictionary(IDictionary<string, CasePayrollValue> values) :
@@ -428,6 +428,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     /// <summary>Returns an enumerator that iterates through the collection</summary>
     /// <returns>An enumerator that can be used to iterate through the collection</returns>
     public IEnumerator<PeriodValue> GetEnumerator() =>
+        // ReSharper disable once NotDisposedResourceIsReturned
         PeriodValues.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() =>

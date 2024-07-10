@@ -10,7 +10,7 @@ namespace PayrollEngine.Client.Scripting.Script;
 public class ScriptClassParser
 {
     private static readonly string[] FunctionAttributeNames =
-    {
+    [
         nameof(CaseAvailableFunctionAttribute),
         nameof(CaseBuildFunctionAttribute),
         nameof(CaseValidateFunctionAttribute),
@@ -33,7 +33,7 @@ public class ScriptClassParser
         nameof(ReportBuildFunctionAttribute),
         nameof(ReportStartFunctionAttribute),
         nameof(ReportEndFunctionAttribute)
-    };
+    ];
 
     /// <summary>The syntax tree</summary>
     public ClassDeclarationSyntax ClassSyntax { get; }
@@ -140,30 +140,30 @@ public class ScriptClassParser
         private static readonly Dictionary<Type, string[]> FunctionAttributes = new()
         {
             // case
-            { typeof(CaseAvailableFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
-            { typeof(CaseBuildFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
-            { typeof(CaseValidateFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
+            { typeof(CaseAvailableFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
+            { typeof(CaseBuildFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
+            { typeof(CaseValidateFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
             // case relation
-            { typeof(CaseRelationBuildFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
-            { typeof(CaseRelationValidateFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
+            { typeof(CaseRelationBuildFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
+            { typeof(CaseRelationValidateFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
             // collector
-            { typeof(CollectorStartFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
-            { typeof(CollectorApplyFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
-            { typeof(CollectorEndFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
+            { typeof(CollectorStartFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
+            { typeof(CollectorApplyFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
+            { typeof(CollectorEndFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
             // wage type
-            { typeof(WageTypeValueFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
-            { typeof(WageTypeResultFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "regulationName" } },
+            { typeof(WageTypeValueFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
+            { typeof(WageTypeResultFunctionAttribute), ["employeeIdentifier", "payrollName", "regulationName"] },
             // report
-            { typeof(ReportBuildFunctionAttribute), new[] { "regulationName" } },
-            { typeof(ReportStartFunctionAttribute), new[] { "regulationName" } },
-            { typeof(ReportEndFunctionAttribute), new[] { "regulationName" } },
+            { typeof(ReportBuildFunctionAttribute), ["regulationName"] },
+            { typeof(ReportStartFunctionAttribute), ["regulationName"] },
+            { typeof(ReportEndFunctionAttribute), ["regulationName"] },
             // payrun
-            { typeof(PayrunStartFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "payrunName" } },
-            { typeof(PayrunEmployeeAvailableFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "payrunName" } },
-            { typeof(PayrunEmployeeStartFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "payrunName" } },
-            { typeof(PayrunWageTypeAvailableFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "payrunName" } },
-            { typeof(PayrunEmployeeEndFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "payrunName" } },
-            { typeof(PayrunEndFunctionAttribute), new[] { "employeeIdentifier", "payrollName", "payrunName" } }
+            { typeof(PayrunStartFunctionAttribute), ["employeeIdentifier", "payrollName", "payrunName"] },
+            { typeof(PayrunEmployeeAvailableFunctionAttribute), ["employeeIdentifier", "payrollName", "payrunName"] },
+            { typeof(PayrunEmployeeStartFunctionAttribute), ["employeeIdentifier", "payrollName", "payrunName"] },
+            { typeof(PayrunWageTypeAvailableFunctionAttribute), ["employeeIdentifier", "payrollName", "payrunName"] },
+            { typeof(PayrunEmployeeEndFunctionAttribute), ["employeeIdentifier", "payrollName", "payrunName"] },
+            { typeof(PayrunEndFunctionAttribute), ["employeeIdentifier", "payrollName", "payrunName"] }
         };
 
         internal static FunctionAttribute CreateFunctionAttribute(string tenantIdentifier, string userIdentifier,
@@ -188,11 +188,11 @@ public class ScriptClassParser
             var parameterNames = FunctionAttributes[type];
             foreach (var parameterName in parameterNames)
             {
-                if (!parameters.ContainsKey(parameterName))
+                if (!parameters.TryGetValue(parameterName, out var parameter))
                 {
                     throw new NotSupportedException($"Missing parameter {parameterName} in script function {attributeName}");
                 }
-                typeParameters.Add(parameters[parameterName]);
+                typeParameters.Add(parameter);
             }
 
             // create type

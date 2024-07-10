@@ -94,11 +94,7 @@ public static class StringExtensions
             return defaultValue;
         }
         var baseCulture = culture.Substring(0, index);
-        if (localizations.TryGetValue(baseCulture, out var baseLocalization))
-        {
-            return baseLocalization;
-        }
-        return defaultValue;
+        return localizations.GetValueOrDefault(baseCulture, defaultValue);
     }
 
     #endregion
@@ -393,11 +389,11 @@ public static class StringExtensions
         }
 
         var dictionary = ConvertJson<Dictionary<string, object>>(json);
-        if (!dictionary.ContainsKey(objectKey))
+        if (!dictionary.TryGetValue(objectKey, out var value))
         {
             return defaultValue;
         }
-        var value = dictionary[objectKey];
+
         if (value == null)
         {
             return defaultValue;
@@ -688,9 +684,9 @@ public static class DateTimeExtensions
     public static string ToUtcString(this DateTime dateTime, IFormatProvider provider) =>
         dateTime.ToUtcTime().ToString("o", provider);
 
-    /// <summary>Round to hour, if it is the last tick from a hour</summary>
+    /// <summary>Round to hour, if it is the last tick from an hour</summary>
     /// <param name="dateTime">The source date time</param>
-    /// <returns>Date of the next hour if the input is on the last tick on a hour, else the original value</returns>
+    /// <returns>Date of the next hour if the input is on the last tick on an hour, else the original value</returns>
     public static DateTime RoundTickToHour(this DateTime dateTime)
     {
         if (dateTime >= Date.MaxValue)
@@ -708,7 +704,7 @@ public static class DateTimeExtensions
     public static DateTime YearStart(this DateTime yearMoment) =>
         Date.YearStart(yearMoment.Year);
 
-    /// <summary>Get the year end date in UTC</summary>
+    /// <summary>Get the year-end date in UTC</summary>
     /// <param name="yearMoment">The year moment</param>
     /// <returns>Last moment of the year</returns>
     public static DateTime YearEnd(this DateTime yearMoment) =>
@@ -896,14 +892,14 @@ public static class DateTimeExtensions
         return firstWeekDay.AddDays(weekOfYear * 7);
     }
 
-    /// <summary>Get week end date by ISO 8601 week number of the year</summary>
+    /// <summary>Get weekend date by ISO 8601 week number of the year</summary>
     /// <param name="year">The year</param>
     /// <param name="weekOfYear">The ISO 8601 week number of the year</param>
     /// <returns>Last day of the week</returns>
     public static DateTime LastDayOfWeek(int year, int weekOfYear) =>
         LastDayOfWeek(year, weekOfYear, CultureInfo.CurrentCulture);
 
-    /// <summary>Get week end date by ISO 8601 week number of the year</summary>
+    /// <summary>Get weekend date by ISO 8601 week number of the year</summary>
     /// <param name="year">The year</param>
     /// <param name="weekOfYear">The ISO 8601 week number of the year</param>
     /// <param name="culture">The calendar culture</param>
@@ -982,13 +978,13 @@ public static class DateTimeExtensions
         date.IsSameDay(compare) && date.Hour == compare.Hour;
 
     /// <summary>Calculates the current age, counting the completed years</summary>
-    /// <param name="birthDate">The birth date</param>
+    /// <param name="birthDate">The birthdate</param>
     /// <returns>The current age</returns>
     public static int Age(this DateTime birthDate) =>
         Age(birthDate, DateTime.UtcNow);
 
     /// <summary>Calculates the age at a specific moment, counting the completed years</summary>
-    /// <param name="birthDate">The birth date</param>
+    /// <param name="birthDate">The birthdate</param>
     /// <param name="testMoment">The test moment</param>
     /// <returns>The age at the test moment</returns>
     public static int Age(this DateTime birthDate, DateTime testMoment)
@@ -1199,11 +1195,11 @@ public static class DictionaryExtensions
     /// <returns>The dictionary value</returns>
     public static object GetValue(this Dictionary<string, object> dictionary, string key, object defaultValue = default)
     {
-        if (!dictionary.ContainsKey(key))
+        if (!dictionary.TryGetValue(key, out var value))
         {
             return defaultValue;
         }
-        var value = dictionary[key];
+
         if (value is JsonElement jsonElement)
         {
             value = jsonElement.GetValue();
@@ -1714,7 +1710,7 @@ public static class CaseValueExtensions
     /// <param name="intersectPeriod">The period to intersect</param>
     /// <returns>List of intersecting date periods</returns>
     public static List<CaseValue> Intersections(this IEnumerable<CaseValue> periodValues, DatePeriod intersectPeriod) =>
-        new(periodValues.Where(periodValue => periodValue.Period().IsOverlapping(intersectPeriod)));
+        [..periodValues.Where(periodValue => periodValue.Period().IsOverlapping(intersectPeriod))];
 
     /// <summary>Get case period values matching a period predicate</summary>
     /// <param name="periodValues">The time periods to test</param>
@@ -1906,7 +1902,7 @@ public static class PeriodValueExtensions
 
     /// <summary>Summarize the total duration from all date period durations</summary>
     /// <param name="values">The period payroll values</param>
-    /// <returns>Total duration from all periods,, an empty time span on empty collection</returns>
+    /// <returns>Total duration from all periods, an empty time span on empty collection</returns>
     public static TimeSpan TotalDuration(this IEnumerable<PeriodValue> values) =>
         // summarize from all durations the time span ticks
         values != null ? new(GetDurations(values).Sum(ts => ts.Ticks)) : TimeSpan.Zero;
@@ -2061,7 +2057,7 @@ public static class PayrollResultsExtensions
 
     /// <summary>Get summary of wage type custom results</summary>
     /// <param name="results">The wage type custom results</param>
-    /// <returns>Wage type results result values summary</returns>
+    /// <returns>Wage type result values summary</returns>
     public static decimal Sum(this IEnumerable<WageTypeCustomResult> results) =>
         Values(results).Sum();
 }
@@ -2095,7 +2091,7 @@ public static class ValueTypeExtensions
     public static bool IsNumber(this ValueType valueType) =>
         IsInteger(valueType) || IsDecimal(valueType);
 
-    /// <summary>Test if value type is a integer</summary>
+    /// <summary>Test if value type is an integer</summary>
     /// <param name="valueType">The value type</param>
     /// <returns>True for integer value types</returns>
     public static bool IsInteger(this ValueType valueType) =>
@@ -2299,7 +2295,8 @@ public static class TupleExtensions
     /// <param name="values">The tuple values</param>
     /// <returns>The collector results</returns>
     public static List<CollectorResult> TupleToCollectorResults(this List<Tuple<string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> values) =>
-        new(values.Select(x => new CollectorResult
+    [
+        ..values.Select(x => new CollectorResult
         {
             CollectorName = x.Item1,
             Start = x.Item2.Item1,
@@ -2307,13 +2304,15 @@ public static class TupleExtensions
             Value = x.Item3,
             Tags = x.Item4,
             Attributes = x.Item5
-        }));
+        })
+    ];
 
     /// <summary>Convert tuple values to a collector custom result</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The collector custom results</returns>
     public static List<CollectorCustomResult> TupleToCollectorCustomResults(this List<Tuple<string, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> values) =>
-        new(values.Select(x => new CollectorCustomResult
+    [
+        ..values.Select(x => new CollectorCustomResult
         {
             CollectorName = x.Item1,
             Source = x.Item2,
@@ -2322,13 +2321,15 @@ public static class TupleExtensions
             Value = x.Item4,
             Tags = x.Item5,
             Attributes = x.Item6
-        }));
+        })
+    ];
 
     /// <summary>Convert tuple values to a wage type result</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The wage type results</returns>
     public static List<WageTypeResult> TupleToWageTypeResults(this List<Tuple<decimal, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> values) =>
-        new(values.Select(x => new WageTypeResult
+    [
+        ..values.Select(x => new WageTypeResult
         {
             WageTypeNumber = x.Item1,
             WageTypeName = x.Item2,
@@ -2337,13 +2338,15 @@ public static class TupleExtensions
             Value = x.Item4,
             Tags = x.Item5,
             Attributes = x.Item6
-        }));
+        })
+    ];
 
     /// <summary>Convert tuple values to a wage type custom result</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The wage type custom results</returns>
     public static List<WageTypeCustomResult> TupleToWageTypeCustomResults(this List<Tuple<decimal, string, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> values) =>
-        new(values.Select(x => new WageTypeCustomResult
+    [
+        ..values.Select(x => new WageTypeCustomResult
         {
             WageTypeNumber = x.Item1,
             Name = x.Item2,
@@ -2353,5 +2356,6 @@ public static class TupleExtensions
             Value = x.Item5,
             Tags = x.Item6,
             Attributes = x.Item7
-        }));
+        })
+    ];
 }

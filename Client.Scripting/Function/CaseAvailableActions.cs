@@ -14,15 +14,15 @@ public class CaseAvailableActions : CaseAvailableActionsBase
     /// <param name="compare">The compare value</param>
     /// <param name="compareDate">The compare date for case values</param>
     [ActionParameter("source", "The source case field",
-        valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType },
-        valueReferences: new[] { ActionReferenceCaseValue },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [StringType, BooleanType, IntType, DecimalType, DateType],
+        valueReferences: [ActionReferenceCaseValue],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compare", "The compare value",
-        valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [StringType, BooleanType, IntType, DecimalType, DateType],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compareDate", "The compare date for case values",
-        valueTypes: new[] { DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [DateType],
+        valueSources: [ActionSourceValue])]
     [CaseAvailableAction("CaseValueEqual", "Validate for equal case value", "Compare")]
     public void CaseValueEqual(CaseAvailableActionContext context, string source, object compare, object compareDate = null)
     {
@@ -102,15 +102,15 @@ public class CaseAvailableActions : CaseAvailableActionsBase
     /// <param name="compare">The compare value</param>
     /// <param name="compareDate">The compare date for case values</param>
     [ActionParameter("source", "The source case field",
-        valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType },
-        valueReferences: new[] { ActionReferenceCaseValue },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [StringType, BooleanType, IntType, DecimalType, DateType],
+        valueReferences: [ActionReferenceCaseValue],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compare", "The compare value",
-        valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [StringType, BooleanType, IntType, DecimalType, DateType],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compareDate", "The compare date for case values",
-        valueTypes: new[] { DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [DateType],
+        valueSources: [ActionSourceValue])]
     [CaseAvailableAction("CaseValueNotEqual", "Validate for different value", "Compare")]
     public void CaseValueNotEqual(CaseAvailableActionContext context, string source, object compare, object compareDate = null)
     {
@@ -190,15 +190,15 @@ public class CaseAvailableActions : CaseAvailableActionsBase
     /// <param name="compare">The compare value</param>
     /// <param name="compareDate">The compare date for case values</param>
     [ActionParameter("source", "The source case field",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueReferences: new[] { ActionReferenceCaseValue },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueReferences: [ActionReferenceCaseValue],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compare", "The compare value",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compareDate", "The compare date for case values",
-        valueTypes: new[] { DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [DateType],
+        valueSources: [ActionSourceValue])]
     [CaseAvailableAction("CaseValueGreaterThan", "Validate for greater value", "Compare")]
     public void CaseValueGreaterThan(CaseAvailableActionContext context, string source, object compare, object compareDate = null)
     {
@@ -262,15 +262,15 @@ public class CaseAvailableActions : CaseAvailableActionsBase
     /// <param name="compare">The compare value</param>
     /// <param name="compareDate">The compare date for case values</param>
     [ActionParameter("source", "The source case field",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueReferences: new[] { ActionReferenceCaseValue },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueReferences: [ActionReferenceCaseValue],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compare", "The compare value",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compareDate", "The compare date for case values",
-        valueTypes: new[] { DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [DateType],
+        valueSources: [ActionSourceValue])]
     [CaseAvailableAction("CaseValueGreaterEqualThan", "Validate for greater or equal value", "Compare")]
     public void CaseValueGreaterEqualThan(CaseAvailableActionContext context, string source, object compare, object compareDate = null)
     {
@@ -334,15 +334,15 @@ public class CaseAvailableActions : CaseAvailableActionsBase
     /// <param name="compare">The compare value</param>
     /// <param name="compareDate">The compare date for case values</param>
     [ActionParameter("source", "The source case field",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueReferences: new[] { ActionReferenceCaseValue },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueReferences: [ActionReferenceCaseValue],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compare", "The compare value",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compareDate", "The compare date for case values",
-        valueTypes: new[] { DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [DateType],
+        valueSources: [ActionSourceValue])]
     [CaseAvailableAction("CaseValueLessThan", "Validate for smaller value", "Compare")]
     public void CaseValueLessThan(CaseAvailableActionContext context, string source, object compare, object compareDate = null)
     {
@@ -406,15 +406,15 @@ public class CaseAvailableActions : CaseAvailableActionsBase
     /// <param name="compare">The compare value</param>
     /// <param name="compareDate">The compare date for case values</param>
     [ActionParameter("source", "The source case field",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueReferences: new[] { ActionReferenceCaseValue },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueReferences: [ActionReferenceCaseValue],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compare", "The compare value",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compareDate", "The compare date for case values",
-        valueTypes: new[] { DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [DateType],
+        valueSources: [ActionSourceValue])]
     [CaseAvailableAction("CaseValueLessEqualThan", "Validate for smaller or equal value", "Compare")]
     public void CaseValueLessEqualThan(CaseAvailableActionContext context, string source, object compare, object compareDate = null)
     {
@@ -479,18 +479,18 @@ public class CaseAvailableActions : CaseAvailableActionsBase
     /// <param name="end">The range end value</param>
     /// <param name="compareDate">The compare date for case values</param>
     [ActionParameter("source", "The source case field",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueReferences: new[] { ActionReferenceCaseValue },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueReferences: [ActionReferenceCaseValue],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("start", "The range start value",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("end", "The range end value",
-        valueTypes: new[] { IntType, DecimalType, DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [IntType, DecimalType, DateType],
+        valueSources: [ActionSourceValue])]
     [ActionParameter("compareDate", "The compare date for case values",
-        valueTypes: new[] { DateType },
-        valueSources: new[] { ActionSourceValue })]
+        valueTypes: [DateType],
+        valueSources: [ActionSourceValue])]
     [CaseAvailableAction("CaseValueBetween", "Validate range value", "Compare")]
     public void CaseValueBetween(CaseAvailableActionContext context, string source, object start, object end,
         object compareDate = null)

@@ -113,7 +113,7 @@ public abstract class ConsolidatedResultCacheBase
         }
 
         // order periods from newest to oldest
-        return new(periodStarts.OrderByDescending(x => x));
+        return [..periodStarts.OrderByDescending(x => x)];
     }
 
     // Duplicated in backend payroll repository command

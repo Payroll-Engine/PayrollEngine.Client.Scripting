@@ -336,7 +336,7 @@ public abstract class ResultQueryBase
     public string Tag
     {
         get => Tags?.FirstOrDefault();
-        set => Tags = value == null ? null : new() { value };
+        set => Tags = value == null ? null : [value];
     }
 
     /// <summary>The result tags</summary>
@@ -352,7 +352,7 @@ public class CollectorResultQuery : ResultQueryBase
     public CollectorResultQuery(string collectorName, PayrunJobStatus? jobJobStatus = null) :
         base(jobJobStatus)
     {
-        Collectors = new() { collectorName };
+        Collectors = [collectorName];
     }
 
     /// <summary>Initializes a new instance of the <see cref="CollectorResultQuery"/> class</summary>
@@ -377,7 +377,7 @@ public class WageTypeResultQuery : ResultQueryBase
     public WageTypeResultQuery(decimal wageTypeNumber, PayrunJobStatus? jobJobStatus = null) :
         base(jobJobStatus)
     {
-        WageTypes = new() { wageTypeNumber };
+        WageTypes = [wageTypeNumber];
     }
 
     /// <summary>Initializes a new instance of the <see cref="WageTypeResultQuery"/> class</summary>
@@ -419,7 +419,7 @@ public class CollectorCycleResultQuery : CycleResultQuery
     public CollectorCycleResultQuery(string collectorName, int cycleCount = 0, PayrunJobStatus? jobJobStatus = null) :
         base(cycleCount, jobJobStatus)
     {
-        Collectors = new() { collectorName };
+        Collectors = [collectorName];
     }
 
     /// <summary>Initializes a new instance of the <see cref="CollectorCycleResultQuery"/> class</summary>
@@ -446,7 +446,7 @@ public class WageTypeCycleResultQuery : CycleResultQuery
     public WageTypeCycleResultQuery(decimal wageTypeNumber, int cycleCount = 0, PayrunJobStatus? jobJobStatus = null) :
         base(cycleCount, jobJobStatus)
     {
-        WageTypes = new() { wageTypeNumber };
+        WageTypes = [wageTypeNumber];
     }
 
     /// <summary>Initializes a new instance of the <see cref="WageTypeCycleResultQuery"/> class</summary>
@@ -489,7 +489,7 @@ public class CollectorPeriodResultQuery : PeriodResultQuery
     public CollectorPeriodResultQuery(string collectorName, int periodCount = 0, PayrunJobStatus? jobJobStatus = null) :
         base(periodCount, jobJobStatus)
     {
-        Collectors = new() { collectorName };
+        Collectors = [collectorName];
     }
 
     /// <summary>Initializes a new instance of the <see cref="CollectorPeriodResultQuery"/> class</summary>
@@ -517,7 +517,7 @@ public class WageTypePeriodResultQuery : PeriodResultQuery
     public WageTypePeriodResultQuery(decimal wageTypeNumber, int periodCount = 0, PayrunJobStatus? jobJobStatus = null) :
         base(periodCount, jobJobStatus)
     {
-        WageTypes = new() { wageTypeNumber };
+        WageTypes = [wageTypeNumber];
     }
 
     /// <summary>Initializes a new instance of the <see cref="WageTypeCycleResultQuery"/> class</summary>
@@ -567,7 +567,7 @@ public class CollectorRangeResultQuery : RangeResultQuery
     public CollectorRangeResultQuery(string collectorName, DateTime start, DateTime end, PayrunJobStatus? jobJobStatus = null) :
         base(start, end, jobJobStatus)
     {
-        Collectors = new() { collectorName };
+        Collectors = [collectorName];
     }
 
     /// <summary>Initializes a new instance of the <see cref="CollectorRangeResultQuery"/> class</summary>
@@ -597,7 +597,7 @@ public class WageTypeRangeResultQuery : RangeResultQuery
     public WageTypeRangeResultQuery(decimal wageTypeNumber, DateTime start, DateTime end, PayrunJobStatus? jobJobStatus = null) :
         base(start, end, jobJobStatus)
     {
-        WageTypes = new() { wageTypeNumber };
+        WageTypes = [wageTypeNumber];
     }
 
     /// <summary>Initializes a new instance of the <see cref="WageTypeCycleResultQuery"/> class</summary>
@@ -642,7 +642,7 @@ public class CollectorConsolidatedResultQuery : ConsolidatedResultQuery
     public CollectorConsolidatedResultQuery(string collectorName, DateTime periodMoment, PayrunJobStatus? jobStatus = null) :
         base(periodMoment, jobStatus)
     {
-        Collectors = new() { collectorName };
+        Collectors = [collectorName];
     }
 
     /// <summary>Initializes a new instance of the <see cref="CollectorConsolidatedResultQuery"/> class</summary>
@@ -669,7 +669,7 @@ public class WageTypeConsolidatedResultQuery : ConsolidatedResultQuery
     public WageTypeConsolidatedResultQuery(decimal wageTypeNumber, DateTime periodMoment, PayrunJobStatus? jobStatus = null) :
         base(periodMoment, jobStatus)
     {
-        WageTypes = new() { wageTypeNumber };
+        WageTypes = [wageTypeNumber];
     }
 
     /// <summary>Initializes a new instance of the <see cref="WageTypeConsolidatedResultQuery"/> class</summary>

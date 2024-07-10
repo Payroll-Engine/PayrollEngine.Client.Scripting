@@ -45,7 +45,7 @@ public static class Date
     public static DateTime YearStart(int year) =>
         new(year, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-    /// <summary>Get the year end date in UTC</summary>
+    /// <summary>Get the year-end date in UTC</summary>
     public static DateTime YearEnd(int year) =>
         YearStart(year).AddYears(1).AddTicks(-1);
 

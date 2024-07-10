@@ -406,13 +406,13 @@ public abstract partial class CaseChangeFunction : CaseFunction
     /// <summary>Ass case value tag</summary>
     /// <param name="caseFieldName">The name of the case field</param>
     /// <param name="tag">The tag to add</param>
-    /// <returns>True if the case value tag has ben added</returns>
+    /// <returns>True if the case value tag has been added</returns>
     public bool AddCaseValueTag(string caseFieldName, string tag) => Runtime.AddCaseValueTag(caseFieldName, tag);
 
     /// <summary>Ass case value tag</summary>
     /// <param name="caseFieldName">The name of the case field</param>
     /// <param name="tag">The tag to remove</param>
-    /// <returns>True if the case value tag has ben removed</returns>
+    /// <returns>True if the case value tag has been removed</returns>
     public bool RemoveCaseValueTag(string caseFieldName, string tag) => Runtime.RemoveCaseValueTag(caseFieldName, tag);
 
     /// <summary>Set case field attribute value</summary>

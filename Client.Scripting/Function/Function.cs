@@ -103,7 +103,7 @@ public abstract partial class Function : IDisposable
     public void LogDebug(string message, string error = null, string comment = null) =>
         Log(LogLevel.Debug, message, error, comment);
 
-    /// <summary>Add a information log</summary>
+    /// <summary>Add an information log</summary>
     /// <param name="message">The log message</param>
     /// <param name="error">The log error</param>
     /// <param name="comment">The log comment</param>
@@ -124,7 +124,7 @@ public abstract partial class Function : IDisposable
     public void LogError(string message, string error = null, string comment = null) =>
         Log(LogLevel.Error, message, error, comment);
 
-    /// <summary>Add a error log using an exception</summary>
+    /// <summary>Add an error log using an exception</summary>
     /// <param name="exception">The exception</param>
     /// <param name="message">The log message, default is the exception message</param>
     /// <param name="comment">The log comment</param>

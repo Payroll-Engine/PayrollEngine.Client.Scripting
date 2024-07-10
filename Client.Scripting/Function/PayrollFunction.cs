@@ -61,7 +61,7 @@ public abstract class ConditionActionContextBase<TFunc> : IConditionActionContex
     PayrollFunction IActionContext.Function => Function;
 
     /// <summary>The action issues</summary>
-    public List<ActionIssue> Issues { get; } = new();
+    public List<ActionIssue> Issues { get; } = [];
 
     /// <summary>Constructor</summary>
     protected ConditionActionContextBase(TFunc function)
@@ -1408,7 +1408,7 @@ public abstract partial class PayrollFunction : Function
         // empty expression
         if (string.IsNullOrWhiteSpace(expression))
         {
-            return new();
+            return [];
         }
 
         expression = expression.Trim();
@@ -1416,7 +1416,7 @@ public abstract partial class PayrollFunction : Function
         // single action expression
         if (!expression.Contains(ConditionActionSeparator))
         {
-            return new() { expression };
+            return [expression];
         }
 
         // single or multi-action expression
@@ -1433,6 +1433,7 @@ public abstract partial class PayrollFunction : Function
                 {
                     var left = expression[index - 1];
                     var right = expression[index + 1];
+                    // ReSharper disable once GrammarMistakeInComment
                     // previous character is letter (action name) or parameter closing character )
                     // next character must be a space
                     if ((char.IsLetter(left) || left == ')') && right == ' ')

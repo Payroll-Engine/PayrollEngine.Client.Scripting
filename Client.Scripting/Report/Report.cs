@@ -1025,7 +1025,7 @@ public static class DataTableExtensions
     {
         if (table != null)
         {
-            table.PrimaryKey = Array.Empty<DataColumn>();
+            table.PrimaryKey = [];
         }
     }
 
@@ -1162,7 +1162,7 @@ public static class DataTableExtensions
         if (table != null)
         {
             var column = table.Columns[columnName];
-            table.PrimaryKey = new[] { column };
+            table.PrimaryKey = [column];
         }
     }
 
@@ -1606,17 +1606,17 @@ public static class DataRowExtensions
         var value = dataRow[column];
         if (value is null or DBNull)
         {
-            return new();
+            return [];
         }
         if (value is IEnumerable<T> enumerable)
         {
-            return new(enumerable);
+            return [..enumerable];
         }
         if (value is string json)
         {
             if (string.IsNullOrWhiteSpace(json))
             {
-                return new();
+                return [];
             }
             return JsonSerializer.Deserialize<List<T>>(json);
         }
@@ -1703,12 +1703,11 @@ public static class DataRowExtensions
         }
 
         var attributes = GetAttributes(dataRow, column);
-        if (!attributes.ContainsKey(attribute))
+        if (!attributes.TryGetValue(attribute, out var value))
         {
             return defaultValue;
         }
 
-        var value = attributes[attribute];
         if (value is JsonElement jsonElement)
         {
             value = jsonElement.GetValue();

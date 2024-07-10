@@ -14,9 +14,9 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     /// <param name="target">The case field on the target case</param>
     /// <param name="value">The value to set</param>
     [ActionParameter("target", "The case field on the target case",
-        valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType })]
+        valueTypes: [StringType, BooleanType, IntType, DecimalType, DateType])]
     [ActionParameter("value", "The value to set",
-        valueTypes: new[] { StringType, BooleanType, IntType, DecimalType, DateType })]
+        valueTypes: [StringType, BooleanType, IntType, DecimalType, DateType])]
     [CaseRelationBuildAction("SetTargetFieldValue", "Set the case relation target field value", "FieldValue")]
     public void SetTargetFieldValue(CaseRelationActionContext context, object target, object value)
     {
@@ -76,9 +76,9 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     /// <param name="target">The case field on the target case</param>
     /// <param name="start">The start date to set</param>
     [ActionParameter("target", "The case field on the target case",
-        valueTypes: new[] { DateType })]
+        valueTypes: [DateType])]
     [ActionParameter("start", "The start date to set",
-        valueTypes: new[] { DateType })]
+        valueTypes: [DateType])]
     [CaseRelationBuildAction("SetTargetFieldStart", "Set the case relation target field change start date", "FieldStart")]
     public void SetTargetFieldStart(CaseRelationActionContext context, object target, object start)
     {
@@ -115,9 +115,9 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     /// <param name="target">The case field on the target case</param>
     /// <param name="end">The end date to set</param>
     [ActionParameter("target", "The case field on the target case",
-        valueTypes: new[] { DateType })]
+        valueTypes: [DateType])]
     [ActionParameter("end", "The end date to set",
-        valueTypes: new[] { DateType })]
+        valueTypes: [DateType])]
     [CaseRelationBuildAction("SetTargetFieldEnd", "Set the case relation target field change end date", "FieldEnd")]
     public void SetTargetFieldEnd(CaseRelationActionContext context, object target, object end)
     {
@@ -150,11 +150,11 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     /// <param name="start">The date to set</param>
     /// <param name="end">The date to set</param>
     [ActionParameter("target", "The case field on the target case",
-        valueTypes: new[] { DateType })]
+        valueTypes: [DateType])]
     [ActionParameter("start", "The start date to set",
-        valueTypes: new[] { DateType })]
+        valueTypes: [DateType])]
     [ActionParameter("end", "The end date to set",
-        valueTypes: new[] { DateType })]
+        valueTypes: [DateType])]
     [CaseRelationBuildAction("SetTargetFieldStartEnd", "Set the case relation target field change start and end date", "FieldStart", "FieldEnd")]
     public void SetTargetFieldStartEnd(CaseRelationActionContext context, object target, object start, object end)
     {
@@ -191,7 +191,7 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     /// <param name="context">The action context</param>
     /// <param name="message">The log message</param>
     [ActionParameter("message", "The log message",
-        valueTypes: new[] { StringType })]
+        valueTypes: [StringType])]
     [CaseRelationBuildAction("Log", "Write log entry", "Tool")]
     public void Log(CaseRelationActionContext context, string message) =>
         context.Function.LogInformation(message);
@@ -203,13 +203,13 @@ public class CaseRelationBuildActions : CaseRelationActionsBase
     /// <param name="scheduleDate">The task schedule date</param>
     /// <param name="category">The task category</param>
     [ActionParameter("name", "The task name",
-        valueTypes: new[] { StringType })]
+        valueTypes: [StringType])]
     [ActionParameter("instruction", "The task instruction",
-        valueTypes: new[] { StringType })]
+        valueTypes: [StringType])]
     [ActionParameter("scheduleDate", "The task schedule date",
-        valueTypes: new[] { StringType })]
+        valueTypes: [StringType])]
     [ActionParameter("category", "The task category",
-        valueTypes: new[] { StringType })]
+        valueTypes: [StringType])]
     [CaseRelationBuildAction("AddTask", "Add a user task", "Tool")]
     public void AddTask(CaseRelationActionContext context, string name, string instruction,
         DateTime scheduleDate, string category = null) =>

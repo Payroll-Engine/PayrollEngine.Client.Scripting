@@ -391,7 +391,7 @@
             <summary>If you have a pager, it goes off when one of these occurs/// </summary>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.CaseType">
-            <summary>The type of a case</summary>
+            <summary>The case type</summary>
         </member>
         <member name="F:PayrollEngine.Client.Scripting.CaseType.Global">
             <summary>Global case</summary>
@@ -701,7 +701,7 @@
             <summary>Get the year start date in UTC</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Date.YearEnd(System.Int32)">
-            <summary>Get the year end date in UTC</summary>
+            <summary>Get the year-end date in UTC</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Date.MonthStart(System.Int32,System.Int32)">
             <summary>Get the month start date in UTC</summary>
@@ -781,7 +781,7 @@
             <summary>Test if the period is within a day</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.DatePeriod.IsWithinHour">
-            <summary>Test if the period is within a hour</summary>
+            <summary>Test if the period is within an hour</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.DatePeriod.TotalDays">
             <summary>Gets the value of the <see cref="T:System.TimeSpan" /> between start and end expressed in whole and fractional days</summary>
@@ -1175,9 +1175,9 @@
             <returns>The UTC date time string</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DateTimeExtensions.RoundTickToHour(System.DateTime)">
-            <summary>Round to hour, if it is the last tick from a hour</summary>
+            <summary>Round to hour, if it is the last tick from an hour</summary>
             <param name="dateTime">The source date time</param>
-            <returns>Date of the next hour if the input is on the last tick on a hour, else the original value</returns>
+            <returns>Date of the next hour if the input is on the last tick on an hour, else the original value</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DateTimeExtensions.YearStart(System.DateTime)">
             <summary>Get the year start date in UTC</summary>
@@ -1185,7 +1185,7 @@
             <returns>First moment of the year</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DateTimeExtensions.YearEnd(System.DateTime)">
-            <summary>Get the year end date in UTC</summary>
+            <summary>Get the year-end date in UTC</summary>
             <param name="yearMoment">The year moment</param>
             <returns>Last moment of the year</returns>
         </member>
@@ -1316,13 +1316,13 @@
             <returns>First day of the week</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DateTimeExtensions.LastDayOfWeek(System.Int32,System.Int32)">
-            <summary>Get week end date by ISO 8601 week number of the year</summary>
+            <summary>Get weekend date by ISO 8601 week number of the year</summary>
             <param name="year">The year</param>
             <param name="weekOfYear">The ISO 8601 week number of the year</param>
             <returns>Last day of the week</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DateTimeExtensions.LastDayOfWeek(System.Int32,System.Int32,System.Globalization.CultureInfo)">
-            <summary>Get week end date by ISO 8601 week number of the year</summary>
+            <summary>Get weekend date by ISO 8601 week number of the year</summary>
             <param name="year">The year</param>
             <param name="weekOfYear">The ISO 8601 week number of the year</param>
             <param name="culture">The calendar culture</param>
@@ -1379,12 +1379,12 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DateTimeExtensions.Age(System.DateTime)">
             <summary>Calculates the current age, counting the completed years</summary>
-            <param name="birthDate">The birth date</param>
+            <param name="birthDate">The birthdate</param>
             <returns>The current age</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DateTimeExtensions.Age(System.DateTime,System.DateTime)">
             <summary>Calculates the age at a specific moment, counting the completed years</summary>
-            <param name="birthDate">The birth date</param>
+            <param name="birthDate">The birthdate</param>
             <param name="testMoment">The test moment</param>
             <returns>The age at the test moment</returns>
         </member>
@@ -1891,7 +1891,7 @@
         <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.TotalDuration(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.PeriodValue})">
             <summary>Summarize the total duration from all date period durations</summary>
             <param name="values">The period payroll values</param>
-            <returns>Total duration from all periods,, an empty time span on empty collection</returns>
+            <returns>Total duration from all periods, an empty time span on empty collection</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.TotalDaysByValue(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.PeriodValue})">
             <summary>Total days considering the value as factor</summary>
@@ -1994,7 +1994,7 @@
         <member name="M:PayrollEngine.Client.Scripting.PayrollResultsExtensions.Sum(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.WageTypeCustomResult})">
             <summary>Get summary of wage type custom results</summary>
             <param name="results">The wage type custom results</param>
-            <returns>Wage type results result values summary</returns>
+            <returns>Wage type result values summary</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.ValueTypeExtensions">
             <summary>Value type extension methods</summary>
@@ -2020,7 +2020,7 @@
             <returns>True for number value types</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.ValueTypeExtensions.IsInteger(PayrollEngine.Client.Scripting.ValueType)">
-            <summary>Test if value type is a integer</summary>
+            <summary>Test if value type is an integer</summary>
             <param name="valueType">The value type</param>
             <returns>True for integer value types</returns>
         </member>
@@ -3333,7 +3333,7 @@
             <param name="end">The case end date to set</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseBuildActions.SetStartEnd(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext,System.Object,System.Object)">
-            <summary>Set the case change start end end date</summary>
+            <summary>Set the case change start end date</summary>
             <param name="context">The action context</param>
             <param name="start">The date to set</param>
             <param name="end">The date to set</param>
@@ -3684,13 +3684,13 @@
             <summary>Ass case value tag</summary>
             <param name="caseFieldName">The name of the case field</param>
             <param name="tag">The tag to add</param>
-            <returns>True if the case value tag has ben added</returns>
+            <returns>True if the case value tag has been added</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeFunction.RemoveCaseValueTag(System.String,System.String)">
             <summary>Ass case value tag</summary>
             <param name="caseFieldName">The name of the case field</param>
             <param name="tag">The tag to remove</param>
-            <returns>True if the case value tag has ben removed</returns>
+            <returns>True if the case value tag has been removed</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeFunction.SetCaseFieldAttribute(System.String,System.String,System.Object)">
             <summary>Set case field attribute value</summary>
@@ -5387,7 +5387,7 @@
             <param name="comment">The log comment</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.Function.LogInformation(System.String,System.String,System.String)">
-            <summary>Add a information log</summary>
+            <summary>Add an information log</summary>
             <param name="message">The log message</param>
             <param name="error">The log error</param>
             <param name="comment">The log comment</param>
@@ -5405,7 +5405,7 @@
             <param name="comment">The log comment</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.Function.LogError(System.Exception,System.String,System.String)">
-            <summary>Add a error log using an exception</summary>
+            <summary>Add an error log using an exception</summary>
             <param name="exception">The exception</param>
             <param name="message">The log message, default is the exception message</param>
             <param name="comment">The log comment</param>
@@ -6729,7 +6729,7 @@
             <returns>Payroll case fields</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteEmployeeTimeCaseValueQuery(System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.Function.CaseValueColumn},System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
-            <summary>Get employees case values as table
+            <summary>Get employees case values as table.
             Table structure: first column is the employee id, and for any case field a column</summary>
             <param name="payrollId">The payroll id</param>
             <param name="employeeIds">The employee ids</param>
@@ -8519,13 +8519,13 @@
             <summary>Add case value tag</summary>
             <param name="caseFieldName">The name of the case field</param>
             <param name="tag">The tag to add</param>
-            <returns>True if the case value tag has ben added</returns>
+            <returns>True if the case value tag has been added</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.ICaseChangeRuntime.RemoveCaseValueTag(System.String,System.String)">
             <summary>Remove case value tag</summary>
             <param name="caseFieldName">The name of the case field</param>
             <param name="tag">The tag to remove</param>
-            <returns>True if the case value tag has ben removed</returns>
+            <returns>True if the case value tag has been removed</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.ICaseChangeRuntime.SetCaseFieldAttribute(System.String,System.String,System.Object)">
             <summary>Set case field attribute value</summary>

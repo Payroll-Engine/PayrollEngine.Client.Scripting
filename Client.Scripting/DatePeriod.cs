@@ -113,7 +113,7 @@ public sealed class DatePeriod
     [JsonIgnore]
     public bool IsWithinDay => Start.IsSameDay(End);
 
-    /// <summary>Test if the period is within a hour</summary>
+    /// <summary>Test if the period is within an hour</summary>
     [JsonIgnore]
     public bool IsWithinHour => Start.IsSameHour(End);
 

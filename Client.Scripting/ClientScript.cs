@@ -90,7 +90,7 @@ public enum LogLevel
     Fatal
 }
 
-/// <summary>The type of a case</summary>
+/// <summary>The case type</summary>
 public enum CaseType
 {
     /// <summary>Global case</summary>

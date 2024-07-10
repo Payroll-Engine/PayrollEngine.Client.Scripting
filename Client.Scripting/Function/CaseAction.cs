@@ -381,7 +381,7 @@ public abstract class ActionMethodBase<TContext, TFunc, TValue> : IActionMethod<
     public DateTime CaseValueDate { get; }
 
     /// <summary>The method parameters</summary>
-    public List<string> Parameters { get; } = new();
+    public List<string> Parameters { get; } = [];
 
     /// <summary>Test for method parameters</summary>
     public bool HasParameters => Parameters.Count > 0;
@@ -426,11 +426,11 @@ public abstract class ActionMethodBase<TContext, TFunc, TValue> : IActionMethod<
 
     private Tuple<ActionValueType, Func<TValue, object>> GetValueFunction()
     {
-        if (!valueFunctions.ContainsKey(Name))
+        if (!valueFunctions.TryGetValue(Name, out var function))
         {
             throw new ScriptException($"Missing action function {Name}");
         }
-        return valueFunctions[Name];
+        return function;
     }
 
     #endregion
@@ -1773,12 +1773,12 @@ public abstract class LookupActionMethodBase<TContext, TFunc> : ActionMethodBase
         }
 
         var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(lookupValue);
-        if (dictionary == null || !dictionary.ContainsKey(objectKey))
+        if (dictionary == null || !dictionary.TryGetValue(objectKey, out var value))
         {
             Context.Function.LogError($"Invalid lookup object key: {objectKey}");
             return null;
         }
-        return dictionary[objectKey];
+        return value;
     }
 }
 
