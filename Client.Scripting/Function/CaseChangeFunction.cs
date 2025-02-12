@@ -67,7 +67,7 @@ public class CaseChangeActionValueContext : PayrollActionValueContext<CaseChange
     {
         if (!Function.GetFieldNames().Any(x => string.Equals(x, caseFieldName)))
         {
-            throw new ScriptException($"Unknown case change field {caseFieldName}");
+            throw new ScriptException($"Unknown case change field {caseFieldName}.");
         }
 
         return new CaseValue(caseFieldName, Date.Now,
@@ -105,7 +105,7 @@ public abstract class CaseChangeActionsBase : CaseActionsBase
         catch (Exception exception)
         {
             context.Function.LogError($"Invalid case field name {context.CaseFieldName}: {exception.GetBaseException().Message}");
-            return default;
+            return null;
         }
     }
 
@@ -120,7 +120,7 @@ public abstract class CaseChangeActionsBase : CaseActionsBase
         catch (Exception exception)
         {
             context.Function.LogError($"Invalid case action value {value}: {exception.GetBaseException().Message}");
-            return default;
+            return null;
         }
     }
 
@@ -139,11 +139,11 @@ public abstract class CaseChangeActionsBase : CaseActionsBase
         var attribute = FindIssueAttribute(issueName);
         if (attribute == null)
         {
-            throw new ScriptException($"Missing action issue attribute {issueName} on type {GetType()}");
+            throw new ScriptException($"Missing action issue attribute {issueName} on type {GetType()}.");
         }
         if (attribute.ParameterCount != parameters.Length)
         {
-            throw new ScriptException($"Mismatching action parameter count on issue attribute {issueName} (expected={attribute.ParameterCount}, actual={parameters.Length}");
+            throw new ScriptException($"Mismatching action parameter count on issue attribute {issueName} (expected={attribute.ParameterCount}, actual={parameters.Length}.");
         }
 
         // localized message from lookup

@@ -1191,7 +1191,7 @@ public static class DataTableExtensions
     {
         if (!IsSingleRow(table))
         {
-            throw new ScriptException($"Table {table.TableName} is not single, count={table.Rows.Count}");
+            throw new ScriptException($"Table {table.TableName} is not single, count={table.Rows.Count}.");
         }
         return table.Rows[0];
     }
@@ -1322,7 +1322,7 @@ public static class DataRowExtensions
     {
         if (!typeof(T).IsEnum)
         {
-            throw new ScriptException($"Invalid enum value type: {typeof(T)}");
+            throw new ScriptException($"Invalid enum value type: {typeof(T)}.");
         }
         var valueText = GetValue(dataRow, column, defaultValue.ToString());
         if (string.IsNullOrWhiteSpace(valueText) || !Enum.TryParse(valueText, true, out T enumValue))
@@ -1370,7 +1370,7 @@ public static class DataRowExtensions
         }
         catch (Exception exception)
         {
-            throw new ScriptException($"Error in column {column}: convert value {value} to type {typeof(T)}", exception);
+            throw new ScriptException($"Error in column {column}: convert value {value} to type {typeof(T)}.", exception);
         }
     }
 
@@ -1621,7 +1621,7 @@ public static class DataRowExtensions
             return JsonSerializer.Deserialize<List<T>>(json);
         }
 
-        throw new ArgumentException($"{value} from column {column} is not a JSON list", nameof(column));
+        throw new ArgumentException($"{value} from column {column} is not a JSON list.", nameof(column));
     }
 
     /// <summary>Get data row JSON value as dictionary</summary>
@@ -1647,7 +1647,7 @@ public static class DataRowExtensions
             string json => string.IsNullOrWhiteSpace(json)
                 ? new()
                 : JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(json),
-            _ => throw new ArgumentException($"{value} from column {column} is not a JSON dictionary", nameof(column))
+            _ => throw new ArgumentException($"{value} from column {column} is not a JSON dictionary.", nameof(column))
         };
     }
 
@@ -1686,7 +1686,7 @@ public static class DataRowExtensions
     /// <param name="attribute">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The attribute value</returns>
-    public static object GetAttribute(this DataRow dataRow, string attribute, object defaultValue = default) =>
+    public static object GetAttribute(this DataRow dataRow, string attribute, object defaultValue = null) =>
         GetAttribute(dataRow, "Attributes", attribute, defaultValue);
 
     /// <summary>Get attribute from a data row json value</summary>
@@ -1695,7 +1695,7 @@ public static class DataRowExtensions
     /// <param name="attribute">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The attribute value</returns>
-    public static object GetAttribute(this DataRow dataRow, string column, string attribute, object defaultValue = default)
+    public static object GetAttribute(this DataRow dataRow, string column, string attribute, object defaultValue = null)
     {
         if (string.IsNullOrWhiteSpace(attribute))
         {
@@ -1728,7 +1728,7 @@ public static class DataRowExtensions
     /// <param name="culture">The culture</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The attribute value</returns>
-    public static string GetLocalization(this DataRow dataRow, string column, string culture, string defaultValue = default) =>
+    public static string GetLocalization(this DataRow dataRow, string column, string culture, string defaultValue = null) =>
         culture.GetLocalization(GetLocalizations(dataRow, column), defaultValue);
 
     /// <summary>Transpose item collection to table columns with values</summary>
@@ -1942,7 +1942,7 @@ public static class DataRowExtensions
             if (targetColumn.DataType != sourceColumn.DataType)
             {
                 throw new ScriptException($"Mismatching types in column {sourceColumn.ColumnName}:" +
-                                           $" source: {sourceColumn.DataType.Name}, target: {targetColumn.DataType.Name}");
+                                           $" source: {sourceColumn.DataType.Name}, target: {targetColumn.DataType.Name}.");
             }
 
             // item/row value

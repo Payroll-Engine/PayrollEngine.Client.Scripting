@@ -49,7 +49,7 @@ public class CaseRelationActionValueContext : PayrollActionValueContext<CaseRela
                 new PayrollValue(Function.GetTargetValue(caseFieldName)));
         }
 
-        throw new ScriptException($"Unknown case change field {caseFieldName}");
+        throw new ScriptException($"Unknown case change field {caseFieldName}.");
     }
 }
 
@@ -77,7 +77,7 @@ public abstract class CaseRelationActionsBase : CaseActionsBase
     {
         if (string.IsNullOrWhiteSpace(source))
         {
-            throw new ArgumentException("Invalid case relation source", nameof(source));
+            throw new ArgumentException("Invalid case relation source.", nameof(source));
         }
 
         try
@@ -87,7 +87,7 @@ public abstract class CaseRelationActionsBase : CaseActionsBase
         catch (Exception exception)
         {
             context.Function.LogError($"Invalid case field name {source}: {exception.GetBaseException().Message}");
-            return default;
+            return null;
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class CaseRelationActionsBase : CaseActionsBase
         catch (Exception exception)
         {
             context.Function.LogError($"Invalid case action value {value}: {exception.GetBaseException().Message}");
-            return default;
+            return null;
         }
     }
 

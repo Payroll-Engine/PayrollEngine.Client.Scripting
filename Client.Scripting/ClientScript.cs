@@ -235,7 +235,7 @@ public class ScriptDictionary<TKey, TValue>
         {
             if (SetValueHandler == null)
             {
-                throw new ScriptException($"Write operation on read-only scripting dictionary: {key}={value} ");
+                throw new ScriptException($"Write operation on read-only scripting dictionary: {key}={value}.");
             }
             SetValueHandler(key, value);
         }

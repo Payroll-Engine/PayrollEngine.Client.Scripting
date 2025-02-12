@@ -61,7 +61,7 @@ public partial class CaseRelationValidateFunction : CaseRelationFunction
         // ReSharper restore EmptyRegion
 
         // compiler will optimize this out if the code provides a return
-        return default;
+        return null;
     }
 
     private bool InvokeValidateActions()

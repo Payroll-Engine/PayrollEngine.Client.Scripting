@@ -79,7 +79,7 @@ public class PayrollValue
 
     /// <summary>Convert payroll value to int/></summary>
     public static implicit operator int(PayrollValue value) =>
-        (int?)value?.Value ?? default;
+        (int?)value?.Value ?? 0;
 
     /// <summary>Convert payroll value to nullable int</summary>
     public static implicit operator int?(PayrollValue value) =>
@@ -87,7 +87,7 @@ public class PayrollValue
 
     /// <summary>Convert payroll value to decimal</summary>
     public static implicit operator decimal(PayrollValue value) =>
-        (decimal?)value?.Value ?? default;
+        (decimal?)value?.Value ?? 0;
 
     /// <summary>Convert payroll value to nullable decimal</summary>
     public static implicit operator decimal?(PayrollValue value) =>
@@ -109,7 +109,7 @@ public class PayrollValue
 
     /// <summary>Convert payroll value to bool</summary>
     public static implicit operator bool(PayrollValue value) =>
-        (bool?)value?.Value ?? default;
+        (bool?)value?.Value ?? false;
 
     /// <summary>Convert payroll value to nullable bool</summary>
     public static implicit operator bool?(PayrollValue value) =>
@@ -132,7 +132,7 @@ public class PayrollValue
         {
             return new(+@int);
         }
-        throw new ScriptException($"operator unary + error in payroll value {value}");
+        throw new ScriptException($"operator unary + error in payroll value {value}.");
     }
 
     /// <summary>Unary minus of a payroll value (decimal, int)</summary>
@@ -148,7 +148,7 @@ public class PayrollValue
         {
             return new(-@int);
         }
-        throw new ScriptException($"operator unary - error in payroll value {value}");
+        throw new ScriptException($"operator unary - error in payroll value {value}.");
     }
 
     /// <summary>Logical negation of a payroll value (bool)</summary>
@@ -160,7 +160,7 @@ public class PayrollValue
             return new(!boolValue);
         }
 
-        throw new ScriptException($"operator ! error in payroll value {value}");
+        throw new ScriptException($"operator ! error in payroll value {value}.");
     }
 
     /// <summary>Test if payroll value is true</summary>
@@ -218,7 +218,7 @@ public class PayrollValue
             case string leftString when right.Value is string rightString:
                 return new(leftString + rightString);
             default:
-                throw new ScriptException($"operator + error in payroll values {left} and {right}");
+                throw new ScriptException($"operator + error in payroll values {left} and {right}.");
         }
     }
 
@@ -241,7 +241,7 @@ public class PayrollValue
             int leftInt when right.Value is int rightInt => new(leftInt - rightInt),
             // int - decimal
             int leftInt when right.Value is decimal rightDecimal => new(leftInt - rightDecimal),
-            _ => throw new ScriptException($"operator - error in payroll values {left} and {right}")
+            _ => throw new ScriptException($"operator - error in payroll values {left} and {right}.")
         };
     }
 
@@ -264,7 +264,7 @@ public class PayrollValue
             int leftInt when right.Value is int rightInt => new(leftInt * rightInt),
             // int * decimal
             int leftInt when right.Value is decimal rightDecimal => new(leftInt * rightDecimal),
-            _ => throw new ScriptException($"operator * error in payroll values {left} and {right}")
+            _ => throw new ScriptException($"operator * error in payroll values {left} and {right}.")
         };
     }
 
@@ -278,7 +278,7 @@ public class PayrollValue
         }
         if (!right.HasValue)
         {
-            throw new ScriptException("division with undefined payroll value");
+            throw new ScriptException("division with undefined payroll value.");
         }
 
         return left.Value switch
@@ -291,7 +291,7 @@ public class PayrollValue
             int leftInt when right.Value is int rightInt => new(leftInt / rightInt),
             // int / decimal
             int leftInt when right.Value is decimal rightDecimal => new(leftInt / rightDecimal),
-            _ => throw new ScriptException($"operator / error in payroll values {left} and {right}")
+            _ => throw new ScriptException($"operator / error in payroll values {left} and {right}.")
         };
     }
 
@@ -305,7 +305,7 @@ public class PayrollValue
         }
         if (!right.HasValue)
         {
-            throw new ScriptException("operator % error; remainder by empty payroll value");
+            throw new ScriptException("operator % error; remainder by empty payroll value.");
         }
 
         return left.Value switch
@@ -318,7 +318,7 @@ public class PayrollValue
             int leftInt when right.Value is int rightInt => new(leftInt % rightInt),
             // int % int
             int leftInt when right.Value is decimal rightDecimal => new(leftInt % rightDecimal),
-            _ => throw new ScriptException($"operator % error in payroll values {left} and {right}")
+            _ => throw new ScriptException($"operator % error in payroll values {left} and {right}.")
         };
     }
 
@@ -340,7 +340,7 @@ public class PayrollValue
         {
             return new(leftBoolean & rightBoolean);
         }
-        throw new ScriptException($"operator & error in payroll values {left} and {right}");
+        throw new ScriptException($"operator & error in payroll values {left} and {right}.");
     }
 
     /// <summary>Test if any payroll value is true (bool)</summary>
@@ -361,7 +361,7 @@ public class PayrollValue
         {
             return new(leftBoolean | rightBoolean);
         }
-        throw new ScriptException($"operator | error in payroll values {left} and {right}");
+        throw new ScriptException($"operator | error in payroll values {left} and {right}.");
     }
 
     /// <summary>Compare two payroll values for equality</summary>
@@ -405,7 +405,7 @@ public class PayrollValue
             int leftInt when right.Value is int rightInt => new(leftInt < rightInt),
             // int < decimal
             int leftInt when right.Value is decimal rightDecimal => new(leftInt < rightDecimal),
-            _ => throw new ScriptException($"operator < error in payroll values {left} and {right}")
+            _ => throw new ScriptException($"operator < error in payroll values {left} and {right}.")
         };
     }
 
@@ -432,7 +432,7 @@ public class PayrollValue
             int leftInt when right.Value is int rightInt => new(leftInt > rightInt),
             // int > decimal
             int leftInt when right.Value is decimal rightDecimal => new(leftInt > rightDecimal),
-            _ => throw new ScriptException($"operator > error in payroll values {left} and {right}")
+            _ => throw new ScriptException($"operator > error in payroll values {left} and {right}.")
         };
     }
 
@@ -459,7 +459,7 @@ public class PayrollValue
             int leftInt when right.Value is int rightInt => new(leftInt <= rightInt),
             // int <= int
             int leftInt when right.Value is decimal rightDecimal => new(leftInt <= rightDecimal),
-            _ => throw new ScriptException($"operator <= error in payroll values {left} and {right}")
+            _ => throw new ScriptException($"operator <= error in payroll values {left} and {right}.")
         };
     }
 
@@ -486,7 +486,7 @@ public class PayrollValue
             int leftInt when right.Value is int rightInt => new(leftInt >= rightInt),
             // int >= decimal
             int leftInt when right.Value is decimal rightDecimal => new(leftInt >= rightDecimal),
-            _ => throw new ScriptException($"operator >= error in payroll values {left} and {right}")
+            _ => throw new ScriptException($"operator >= error in payroll values {left} and {right}.")
         };
     }
 
@@ -508,18 +508,18 @@ public class PayrollValue
     /// <param name="stepSize">The round step size</param>
     /// <returns>The up-rounded value</returns>
     public decimal RoundUp(decimal stepSize = 1) =>
-        Value is decimal decimalValue ? decimalValue.RoundUp(stepSize) : default;
+        Value is decimal decimalValue ? decimalValue.RoundUp(stepSize) : 0;
 
     /// <summary>Rounds a decimal value down</summary>
     /// <param name="stepSize">The round step size</param>
     /// <returns>The down-rounded value</returns>
     public decimal RoundDown(decimal stepSize) =>
-        Value is decimal decimalValue ? decimalValue.RoundDown(stepSize) : default;
+        Value is decimal decimalValue ? decimalValue.RoundDown(stepSize) : 0;
 
     /// <summary>Returns the integral digits of the specified decimal, using a step size</summary>
     /// <param name="stepSize">The step size used to truncate</param>
     public decimal? Truncate(int stepSize = 1) =>
-        Value is decimal decimalValue ? decimalValue.Truncate(stepSize) : default;
+        Value is decimal decimalValue ? decimalValue.Truncate(stepSize) : 0;
 
     #endregion
 

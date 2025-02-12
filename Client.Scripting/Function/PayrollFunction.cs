@@ -1100,7 +1100,7 @@ public abstract partial class PayrollFunction : Function
             // create instance of declaring type: requires a default constructor
             if (method.DeclaringType == null)
             {
-                throw new ScriptException($"Missing declaring type for method {method.Name}");
+                throw new ScriptException($"Missing declaring type for method {method.Name}.");
             }
             var actionsInstance = Activator.CreateInstance(method.DeclaringType);
 
@@ -1478,7 +1478,7 @@ public abstract partial class PayrollFunction : Function
                     }
                     break;
                 case ConditionAlternativeMarker:
-                    // alternative mask: ' : ' or at the end of line ' :'
+                    // alternative mask: ' : ' or at the end of line ' :''
                     if (expression[index - 1] == ' ' &&
                         (index == expression.Length - 1 || expression[index + 1] == ' '))
                     {

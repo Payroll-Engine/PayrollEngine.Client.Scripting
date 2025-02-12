@@ -87,7 +87,7 @@ public class MultiPeriodCasePayrollValueDictionary : Dictionary<DatePeriod, Case
             var periodValue = periodValues.Value[caseFieldName];
             if (periodValue == null)
             {
-                throw new ScriptException($"Unknown case field {caseFieldName}");
+                throw new ScriptException($"Unknown case field {caseFieldName}.");
             }
             values.Add(periodValues.Key, periodValue);
         }

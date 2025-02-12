@@ -71,7 +71,7 @@ public abstract class ConsolidatedResultCacheBase
         // test for valid cycle setup
         if (function.CycleStart != CycleStartDate)
         {
-            throw new ScriptException($"Mismatching cache cycle dates: {function.CycleStart} vs {CycleStartDate}");
+            throw new ScriptException($"Mismatching cache cycle dates: {function.CycleStart} vs {CycleStartDate}.");
         }
 
         // forecast

@@ -5399,7 +5399,7 @@
             <param name="comment">The log comment</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.Function.LogError(System.String,System.String,System.String)">
-            <summary>Add a error log</summary>
+            <summary>Add error log</summary>
             <param name="message">The log message</param>
             <param name="error">The log error</param>
             <param name="comment">The log comment</param>

@@ -210,7 +210,7 @@ public abstract partial class ReportFunction : Function
                 .Parameter(nameof(divisionId), divisionId));
         if (!division.IsSingleRow())
         {
-            throw new ScriptException(ToReportMessage($"Missing division with id {divisionId}"));
+            throw new ScriptException(ToReportMessage($"Missing division with id {divisionId}."));
         }
         return division;
     }
@@ -375,11 +375,11 @@ public abstract partial class ReportFunction : Function
         var result = ExecuteQuery(tableName, methodName, parameters);
         if (result == null)
         {
-            throw new ScriptException($"Empty result on single result value query on table {tableName}");
+            throw new ScriptException($"Empty result on single result value query on table {tableName}.");
         }
         if (result.Rows.Count > 1)
         {
-            throw new ScriptException($"Multiple results on single result value query on table {tableName} and attribute {attributeName}");
+            throw new ScriptException($"Multiple results on single result value query on table {tableName} and attribute {attributeName}.");
         }
         return result.Rows[0].GetValue<T>(attributeName);
     }
@@ -425,7 +425,7 @@ public abstract partial class ReportFunction : Function
         string lookupName, string culture,
         DateTime? regulationDate = null, DateTime? evaluationDate = null)
     {
-        var lookups = ExecuteLookupQuery(payrollId, new[] { lookupName },
+        var lookups = ExecuteLookupQuery(payrollId, [lookupName],
             culture, regulationDate, evaluationDate);
         return lookups.TryGetValue(lookupName, out var lookup) ? lookup : new();
     }
@@ -487,7 +487,7 @@ public abstract partial class ReportFunction : Function
             // duplicated lookup
             if (lookups.ContainsKey(lookupName))
             {
-                throw new ScriptException($"Duplicated lookup {lookupName}");
+                throw new ScriptException($"Duplicated lookup {lookupName}.");
             }
             var values = lookupValuesRow.GetValue<LookupValueData[]>("Values");
             if (values != null)
@@ -514,7 +514,7 @@ public abstract partial class ReportFunction : Function
     {
         if (caseFieldNames == null && string.IsNullOrWhiteSpace(clusterSetName))
         {
-            throw new ScriptException("Case field query requires case fields or a cluster set");
+            throw new ScriptException("Case field query requires case fields or a cluster set.");
         }
 
         var parameters = new Dictionary<string, string>
@@ -714,7 +714,7 @@ public abstract partial class ReportFunction : Function
             DataRow caseFieldRow = GetCaseFieldRow(caseFields, column);
             if (caseFieldRow == null)
             {
-                throw new ScriptException($"Unknown case field {column.Name}");
+                throw new ScriptException($"Unknown case field {column.Name}.");
             }
 
             // column type
@@ -722,7 +722,7 @@ public abstract partial class ReportFunction : Function
             if (!valueType.HasValue)
             {
                 throw new ScriptException(
-                    $"Unknown case field type in column {column.Name} (enum: {typeof(ValueType)})");
+                    $"Unknown case field type in column {column.Name} (enum: {typeof(ValueType)}).");
             }
 
             // add column

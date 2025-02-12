@@ -80,6 +80,6 @@ public partial class WageTypeValueFunction : WageTypeFunction
         #endregion
         // ReSharper restore EmptyRegion
         // compiler will optimize this out if the code provides a return
-        return default;
+        return null;
     }
 }

@@ -102,6 +102,7 @@ public class CaseValue : IEquatable<CaseValue>
             Value == compare.Value &&
             CancellationDate == compare.CancellationDate &&
             (Tags?.SequenceEqual(compare.Tags) ?? compare.Tags != null) &&
+            // ReSharper disable once UsageOfDefaultStructEquality
             (Attributes?.SequenceEqual(compare.Attributes) ?? compare.Attributes != null);
     }
 

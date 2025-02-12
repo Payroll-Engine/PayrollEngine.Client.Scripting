@@ -76,7 +76,7 @@ internal abstract class ScriptParserBase
         var classes = ScriptClassParser.FromSource(sourceCode);
         if (!classes.Any())
         {
-            throw new ScriptPublishException("Missing scripting classes in source");
+            throw new ScriptPublishException("Missing scripting classes in source.");
         }
 
         return classes;

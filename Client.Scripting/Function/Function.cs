@@ -117,7 +117,7 @@ public abstract partial class Function : IDisposable
     public void LogWarning(string message, string error = null, string comment = null) =>
         Log(LogLevel.Warning, message, error, comment);
 
-    /// <summary>Add a error log</summary>
+    /// <summary>Add error log</summary>
     /// <param name="message">The log message</param>
     /// <param name="error">The log error</param>
     /// <param name="comment">The log comment</param>

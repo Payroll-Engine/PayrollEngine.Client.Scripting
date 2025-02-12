@@ -44,15 +44,15 @@ public static class TypeExtensions
 public static class NullableExtensions
 {
     /// <summary>Safe nullable boolean cast</summary>
-    public static bool Safe(this bool? value, bool defaultValue = default) =>
+    public static bool Safe(this bool? value, bool defaultValue = false) =>
         value ?? defaultValue;
 
     /// <summary>Safe nullable int cast</summary>
-    public static int Safe(this int? value, int defaultValue = default) =>
+    public static int Safe(this int? value, int defaultValue = 0) =>
         value ?? defaultValue;
 
     /// <summary>Safe nullable decimal cast</summary>
-    public static decimal Safe(this decimal? value, decimal defaultValue = default) =>
+    public static decimal Safe(this decimal? value, decimal defaultValue = 0) =>
         value ?? defaultValue;
 
     /// <summary>Safe nullable DateTime cast</summary>
@@ -336,13 +336,13 @@ public static class StringExtensions
     {
         if (string.IsNullOrWhiteSpace(caseRelation))
         {
-            return default;
+            return null;
         }
 
         var relatedCases = caseRelation.Split(RelatedCaseSeparator, StringSplitOptions.RemoveEmptyEntries);
         if (relatedCases.Length != 2)
         {
-            throw new ArgumentException($"invalid case relation {caseRelation}, please use 'sourceCaseName:targetCaseName')");
+            throw new ArgumentException($"invalid case relation {caseRelation}, please use 'sourceCaseName:targetCaseName').");
         }
         return new(relatedCases[0], relatedCases[1]);
     }
@@ -355,11 +355,11 @@ public static class StringExtensions
     {
         if (string.IsNullOrWhiteSpace(sourceCaseName))
         {
-            return default;
+            return null;
         }
         if (string.IsNullOrWhiteSpace(targetCaseName))
         {
-            return default;
+            return null;
         }
 
         return $"{sourceCaseName}{RelatedCaseSeparator}{targetCaseName}";
@@ -467,21 +467,21 @@ public static class DecimalExtensions
     /// <param name="stepSize">The step size used to truncate</param>
     /// <returns>The result of d rounded toward zero, to the nearest whole number within the step size</returns>
     public static decimal Truncate(this decimal value, int stepSize) =>
-        value == default ? default : value - (value % stepSize);
+        value == 0 ? 0 : value - (value % stepSize);
 
     /// <summary>Rounds a decimal value up</summary>
     /// <param name="value">The decimal value to round</param>
     /// <param name="stepSize">The round step size</param>
     /// <returns>The up-rounded value</returns>
     public static decimal RoundUp(this decimal value, decimal stepSize) =>
-        value == default || stepSize == 0 ? value : Math.Ceiling(value / stepSize) * stepSize;
+        value == 0 || stepSize == 0 ? value : Math.Ceiling(value / stepSize) * stepSize;
 
     /// <summary>Rounds a decimal value down</summary>
     /// <param name="value">The decimal value to round</param>
     /// <param name="stepSize">The round step size</param>
     /// <returns>The rounded value</returns>
     public static decimal RoundDown(this decimal value, decimal stepSize) =>
-        value == default || stepSize == 0 ? value : Math.Floor(value / stepSize) * stepSize;
+        value == 0 || stepSize == 0 ? value : Math.Floor(value / stepSize) * stepSize;
 
     /// <summary>Rounds a decimal value wit predefined rounding type</summary>
     /// <param name="value">The decimal value to round</param>
@@ -542,7 +542,7 @@ public static class DecimalExtensions
     /// <param name="divisor">The divisor factor</param>
     /// <returns>The rounded value to one-tenth</returns>
     public static decimal RoundPartOfOne(this decimal value, int divisor) =>
-        value == default ? default : Math.Round(value * divisor, MidpointRounding.AwayFromZero) / divisor;
+        value == 0 ? 0 : Math.Round(value * divisor, MidpointRounding.AwayFromZero) / divisor;
 }
 
 /// <summary><see cref="DateTime">DateTime</see> extension methods</summary>
@@ -645,7 +645,7 @@ public static class DateTimeExtensions
                 // convert to utc
                 return moment.ToUniversalTime();
             default:
-                throw new ArgumentOutOfRangeException($"Unknown date time kind {moment.Kind}");
+                throw new ArgumentOutOfRangeException($"Unknown date time kind {moment.Kind}.");
         }
     }
 
@@ -667,7 +667,7 @@ public static class DateTimeExtensions
                 // convert to utc
                 return moment.ToUniversalTime();
             default:
-                throw new ArgumentOutOfRangeException($"Unknown date time kind {moment.Kind}");
+                throw new ArgumentOutOfRangeException($"Unknown date time kind {moment.Kind}.");
         }
     }
 
@@ -991,7 +991,7 @@ public static class DateTimeExtensions
     {
         if (testMoment <= birthDate)
         {
-            throw new ArgumentOutOfRangeException(nameof(testMoment), "calculate age: birth-date must be older than test-date");
+            throw new ArgumentOutOfRangeException(nameof(testMoment), "calculate age: birth-date must be older than test-date.");
         }
         var age = testMoment.Year - birthDate.Year;
         // leap years
@@ -1033,7 +1033,7 @@ public static class DateTimeExtensions
     public static DateTime RoundUp(this DateTime dateTime, TimeSpan stepSize)
     {
         var modTicks = dateTime.Ticks % stepSize.Ticks;
-        var delta = modTicks != default ? stepSize.Ticks - modTicks : 0;
+        var delta = modTicks != 0 ? stepSize.Ticks - modTicks : 0;
         return delta != 0 ? new(dateTime.Ticks + delta, dateTime.Kind) : dateTime;
     }
 
@@ -1044,7 +1044,7 @@ public static class DateTimeExtensions
     public static DateTime RoundDown(this DateTime dateTime, TimeSpan stepSize)
     {
         var delta = dateTime.Ticks % stepSize.Ticks;
-        return delta != default ? new(dateTime.Ticks - delta, dateTime.Kind) : dateTime;
+        return delta != 0 ? new(dateTime.Ticks - delta, dateTime.Kind) : dateTime;
     }
 
     /// <summary>Rounds a date time to the nearest value</summary>
@@ -1054,7 +1054,7 @@ public static class DateTimeExtensions
     public static DateTime Round(this DateTime dateTime, TimeSpan stepSize)
     {
         var delta = dateTime.Ticks % stepSize.Ticks;
-        if (delta == default)
+        if (delta == 0)
         {
             return dateTime;
         }
@@ -1193,7 +1193,7 @@ public static class DictionaryExtensions
     /// <param name="key">The value key</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The dictionary value</returns>
-    public static object GetValue(this Dictionary<string, object> dictionary, string key, object defaultValue = default)
+    public static object GetValue(this Dictionary<string, object> dictionary, string key, object defaultValue = null)
     {
         if (!dictionary.TryGetValue(key, out var value))
         {
@@ -1238,7 +1238,7 @@ public static class TimeSpanExtensions
     public static TimeSpan RoundUp(this TimeSpan timeSpan, TimeSpan stepSize)
     {
         var modTicks = timeSpan.Ticks % stepSize.Ticks;
-        var delta = modTicks != default ? stepSize.Ticks - modTicks : 0;
+        var delta = modTicks != 0 ? stepSize.Ticks - modTicks : 0;
         return delta != 0 ? new(timeSpan.Ticks + delta) : timeSpan;
     }
 
@@ -1249,7 +1249,7 @@ public static class TimeSpanExtensions
     public static TimeSpan RoundDown(this TimeSpan timeSpan, TimeSpan stepSize)
     {
         var delta = timeSpan.Ticks % stepSize.Ticks;
-        return delta != default ? new(timeSpan.Ticks - delta) : timeSpan;
+        return delta != 0 ? new(timeSpan.Ticks - delta) : timeSpan;
     }
 
     /// <summary>Rounds a time interval to the nearest value</summary>
@@ -1259,7 +1259,7 @@ public static class TimeSpanExtensions
     public static TimeSpan Round(this TimeSpan timeSpan, TimeSpan stepSize)
     {
         var delta = timeSpan.Ticks % stepSize.Ticks;
-        if (delta == default)
+        if (delta == 0)
         {
             return timeSpan;
         }
@@ -2137,7 +2137,7 @@ public static class ValueTypeExtensions
         {
             return typeof(DBNull);
         }
-        throw new ScriptException($"Unknown value type {valueType}");
+        throw new ScriptException($"Unknown value type {valueType}.");
     }
 
     /// <summary>Get the value type</summary>
@@ -2181,15 +2181,15 @@ public static class ValueTypeExtensions
 
         if (valueType.IsInteger())
         {
-            return string.IsNullOrWhiteSpace(json) ? default : JsonSerializer.Deserialize<int>(json);
+            return string.IsNullOrWhiteSpace(json) ? 0 : JsonSerializer.Deserialize<int>(json);
         }
         if (valueType.IsDecimal())
         {
-            return string.IsNullOrWhiteSpace(json) ? default : JsonSerializer.Deserialize<decimal>(json);
+            return string.IsNullOrWhiteSpace(json) ? 0 : JsonSerializer.Deserialize<decimal>(json);
         }
         if (valueType.IsString())
         {
-            return string.IsNullOrWhiteSpace(json) ? default :
+            return string.IsNullOrWhiteSpace(json) ? null :
                 json.StartsWith('"') ? JsonSerializer.Deserialize<string>(json) : json;
         }
         if (valueType.IsDateTime())
@@ -2207,7 +2207,7 @@ public static class ValueTypeExtensions
         {
             return null;
         }
-        throw new ScriptException($"unknown value type {valueType}");
+        throw new ScriptException($"unknown value type {valueType}.");
     }
 }
 

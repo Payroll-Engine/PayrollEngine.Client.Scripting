@@ -419,7 +419,7 @@ public abstract class ActionMethodBase<TContext, TFunc, TValue> : IActionMethod<
     {
         if (valueFunctions.ContainsKey(name))
         {
-            throw new ScriptException($"Duplicated action value function: {name}");
+            throw new ScriptException($"Duplicated action value function: {name}.");
         }
         valueFunctions.Add(name, new(valueType, evaluate));
     }
@@ -428,7 +428,7 @@ public abstract class ActionMethodBase<TContext, TFunc, TValue> : IActionMethod<
     {
         if (!valueFunctions.TryGetValue(Name, out var function))
         {
-            throw new ScriptException($"Missing action function {Name}");
+            throw new ScriptException($"Missing action function {Name}.");
         }
         return function;
     }
@@ -516,7 +516,7 @@ public abstract class ActionMethodBase<TContext, TFunc, TValue> : IActionMethod<
             case ActionValueSource.ValueAttribute:
             case ActionValueSource.Lookup:
             case ActionValueSource.RangeLookup:
-                throw new ScriptException("No parameter support for case value attributes");
+                throw new ScriptException("No parameter support for case value attributes.");
         }
 
         if (value == null)
@@ -2264,18 +2264,18 @@ public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
             case ActionValueSource.ValueAttribute:
                 if (!AttributeType.HasValue)
                 {
-                    throw new ScriptException("Missing case field or value attribute");
+                    throw new ScriptException("Missing case field or value attribute.");
                 }
                 return AttributeType.Value;
             case ActionValueSource.Lookup:
             case ActionValueSource.RangeLookup:
                 if (!LookupType.HasValue)
                 {
-                    throw new ScriptException("Missing lookup value attribute");
+                    throw new ScriptException("Missing lookup value attribute.");
                 }
                 return LookupType.Value;
             default:
-                throw new ScriptException($"Unsupported value type {ValueSource}");
+                throw new ScriptException($"Unsupported value type {ValueSource}.");
         }
     }
 
@@ -2304,7 +2304,7 @@ public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
                 {
                     case ActionValueReferenceType.CaseChange:
                     case ActionValueReferenceType.CaseValue:
-                        value = CaseValue?.Value != null ? CaseValue.Value.Value : default;
+                        value = CaseValue?.Value != null ? CaseValue.Value.Value : null;
                         break;
                     default:
                         value = SourceValue;
@@ -2319,7 +2319,7 @@ public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
                         value = CaseValue?.Start;
                         break;
                     default:
-                        throw new ScriptException("Start mode not allowed");
+                        throw new ScriptException("Start mode not allowed.");
                 }
                 break;
             case ActionValueSource.End:
@@ -2330,7 +2330,7 @@ public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
                         value = CaseValue?.End;
                         break;
                     default:
-                        throw new ScriptException("End mode not allowed");
+                        throw new ScriptException("End mode not allowed.");
                 }
                 break;
             case ActionValueSource.Period:
@@ -2344,7 +2344,7 @@ public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
                         }
                         break;
                     default:
-                        throw new ScriptException("End mode not allowed");
+                        throw new ScriptException("End mode not allowed.");
                 }
                 break;
             case ActionValueSource.FieldAttribute:
@@ -2742,7 +2742,7 @@ public abstract class CaseActionsBase
         var attribute = GetType().GetCustomAttribute<ActionProviderAttribute>();
         if (attribute == null)
         {
-            throw new ScriptException($"Missing action provider attribute on type {GetType()}");
+            throw new ScriptException($"Missing action provider attribute on type {GetType()}.");
         }
         Namespace = attribute.Namespace;
     }

@@ -81,12 +81,12 @@ public class ScriptClassParser
                     var tenantIdentifier = attributeParameters["tenantIdentifier"];
                     if (string.IsNullOrWhiteSpace(tenantIdentifier))
                     {
-                        throw new PayrollException($"Missing parameter 'tenantIdentifier' in script function {ClassName}");
+                        throw new PayrollException($"Missing parameter 'tenantIdentifier' in script function {ClassName}.");
                     }
                     var userIdentifier = attributeParameters["userIdentifier"];
                     if (string.IsNullOrWhiteSpace(userIdentifier))
                     {
-                        throw new PayrollException($"Missing parameter 'userIdentifier' in script function {ClassName}");
+                        throw new PayrollException($"Missing parameter 'userIdentifier' in script function {ClassName}.");
                     }
 
                     AttributeSyntax = attribute;
@@ -173,7 +173,7 @@ public class ScriptClassParser
             var type = FunctionAttributes.Keys.FirstOrDefault(x => string.Equals(x.Name, attributeName));
             if (type == null)
             {
-                throw new NotSupportedException($"Unsupported script function attribute {attributeName}");
+                throw new NotSupportedException($"Unsupported script function attribute {attributeName}.");
             }
 
             // type parameters
@@ -190,7 +190,7 @@ public class ScriptClassParser
             {
                 if (!parameters.TryGetValue(parameterName, out var parameter))
                 {
-                    throw new NotSupportedException($"Missing parameter {parameterName} in script function {attributeName}");
+                    throw new NotSupportedException($"Missing parameter {parameterName} in script function {attributeName}.");
                 }
                 typeParameters.Add(parameter);
             }

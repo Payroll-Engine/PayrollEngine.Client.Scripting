@@ -66,6 +66,6 @@ public partial class ReportBuildFunction : ReportFunction
         #endregion
         // ReSharper restore EmptyRegion
         // compiler will optimize this out if the code provides a return
-        return default;
+        return null;
     }
 }

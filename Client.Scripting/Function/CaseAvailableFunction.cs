@@ -53,7 +53,7 @@ public abstract class CaseAvailableActionsBase : CaseActionsBase
     {
         if (string.IsNullOrWhiteSpace(source))
         {
-            throw new ArgumentException("Invalid case available source", nameof(source));
+            throw new ArgumentException("Invalid case available source.", nameof(source));
         }
 
         try
@@ -63,7 +63,7 @@ public abstract class CaseAvailableActionsBase : CaseActionsBase
         catch (Exception exception)
         {
             context.Function.LogError($"Invalid case field name {source}: {exception.GetBaseException().Message}");
-            return default;
+            return null;
         }
     }
 
@@ -83,7 +83,7 @@ public abstract class CaseAvailableActionsBase : CaseActionsBase
         catch (Exception exception)
         {
             context.Function.LogError($"Invalid case action value {value}: {exception.GetBaseException().Message}");
-            return default;
+            return null;
         }
     }
 
@@ -147,7 +147,7 @@ public partial class CaseAvailableFunction : CaseFunction
         // ReSharper restore EmptyRegion
 
         // compiler will optimize this out if the code provides a return
-        return default;
+        return null;
     }
 
     private bool InvokeAvailableActions()

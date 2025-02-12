@@ -169,22 +169,22 @@ public partial class ReportEndFunction : ReportFunction
         var parentTable = DataSet.Tables[parentTableName];
         if (parentTable == null)
         {
-            throw new ScriptException($"Missing relation parent table {parentTableName}");
+            throw new ScriptException($"Missing relation parent table {parentTableName}.");
         }
         var parentColumn = parentTable.Columns[parentColumnName];
         if (parentColumn == null)
         {
-            throw new ScriptException($"Missing relation parent column {parentTableName}.{parentColumnName}");
+            throw new ScriptException($"Missing relation parent column {parentTableName}.{parentColumnName}.");
         }
         var childTable = DataSet.Tables[childTableName];
         if (childTable == null)
         {
-            throw new ScriptException($"Missing relation child table {childTableName}");
+            throw new ScriptException($"Missing relation child table {childTableName}.");
         }
         var childColumn = childTable.Columns[childColumnName];
         if (childColumn == null)
         {
-            throw new ScriptException($"Missing relation parent column {childTableName}.{childColumnName}");
+            throw new ScriptException($"Missing relation parent column {childTableName}.{childColumnName}.");
         }
         return DataSet.Relations.Add(relationName, parentColumn, childColumn);
     }
@@ -200,6 +200,6 @@ public partial class ReportEndFunction : ReportFunction
         #endregion
         // ReSharper restore EmptyRegion
         // compiler will optimize this out if the code provides a return
-        return default;
+        return null;
     }
 }

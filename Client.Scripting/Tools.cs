@@ -212,14 +212,14 @@ public class CheckDigit
         }
         if (value.Length <= numCheckDigits)
         {
-            throw new CheckDigitLengthException($"Value '{value}': length should be greater than {numCheckDigits}",
+            throw new CheckDigitLengthException($"Value '{value}': length should be greater than {numCheckDigits}.",
                 value, numCheckDigits);
         }
 
         var checkedValue = AddCheckDigit(value.Substring(0, value.Length - numCheckDigits));
         if (!string.Equals(value, checkedValue))
         {
-            throw new CheckDigitMismatchException($"Value '{value}': length should equals to {checkedValue}",
+            throw new CheckDigitMismatchException($"Value '{value}': length should equals to {checkedValue}.",
                 value, checkedValue);
         }
     }
@@ -249,7 +249,7 @@ public class CheckDigit
             var indexToAdd = CharacterSet.IndexOf(valueDigit);
             if (indexToAdd < 0)
             {
-                throw new CheckDigitCharException($"Value '{value}': with illegal character '{valueDigit}'",
+                throw new CheckDigitCharException($"Value '{value}': with illegal character '{valueDigit}'.",
                     value, valueDigit);
             }
             calculation = ((calculation + indexToAdd) * Radix) % Modulus;

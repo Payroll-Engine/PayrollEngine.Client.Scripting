@@ -35,6 +35,6 @@ public partial class PayrunEmployeeStartFunction : PayrunFunction
         #endregion
         // ReSharper restore EmptyRegion
         // compiler will optimize this out if the code provides a return
-        return default;
+        return null;
     }
 }

@@ -53,7 +53,7 @@ public partial class CaseRelationBuildFunction : CaseRelationFunction
         // ReSharper restore EmptyRegion
 
         // compiler will optimize this out if the code provides a return
-        return default;
+        return null;
     }
 
     private void InvokeBuildActions()

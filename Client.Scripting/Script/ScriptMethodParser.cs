@@ -59,7 +59,7 @@ public class ScriptMethodParser
                     var attributeName = attribute.Name.ToString().EnsureEnd("Attribute");
                     if (!ScriptAttributeNames.Contains(attributeName))
                     {
-                        throw new NotSupportedException($"Unsupported script  attribute {attributeName}");
+                        throw new NotSupportedException($"Unsupported script  attribute {attributeName}.");
                     }
 
                     if (attribute.ArgumentList != null)
@@ -139,7 +139,7 @@ public class ScriptMethodParser
             var type = ScriptAttributes.Keys.FirstOrDefault(x => string.Equals(x.Name, attributeName));
             if (type == null)
             {
-                throw new NotSupportedException($"Unsupported script attribute {attributeName}");
+                throw new NotSupportedException($"Unsupported script attribute {attributeName}.");
             }
 
             // constructor parameters from attribute parameters
@@ -149,7 +149,7 @@ public class ScriptMethodParser
             {
                 if (!parameters.TryGetValue(parameterName, out var parameter))
                 {
-                    throw new NotSupportedException($"Missing parameter {parameterName} in script function {attributeName}");
+                    throw new NotSupportedException($"Missing parameter {parameterName} in script function {attributeName}.");
                 }
                 typeParameters.Add(parameter);
             }
