@@ -159,9 +159,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="format">The format string</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
+    /// <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("format", "The format (www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldStartFormat", "Set field start format", "FieldInput", "FieldStart")]
     public void SetFieldStartFormat(CaseChangeActionContext context, object field, object format)
@@ -264,7 +264,7 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="format">The format string</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
+    /// <remarks>see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
     [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
@@ -370,9 +370,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="mask">The text mask</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
+    /// <remarks>see https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("mask", "The value mask (www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
+    [ActionParameter("mask", "The value mask (https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldValueMask", "Set field value mask", "FieldInput", "FieldValue")]
     public void SetFieldValueMask(CaseChangeActionContext context, object field, object mask)
@@ -429,9 +429,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="culture">The culture</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
+    /// <remarks>see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("culture", "The culture (www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
+    [ActionParameter("culture", "The culture (https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldCulture", "Set field value culture", "FieldInput", "FieldValue")]
     public void SetFieldCulture(CaseChangeActionContext context, object field, object culture)
@@ -521,9 +521,9 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="field">The target field</param>
     /// <param name="format">The text format</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
+    /// <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("format", "The value format (learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    [ActionParameter("format", "The value format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldFormat", "Set field value format", "FieldInput", "FieldValue")]
     public void SetFieldFormat(CaseChangeActionContext context, object field, object format)
@@ -675,8 +675,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <summary>Set start format</summary>
     /// <param name="context">The action context</param>
     /// <param name="format">The format string</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
-    [ActionParameter("format", "The format (www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    /// <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
+    [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetStartFormat", "Set start format", "FieldInput", "FieldStart")]
     public void SetStartFormat(CaseChangeActionContext context, object format) =>
@@ -740,7 +740,7 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <summary>Set end format</summary>
     /// <param name="context">The action context</param>
     /// <param name="format">The format string</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
+    /// <remarks>see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
     [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetEndFormat", "Set end format", "FieldInput", "FieldEnd")]
@@ -802,8 +802,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <summary>Set value mask</summary>
     /// <param name="context">The action context</param>
     /// <param name="mask">The text mask</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
-    [ActionParameter("mask", "The value mask (www.learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
+    /// <remarks>see https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
+    [ActionParameter("mask", "The value mask (https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetValueMask", "Set value mask", "FieldInput", "FieldValue")]
     public void SetValueMask(CaseChangeActionContext context, object mask) =>
@@ -842,8 +842,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <summary>Set value culture</summary>
     /// <param name="context">The action context</param>
     /// <param name="culture">The culture</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
-    [ActionParameter("culture", "The culture (www.learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
+    /// <remarks>see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
+    [ActionParameter("culture", "The culture (https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetCulture", "Set value culture", "FieldInput", "FieldValue")]
     public void SetCulture(CaseChangeActionContext context, object culture) =>
@@ -878,8 +878,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <summary>Set value format</summary>
     /// <param name="context">The action context</param>
     /// <param name="format">The text format</param>
-    /// <remarks>see www.learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
-    [ActionParameter("format", "The value format (learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    /// <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
+    [ActionParameter("format", "The value format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFormat", "Set value format", "FieldInput", "FieldValue")]
     public void SetFormat(CaseChangeActionContext context, object format) =>
