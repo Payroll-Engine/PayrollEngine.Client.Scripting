@@ -1,11 +1,11 @@
 ﻿/* PayrollFunction */
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json;
+using System.Reflection;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -155,14 +155,12 @@ public abstract partial class PayrollFunction : Function
 
     #endregion
 
-    
     #region Culture
 
     /// <summary>The payroll culture</summary>
     public string PayrollCulture { get; }
 
     #endregion
-
 
     #region Employee
 
@@ -177,11 +175,8 @@ public abstract partial class PayrollFunction : Function
         Runtime.GetEmployeeAttribute(attributeName);
 
     /// <summary>Get employee attribute typed value</summary>
-    public T GetEmployeeAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = GetEmployeeAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetEmployeeAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetEmployeeAttribute(attributeName), defaultValue);
 
     #endregion
 
@@ -428,11 +423,8 @@ public abstract partial class PayrollFunction : Function
     /// <param name="caseFieldName">Name of the case field</param>
     /// <param name="attributeName">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
-    public T GetCaseFieldAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default)
-    {
-        var value = GetCaseFieldAttribute(caseFieldName, attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetCaseFieldAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetCaseFieldAttribute(caseFieldName, attributeName), defaultValue);
 
     /// <summary>Test for existing case field value attribute</summary>
     /// <param name="caseFieldName">Name of the case field</param>
@@ -450,11 +442,8 @@ public abstract partial class PayrollFunction : Function
     /// <param name="caseFieldName">Name of the case field</param>
     /// <param name="attributeName">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
-    public T GetCaseValueAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default)
-    {
-        var value = GetCaseValueAttribute(caseFieldName, attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetCaseValueAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetCaseValueAttribute(caseFieldName, attributeName), defaultValue);
 
     /// <summary>Test for available cases from the current period</summary>
     /// <param name="caseFieldNames">The name of the case fields to test</param>
@@ -655,6 +644,16 @@ public abstract partial class PayrollFunction : Function
     public CaseValue GetRawCaseValue(string caseFieldName, DateTime valueDate) =>
         TupleExtensions.TupleToCaseValue(Runtime.GetCaseValue(caseFieldName, valueDate.ToUtc()));
 
+    /// <summary>Get raw payroll value from a specific date</summary>
+    /// <param name="caseFieldName">The case field name</param>
+    /// <param name="valueDate">The value date</param>
+    /// <returns>Raw case value from a specific date</returns>
+    public T GetRawCaseValue<T>(string caseFieldName, DateTime valueDate)
+    {
+        var value = GetRawCaseValue(caseFieldName, valueDate)?.Value;
+        return value != null ? value.ValueAs<T>() : default;
+    }
+
     /// <summary>Get raw case values created within a date period</summary>
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="period">The case value creation period</param>
@@ -742,13 +741,10 @@ public abstract partial class PayrollFunction : Function
             foreach (var caseValueSlot in caseValueSlots)
             {
                 var caseValue = GetCaseValue(CaseFieldSlot(caseFieldName, caseValueSlot));
-                if (caseValue.HasValue)
+                var value = ChangeValueType<T>(caseValue.Value);
+                if (value != null)
                 {
-                    var value = (T)Convert.ChangeType(caseValue.Value, typeof(T));
-                    if (value != null)
-                    {
-                        slotValues.Add(caseValueSlot, value);
-                    }
+                    slotValues.Add(caseValueSlot, value);
                 }
             }
         }

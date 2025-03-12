@@ -16,7 +16,6 @@ public static class SystemActionProvider
 
     /// <summary>Get the system action scripts</summary>
     /// <param name="functionType">The function type</param>
-    /// <returns></returns>
     public static List<string> GetSystemActionScripts(FunctionType functionType)
     {
         var actionScripts = new List<string>();

@@ -1,11 +1,12 @@
 ﻿/* ReportEndFunction */
+
 // ReSharper disable RedundantUsingDirective
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using PayrollEngine.Client.Scripting;
 using PayrollEngine.Client.Scripting.Report;

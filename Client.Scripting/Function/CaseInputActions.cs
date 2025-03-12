@@ -2,63 +2,6 @@
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-internal static class InputAttributes
-{
-    private static readonly string Prefix = "input.";
-
-    // case general
-    internal static readonly string Icon = $"{Prefix}icon";
-
-    // case field general
-    internal static readonly string Hidden = $"{Prefix}hidden";
-    internal static readonly string ShowDescription = $"{Prefix}showDescription";
-
-    // case field start
-    internal static readonly string StartLabel = $"{Prefix}startLabel";
-    internal static readonly string StartHelp = $"{Prefix}startHelp";
-    internal static readonly string StartRequired = $"{Prefix}startRequired";
-    internal static readonly string StartReadOnly = $"{Prefix}startReadOny";
-    internal static readonly string StartFormat = $"{Prefix}startFormat";
-    internal static readonly string StartPickerOpen = $"{Prefix}startPickerOpen";
-    internal static readonly string StartPickerType = $"{Prefix}startPickerType";
-
-    // case field end
-    internal static readonly string EndLabel = $"{Prefix}endLabel";
-    internal static readonly string EndHelp = $"{Prefix}endHelp";
-    internal static readonly string EndRequired = $"{Prefix}endRequired";
-    internal static readonly string EndReadOnly = $"{Prefix}endReadOny";
-    internal static readonly string EndFormat = $"{Prefix}endFormat";
-    internal static readonly string EndPickerOpen = $"{Prefix}endPickerOpen";
-    internal static readonly string EndPickerType = $"{Prefix}endPickerType";
-
-    // case field value
-    internal static readonly string ValueLabel = $"{Prefix}valueLabel";
-    internal static readonly string ValueAdornment = $"{Prefix}valueAdornment";
-    internal static readonly string ValueHelp = $"{Prefix}valueHelp";
-    internal static readonly string ValueMask = $"{Prefix}valueMask";
-    internal static readonly string ValueRequired = $"{Prefix}valueRequired";
-    internal static readonly string ValueReadOnly = $"{Prefix}valueReadOnly";
-    internal static readonly string ValuePickerOpen = $"{Prefix}valuePickerOpen";
-    internal static readonly string Culture = $"{Prefix}culture";
-    internal static readonly string MinValue = $"{Prefix}minValue";
-    internal static readonly string MaxValue = $"{Prefix}maxValue";
-    internal static readonly string StepSize = $"{Prefix}stepSize";
-    internal static readonly string Format = $"{Prefix}format";
-    internal static readonly string LineCount = $"{Prefix}lineCount";
-    internal static readonly string MaxLength = $"{Prefix}maxLength";
-    internal static readonly string Check = $"{Prefix}check";
-
-    // case field attachments
-    internal static readonly string Attachment = $"{Prefix}attachment";
-    internal static readonly string AttachmentExtensions = $"{Prefix}attachmentExtensions";
-
-    // list
-    // no actions for the list attributes List, ListSelection and ListResult
-    //internal static readonly string List = $"{Prefix}list";
-    //internal static readonly string ListValues = $"{Prefix}listValues";
-    //internal static readonly string ListSelection = $"{Prefix}listSelection";
-}
-
 /// <summary>Extension methods for case input actions</summary>
 [ActionProvider(Function.InputActionNamespace, typeof(CaseChangeFunction))]
 public class CaseInputActions : CaseChangeActionsBase
@@ -78,6 +21,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseAttribute(context, InputAttributes.Icon, iconValue.ResolvedValue);
     }
 
@@ -119,6 +63,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.StartLabel, labelValue.ResolvedValue);
     }
 
@@ -136,6 +81,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.StartHelp, helpValue.ResolvedValue);
     }
 
@@ -161,7 +107,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="format">The format string</param>
     /// <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    [ActionParameter("format",
+        "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldStartFormat", "Set field start format", "FieldInput", "FieldStart")]
     public void SetFieldStartFormat(CaseChangeActionContext context, object field, object format)
@@ -171,6 +118,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.StartFormat, formatValue.ResolvedValue);
     }
 
@@ -224,6 +172,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.EndLabel, labelValue.ResolvedValue);
     }
 
@@ -241,6 +190,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.EndHelp, helpValue.ResolvedValue);
     }
 
@@ -266,7 +216,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="format">The format string</param>
     /// <remarks>see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    [ActionParameter("format",
+        "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldEndFormat", "Set field end format", "FieldInput", "FieldEnd")]
     public void SetFieldEndFormat(CaseChangeActionContext context, object field, object format)
@@ -276,6 +227,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.EndFormat, formatValue.ResolvedValue);
     }
 
@@ -329,6 +281,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.ValueLabel, textValue.ResolvedValue);
     }
 
@@ -346,6 +299,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.ValueAdornment, adornmentValue.ResolvedValue);
     }
 
@@ -363,6 +317,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.ValueHelp, helpValue.ResolvedValue);
     }
 
@@ -372,7 +327,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="mask">The text mask</param>
     /// <remarks>see https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("mask", "The value mask (https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
+    [ActionParameter("mask",
+        "The value mask (https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldValueMask", "Set field value mask", "FieldInput", "FieldValue")]
     public void SetFieldValueMask(CaseChangeActionContext context, object field, object mask)
@@ -382,6 +338,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.ValueMask, maskValue.ResolvedValue);
     }
 
@@ -431,7 +388,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="culture">The culture</param>
     /// <remarks>see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("culture", "The culture (https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
+    [ActionParameter("culture",
+        "The culture (https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldCulture", "Set field value culture", "FieldInput", "FieldValue")]
     public void SetFieldCulture(CaseChangeActionContext context, object field, object culture)
@@ -441,6 +399,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.Culture, cultureValue.ResolvedValue);
     }
 
@@ -459,12 +418,14 @@ public class CaseInputActions : CaseChangeActionsBase
             SetCaseFieldAttribute(context, field, InputAttributes.MinValue, intValue.ResolvedValue);
             return;
         }
+
         var decimalValue = GetActionValue<int>(context, minimum);
         if (decimalValue != null && decimalValue.IsFulfilled)
         {
             SetCaseFieldAttribute(context, field, InputAttributes.MinValue, decimalValue.ResolvedValue);
             return;
         }
+
         var dateTimeValue = GetActionValue<int>(context, minimum);
         if (dateTimeValue != null && dateTimeValue.IsFulfilled)
         {
@@ -487,12 +448,14 @@ public class CaseInputActions : CaseChangeActionsBase
             SetCaseFieldAttribute(context, field, InputAttributes.MaxValue, intValue.ResolvedValue);
             return;
         }
+
         var decimalValue = GetActionValue<int>(context, maximum);
         if (decimalValue != null && decimalValue.IsFulfilled)
         {
             SetCaseFieldAttribute(context, field, InputAttributes.MaxValue, decimalValue.ResolvedValue);
             return;
         }
+
         var dateTimeValue = GetActionValue<int>(context, maximum);
         if (dateTimeValue != null && dateTimeValue.IsFulfilled)
         {
@@ -514,6 +477,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.StepSize, stepSizeValue.ResolvedValue);
     }
 
@@ -523,7 +487,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="format">The text format</param>
     /// <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
     [ActionParameter("field", "The target field", valueTypes: [StringType])]
-    [ActionParameter("format", "The value format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    [ActionParameter("format",
+        "The value format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFieldFormat", "Set field value format", "FieldInput", "FieldValue")]
     public void SetFieldFormat(CaseChangeActionContext context, object field, object format)
@@ -533,6 +498,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.Format, formatValue.ResolvedValue);
     }
 
@@ -550,6 +516,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.LineCount, countValue.ResolvedValue);
     }
 
@@ -567,6 +534,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.MaxLength, lengthValue.ResolvedValue);
     }
 
@@ -621,6 +589,7 @@ public class CaseInputActions : CaseChangeActionsBase
         {
             return;
         }
+
         SetCaseFieldAttribute(context, field, InputAttributes.AttachmentExtensions, extensionsValue.ResolvedValue);
     }
 
@@ -676,7 +645,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="format">The format string</param>
     /// <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
-    [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    [ActionParameter("format",
+        "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetStartFormat", "Set start format", "FieldInput", "FieldStart")]
     public void SetStartFormat(CaseChangeActionContext context, object format) =>
@@ -699,6 +669,7 @@ public class CaseInputActions : CaseChangeActionsBase
     [CaseBuildAction("SetStartPickerOpenYear", "Set start year date picker", "FieldInput", "FieldStart")]
     public void SetStartPickerOpenYear(CaseChangeActionContext context) =>
         SetFieldStartPickerOpenYear(context, context.CaseFieldName);
+
     /// <summary>Set start time picker</summary>
     /// <param name="context">The action context</param>
     [CaseBuildAction("SetStartPickerTypeDateTime", "Set start time picker", "FieldInput", "FieldStart")]
@@ -741,7 +712,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="format">The format string</param>
     /// <remarks>see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
-    [ActionParameter("format", "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    [ActionParameter("format",
+        "The format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetEndFormat", "Set end format", "FieldInput", "FieldEnd")]
     public void SetEndFormat(CaseChangeActionContext context, object format) =>
@@ -803,7 +775,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="mask">The text mask</param>
     /// <remarks>see https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask</remarks>
-    [ActionParameter("mask", "The value mask (https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
+    [ActionParameter("mask",
+        "The value mask (https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetValueMask", "Set value mask", "FieldInput", "FieldValue")]
     public void SetValueMask(CaseChangeActionContext context, object mask) =>
@@ -843,7 +816,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="culture">The culture</param>
     /// <remarks>see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c</remarks>
-    [ActionParameter("culture", "The culture (https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
+    [ActionParameter("culture",
+        "The culture (https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetCulture", "Set value culture", "FieldInput", "FieldValue")]
     public void SetCulture(CaseChangeActionContext context, object culture) =>
@@ -879,7 +853,8 @@ public class CaseInputActions : CaseChangeActionsBase
     /// <param name="context">The action context</param>
     /// <param name="format">The text format</param>
     /// <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</remarks>
-    [ActionParameter("format", "The value format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
+    [ActionParameter("format",
+        "The value format (https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)",
         valueTypes: [StringType])]
     [CaseBuildAction("SetFormat", "Set value format", "FieldInput", "FieldValue")]
     public void SetFormat(CaseChangeActionContext context, object format) =>
@@ -939,23 +914,17 @@ public class CaseInputActions : CaseChangeActionsBase
 
     #endregion
 
-    private static void SetCaseAttribute(CaseChangeActionContext context, string attribute, object value)
-    {
-        var fieldValue = GetActionValue<string>(context, value);
-        if (fieldValue == null || !fieldValue.IsReference || string.IsNullOrWhiteSpace(fieldValue.ResolvedValue))
-        {
-            return;
-        }
-        context.Function.SetCaseAttribute(context.Function.CaseName, attribute, fieldValue.ResolvedValue);
-    }
+    private static void SetCaseAttribute(CaseChangeActionContext context, string attribute, object value) =>
+        context.Function.SetCaseAttribute(context.Function.CaseName, attribute, value);
 
-    private static void SetCaseFieldAttribute(CaseChangeActionContext context, object field, string attribute, object value)
+    private static void SetCaseFieldAttribute(CaseChangeActionContext context, object fieldName,
+        string attribute, object value)
     {
-        var fieldValue = GetActionValue<string>(context, field);
-        if (fieldValue == null || !fieldValue.IsReference || string.IsNullOrWhiteSpace(fieldValue.ResolvedValue))
+        var caseFieldName = fieldName as string;
+        if (string.IsNullOrWhiteSpace(caseFieldName))
         {
-            return;
+            context.Function.LogError($"Invalid case field {fieldName} for attribute {attribute}={value}");
         }
-        context.Function.SetCaseFieldAttribute(fieldValue.ResolvedValue, attribute, value);
+        context.Function.SetCaseFieldAttribute(caseFieldName, attribute, value);
     }
 }

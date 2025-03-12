@@ -1,7 +1,5 @@
 ﻿/* CaseFunction */
 
-using System;
-
 namespace PayrollEngine.Client.Scripting.Function;
 
 /// <summary>Base class for case functions</summary>
@@ -37,9 +35,6 @@ public abstract partial class CaseFunction : PayrollFunction
         Runtime.GetCaseAttribute(attributeName);
 
     /// <summary>Get case attribute typed value</summary>
-    public T GetCaseAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = Runtime.GetCaseAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetCaseAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType<T>(Runtime.GetCaseAttribute(attributeName));
 }

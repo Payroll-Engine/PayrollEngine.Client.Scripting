@@ -80,7 +80,8 @@ public static class Date
     /// <summary>Get the maximum timespan</summary>
     public static TimeSpan Max(TimeSpan left, TimeSpan right) =>
         left > right ? left : right;
-    #region Parser
+
+    #region Convert
 
     /// <summary>Parse date time string</summary>
     /// <param name="dateValue">The date value</param>

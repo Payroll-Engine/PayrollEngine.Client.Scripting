@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using System.Text.Json;
 
 namespace PayrollEngine.Client.Scripting.Report;
@@ -216,6 +217,10 @@ public class Parameter : ExpressionBase
         if (value == null)
         {
             return string.Empty;
+        }
+        if (value is DateTime dateTime)
+        {
+            return dateTime.ToUtcString();
         }
         return value.GetType().IsArray ?
             JsonSerializer.Serialize(value) : value.ToString();
@@ -1061,6 +1066,59 @@ public static class DataTableExtensions
         return table.Columns.Add(columnName, type, expression);
     }
 
+    /// <summary>Add table relation column with initial value</summary>
+    /// <param name="table">The table</param>
+    /// <param name="columnName">Name of the column</param>
+    /// <param name="relationValue">Value to set to all rows</param>
+    public static DataColumn AddRelationColumn<T>(this DataTable table, string columnName, object relationValue)
+    {
+        var column = AddColumn(table, columnName, typeof(T));
+        foreach (var row in table.AsEnumerable())
+        {
+            row[columnName] = relationValue;
+        }
+        return column;
+    }
+
+    /// <summary>Add table relation integer column with initial value</summary>
+    /// <param name="table">The table</param>
+    /// <param name="columnName">Name of the column</param>
+    /// <param name="relationId">Value to set to all rows</param>
+    public static DataColumn AddRelationColumn(this DataTable table, string columnName, int relationId) =>
+        AddRelationColumn<int>(table, columnName, relationId);
+
+    /// <summary>Add localization column</summary>
+    /// <param name="table">The table</param>
+    /// <param name="culture">Localization culture</param>
+    /// <param name="columnName">Name of the source column</param>
+    /// <param name="localizationsColumnName">Name of the localizations column (default: columnNameLocalizations)</param>
+    /// <remarks>Requires </remarks>
+    public static DataColumn AddLocalizationColumn(this DataTable table, string culture, string columnName,
+        string localizationsColumnName = null)
+    {
+        localizationsColumnName ??= $"{columnName}Localizations";
+        if (!table.Columns.Contains(columnName) || !table.Columns.Contains(localizationsColumnName))
+        {
+            return null;
+        }
+
+        var localizationColumnName = $"{columnName}Localization";
+        var column = AddColumn(table, localizationColumnName, typeof(string));
+        foreach (var row in table.AsEnumerable())
+        {
+            var localizationsJson = row[localizationsColumnName] as string;
+            if (string.IsNullOrWhiteSpace(localizationsJson))
+            {
+                continue;
+            }
+
+            var original = row[columnName] as string;
+            var localizations = JsonSerializer.Deserialize<Dictionary<string, string>>(localizationsJson);
+            row[localizationColumnName] = culture.GetLocalization(localizations, original);
+        }
+        return column;
+    }
+
     /// <summary>Insert table column at certain list position</summary>
     /// <param name="table">The table</param>
     /// <param name="index">The column list position</param>
@@ -1178,6 +1236,28 @@ public static class DataTableExtensions
     public static bool HasRows(this DataTable table) =>
         table != null && table.Rows.Count > 0;
 
+    /// <summary>Find row by value search</summary>
+    /// <param name="table">The table</param>
+    /// <param name="column">The search column name</param>
+    /// <param name="value">The search key</param>
+    /// <returns>The matching data ro or null</returns>
+    public static DataRow FindFirstRow<T>(this DataTable table, string column, T value) =>
+        table.AsEnumerable().FirstOrDefault(x => Equals(x.GetValue<T>(column), value));
+
+    /// <summary>Get row table value by value search</summary>
+    /// <param name="table">The table</param>
+    /// <param name="keyColumn">The search column name</param>
+    /// <param name="keyValue">The search key</param>
+    /// <param name="valueColumn">The value column name</param>
+    /// <param name="defaultValue">The default value</param>
+    /// <returns>The data row value</returns>
+    public static T GetRowValue<T>(this DataTable table, string keyColumn, object keyValue,
+        string valueColumn, T defaultValue = default)
+    {
+        var dataRow = FindFirstRow(table, keyColumn, keyValue);
+        return dataRow != null ? dataRow.GetValue(valueColumn, defaultValue) : defaultValue;
+    }
+
     /// <summary>Test for single row table</summary>
     /// <param name="table">The table</param>
     /// <returns>True for a single row collection</returns>
@@ -1205,27 +1285,27 @@ public static class DataTableExtensions
     /// <summary>Get single row id</summary>
     /// <param name="table">The table</param>
     /// <returns>The data row id</returns>
-    public static int GetSingleRowId(this DataTable table) =>
-        IsSingleRow(table) ? SingleRow(table).GetRowId() : 0;
+    public static int SingleRowId(this DataTable table) =>
+        IsSingleRow(table) ? SingleRow(table).Id() : 0;
 
     /// <summary>Get single row name</summary>
     /// <param name="table">The table</param>
     /// <returns>The data row name</returns>
-    public static string GetSingleRowName(this DataTable table) =>
-        IsSingleRow(table) ? SingleRow(table).GetRowName() : null;
+    public static string SingleRowName(this DataTable table) =>
+        IsSingleRow(table) ? SingleRow(table).Name() : null;
 
     /// <summary>Get single row identifier</summary>
     /// <param name="table">The table</param>
     /// <returns>The data row identifier</returns>
-    public static string GetSingleRowIdentifier(this DataTable table) =>
-        IsSingleRow(table) ? SingleRow(table).GetRowIdentifier() : null;
+    public static string SingleRowIdentifier(this DataTable table) =>
+        IsSingleRow(table) ? SingleRow(table).Identifier() : null;
 
     /// <summary>Get single row table value</summary>
     /// <param name="table">The table</param>
     /// <param name="column">The column name</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The data row value</returns>
-    public static T GetSingleRowValue<T>(this DataTable table, string column, T defaultValue = default) =>
+    public static T SingleRowValue<T>(this DataTable table, string column, T defaultValue = default) =>
         IsSingleRow(table) ? SingleRow(table).GetValue(column, defaultValue) : defaultValue;
 
     /// <summary>Select table rows by filter</summary>
@@ -1234,9 +1314,28 @@ public static class DataTableExtensions
     public static IEnumerable<DataRow> SelectRows(this DataTable table, string filterExpression) =>
         table.Select(filterExpression);
 
+    /// <summary>Selects rows by function</summary>
+    /// <param name="table">The table</param>
+    /// <param name="selectFunc">Select functions</param>
+    /// <returns>The selected data rows</returns>
+    public static List<DataRow> SelectRows(this DataTable table, Func<DataRow, bool> selectFunc) =>
+        Enumerable.Where(table.AsEnumerable(), selectFunc).ToList();
+
+    /// <summary>Test for rows</summary>
+    /// <param name="table">The table</param>
+    public static bool Any(this DataTable table) =>
+        table.Rows.Count > 0;
+
+    /// <summary>Test for rows by function</summary>
+    /// <param name="table">The table</param>
+    /// <param name="anyFunc">Any functions</param>
+    public static bool Any(this DataTable table, Func<DataRow, bool> anyFunc) =>
+        table.AsEnumerable().Any(anyFunc);
+
     /// <summary>Delete table rows by filter</summary>
     /// <param name="table">The table</param>
     /// <param name="filterExpression">The filter matching the rows to delete</param>
+    /// <returns>The deleted row count</returns>
     public static int DeleteRows(this DataTable table, string filterExpression)
     {
         var deleteCount = 0;
@@ -1254,24 +1353,24 @@ public static class DataTableExtensions
     }
 
     /// <summary>Get data table rows value</summary>
-    /// <param name="dataTable">The data table</param>
+    /// <param name="table">The data table</param>
     /// <param name="column">The column name</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The data table rows value</returns>
-    public static List<T> GetValues<T>(this DataTable dataTable, string column, T defaultValue = default) =>
-        dataTable.Select().GetValues(column, defaultValue);
+    public static List<T> GetValues<T>(this DataTable table, string column, T defaultValue = default) =>
+        table.Select().GetValues(column, defaultValue);
 
     /// <summary>Get data table rows JSON value as dictionary</summary>
-    /// <param name="dataTable">The data table</param>
+    /// <param name="table">The data table</param>
     /// <param name="column">The column name</param>
     /// <param name="keyField">The json object key field</param>
     /// <param name="valueField">The json object value field</param>
     /// <returns>The data table rows value</returns>
-    public static Dictionary<string, string> GetDictionary(this DataTable dataTable,
+    public static Dictionary<string, string> GetDictionary(this DataTable table,
         string column, string keyField, string valueField)
     {
         var values = new Dictionary<string, string>();
-        foreach (var row in dataTable.AsEnumerable())
+        foreach (var row in table.AsEnumerable())
         {
             var objectValues = row.GetDictionary<string, string>(column);
             if (objectValues != null && objectValues.ContainsKey(keyField) &&
@@ -1291,26 +1390,26 @@ public static class DataRowExtensions
     /// <summary>Get data row id</summary>
     /// <param name="dataRow">The data row</param>
     /// <returns>The data row id</returns>
-    public static int GetRowId(this DataRow dataRow) =>
+    public static int Id(this DataRow dataRow) =>
         GetValue<int>(dataRow, "Id");
 
     /// <summary>Get data row name</summary>
     /// <param name="dataRow">The data row</param>
     /// <returns>The data row name</returns>
-    public static string GetRowName(this DataRow dataRow) =>
+    public static string Name(this DataRow dataRow) =>
         GetValue<string>(dataRow, "Name");
 
     /// <summary>Get data row identifier</summary>
     /// <param name="dataRow">The data row</param>
     /// <returns>The data row identifier</returns>
-    public static string GetRowIdentifier(this DataRow dataRow) =>
+    public static string Identifier(this DataRow dataRow) =>
         GetValue<string>(dataRow, "Identifier");
 
     /// <summary>Get data row object status</summary>
     /// <param name="dataRow">The data row</param>
     /// <returns>The data row object status</returns>
-    public static ObjectStatus GetRowObjectStatus(this DataRow dataRow) =>
-        GetEnumValue(dataRow, "Status", ObjectStatus.Inactive);
+    public static ObjectStatus ObjectStatus(this DataRow dataRow) =>
+        GetEnumValue(dataRow, "Status", Scripting.ObjectStatus.Inactive);
 
     /// <summary>Get data row enum value</summary>
     /// <param name="dataRow">The data row</param>
@@ -1431,6 +1530,10 @@ public static class DataRowExtensions
         if (type == typeof(string) && !json.StartsWith('"'))
         {
             return json;
+        }
+        if (type == typeof(DateTime) && DateTime.TryParse(json, out var dateValue))
+        {
+            return dateValue.ToUtc();
         }
         return string.IsNullOrWhiteSpace(json) ? defaultValue :
             JsonSerializer.Deserialize(json, type);
@@ -1610,7 +1713,7 @@ public static class DataRowExtensions
         }
         if (value is IEnumerable<T> enumerable)
         {
-            return [..enumerable];
+            return [.. enumerable];
         }
         if (value is string json)
         {

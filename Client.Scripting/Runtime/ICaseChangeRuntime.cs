@@ -27,6 +27,18 @@ public interface ICaseChangeRuntime : ICaseRuntime
     /// <returns>True if the case attribute has been removed</returns>
     bool RemoveCaseAttribute(string caseName, string attributeName);
 
+    /// <summary>Get the case change reason</summary>
+    string GetReason();
+
+    /// <summary>Set the case change reason</summary>
+    void SetReason(string reason);
+
+    /// <summary>Get the case change forecast</summary>
+    string GetForecast();
+
+    /// <summary>Set the case change forecast</summary>
+    void SetForecast(string forecast);
+
     #endregion
 
     #region Case Fields
@@ -82,6 +94,11 @@ public interface ICaseChangeRuntime : ICaseRuntime
     /// <param name="start">The start date to initialize</param>
     void InitStart(string caseFieldName, DateTime? start);
 
+    /// <summary>Test if a case end date is mandatory</summary>
+    /// <param name="caseFieldName">The name of the case field</param>
+    /// <returns>True if the case end date is mandatory</returns>
+    bool MandatoryEnd(string caseFieldName);
+
     /// <summary>Test if a case end date is defined</summary>
     /// <param name="caseFieldName">The name of the case field</param>
     /// <returns>True if the case end date is available</returns>
@@ -101,6 +118,11 @@ public interface ICaseChangeRuntime : ICaseRuntime
     /// <param name="caseFieldName">The name of the case field</param>
     /// <param name="end">The end date to initialize</param>
     void InitEnd(string caseFieldName, DateTime? end);
+
+    /// <summary>Test if a case value is mandatory</summary>
+    /// <param name="caseFieldName">The name of the case field</param>
+    /// <returns>True if the case value is mandatory</returns>
+    bool MandatoryValue(string caseFieldName);
 
     /// <summary>Get a case value type</summary>
     /// <param name="caseFieldName">The name of the case field</param>

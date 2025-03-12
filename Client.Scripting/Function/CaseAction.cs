@@ -1,10 +1,11 @@
 ﻿/* CaseAction */
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
 using System.Text.Json;
+using System.Reflection;
+using System.Diagnostics;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -2018,7 +2019,6 @@ public abstract class ActionCaseValueBase
     /// <summary>Get the marker index</summary>
     /// <param name="expression"></param>
     /// <param name="marker"></param>
-    /// <returns></returns>
     protected static int GetMarkerIndex(string expression, string marker)
     {
         for (var index = 0; index < expression.Length; index++)
@@ -2376,15 +2376,6 @@ public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
         var convertType = Nullable.GetUnderlyingType(type) ?? typeof(TValue);
         try
         {
-            if (convertType == typeof(DateTime) && value is string stringValue)
-            {
-                stringValue = stringValue.Trim();
-                if ("tomorrow".Equals(stringValue))
-                {
-                    value = Date.Today.AddDays(10);
-                }
-            }
-
             if (value is JsonElement jsonElement)
             {
                 value = jsonElement.GetValue();
@@ -2397,7 +2388,9 @@ public abstract class ActionCaseValue<TContext, TFunc, TValue> : ActionCaseValue
         }
         catch (Exception exception)
         {
-            Context.Function.LogError($"Convert error of value {value} (type={value?.GetType()}, ValueMode={ValueSource}): {exception.GetBaseException().Message}");
+            Context.Function.LogError($"Convert error of value {value} (type={value?.GetType()}, ValueMode={ValueSource})"+
+                                      $"\n{exception.GetBaseException().Message}" +
+                                      $"\n{new StackTrace()}");
             return default;
         }
     }

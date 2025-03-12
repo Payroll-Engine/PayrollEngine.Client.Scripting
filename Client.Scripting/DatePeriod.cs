@@ -64,6 +64,22 @@ public sealed class DatePeriod
         HasEnd = GetHasEnd();
     }
 
+    /// <summary>
+    /// Create period from start date and duration
+    /// </summary>
+    /// <param name="start">Period start</param>
+    /// <param name="duration">Period duration</param>
+    public static DatePeriod FromStart(DateTime start, TimeSpan duration) =>
+        new(start, start.Add(duration));
+
+    /// <summary>
+    /// Create period from end date and duration
+    /// </summary>
+    /// <param name="duration">Period duration</param>
+    /// <param name="end">Period end</param>
+    public static DatePeriod FromEnd(TimeSpan duration, DateTime end) =>
+        new(end.Subtract(duration), end);
+
     // internal
     private bool GetHasStart() => Start != Date.MinValue;
     private bool GetHasEnd() => End != Date.MaxValue;
@@ -92,6 +108,10 @@ public sealed class DatePeriod
     /// <summary>Test if start and end are equal</summary>
     [JsonIgnore]
     public bool IsMoment => Start.Equals(End);
+
+    /// <summary>Test if period is empty</summary>
+    [JsonIgnore]
+    public bool IsEmpty => IsMoment;
 
     /// <summary>Test if start and end are UTC</summary>
     [JsonIgnore]

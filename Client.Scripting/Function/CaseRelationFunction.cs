@@ -70,7 +70,7 @@ public abstract class CaseRelationActionsBase : CaseActionsBase
     protected static StringComparison GetCompareCulture(bool ignoreCase) =>
         ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
 
-    
+
     /// <summary>New source action</summary>
     protected static CaseRelationActionCaseValue<TValue> GetSourceActionValue<TValue>(CaseRelationActionContext context,
         string source)
@@ -279,11 +279,8 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     /// <summary>Get attribute value</summary>
     /// <param name="attributeName">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
-    public T GetSourceCaseAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = GetSourceCaseAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetSourceCaseAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetSourceCaseAttribute(attributeName), defaultValue);
 
     /// <summary>Get source case field attribute value</summary>
     /// <param name="caseFieldName">The case field name</param>
@@ -295,11 +292,8 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="attributeName">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
-    public T GetSourceCaseFieldAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default)
-    {
-        var value = GetSourceCaseFieldAttribute(caseFieldName, attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetSourceCaseFieldAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetSourceCaseFieldAttribute(caseFieldName, attributeName), defaultValue);
 
     /// <summary>Get source case value attribute value</summary>
     /// <param name="caseFieldName">The case field name</param>
@@ -311,11 +305,8 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="attributeName">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
-    public T GetSourceCaseValueAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default)
-    {
-        var value = GetSourceCaseValueAttribute(caseFieldName, attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetSourceCaseValueAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetSourceCaseValueAttribute(caseFieldName, attributeName), defaultValue);
 
     #endregion
 
@@ -501,11 +492,8 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     public object GetTargetCaseAttribute(string attributeName) => Runtime.GetTargetCaseAttribute(attributeName);
 
     /// <summary>Get attribute value</summary>
-    public T GetTargetCaseAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = Runtime.GetTargetCaseAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetTargetCaseAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(Runtime.GetTargetCaseAttribute(attributeName), defaultValue);
 
     /// <summary>Get target case field attribute value</summary>
     /// <param name="caseFieldName">The case field name</param>
@@ -517,11 +505,8 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="attributeName">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
-    public T GetTargetCaseFieldAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default)
-    {
-        var value = GetTargetCaseFieldAttribute(caseFieldName, attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetTargetCaseFieldAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetTargetCaseFieldAttribute(caseFieldName, attributeName), defaultValue);
 
     /// <summary>Get target case value attribute value</summary>
     /// <param name="caseFieldName">The case field name</param>
@@ -533,11 +518,8 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="attributeName">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
-    public T GetTargetCaseValueAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default)
-    {
-        var value = GetTargetCaseValueAttribute(caseFieldName, attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetTargetCaseValueAttribute<T>(string caseFieldName, string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetTargetCaseValueAttribute(caseFieldName, attributeName), defaultValue);
 
     #endregion
 

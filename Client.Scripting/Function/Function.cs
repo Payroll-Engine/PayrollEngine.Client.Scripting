@@ -1,9 +1,11 @@
 ﻿/* Function */
 
 using System;
+using System.Text.Json;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
+using System.Globalization;
+using System.Linq;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -26,9 +28,6 @@ public abstract partial class Function : IDisposable
     {
         Runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
 
-        // culture
-        UserCulture = Runtime.UserCulture;
-
         // tenant
         TenantId = Runtime.TenantId;
         TenantIdentifier = Runtime.TenantIdentifier;
@@ -36,14 +35,9 @@ public abstract partial class Function : IDisposable
         // user
         UserId = Runtime.UserId;
         UserIdentifier = Runtime.UserIdentifier;
+        UserCulture = Runtime.UserCulture;
+        UserType = (UserType)Runtime.UserType;
     }
-
-    #region Culture
-
-    /// <summary>The user culture</summary>
-    public string UserCulture { get; }
-
-    #endregion
 
     #region Tenant
 
@@ -58,11 +52,8 @@ public abstract partial class Function : IDisposable
         Runtime.GetTenantAttribute(attributeName);
 
     /// <summary>Get tenant attribute typed value</summary>
-    public T GetTenantAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = GetTenantAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetTenantAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetTenantAttribute(attributeName), defaultValue);
 
     #endregion
 
@@ -74,15 +65,106 @@ public abstract partial class Function : IDisposable
     /// <summary>The user identifier</summary>
     public string UserIdentifier { get; }
 
+    /// <summary>The user culture</summary>
+    public string UserCulture { get; }
+
+    /// <summary>The user type</summary>
+    public UserType UserType { get; }
+
+    /// <summary>Test for self employee self-service (user is employee)</summary>
+    public bool SelfServiceUser =>
+        UserType == UserType.Employee;
+
+    /// <summary>Test for user type</summary>
+    public bool AdminUser =>
+        UserType >= UserType.TenantAdministrator;
+
     /// <summary>Get user attribute value</summary>
     public object GetUserAttribute(string attributeName) =>
         Runtime.GetUserAttribute(attributeName);
 
     /// <summary>Get user attribute typed value</summary>
-    public T GetUserAttribute<T>(string attributeName, T defaultValue = default)
+    public T GetUserAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetUserAttribute(attributeName), defaultValue);
+
+    #endregion
+
+    #region Culture and Calendar
+
+    /// <summary>Gets the derived culture name by priority:
+    /// - employee (optional)
+    /// - division (optional)
+    /// - tenant (fallback)</summary>
+    /// <param name="divisionId">The division id, use 0 to ignore the division culture (mandatory with employee id)</param>
+    /// <param name="employeeId">The employee id, use 0 to ignore the employee culture</param>
+    /// <returns>The most derived culture name</returns>
+    public string GetDerivedCulture(int divisionId = 0, int employeeId = 0) =>
+        Runtime.GetDerivedCulture(divisionId, employeeId);
+
+    /// <summary>Gets the derived calendar name by priority:
+    /// - employee (optional)
+    /// - division (optional)
+    /// - tenant (fallback)</summary>
+    /// <param name="divisionId">The division id, use 0 to ignore the division culture</param>
+    /// <param name="employeeId">The employee id, use 0 to ignore the employee culture</param>
+    /// <returns>The most derived calendar name</returns>
+    public string GetDerivedCalendar(int divisionId = 0, int employeeId = 0) =>
+        Runtime.GetDerivedCalendar(divisionId, employeeId);
+
+    /// <summary>Test for working day</summary>
+    /// <param name="calendarName">The calendar name</param>
+    /// <param name="moment">Test day</param>
+    public bool IsWorkDay(string calendarName, DateTime moment) =>
+        Runtime.IsWorkDay(calendarName, moment);
+
+    /// <summary>Get previous working day</summary>
+    /// <param name="calendarName">The calendar name</param>
+    /// <param name="moment">The start moment</param>
+    public DateTime GetPreviousWorkDay(string calendarName, DateTime moment) =>
+        GetPreviousWorkDays(calendarName, moment, 1).FirstOrDefault(DateTime.MinValue);
+
+    /// <summary>Get previous working days</summary>
+    /// <param name="calendarName">The calendar name</param>
+    /// <param name="moment">The start moment (not included in results)</param>
+    /// <param name="count">The number of days (default: 1)</param>
+    public List<DateTime> GetPreviousWorkDays(string calendarName, DateTime moment, int count) =>
+        Runtime.GetPreviousWorkDays(calendarName, moment, count);
+
+    /// <summary>Get next working day</summary>
+    /// <param name="calendarName">The calendar name</param>
+    /// <param name="moment">The start moment</param>
+    public DateTime GetNextWorkDay(string calendarName, DateTime moment) =>
+        GetNextWorkDays(calendarName, moment, 1).FirstOrDefault(DateTime.MinValue);
+
+    /// <summary>Get next working days</summary>
+    /// <param name="calendarName">The calendar name</param>
+    /// <param name="moment">The start moment (not included in results)</param>
+    /// <param name="count">The number of days (default: 1)</param>
+    public List<DateTime> GetNextWorkDays(string calendarName, DateTime moment, int count) =>
+        Runtime.GetNextWorkDays(calendarName, moment, count);
+
+    /// <summary>Gets the calendar period</summary>
+    /// <param name="moment">Moment within the period</param>
+    /// <param name="divisionId">The division id, use 0 to ignore the division culture</param>
+    /// <param name="employeeId">The employee id, use 0 to ignore the employee culture</param>
+    /// <param name="offset">The period offset (default: 0/current)</param>
+    /// <returns>The period start and end date</returns>
+    public DatePeriod GetDerivedCalendarPeriod(DateTime moment,
+        int divisionId = 0, int employeeId = 0, int offset = 0) =>
+        GetCalendarPeriod(GetDerivedCalendar(divisionId, employeeId), moment,
+            offset, GetDerivedCulture(divisionId, employeeId));
+
+    /// <summary>Gets the calendar period</summary>
+    /// <param name="calendarName">The calendar name</param>
+    /// <param name="moment">Moment within the period</param>
+    /// <param name="offset">The period offset (default: 0/current)</param>
+    /// <param name="culture">The calendar culture (default: tenant culture)</param>
+    /// <returns>The period start and end date</returns>
+    public DatePeriod GetCalendarPeriod(string calendarName, DateTime moment,
+        int offset = 0, string culture = null)
     {
-        var value = GetUserAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
+        var period = (Tuple<DateTime, DateTime>)Runtime.GetCalendarPeriod(calendarName, moment, offset, culture);
+        return new(period.Item1, period.Item2);
     }
 
     #endregion
@@ -225,6 +307,51 @@ public abstract partial class Function : IDisposable
     }
 
     #endregion
+
+    /// <summary>
+    /// Change value type
+    /// </summary>
+    /// <param name="value">Value to change</param>
+    /// <param name="defaultValue">Default value</param>
+    /// <param name="provider">Format provider (default <see cref="CultureInfo.InvariantCulture"/>) </param>
+    /// <remarks>Supports json elements</remarks>
+    public T ChangeValueType<T>(object value, T defaultValue = default,
+        IFormatProvider provider = null) =>
+        ChangeValueType(value, typeof(T), defaultValue, provider);
+
+    /// <summary>
+    /// Change value type
+    /// </summary>
+    /// <param name="value">Value to change</param>
+    /// <param name="conversionType">Target value type</param>
+    /// <param name="defaultValue">Default value</param>
+    /// <param name="provider">Format provider (default <see cref="CultureInfo.InvariantCulture"/>) </param>
+    /// <remarks>Supports json elements</remarks>
+    public T ChangeValueType<T>(object value, Type conversionType,
+        T defaultValue = default, IFormatProvider provider = null)
+    {
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        if (value is JsonElement jsonElement)
+        {
+            // json value
+            value = jsonElement.GetValue();
+        }
+        else if (value is string stringValue && typeof(T) == typeof(DateTime))
+        {
+            // date time
+            stringValue = stringValue.Trim('"');
+            if (string.IsNullOrWhiteSpace(stringValue))
+            {
+                return defaultValue;
+            }
+            value = stringValue;
+        }
+        return (T)Convert.ChangeType(value, typeof(T), provider ?? CultureInfo.InvariantCulture);
+    }
 
     /// <summary>Dispose the function</summary>
     public virtual void Dispose() =>

@@ -1,13 +1,15 @@
 ﻿/* ReportFunction */
 
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.Json;
+using System.Collections.Generic;
 using PayrollEngine.Client.Scripting.Report;
 
 namespace PayrollEngine.Client.Scripting.Function;
+
+#region Data
 
 /// <summary>Represents the API LookupValueData object</summary>
 // ReSharper disable once ClassNeverInstantiated.Local
@@ -61,6 +63,8 @@ public class CaseValueColumn
     }
 }
 
+#endregion
+
 /// <summary>Base class for report functions</summary>
 // ReSharper disable once PartialTypeWithSinglePart
 public abstract partial class ReportFunction : Function
@@ -99,11 +103,14 @@ public abstract partial class ReportFunction : Function
     /// <param name="attributeName">Name of the attribute</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The report attribute value</returns>
-    public T GetReportAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = GetReportAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetReportAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetReportAttribute(attributeName), defaultValue);
+
+    /// <summary>Set report attribute value</summary>
+    /// <param name="attributeName">Name of the attribute</param>
+    /// <param name="value">Attribute value</param>
+    public void SetReportAttribute(string attributeName, object value) =>
+        Runtime.SetReportAttribute(attributeName, value);
 
     /// <summary>Check for existing report parameter</summary>
     /// <param name="parameterName">The parameter name</param>
@@ -120,28 +127,32 @@ public abstract partial class ReportFunction : Function
     /// <param name="parameterName">The parameter name</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The report parameter value</returns>
-    public T GetParameter<T>(string parameterName, T defaultValue = default)
-    {
-        var value = GetParameter(parameterName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetParameter<T>(string parameterName, T defaultValue = default) =>
+        ChangeValueType(GetParameter(parameterName), defaultValue);
 
     /// <summary>Get report parameter attribute value</summary>
+    /// <param name="parameterName">The parameter name</param>
     /// <param name="attributeName">Name of the attribute</param>
     /// <returns>The report attribute value</returns>
-    public object GetParameterAttribute(string attributeName) =>
-        Runtime.GetParameterAttribute(attributeName);
+    public object GetParameterAttribute(string parameterName, string attributeName) =>
+        Runtime.GetParameterAttribute(parameterName, attributeName);
 
     /// <summary>Get report parameter attribute typed value</summary>
     /// <typeparam name="T"></typeparam>
+    /// <param name="parameterName">The parameter name</param>
     /// <param name="attributeName">Name of the attribute</param>
     /// <param name="defaultValue">The default value</param>
     /// <returns>The report attribute value</returns>
-    public T GetParameterAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = GetParameterAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetParameterAttribute<T>(string parameterName, string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetParameterAttribute(parameterName, attributeName), defaultValue);
+
+    /// <summary>Set report attribute value</summary>
+    /// <param name="parameterName">The parameter name</param>
+    /// <param name="attributeName">Name of the attribute</param>
+    /// <param name="value">The attribute value</param>
+    /// <returns>The report attribute value</returns>
+    public void SetParameterAttribute(string parameterName, string attributeName, object value) =>
+        Runtime.SetParameterAttribute(parameterName, attributeName, value);
 
     /// <summary>Test for hidden report parameter</summary>
     /// <param name="parameterName">The parameter name</param>
@@ -175,7 +186,7 @@ public abstract partial class ReportFunction : Function
 
     #region Query
 
-    /// <summary>Query on Api web method</summary>
+    /// <summary>Query on Api web method with the user culture</summary>
     /// <param name="tableName">Target table name</param>
     /// <param name="methodName">The query name</param>
     /// <param name="parameters">The method parameters</param>
@@ -500,7 +511,7 @@ public abstract partial class ReportFunction : Function
 
     #endregion
 
-    #region Cases and Case Values
+    #region Cases
 
     /// <summary>Get payroll case fields</summary>
     /// <param name="payrollId">The payroll id</param>
@@ -755,6 +766,181 @@ public abstract partial class ReportFunction : Function
 
     #endregion
 
+    #region Case Values
+
+    /// <summary>
+    /// Execute case value query on period
+    /// </summary>
+    /// <param name="tableName">Table name</param>
+    /// <param name="payrollId">Payroll id</param>
+    /// <param name="caseFieldNames">The case field names</param>
+    /// <param name="period">Value period</param>
+    /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
+    /// <param name="regulationDate">The regulation date (default: UTC now)</param>
+    /// <returns>Data table including for any case filed a column</returns>
+    protected DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
+        IEnumerable<string> caseFieldNames, DatePeriod period,
+        DateTime? regulationDate = null, DateTime? evaluationDate = null) =>
+        ExecuteRawCaseValueQuery(tableName, payrollId, employeeId: 0, caseFieldNames,
+            period.Start, period.End, regulationDate, evaluationDate);
+
+    /// <summary>
+    /// Execute employee case value query on period
+    /// </summary>
+    /// <param name="tableName">Table name</param>
+    /// <param name="payrollId">Payroll id</param>
+    /// <param name="employeeId">Employee id</param>
+    /// <param name="caseFieldNames">The case field names</param>
+    /// <param name="period">Value period</param>
+    /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
+    /// <param name="regulationDate">The regulation date (default: UTC now)</param>
+    /// <returns>Data table including for any case filed a column</returns>
+    protected DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
+        int employeeId, IEnumerable<string> caseFieldNames, DatePeriod period,
+        DateTime? regulationDate = null, DateTime? evaluationDate = null) =>
+        ExecuteRawCaseValueQuery(tableName, payrollId, employeeId: employeeId, caseFieldNames,
+            period.Start, period.End, regulationDate, evaluationDate);
+
+    /// <summary>
+    /// Execute case value query
+    /// </summary>
+    /// <param name="tableName">Table name</param>
+    /// <param name="payrollId">Payroll id</param>
+    /// <param name="caseFieldNames">The case field names</param>
+    /// <param name="periodStart">Value period start date</param>
+    /// <param name="periodEnd">Value period end date</param>
+    /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
+    /// <param name="regulationDate">The regulation date (default: UTC now)</param>
+    /// <returns>Data table including for any case filed a column</returns>
+    protected DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
+        IEnumerable<string> caseFieldNames,
+        DateTime? periodStart = null, DateTime? periodEnd = null,
+        DateTime? regulationDate = null, DateTime? evaluationDate = null) =>
+        ExecuteRawCaseValueQuery(tableName, payrollId, employeeId: 0, caseFieldNames,
+            periodStart, periodEnd, regulationDate, evaluationDate);
+
+    /// <summary>
+    /// Execute employee case value query
+    /// </summary>
+    /// <param name="tableName">Table name</param>
+    /// <param name="payrollId">Payroll id</param>
+    /// <param name="employeeId">Employee id</param>
+    /// <param name="caseFieldNames">The case field names</param>
+    /// <param name="startDate">Value period start date</param>
+    /// <param name="endDate">Value period end  date</param>
+    /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
+    /// <param name="regulationDate">The regulation date (default: UTC now)</param>
+    /// <returns>Data table including for any case filed a column</returns>
+    protected DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
+        int employeeId, IEnumerable<string> caseFieldNames,
+        DateTime? startDate = null, DateTime? endDate = null,
+        DateTime? regulationDate = null, DateTime? evaluationDate = null)
+    {
+        if (string.IsNullOrWhiteSpace(tableName))
+        {
+            throw new ArgumentException(nameof(tableName));
+        }
+
+        // table
+        var table = new DataTable(tableName);
+
+        // query case values (list of case field names, with column type and case value table)
+        var fieldTables = new List<(string CaseFieldName, Type DbType, DataTable Table)>();
+        foreach (var caseFieldName in caseFieldNames)
+        {
+            // query parameter
+            var queryParameter = new QueryParameters()
+                .Parameter("TenantId", TenantId)
+                .Parameter("PayrollId", payrollId)
+                .Parameter("CaseFieldNames", new[] { caseFieldName });
+            if (employeeId > 0)
+            {
+                queryParameter = queryParameter.Parameter("EmployeeId", employeeId);
+            }
+            if (startDate != null)
+            {
+                queryParameter = queryParameter.Parameter("StartDate", startDate.Value);
+            }
+            if (endDate != null)
+            {
+                queryParameter = queryParameter.Parameter("EndDate", endDate.Value);
+            }
+            if (regulationDate != null)
+            {
+                queryParameter = queryParameter.Parameter("RegulationDate", regulationDate.Value);
+            }
+            if (evaluationDate != null)
+            {
+                queryParameter = queryParameter.Parameter("EvaluationDate", evaluationDate.Value);
+            }
+
+            // query payroll case values
+            var fieldTable = ExecuteQuery("GetPayrollCaseValues", queryParameter);
+            if (!fieldTable.Any())
+            {
+                continue;
+            }
+            var dbType = fieldTable.Rows[0].GetPayrollValueType().GetDataType();
+            fieldTables.Add(new(caseFieldName, dbType, fieldTable));
+        }
+        if (!fieldTables.Any())
+        {
+            return table;
+        }
+
+        // case values (dictionary of case field name/value, grouped by creation date)
+        var caseValuesByDate = new Dictionary<DateTime, Dictionary<string, object>>();
+        foreach (var fieldTable in fieldTables)
+        {
+            foreach (var dataRow in fieldTable.Table.AsEnumerable())
+            {
+                var value = dataRow.GetPayrollValue();
+                if (value == null)
+                {
+                    continue;
+                }
+                var date = dataRow.GetValue<DateTime>("Created");
+                if (!caseValuesByDate.ContainsKey(date))
+                {
+                    caseValuesByDate.Add(date, new());
+                }
+                caseValuesByDate[date][fieldTable.CaseFieldName] = value;
+            }
+        }
+        if (!caseValuesByDate.Any())
+        {
+            return table;
+        }
+
+        // columns (date and case field columns)
+        table.Columns.Add("Date", typeof(DateTime));
+        foreach (var fieldTable in fieldTables)
+        {
+            if (!table.Columns.Contains(fieldTable.CaseFieldName))
+            {
+                table.Columns.Add(fieldTable.CaseFieldName, fieldTable.DbType);
+            }
+        }
+
+        // rows ordered by date
+        var dates = caseValuesByDate.Keys.Order().ToList();
+        foreach (var date in dates)
+        {
+            var row = table.NewRow();
+            var caseValues = caseValuesByDate[date];
+            row["Date"] = date;
+            foreach (var caseValue in caseValues)
+            {
+                row[caseValue.Key] = caseValue.Value;
+            }
+            table.Rows.Add(row);
+        }
+
+        return table;
+    }
+
+    #endregion
+
     #region Report Parameters
 
     /// <summary>Resolve the user id from the parameter UserId by id or identifier</summary>
@@ -875,6 +1061,53 @@ public abstract partial class ReportFunction : Function
 
         LogWarning(ToReportMessage($"Invalid value for parameter {parameterName}"));
         return null;
+    }
+
+    #endregion
+
+    #region Info
+
+    /// <summary>
+    /// Add build info
+    /// </summary>
+    /// <param name="name">Info name</param>
+    /// <param name="value">Info value</param>
+    public void AddInfo(string name, object value)
+    {
+        // info values
+        var values = new Dictionary<string, object>();
+        var attribute = GetReportAttribute(InputAttributes.EditInfo) as string;
+        if (!string.IsNullOrWhiteSpace(attribute))
+        {
+            values = JsonSerializer.Deserialize<Dictionary<string, object>>(attribute);
+        }
+
+        // set/replace value
+        values[name] = value;
+        SetReportAttribute(InputAttributes.EditInfo, JsonSerializer.Serialize(values));
+    }
+
+    /// <summary>
+    /// Remove build info
+    /// </summary>
+    /// <param name="name">Info name</param>
+    public void RemoveInfo(string name)
+    {
+        // info values
+        var attribute = GetReportAttribute(InputAttributes.EditInfo) as string;
+        if (string.IsNullOrWhiteSpace(attribute))
+        {
+            return;
+        }
+        var values = JsonSerializer.Deserialize<Dictionary<string, object>>(attribute);
+        if (!values.ContainsKey(name))
+        {
+            return;
+        }
+
+        // remove value
+        values.Remove(name);
+        SetReportAttribute(InputAttributes.EditInfo, values.Count > 0 ? JsonSerializer.Serialize(values) : null);
     }
 
     #endregion

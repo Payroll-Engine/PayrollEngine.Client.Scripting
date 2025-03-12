@@ -1,8 +1,10 @@
 ﻿/* CollectorEndFunction */
+
 // ReSharper disable RedundantUsingDirective
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
 
 namespace PayrollEngine.Client.Scripting.Function;

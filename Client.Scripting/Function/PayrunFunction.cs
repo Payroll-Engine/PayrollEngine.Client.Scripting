@@ -1,9 +1,9 @@
 ﻿/* PayrunFunction */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -78,11 +78,8 @@ public abstract partial class PayrunFunction : PayrollFunction
         Runtime.GetPayrunJobAttribute(attributeName);
 
     /// <summary>Get employee attribute typed value</summary>
-    public T GetPayrunJobAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = GetPayrunJobAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetPayrunJobAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetPayrunJobAttribute(attributeName), defaultValue);
 
     /// <summary>Set payrun job attribute value</summary>
     /// <param name="attributeName">Name of the attribute</param>

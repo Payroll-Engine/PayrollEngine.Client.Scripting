@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
+using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Runtime;
 
@@ -8,13 +8,19 @@ namespace PayrollEngine.Client.Scripting.Runtime;
 public interface IReportRuntime : IRuntime
 {
     /// <summary>Gets the report name</summary>
-    /// <value>The name of the case</value>
     string ReportName { get; }
+
+    #region Attributes
 
     /// <summary>Get report attribute value</summary>
     /// <param name="attributeName">Name of the attribute</param>
     /// <returns>The report attribute value</returns>
     object GetReportAttribute(string attributeName);
+
+    /// <summary>Set report attribute value</summary>
+    /// <param name="attributeName">Name of the attribute</param>
+    /// <param name="value">Attribute value</param>
+    void SetReportAttribute(string attributeName, object value);
 
     /// <summary>Check for existing report parameter</summary>
     /// <param name="parameterName">The parameter name</param>
@@ -31,10 +37,21 @@ public interface IReportRuntime : IRuntime
     /// <returns>The report attribute value</returns>
     object GetParameterAttribute(string parameterName, string attributeName);
 
+    /// <summary>Set report attribute value</summary>
+    /// <param name="parameterName">The parameter name</param>
+    /// <param name="attributeName">Name of the attribute</param>
+    /// <param name="value">The attribute value</param>
+    /// <returns>The report attribute value</returns>
+    void SetParameterAttribute(string parameterName, string attributeName, object value);
+
     /// <summary>Test for hidden report parameter</summary>
     /// <param name="parameterName">The parameter name</param>
     /// <returns>True for hidden report attribute</returns>
     bool ParameterHidden(string parameterName);
+
+    #endregion
+
+    #region Execute Query
 
     /// <summary>Execute a query on the Api web method</summary>
     /// <param name="tableName">Target table name</param>
@@ -129,9 +146,16 @@ public interface IReportRuntime : IRuntime
     /// <returns>Resulting data table, existing will be removed</returns>
     DataTable ExecutePayrunResultQuery(string tableName, int payrollResultId, Tuple<int?, string, string, string, long?, long?> queryValues);
 
+    #endregion
+
+    #region Report Log
+
     /// <summary>Add report log</summary>
     /// <param name="message">The log message</param>
     /// <param name="key">The log key</param>
     /// <param name="reportDate">The report date (default: now)</param>
     void AddReportLog(string message, string key = null, DateTime? reportDate = null);
+
+    #endregion
+
 }

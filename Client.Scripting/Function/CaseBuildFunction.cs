@@ -1,8 +1,11 @@
 ﻿/* CaseBuildFunction */
+
 // ReSharper disable RedundantUsingDirective
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Collections.Generic;
+using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
 
 namespace PayrollEngine.Client.Scripting.Function;
@@ -48,6 +51,74 @@ public partial class CaseBuildFunction : CaseChangeFunction
     public string[] GetFieldBuildActions(string caseFieldName) =>
         Runtime.GetFieldBuildActions(caseFieldName);
 
+    #region Validation
+
+    /// <summary>
+    /// Set case build to valid
+    /// </summary>
+    public void BuildValid() => BuildValidity(true);
+
+    /// <summary>
+    /// Set case build to invalid
+    /// </summary>
+    public void BuildInvalid() => BuildValidity(false);
+
+    /// <summary>
+    /// Set case build validity
+    /// </summary>
+    /// <param name="valid">Build validity</param>
+    public void BuildValidity(bool valid) =>
+        SetCaseAttribute(InputAttributes.Validity, valid);
+
+    #endregion
+
+    #region Info
+
+    /// <summary>
+    /// Add build info
+    /// </summary>
+    /// <param name="name">Info name</param>
+    /// <param name="value">Info value</param>
+    public void AddInfo(string name, object value)
+    {
+        // info values
+        var values = new Dictionary<string, object>();
+        var attribute = GetCaseAttribute(InputAttributes.EditInfo) as string;
+        if (!string.IsNullOrWhiteSpace(attribute))
+        {
+            values = JsonSerializer.Deserialize<Dictionary<string, object>>(attribute);
+        }
+
+        // set/replace value
+        values[name] = value;
+        SetCaseAttribute(InputAttributes.EditInfo, JsonSerializer.Serialize(values));
+    }
+
+    /// <summary>
+    /// Remove build info
+    /// </summary>
+    /// <param name="name">Info name</param>
+    public void RemoveInfo(string name)
+    {
+        // info values
+        var attribute = GetCaseAttribute(InputAttributes.EditInfo) as string;
+        if (string.IsNullOrWhiteSpace(attribute))
+        {
+            return;
+        }
+        var values = JsonSerializer.Deserialize<Dictionary<string, object>>(attribute);
+        if (!values.ContainsKey(name))
+        {
+            return;
+        }
+
+        // remove value
+        values.Remove(name);
+        SetCaseAttribute(InputAttributes.EditInfo, values.Count > 0 ? JsonSerializer.Serialize(values) : null);
+    }
+
+    #endregion
+
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Build()
@@ -75,7 +146,7 @@ public partial class CaseBuildFunction : CaseChangeFunction
 
     private void InvokeCaseFieldActions()
     {
-        foreach (var fieldName in GetFieldNames())
+        foreach (var fieldName in FieldNames)
         {
             var context = new CaseChangeActionContext(this, fieldName);
             foreach (var action in GetFieldBuildActions(fieldName))

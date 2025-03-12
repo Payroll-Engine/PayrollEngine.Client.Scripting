@@ -1,9 +1,12 @@
 ﻿/* CaseValidateFunction */
+
 // ReSharper disable RedundantUsingDirective
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Linq.Expressions;
+using System.Collections.Generic;
+using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
 
 namespace PayrollEngine.Client.Scripting.Function;
@@ -48,16 +51,71 @@ public partial class CaseValidateFunction : CaseChangeFunction
     public string[] GetFieldValidateActions(string caseFieldName) =>
         Runtime.GetFieldValidateActions(caseFieldName);
 
+    #region Info
+
+    /// <summary>
+    /// Add build info
+    /// </summary>
+    /// <param name="name">Info name</param>
+    /// <param name="value">Info value</param>
+    public void AddInfo(string name, object value)
+    {
+        // info values
+        var values = new Dictionary<string, object>();
+        var attribute = GetCaseAttribute(InputAttributes.EditInfo) as string;
+        if (!string.IsNullOrWhiteSpace(attribute))
+        {
+            values = JsonSerializer.Deserialize<Dictionary<string, object>>(attribute);
+        }
+
+        // set/replace value
+        values[name] = value;
+        SetCaseAttribute(InputAttributes.EditInfo, JsonSerializer.Serialize(values));
+    }
+
+    /// <summary>
+    /// Remove build info
+    /// </summary>
+    /// <param name="name">Info name</param>
+    public void RemoveInfo(string name)
+    {
+        // info values
+        var attribute = GetCaseAttribute(InputAttributes.EditInfo) as string;
+        if (string.IsNullOrWhiteSpace(attribute))
+        {
+            return;
+        }
+        var values = JsonSerializer.Deserialize<Dictionary<string, object>>(attribute);
+        if (!values.ContainsKey(name))
+        {
+            return;
+        }
+
+        // remove value
+        values.Remove(name);
+        SetCaseAttribute(InputAttributes.EditInfo, values.Count > 0 ? JsonSerializer.Serialize(values) : null);
+    }
+
+    #endregion
+
     /// <summary>Test for issues</summary>
     public bool HasIssues() => Runtime.HasIssues();
 
     /// <summary>Add a new case issue</summary>
-    public void AddIssue(string message) =>
+    /// <returns>Always false</returns>
+    public bool AddIssue(string message)
+    {
         Runtime.AddIssue(message);
+        return false;
+    }
 
     /// <summary>Add a new case field issue</summary>
-    public void AddIssue(string caseFieldName, string message) =>
+    /// <returns>Always false</returns>
+    public bool AddIssue(string caseFieldName, string message)
+    {
         Runtime.AddIssue(caseFieldName, message);
+        return false;
+    }
 
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
@@ -102,7 +160,7 @@ public partial class CaseValidateFunction : CaseChangeFunction
 
     private bool InvokeCaseFieldActions()
     {
-        foreach (var fieldName in GetFieldNames())
+        foreach (var fieldName in FieldNames)
         {
             var context = new CaseChangeActionContext(this, fieldName);
             foreach (var action in GetFieldValidateActions(fieldName))

@@ -92,7 +92,7 @@ public interface IPayrollRuntime : IRuntime
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="valueDate">The value date</param>
     /// <remarks>Use nested tuples to reduce the tuple item count to 7</remarks>
-    /// <returns>The period values of multiple cases</returns>
+    /// <returns>Case value from a specific date</returns>
     Tuple<string, DateTime, Tuple<DateTime?, DateTime?>, object, DateTime?, List<string>, Dictionary<string, object>> GetCaseValue(
         string caseFieldName, DateTime valueDate);
 
@@ -101,7 +101,7 @@ public interface IPayrollRuntime : IRuntime
     /// <param name="startDate">The date after the case value was created</param>
     /// <param name="endDate">The date before the case value was created</param>
     /// <remarks>Use nested tuples to reduce the tuple item count to 7</remarks>
-    /// <returns>The period values of multiple cases</returns>
+    /// <returns>Case values from the current period</returns>
     List<Tuple<string, DateTime, Tuple<DateTime?, DateTime?>, object, DateTime?, List<string>, Dictionary<string, object>>> GetCaseValues(
         string caseFieldName, DateTime? startDate = null, DateTime? endDate = null);
 

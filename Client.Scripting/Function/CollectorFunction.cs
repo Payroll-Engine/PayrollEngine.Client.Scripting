@@ -1,9 +1,9 @@
 ﻿/* CollectorFunction */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -112,11 +112,8 @@ public abstract partial class CollectorFunction : PayrunFunction
         Runtime.GetCollectorAttribute(attributeName);
 
     /// <summary>Get attribute typed value</summary>
-    public T GetCollectorAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = Runtime.GetCollectorAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetCollectorAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(Runtime.GetCollectorAttribute(attributeName), defaultValue);
 
     /// <summary>Get consolidated and current period employee collector results by query</summary>
     /// <param name="query">The result query</param>

@@ -1,9 +1,9 @@
 ﻿/* WageTypeFunction */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -57,7 +57,7 @@ public abstract partial class WageTypeFunction : PayrunFunction
 
     /// <summary>The wage type description</summary>
     public string WageTypeDescription { get; }
-    
+
     /// <summary>The wage type calendar</summary>
     public string WageTypeCalendar { get; }
 
@@ -92,11 +92,8 @@ public abstract partial class WageTypeFunction : PayrunFunction
         Runtime.GetResultAttribute(name);
 
     /// <summary>Get wage result attribute typed value</summary>
-    public T GetResultAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = GetResultAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetResultAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(GetResultAttribute(attributeName), defaultValue);
 
     /// <summary>Sets the wage result attribute value</summary>
     /// <param name="name">The attribute name</param>
@@ -109,11 +106,8 @@ public abstract partial class WageTypeFunction : PayrunFunction
         Runtime.GetWageTypeAttribute(attributeName);
 
     /// <summary>Get attribute typed value</summary>
-    public T GetWageTypeAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = Runtime.GetWageTypeAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetWageTypeAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(Runtime.GetWageTypeAttribute(attributeName), defaultValue);
 
     /// <summary>Get consolidated and current period employee collector results by query</summary>
     /// <param name="query">The result query</param>

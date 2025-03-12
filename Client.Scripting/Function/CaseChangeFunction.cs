@@ -1,9 +1,12 @@
 ﻿/* CaseChangeFunction */
 
+// ReSharper disable RedundantUsingDirective
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
+using PayrollEngine.Client.Scripting;
+// ReSharper restore RedundantUsingDirective
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -65,7 +68,7 @@ public class CaseChangeActionValueContext : PayrollActionValueContext<CaseChange
     /// <inheritdoc />
     public override CaseValue GetCaseChangeValue(string caseFieldName)
     {
-        if (!Function.GetFieldNames().Any(x => string.Equals(x, caseFieldName)))
+        if (!Function.FieldNames.Any(x => string.Equals(x, caseFieldName)))
         {
             throw new ScriptException($"Unknown case change field {caseFieldName}.");
         }
@@ -205,6 +208,7 @@ public abstract partial class CaseChangeFunction : CaseFunction
         Value = new(GetValue, SetValue);
         PayrollValue = new(caseFieldName => new(GetValue(caseFieldName)),
             (caseFieldName, value) => SetValue(caseFieldName, value.Value));
+        FieldNames = new(Runtime.GetFieldNames());
     }
 
     /// <summary>New function instance without runtime (scripting development)</summary>
@@ -224,10 +228,21 @@ public abstract partial class CaseChangeFunction : CaseFunction
     public bool Cancellation => CancellationDate.HasValue;
 
     /// <summary>Test if a case is available</summary>
+    /// <returns>True if the case is available</returns>
+    public bool CaseAvailable() =>
+        CaseAvailable(CaseName);
+
+    /// <summary>Test if a case is available</summary>
     /// <param name="caseName">The name of the case</param>
     /// <returns>True if the case is available</returns>
     public bool CaseAvailable(string caseName) =>
         Runtime.CaseAvailable(caseName);
+
+    /// <summary>Set case attribute value</summary>
+    /// <param name="attributeName">The name of the case attribute</param>
+    /// <param name="value">The value of the case attribute</param>
+    public void SetCaseAttribute(string attributeName, object value) =>
+        SetCaseAttribute(CaseName, attributeName, value);
 
     /// <summary>Set case attribute value</summary>
     /// <param name="caseName">The name of the case</param>
@@ -237,11 +252,33 @@ public abstract partial class CaseChangeFunction : CaseFunction
         Runtime.SetCaseAttribute(caseName, attributeName, value);
 
     /// <summary>Remove case attribute</summary>
+    /// <param name="attributeName">The name of the case attribute</param>
+    /// <returns>True if the case attribute has been removed</returns>
+    public bool RemoveCaseAttribute(string attributeName) =>
+        RemoveCaseAttribute(CaseName, attributeName);
+
+    /// <summary>Remove case attribute</summary>
     /// <param name="caseName">The name of the case</param>
     /// <param name="attributeName">The name of the case attribute</param>
     /// <returns>True if the case attribute has been removed</returns>
     public bool RemoveCaseAttribute(string caseName, string attributeName) =>
         Runtime.RemoveCaseAttribute(caseName, attributeName);
+
+    /// <summary>Get the case change reason</summary>
+    public string GetReason() =>
+        Runtime.GetReason();
+
+    /// <summary>Set the case change reason</summary>
+    public void SetReason(string reason) =>
+        Runtime.SetReason(reason);
+
+    /// <summary>Get the case change forecast</summary>
+    public string GetForecast() =>
+        Runtime.GetForecast();
+
+    /// <summary>Set the case change forecast</summary>
+    public void SetForecast(string forecast) =>
+        Runtime.SetForecast(forecast);
 
     #endregion
 
@@ -260,7 +297,7 @@ public abstract partial class CaseChangeFunction : CaseFunction
     public ScriptDictionary<string, PayrollValue> PayrollValue { get; }
 
     /// <summary>Get field names</summary>
-    public string[] GetFieldNames() => Runtime.GetFieldNames();
+    public List<string> FieldNames { get; }
 
     /// <summary>Test if the case contains fields</summary>
     public bool HasFields() => Runtime.HasFields();
@@ -289,24 +326,41 @@ public abstract partial class CaseChangeFunction : CaseFunction
     public void FieldAvailable(string caseFieldName, bool available) =>
         Runtime.FieldAvailable(caseFieldName, available);
 
-    /// <summary>Initialize the case field</summary>
+    /// <summary>Initialize the case field value, start and end</summary>
     /// <param name="caseFieldName">Name of the case field</param>
+    /// <param name="value">The case field value</param>
     /// <param name="start">The case field start date</param>
     /// <param name="end">The case field end date</param>
-    /// <param name="value">The case field value</param>
-    public void InitField(string caseFieldName, DateTime? start = null, DateTime? end = null, object value = null)
+    public void InitField(string caseFieldName, object value, DateTime? start = null, DateTime? end = null)
     {
-        InitStart(caseFieldName, start);
-        InitEnd(caseFieldName, end);
         InitValue(caseFieldName, value);
+        if (start != null)
+        {
+            InitStart(caseFieldName, start);
+        }
+        if (end != null)
+        {
+            InitEnd(caseFieldName, end);
+        }
     }
 
-    /// <summary>Initialize the case field</summary>
+    /// <summary>Set the case field value, start and end</summary>
     /// <param name="caseFieldName">Name of the case field</param>
-    /// <param name="start">The case field start date</param>
     /// <param name="value">The case field value</param>
-    public void InitField(string caseFieldName, DateTime? start = null, object value = null) =>
-        InitField(caseFieldName, start, null, value);
+    /// <param name="start">The case field start date</param>
+    /// <param name="end">The case field end date</param>
+    public void SetField(string caseFieldName, object value, DateTime? start = null, DateTime? end = null)
+    {
+        SetValue(caseFieldName, value);
+        if (start != null)
+        {
+            SetStart(caseFieldName, start);
+        }
+        if (end != null)
+        {
+            SetEnd(caseFieldName, end);
+        }
+    }
 
     /// <summary>Test if a case field start is defined</summary>
     /// <param name="caseFieldName">Name of the case field</param>
@@ -328,6 +382,25 @@ public abstract partial class CaseChangeFunction : CaseFunction
     public void InitStart(string caseFieldName, DateTime? start) =>
         Runtime.InitStart(caseFieldName, start);
 
+    /// <summary>Update the start date of all case fields with available or mandatory values</summary>
+    /// <param name="start">The case field start date</param>
+    public void UpdateStart(DateTime? start)
+    {
+        foreach (var fieldName in FieldNames)
+        {
+            if (MandatoryEnd(fieldName) || MandatoryValue(fieldName) || HasValue(fieldName))
+            {
+                SetStart(fieldName, start);
+            }
+        }
+    }
+
+    /// <summary>Test if a case end date is mandatory</summary>
+    /// <param name="caseFieldName">The name of the case field</param>
+    /// <returns>True if the case end date is mandatory</returns>
+    public bool MandatoryEnd(string caseFieldName) =>
+        Runtime.MandatoryEnd(caseFieldName);
+
     /// <summary>Test if a case field end is defined</summary>
     /// <param name="caseFieldName">Name of the case field</param>
     public bool HasEnd(string caseFieldName) => Runtime.HasEnd(caseFieldName);
@@ -347,6 +420,25 @@ public abstract partial class CaseChangeFunction : CaseFunction
     /// <param name="end">The case field end date</param>
     public void InitEnd(string caseFieldName, DateTime? end) =>
         Runtime.InitEnd(caseFieldName, end);
+
+    /// <summary>Update the end date of all case fields with available or mandatory values</summary>
+    /// <param name="end">The case field end date</param>
+    public void UpdateEnd(DateTime? end)
+    {
+        foreach (var fieldName in FieldNames)
+        {
+            if (MandatoryEnd(fieldName) || MandatoryValue(fieldName) || HasValue(fieldName))
+            {
+                SetEnd(fieldName, end);
+            }
+        }
+    }
+
+    /// <summary>Test if a case value is mandatory</summary>
+    /// <param name="caseFieldName">The name of the case field</param>
+    /// <returns>True if the case value is mandatory</returns>
+    public bool MandatoryValue(string caseFieldName) =>
+        Runtime.MandatoryValue(caseFieldName);
 
     /// <summary>Get the value period of a case field</summary>
     /// <param name="caseFieldName">Name of the case field</param>
@@ -374,7 +466,8 @@ public abstract partial class CaseChangeFunction : CaseFunction
 
     /// <summary>Get the typed value of a case field</summary>
     /// <param name="caseFieldName">Name of the case field</param>
-    public T GetValue<T>(string caseFieldName) => (T)GetValue(caseFieldName);
+    public T GetValue<T>(string caseFieldName) =>
+        GetValue(caseFieldName, default(T));
 
     /// <summary>Get the typed value of a case field with a default value</summary>
     /// <param name="caseFieldName">Name of the case field</param>
@@ -476,13 +569,10 @@ public abstract partial class CaseChangeFunction : CaseFunction
             foreach (var caseValueSlot in caseValueSlots)
             {
                 var caseValue = GetCaseValue(CaseFieldSlot(caseFieldName, caseValueSlot));
-                if (caseValue.HasValue)
+                var value = ChangeValueType<T>(caseValue.Value);
+                if (value != null)
                 {
-                    var value = (T)Convert.ChangeType(caseValue.Value, typeof(T));
-                    if (value != null)
-                    {
-                        slotValues.Add(value, caseValueSlot);
-                    }
+                    slotValues.Add(value, caseValueSlot);
                 }
             }
         }

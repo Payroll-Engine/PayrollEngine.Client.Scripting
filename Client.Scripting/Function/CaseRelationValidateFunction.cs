@@ -1,8 +1,9 @@
 ﻿/* CaseRelationValidateFunction */
+
 // ReSharper disable RedundantUsingDirective
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 // ReSharper restore RedundantUsingDirective
 
 namespace PayrollEngine.Client.Scripting.Function;
@@ -36,15 +37,23 @@ public partial class CaseRelationValidateFunction : CaseRelationFunction
     /// <summary>Add a new case issue</summary>
     /// <param name="message">The issue message</param>
     /// <param name="number">The issue number</param>
-    public void AddIssue(string message, int number = 0) =>
+    /// <returns>Always false</returns>
+    public bool AddIssue(string message, int number = 0)
+    {
         Runtime.AddIssue(message, number);
+        return false;
+    }
 
     /// <summary>Add a new case field issue</summary>
     /// <param name="caseFieldName">Name of the case field</param>
     /// <param name="message">The issue message</param>
     /// <param name="number">The issue number</param>
-    public void AddIssue(string caseFieldName, string message, int number = 0) =>
+    /// <returns>Always false</returns>
+    public bool AddIssue(string caseFieldName, string message, int number = 0)
+    {
         Runtime.AddIssue(caseFieldName, message, number);
+        return false;
+    }
 
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>

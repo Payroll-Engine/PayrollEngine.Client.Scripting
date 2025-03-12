@@ -1,8 +1,10 @@
 ﻿/* PayrunWageTypeAvailableFunction */
+
 // ReSharper disable RedundantUsingDirective
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
 
 namespace PayrollEngine.Client.Scripting.Function;
@@ -43,11 +45,8 @@ public partial class PayrunWageTypeAvailableFunction : PayrunFunction
         Runtime.GetWageTypeAttribute(attributeName);
 
     /// <summary>Get wage type attribute typed value</summary>
-    public T GetWageTypeAttribute<T>(string attributeName, T defaultValue = default)
-    {
-        var value = Runtime.GetWageTypeAttribute(attributeName);
-        return value == null ? defaultValue : (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetWageTypeAttribute<T>(string attributeName, T defaultValue = default) =>
+        ChangeValueType(Runtime.GetWageTypeAttribute(attributeName), defaultValue);
 
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>

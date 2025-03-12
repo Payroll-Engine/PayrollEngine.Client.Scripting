@@ -620,7 +620,7 @@ public static class DateTimeExtensions
     /// <param name="end">The period end date</param>
     /// <returns>The formatted period end date</returns>
     public static string ToPeriodEndString(this DateTime end) =>
-        IsMidnight(end) || IsLastMomentOfDay(end) ? $"{end.ToShortDateString()} {end.ToShortTimeString()}" : end.ToShortDateString();
+        IsMidnight(end) || IsLastMomentOfDay(end) ? end.ToShortDateString() : $"{end.ToShortDateString()} {end.ToShortTimeString()}";
 
     /// <summary>Test if the date is in UTC</summary>
     /// <param name="dateTime">The source date time</param>
@@ -1388,6 +1388,20 @@ public static class DatePeriodExtensions
         return splitPeriods;
     }
 
+    /// <summary>Get period days</summary>
+    /// <param name="period">The period</param>
+    public static List<DateTime> Days(this DatePeriod period)
+    {
+        var days = new List<DateTime>();
+        var current = period.Start.Date;
+        while (current <= period.End.Date)
+        {
+            days.Add(current);
+            current = current.AddDays(1);
+        }
+        return days;
+    }
+
     /// <summary>Test if a specific time moment is the first day of a period</summary>
     /// <param name="test">The moment to test</param>
     /// <param name="period">The period </param>
@@ -1618,6 +1632,181 @@ public static class DatePeriodExtensions
     }
 }
 
+/// <summary><see cref="TimePeriod">TimePeriod</see> extension methods</summary>
+public static class TimePeriodExtensions
+{
+    /// <summary>Test if a specific time moment is before this period</summary>
+    /// <param name="period">The period</param>
+    /// <param name="test">The moment to test</param>
+    /// <returns>True, if the moment is before this period</returns>
+    public static bool IsBefore(this TimePeriod period, decimal test) =>
+        test < period.Start;
+
+    /// <summary>Test if a specific time period is before this period</summary>
+    /// <param name="period">The period</param>
+    /// <param name="testPeriod">The period to test</param>
+    /// <returns>True, if the period is before this period</returns>
+    public static bool IsBefore(this TimePeriod period, TimePeriod testPeriod) =>
+        testPeriod.End < period.Start;
+
+    /// <summary>Test if a specific time moment is after this period</summary>
+    /// <param name="period">The period</param>
+    /// <param name="test">The moment to test</param>
+    /// <returns>True, if the moment is after this period</returns>
+    public static bool IsAfter(this TimePeriod period, decimal test) =>
+        test > period.End;
+
+    /// <summary>Test if a specific time period is after this period</summary>
+    /// <param name="period">The period</param>
+    /// <param name="testPeriod">The period to test</param>
+    /// <returns>True, if the period is after this period</returns>
+    public static bool IsAfter(this TimePeriod period, TimePeriod testPeriod) =>
+        testPeriod.Start > period.End;
+
+    /// <summary>Test if a specific time moment is within the period, including open periods</summary>
+    /// <param name="period">The period</param>
+    /// <param name="test">The moment to test</param>
+    /// <returns>True, if the moment is within this period</returns>
+    public static bool IsWithin(this TimePeriod period, decimal test) =>
+        test.IsWithin(period.Start, period.End);
+
+    /// <summary>Test if a specific time period is within the period, including open periods</summary>
+    /// <param name="period">The period</param>
+    /// <param name="testPeriod">The period to test</param>
+    /// <returns>True, if the test period is within this period</returns>
+    public static bool IsWithin(this TimePeriod period, TimePeriod testPeriod) =>
+        IsWithin(period, testPeriod.Start) && IsWithin(period, testPeriod.End);
+
+    /// <summary>Test if a specific time moment is within or before the period, including open periods</summary>
+    /// <param name="period">The period</param>
+    /// <param name="test">The moment to test</param>
+    /// <returns>True, if the moment is within or before this period</returns>
+    public static bool IsWithinOrBefore(this TimePeriod period, decimal test) =>
+        test <= period.End;
+
+    /// <summary>Test if a specific time moment is within or after the period, including open periods</summary>
+    /// <param name="period">The period</param>
+    /// <param name="test">The moment to test</param>
+    /// <returns>True, if the moment is within or after this period</returns>
+    public static bool IsWithinOrAfter(this TimePeriod period, decimal test) =>
+        test >= period.Start;
+
+    /// <summary>Test if period is overlapping this period</summary>
+    /// <param name="period">The period</param>
+    /// <param name="testPeriod">The period to test</param>
+    /// <returns>True, if the period is overlapping this period</returns>
+    public static bool IsOverlapping(this TimePeriod period, TimePeriod testPeriod) =>
+        testPeriod.Start < period.End && period.Start < testPeriod.End;
+
+    /// <summary>Get the intersection of a time period with this period</summary>
+    /// <param name="period">The period</param>
+    /// <param name="intersectPeriod">The period to intersect</param>
+    /// <returns>The intersecting time period, null if no intersection is present</returns>
+    public static TimePeriod Intersect(this TimePeriod period, TimePeriod intersectPeriod)
+    {
+        if (!IsOverlapping(period, intersectPeriod))
+        {
+            return null;
+        }
+        return new(
+            Math.Max(period.Start, intersectPeriod.Start),
+            Math.Min(period.End, intersectPeriod.End));
+    }
+
+    /// <summary>Get the hours of intersection</summary>
+    /// <param name="period">The period</param>
+    /// <param name="intersectPeriod">The period to intersect</param>
+    /// <returns>The intersecting duration in hours, 0 if no intersection is present</returns>
+    public static decimal IntersectHours(this TimePeriod period, TimePeriod intersectPeriod)
+    {
+        var intersect = Intersect(period, intersectPeriod);
+        return intersect == null ? 0 : (decimal)intersect.Duration.TotalHours;
+    }
+
+    /// <summary>Total duration of all time periods</summary>
+    /// <param name="timePeriods">The time periods</param>
+    /// <returns>Accumulated total duration</returns>
+    public static TimeSpan TotalDuration(this IEnumerable<TimePeriod> timePeriods)
+    {
+        var duration = TimeSpan.Zero;
+        return timePeriods.Aggregate(duration, (current, period) => current.Add(period.Duration));
+    }
+
+    /// <summary>Test if any period is overlapping another period</summary>
+    /// <param name="timePeriods">The time periods to test</param>
+    /// <returns>True, if the period is overlapping this period</returns>
+    public static bool HasOverlapping(this IEnumerable<TimePeriod> timePeriods)
+    {
+        var periodList = timePeriods.ToList();
+        for (var current = 1; current < periodList.Count; current++)
+        {
+            for (var remain = current + 1; remain < periodList.Count; remain++)
+            {
+                if (periodList[remain].IsOverlapping(periodList[current]))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /// <summary>Test if a specific time moment is within any time period</summary>
+    /// <param name="timePeriods">The time periods to test</param>
+    /// <param name="test">The moment to test</param>
+    /// <returns>True, if the moment is within this period</returns>
+    public static bool IsWithinAny(this IEnumerable<TimePeriod> timePeriods, decimal test) =>
+        timePeriods.Any(periodValue => periodValue.IsWithin(test));
+
+    /// <summary>Test if a specific time period is within any time period</summary>
+    /// <param name="timePeriods">The time periods to test</param>
+    /// <param name="testPeriod">The period to test</param>
+    /// <returns>True, if the test period is within this period</returns>
+    public static bool IsWithinAny(this IEnumerable<TimePeriod> timePeriods, TimePeriod testPeriod) =>
+        timePeriods.Any(periodValue => periodValue.IsWithin(testPeriod));
+
+    /// <summary>Get limits period, from the earliest start to the latest end</summary>
+    /// <param name="timePeriods">The time periods to evaluate</param>
+    /// <returns>Time period including all time periods, an anytime period for empty collections</returns>
+    public static TimePeriod Limits(this IEnumerable<TimePeriod> timePeriods)
+    {
+        decimal? start = null;
+        decimal? end = null;
+        foreach (var timePeriod in timePeriods)
+        {
+            // start
+            if (!start.HasValue || timePeriod.Start < start.Value)
+            {
+                start = timePeriod.Start;
+            }
+            // end
+            if (!end.HasValue || timePeriod.End > end.Value)
+            {
+                end = timePeriod.End;
+            }
+        }
+        return new(start, end);
+    }
+
+    /// <summary>Get all intersections of a time period with any time period</summary>
+    /// <param name="timePeriods">The time periods to test</param>
+    /// <param name="intersectPeriod">The period to intersect</param>
+    /// <returns>List of intersecting time periods</returns>
+    public static List<TimePeriod> Intersections(this IEnumerable<TimePeriod> timePeriods, TimePeriod intersectPeriod)
+    {
+        var intersections = new List<TimePeriod>();
+        foreach (var timePeriod in timePeriods)
+        {
+            var intersection = timePeriod.Intersect(intersectPeriod);
+            if (intersection != null)
+            {
+                intersections.Add(intersection);
+            }
+        }
+        return intersections;
+    }
+}
+
 /// <summary><see cref="CaseValue">CaseValue</see> extension methods</summary>
 public static class CaseValueExtensions
 {
@@ -1693,6 +1882,23 @@ public static class CaseValueExtensions
         }
     }
 
+    /// <summary>Get first matching period containing the test date</summary>
+    /// <param name="caseValues">The case period values</param>
+    /// <param name="date">The date of the case value</param>
+    /// <returns>Accumulated total duration</returns>
+    public static CaseValue CaseValueWithin(this IEnumerable<CaseValue> caseValues, DateTime date)
+    {
+        foreach (var caseValue in caseValues)
+        {
+            var period = caseValue.Period();
+            if (period.IsWithin(date))
+            {
+                return caseValue;
+            }
+        }
+        return null;
+    }
+
     /// <summary>Get case period values grouped by value</summary>
     /// <param name="periodValues">The case period values</param>
     /// <returns>Case period values grouped by value</returns>
@@ -1710,7 +1916,7 @@ public static class CaseValueExtensions
     /// <param name="intersectPeriod">The period to intersect</param>
     /// <returns>List of intersecting date periods</returns>
     public static List<CaseValue> Intersections(this IEnumerable<CaseValue> periodValues, DatePeriod intersectPeriod) =>
-        [..periodValues.Where(periodValue => periodValue.Period().IsOverlapping(intersectPeriod))];
+        [.. periodValues.Where(periodValue => periodValue.Period().IsOverlapping(intersectPeriod))];
 
     /// <summary>Get case period values matching a period predicate</summary>
     /// <param name="periodValues">The time periods to test</param>
