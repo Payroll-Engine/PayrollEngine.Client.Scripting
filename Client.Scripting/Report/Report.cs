@@ -1,11 +1,12 @@
 ﻿/* Report */
 
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Linq;
 using System.Text.Json;
+using System.Globalization;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PayrollEngine.Client.Scripting.Report;
 
@@ -1021,6 +1022,52 @@ public abstract class ExpressionBase
 #region Extensions
 
 // duplicated in PayrollEngine.DataTableExtensions
+/// <summary>Data set extension methods</summary>
+public static class DataSetExtensions
+{
+    /// <summary>Test for  data set rows</summary>
+    /// <param name="dataSet">The system data set to convert</param>
+    /// <returns>True if any row is available</returns>
+    public static bool HasRows(this DataSet dataSet)
+    {
+        if (dataSet?.Tables == null || dataSet.Tables.Count == 0)
+        {
+            return false;
+        }
+        return dataSet.Tables.Cast<DataTable>().Any(table => table.Rows.Count > 0);
+    }
+
+    /// <summary>Get data set table rows values as dictionary</summary>
+    /// <param name="dataSet">The payroll data set to convert</param>
+    /// <returns>The data table values as dictionary, key is table column name</returns>
+    public static Dictionary<string, List<Dictionary<string, object>>> AsDictionary(this DataSet dataSet)
+    {
+        var values = new Dictionary<string, List<Dictionary<string, object>>>();
+        foreach (DataTable table in dataSet.Tables)
+        {
+            values.Add(table.TableName, table.AsDictionary());
+        }
+        return values;
+    }
+
+    /// <summary>Get data set as json</summary>
+    /// <param name="dataSet">The payroll data set to convert</param>
+    /// <param name="namingPolicy">Naming policy (default: camel case)</param>
+    /// <param name="ignoreNull">Ignore null values (default: true)</param>
+    public static string Json(this DataSet dataSet, JsonNamingPolicy namingPolicy = null,
+        bool ignoreNull = true)
+    {
+        return JsonSerializer.Serialize(AsDictionary(dataSet), new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+            DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
+        });
+    }
+}
+
+// duplicated in PayrollEngine.DataTableExtensions
 /// <summary>Data table extension methods</summary>
 public static class DataTableExtensions
 {
@@ -1037,7 +1084,7 @@ public static class DataTableExtensions
     /// <summary>Test for table column</summary>
     /// <param name="table">The table</param>
     /// <param name="columnName">Name of the column</param>
-    public static bool ContainsColumn(DataTable table, string columnName) =>
+    public static bool ContainsColumn(this DataTable table, string columnName) =>
         table.Columns.Contains(columnName);
 
     /// <summary>Add table column</summary>
@@ -1352,6 +1399,35 @@ public static class DataTableExtensions
         return deleteCount;
     }
 
+    /// <summary>Get data table as dictionary</summary>
+    /// <param name="dataTable">The data table</param>
+    /// <returns>List of row dictionaries</returns>
+    public static List<Dictionary<string, object>> AsDictionary(this DataTable dataTable)
+    {
+        var values = new List<Dictionary<string, object>>();
+        foreach (DataRow row in dataTable.AsEnumerable())
+        {
+            values.Add(row.AsDictionary());
+        }
+        return values;
+    }
+
+    /// <summary>Get data table as json</summary>
+    /// <param name="dataTable">The data table</param>
+    /// <param name="namingPolicy">Naming policy (default: camel case)</param>
+    /// <param name="ignoreNull">Ignore null values (default: true)</param>
+    public static string Json(this DataTable dataTable, JsonNamingPolicy namingPolicy = null,
+        bool ignoreNull = true)
+    {
+        return JsonSerializer.Serialize(AsDictionary(dataTable), new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+            DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
+        });
+    }
+
     /// <summary>Get data table rows value</summary>
     /// <param name="table">The data table</param>
     /// <param name="column">The column name</param>
@@ -1410,6 +1486,36 @@ public static class DataRowExtensions
     /// <returns>The data row object status</returns>
     public static ObjectStatus ObjectStatus(this DataRow dataRow) =>
         GetEnumValue(dataRow, "Status", Scripting.ObjectStatus.Inactive);
+
+    /// <summary>Get data row values as dictionary</summary>
+    /// <param name="dataRow">The data row</param>
+    /// <returns>The data rows values as dictionary, key is the column name</returns>
+    public static Dictionary<string, object> AsDictionary(this DataRow dataRow)
+    {
+        var values = new Dictionary<string, object>();
+        foreach (DataColumn column in dataRow.Table.Columns)
+        {
+            values.Add(column.ColumnName, GetValue<object>(dataRow, column.ColumnName));
+        }
+        return values;
+    }
+
+    /// <summary>Get data row as json</summary>
+    /// <param name="dataRow">The data row</param>
+    /// <param name="namingPolicy">Naming policy (default: camel case)</param>
+    /// <param name="ignoreNull">Ignore null values (default: true)</param>
+    public static string Json(this DataRow dataRow, JsonNamingPolicy namingPolicy = null,
+        bool ignoreNull = true)
+    {
+        ArgumentNullException.ThrowIfNull(dataRow);
+        return JsonSerializer.Serialize(AsDictionary(dataRow), new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+            DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
+        });
+    }
 
     /// <summary>Get data row enum value</summary>
     /// <param name="dataRow">The data row</param>
@@ -1665,6 +1771,26 @@ public static class DataRowExtensions
         }
 
         return value;
+    }
+
+    /// <summary>Get data row values</summary>
+    /// <param name="dataRows">The data rows</param>
+    /// <returns>The data rows values</returns>
+    public static List<object> GetValues(this IEnumerable<DataRow> dataRows)
+    {
+        if (dataRows == null)
+        {
+            throw new ArgumentNullException(nameof(dataRows));
+        }
+        var values = new List<object>();
+        foreach (DataRow row in dataRows)
+        {
+            foreach (DataColumn column in row.Table.Columns)
+            {
+                values.Add(row[column.ColumnName]);
+            }
+        }
+        return values;
     }
 
     /// <summary>Get data rows value</summary>
