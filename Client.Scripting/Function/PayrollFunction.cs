@@ -107,6 +107,9 @@ public abstract partial class PayrollFunction : Function
         // payroll
         PayrollId = Runtime.PayrollId;
 
+        // division
+        DivisionId = Runtime.DivisionId;
+
         // culture
         PayrollCulture = Runtime.PayrollCulture;
 
@@ -155,10 +158,29 @@ public abstract partial class PayrollFunction : Function
 
     #endregion
 
+    #region Division
+
+    /// <summary>The division id</summary>
+    public int DivisionId { get; }
+
+    #endregion
+
     #region Culture
 
     /// <summary>The payroll culture</summary>
     public string PayrollCulture { get; }
+
+    #endregion
+
+    #region Calendar
+
+    /// <summary>Gets the calendar period</summary>
+    /// <param name="moment">Moment within the period (default: today)</param>
+    /// <param name="offset">The period offset (default: 0/current)</param>
+    /// <returns>The period start and end date</returns>
+    public DatePeriod GetCalendarPeriod(DateTime? moment = null, int offset = 0) =>
+        GetCalendarPeriod(GetDerivedCalendar(DivisionId, EmployeeId ?? 0), moment,
+            offset, GetDerivedCulture(DivisionId, EmployeeId ?? 0));
 
     #endregion
 
@@ -644,6 +666,13 @@ public abstract partial class PayrollFunction : Function
     public CaseValue GetRawCaseValue(string caseFieldName, DateTime valueDate) =>
         TupleExtensions.TupleToCaseValue(Runtime.GetCaseValue(caseFieldName, valueDate.ToUtc()));
 
+    /// <summary>Get multiple raw case values from a specific date</summary>
+    /// <param name="caseFieldNames">The case field names</param>
+    /// <param name="valueDate">The value date</param>
+    /// <returns>Raw case value from a specific date</returns>
+    public List<CaseValue> GetRawCaseValues(IList<string> caseFieldNames, DateTime valueDate) =>
+        TupleExtensions.TupleToCaseValues(Runtime.GetCaseValues(caseFieldNames, valueDate.ToUtc()));
+
     /// <summary>Get raw payroll value from a specific date</summary>
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="valueDate">The value date</param>
@@ -658,7 +687,7 @@ public abstract partial class PayrollFunction : Function
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="period">The case value creation period</param>
     /// <returns>Raw case values from a date period</returns>
-    public List<CaseValue> GetRawCaseValues(string caseFieldName, DatePeriod period) =>
+    public List<CaseValue> GetPeriodRawCaseValues(string caseFieldName, DatePeriod period) =>
         GetRawCaseValues(caseFieldName, period.Start, period.End);
 
     /// <summary>Get raw case values created within a date period</summary>
@@ -666,14 +695,14 @@ public abstract partial class PayrollFunction : Function
     /// <remarks>Case value tags and attributes are not supported</remarks>
     /// <returns>Raw case values from a date period</returns>
     public List<CaseValue> GetPeriodRawCaseValues(string caseFieldName) =>
-        GetRawCaseValues(caseFieldName, Period);
+        GetPeriodRawCaseValues(caseFieldName, Period);
 
     /// <summary>Get raw case values created within an offset period</summary>
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="periodOffset">The offset period</param>
     /// <returns>Raw case values from an offset period</returns>
-    public List<CaseValue> GetRawCaseValues(string caseFieldName, int periodOffset) =>
-        GetRawCaseValues(caseFieldName, GetPeriod(periodOffset));
+    public List<CaseValue> GetPeriodRawCaseValues(string caseFieldName, int periodOffset) =>
+        GetPeriodRawCaseValues(caseFieldName, GetPeriod(periodOffset));
 
     /// <summary>Get raw case values created within the current period</summary>
     /// <param name="caseFieldName">The case field name</param>
@@ -682,6 +711,107 @@ public abstract partial class PayrollFunction : Function
     /// <returns>Raw case values from the current period</returns>
     public List<CaseValue> GetRawCaseValues(string caseFieldName, DateTime? startDate = null, DateTime? endDate = null) =>
         TupleExtensions.TupleToCaseValues(Runtime.GetCaseValues(caseFieldName, startDate, endDate));
+
+    /// <summary>Get case data object with the current period value</summary>
+    /// <param name="recursive">Recursive objects (default: true)</param>
+    /// <param name="writeable">Writeable values only</param>
+    /// <returns>Data object with change data</returns>
+    public List<CasePayrollValue> GetCaseObjectValues<T>(bool recursive = true, bool writeable = false) where T : class, ICaseObject, new()
+    {
+        var values = new List<CasePayrollValue>();
+        foreach (var propertyInfo in CaseObject.GetProperties<T>(recursive, writeable))
+        {
+            var caseValue = GetCaseValue(propertyInfo.CaseFieldName);
+            if (caseValue != null)
+            {
+                values.Add(caseValue);
+            }
+        }
+        return values;
+    }
+
+    /// <summary>Get case data object by y moment within the payroll values</summary>
+    /// <param name="caseValues">Case payroll values</param>
+    /// <param name="moment">Value moment</param>
+    /// <returns>Data object with change data</returns>
+    public T GetCaseObject<T>(List<CasePayrollValue> caseValues, DateTime moment) where T : class, ICaseObject, new()
+    {
+        var caseObject = new T();
+        foreach (var propertyInfo in CaseObject.GetProperties<T>(writeable: true))
+        {
+            var caseFieldName = propertyInfo.CaseFieldName;
+            var casePayrollValue = caseValues.FirstOrDefault(x => string.Equals(x.CaseFieldName, caseFieldName));
+            var value = casePayrollValue?.PeriodValues.FirstOrDefault(x => x.Period.IsWithin(moment))?.Value;
+            if (value != null)
+            {
+                caseObject.SetValue(caseFieldName, value);
+            }
+        }
+        return caseObject;
+    }
+
+    /// <summary>Get case object from a specific date</summary>
+    /// <param name="valueDate">Value date</param>
+    /// <param name="recursive">Recursive objects (default: true)</param>
+    /// <returns>Data object with change data</returns>
+    public T GetRawCaseObject<T>(DateTime valueDate, bool recursive = true) where T : class, ICaseObject, new()
+    {
+        var caseObject = new T();
+
+        // retrieve case values
+        var caseFieldNames = CaseObject.GetProperties<T>(recursive, writeable: true).Select(x => x.CaseFieldName).ToList();
+        var caseValues = GetRawCaseValues(caseFieldNames, valueDate);
+
+        foreach (var propertyInfo in CaseObject.GetProperties<T>(writeable: true))
+        {
+            var caseValue = caseValues.FirstOrDefault(x => string.Equals(x.CaseFieldName, propertyInfo.CaseFieldName));
+            if (caseValue != null)
+            {
+                caseObject.SetValue(propertyInfo.CaseFieldName, caseValue.Value.Convert(propertyInfo.Property.PropertyType));
+            }
+        }
+
+        return caseObject;
+    }
+
+    /// <summary>Get case object from a date period</summary>
+    /// <param name="moments">Value moments</param>
+    /// <param name="recursive">Recursive objects (default: true)</param>
+    /// <returns>Data object with change data</returns>
+    public List<T> GetPeriodRawCaseObjects<T>(List<DateTime> moments, bool recursive = true)
+        where T : class, ICaseObject, new()
+    {
+        var properties = CaseObject.GetProperties<T>(recursive, writeable: true);
+
+        // period values by case field
+        var periodValues = new Dictionary<string, List<CaseValue>>();
+        foreach (var property in properties)
+        {
+            var caseFieldName = property.Property.GetCaseFieldName();
+            var values = GetPeriodRawCaseValues(caseFieldName);
+            periodValues.Add(caseFieldName, values);
+        }
+
+        // period objects
+        var objects = new List<T>();
+        foreach (var moment in moments)
+        {
+            // moment object
+            var obj = new T();
+            foreach (var property in properties)
+            {
+                var caseFieldName = property.Property.GetCaseFieldName();
+                var periodValue = periodValues[caseFieldName];
+                var value = periodValue.FirstOrDefault(x => x.Created == moment);
+                if (value?.Value != null)
+                {
+                    obj.SetValue(caseFieldName, value.Value.Convert(property.Property.PropertyType));
+                }
+            }
+            objects.Add(obj);
+        }
+        return objects;
+    }
 
     /// <summary>Get multiple case values of the current period</summary>
     /// <param name="caseFieldNames">The case field names</param>

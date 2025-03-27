@@ -102,20 +102,12 @@ public partial class CaseValidateFunction : CaseChangeFunction
     public bool HasIssues() => Runtime.HasIssues();
 
     /// <summary>Add a new case issue</summary>
-    /// <returns>Always false</returns>
-    public bool AddIssue(string message)
-    {
+    public void AddIssue(string message) =>
         Runtime.AddIssue(message);
-        return false;
-    }
 
     /// <summary>Add a new case field issue</summary>
-    /// <returns>Always false</returns>
-    public bool AddIssue(string caseFieldName, string message)
-    {
+    public void AddIssue(string caseFieldName, string message) =>
         Runtime.AddIssue(caseFieldName, message);
-        return false;
-    }
 
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>

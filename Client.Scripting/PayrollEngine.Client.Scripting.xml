@@ -141,6 +141,101 @@
             <param name="runtimeKey">The employee runtime key, default is <see cref="T:PayrollEngine.Client.Scripting.Cache.WageTypeConsolidatedResultCache"/></param>
             <returns>The collector result cache</returns>
         </member>
+        <member name="T:PayrollEngine.Client.Scripting.CaseObjectAttribute">
+            <summary>Case object attribute</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObjectAttribute.#ctor(System.String)">
+            <summary>Case object attribute</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.CaseObjectAttribute.Ns">
+            <summary>Object namespace</summary>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.CaseFieldIgnoreAttribute">
+            <summary>Case field ignore attribute</summary>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.CaseObjectExtensions">
+            <summary>Case object extension methods</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObjectExtensions.GetNamespace(System.Reflection.MemberInfo)">
+            <summary>Get member namespace</summary>
+            <param name="member">Member</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObjectExtensions.GetCaseFieldName(System.Reflection.PropertyInfo)">
+            <summary>Get case field name</summary>
+            <param name="property">Property</param>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.ICaseObject">
+            <summary>Case object</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.ICaseObject.GetObject``1(System.String)">
+            <summary>Get case object by property name</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.ICaseObject.GetObjects``1">
+            <summary>Get case objects</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.ICaseObject.GetCaseFieldName(System.String)">
+            <summary>Get case field name</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.ICaseObject.GetValue(System.String)">
+            <summary>Get case object value by case field name</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.ICaseObject.SetValue(System.String,System.Object)">
+            <summary>Set case object value by case field name</summary>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.CaseObject">
+            <summary>Case object/// </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetObject``1(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetObjects``1">
+            <inheritdoc />
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetCaseFieldName(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetValue(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.SetValue(System.String,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetProperty(System.String)">
+            <summary>Get property by name</summary>
+            <param name="propertyName">Property name</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.FindDeclaringObject(System.String,System.String,PayrollEngine.Client.Scripting.ICaseObject)">
+            <summary>Find declaring object with property using a recursive search</summary>
+            <param name="caseFieldName">Case field name</param>
+            <param name="namespace">The namespace</param>
+            <param name="caseObject">Case object</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetCaseFieldName``1(System.String)">
+            <summary>Get case field name</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetCaseFieldNames``1(System.Boolean,System.Boolean)">
+            <summary>Get case field names</summary>
+            <param name="recursive">Recursive objects (default: true)</param>
+            <param name="writeable">Writeable properties only</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetProperties``1(System.Boolean,System.Boolean)">
+            <summary>Get object properties</summary>
+            <param name="recursive">Recursive objects (default: true)</param>
+            <param name="writeable">Writeable properties only</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.GetProperties(System.Type,System.Boolean,System.Boolean)">
+            <summary>Get object properties</summary>
+            <param name="type">Object type</param>
+            <param name="recursive">Recursive objects (default: true)</param>
+            <param name="writeable">Writeable properties only</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseObject.FindProperties(System.Type,System.Boolean,System.Boolean,System.String)">
+            <summary>Find object properties with recursive search</summary>
+            <param name="type">Object type</param>
+            <param name="recursive">Recursive objects (default: true)</param>
+            <param name="writeable">Writeable properties only</param>
+            <param name="namespace">The namespace</param>
+        </member>
         <member name="T:PayrollEngine.Client.Scripting.PeriodCasePayrollValueDictionary">
             <summary>Dictionary of case value grouped by date period</summary>
         </member>
@@ -1790,103 +1885,103 @@
             <param name="intersectPeriod">The period to intersect</param>
             <returns>List of intersecting date periods</returns>
         </member>
-        <member name="T:PayrollEngine.Client.Scripting.TimePeriodExtensions">
-            <summary><see cref="T:PayrollEngine.Client.Scripting.TimePeriod">TimePeriod</see> extension methods</summary>
+        <member name="T:PayrollEngine.Client.Scripting.HourPeriodExtensions">
+            <summary><see cref="T:PayrollEngine.Client.Scripting.HourPeriod">TimePeriod</see> extension methods</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsBefore(PayrollEngine.Client.Scripting.TimePeriod,System.Decimal)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsBefore(PayrollEngine.Client.Scripting.HourPeriod,System.Decimal)">
             <summary>Test if a specific time moment is before this period</summary>
             <param name="period">The period</param>
             <param name="test">The moment to test</param>
             <returns>True, if the moment is before this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsBefore(PayrollEngine.Client.Scripting.TimePeriod,PayrollEngine.Client.Scripting.TimePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsBefore(PayrollEngine.Client.Scripting.HourPeriod,PayrollEngine.Client.Scripting.HourPeriod)">
             <summary>Test if a specific time period is before this period</summary>
             <param name="period">The period</param>
             <param name="testPeriod">The period to test</param>
             <returns>True, if the period is before this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsAfter(PayrollEngine.Client.Scripting.TimePeriod,System.Decimal)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsAfter(PayrollEngine.Client.Scripting.HourPeriod,System.Decimal)">
             <summary>Test if a specific time moment is after this period</summary>
             <param name="period">The period</param>
             <param name="test">The moment to test</param>
             <returns>True, if the moment is after this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsAfter(PayrollEngine.Client.Scripting.TimePeriod,PayrollEngine.Client.Scripting.TimePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsAfter(PayrollEngine.Client.Scripting.HourPeriod,PayrollEngine.Client.Scripting.HourPeriod)">
             <summary>Test if a specific time period is after this period</summary>
             <param name="period">The period</param>
             <param name="testPeriod">The period to test</param>
             <returns>True, if the period is after this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsWithin(PayrollEngine.Client.Scripting.TimePeriod,System.Decimal)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsWithin(PayrollEngine.Client.Scripting.HourPeriod,System.Decimal)">
             <summary>Test if a specific time moment is within the period, including open periods</summary>
             <param name="period">The period</param>
             <param name="test">The moment to test</param>
             <returns>True, if the moment is within this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsWithin(PayrollEngine.Client.Scripting.TimePeriod,PayrollEngine.Client.Scripting.TimePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsWithin(PayrollEngine.Client.Scripting.HourPeriod,PayrollEngine.Client.Scripting.HourPeriod)">
             <summary>Test if a specific time period is within the period, including open periods</summary>
             <param name="period">The period</param>
             <param name="testPeriod">The period to test</param>
             <returns>True, if the test period is within this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsWithinOrBefore(PayrollEngine.Client.Scripting.TimePeriod,System.Decimal)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsWithinOrBefore(PayrollEngine.Client.Scripting.HourPeriod,System.Decimal)">
             <summary>Test if a specific time moment is within or before the period, including open periods</summary>
             <param name="period">The period</param>
             <param name="test">The moment to test</param>
             <returns>True, if the moment is within or before this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsWithinOrAfter(PayrollEngine.Client.Scripting.TimePeriod,System.Decimal)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsWithinOrAfter(PayrollEngine.Client.Scripting.HourPeriod,System.Decimal)">
             <summary>Test if a specific time moment is within or after the period, including open periods</summary>
             <param name="period">The period</param>
             <param name="test">The moment to test</param>
             <returns>True, if the moment is within or after this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsOverlapping(PayrollEngine.Client.Scripting.TimePeriod,PayrollEngine.Client.Scripting.TimePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsOverlapping(PayrollEngine.Client.Scripting.HourPeriod,PayrollEngine.Client.Scripting.HourPeriod)">
             <summary>Test if period is overlapping this period</summary>
             <param name="period">The period</param>
             <param name="testPeriod">The period to test</param>
             <returns>True, if the period is overlapping this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.Intersect(PayrollEngine.Client.Scripting.TimePeriod,PayrollEngine.Client.Scripting.TimePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.Intersect(PayrollEngine.Client.Scripting.HourPeriod,PayrollEngine.Client.Scripting.HourPeriod)">
             <summary>Get the intersection of a time period with this period</summary>
             <param name="period">The period</param>
             <param name="intersectPeriod">The period to intersect</param>
             <returns>The intersecting time period, null if no intersection is present</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IntersectHours(PayrollEngine.Client.Scripting.TimePeriod,PayrollEngine.Client.Scripting.TimePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IntersectHours(PayrollEngine.Client.Scripting.HourPeriod,PayrollEngine.Client.Scripting.HourPeriod)">
             <summary>Get the hours of intersection</summary>
             <param name="period">The period</param>
             <param name="intersectPeriod">The period to intersect</param>
             <returns>The intersecting duration in hours, 0 if no intersection is present</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.TotalDuration(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.TimePeriod})">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.TotalDuration(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.HourPeriod})">
             <summary>Total duration of all time periods</summary>
             <param name="timePeriods">The time periods</param>
             <returns>Accumulated total duration</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.HasOverlapping(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.TimePeriod})">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.HasOverlapping(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.HourPeriod})">
             <summary>Test if any period is overlapping another period</summary>
             <param name="timePeriods">The time periods to test</param>
             <returns>True, if the period is overlapping this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsWithinAny(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.TimePeriod},System.Decimal)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsWithinAny(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.HourPeriod},System.Decimal)">
             <summary>Test if a specific time moment is within any time period</summary>
             <param name="timePeriods">The time periods to test</param>
             <param name="test">The moment to test</param>
             <returns>True, if the moment is within this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.IsWithinAny(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.TimePeriod},PayrollEngine.Client.Scripting.TimePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.IsWithinAny(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.HourPeriod},PayrollEngine.Client.Scripting.HourPeriod)">
             <summary>Test if a specific time period is within any time period</summary>
             <param name="timePeriods">The time periods to test</param>
             <param name="testPeriod">The period to test</param>
             <returns>True, if the test period is within this period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.Limits(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.TimePeriod})">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.Limits(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.HourPeriod})">
             <summary>Get limits period, from the earliest start to the latest end</summary>
             <param name="timePeriods">The time periods to evaluate</param>
             <returns>Time period including all time periods, an anytime period for empty collections</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriodExtensions.Intersections(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.TimePeriod},PayrollEngine.Client.Scripting.TimePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.Intersections(System.Collections.Generic.IEnumerable{PayrollEngine.Client.Scripting.HourPeriod},PayrollEngine.Client.Scripting.HourPeriod)">
             <summary>Get all intersections of a time period with any time period</summary>
             <param name="timePeriods">The time periods to test</param>
             <param name="intersectPeriod">The period to intersect</param>
@@ -1904,6 +1999,12 @@
             <summary>Convert the case value to custom type</summary>
             <param name="caseValue">The case value</param>
             <param name="defaultValue">The default value</param>
+            <returns>Accumulated total duration</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ValueAs(PayrollEngine.Client.Scripting.CaseValue,System.Type)">
+            <summary>Convert the case value to custom type</summary>
+            <param name="caseValue">The case value</param>
+            <param name="type">Target type</param>
             <returns>Accumulated total duration</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CaseValueExtensions.ToString(PayrollEngine.Client.Scripting.CaseValue)">
@@ -2003,19 +2104,30 @@
             <summary>Convert payroll case value to custom type</summary>
             <param name="payrollValue">The payroll value</param>
             <param name="defaultValue">The default value</param>
-            <returns>Accumulated total duration</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.Convert(PayrollEngine.Client.Scripting.PayrollValue,System.Type,System.Object)">
+            <summary>Convert payroll case value to custom type</summary>
+            <param name="payrollValue">The payroll value</param>
+            <param name="type">Target type</param>
+            <param name="defaultValue">The default value</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToString(PayrollEngine.Client.Scripting.PayrollValue)">
-            <summary>Convert payroll case value to string/></summary>
+            <summary>Convert payroll case value to string</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToBoolean(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to bool</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToNullableBoolean(PayrollEngine.Client.Scripting.PayrollValue)">
+            <summary>Convert payroll case value to nullable bool</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToInt(PayrollEngine.Client.Scripting.PayrollValue)">
-            <summary>Convert payroll case value to int/></summary>
+            <summary>Convert payroll case value to int</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToNullableInt(PayrollEngine.Client.Scripting.PayrollValue)">
-            <summary>Convert payroll case value to nullable int/></summary>
+            <summary>Convert payroll case value to nullable int</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToDecimal(PayrollEngine.Client.Scripting.PayrollValue)">
-            <summary>Convert payroll case value to decimal/></summary>
+            <summary>Convert payroll case value to decimal</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PayrollValueExtensions.ToDecimal(PayrollEngine.Client.Scripting.PayrollValue,PayrollEngine.Client.Scripting.DecimalRounding)">
             <summary>Convert payroll case value to decimal</summary>
@@ -2101,6 +2213,12 @@
             <summary>Convert case period value to custom type</summary>
             <param name="periodValue">The case value</param>
             <param name="defaultValue">The default value</param>
+            <returns>Accumulated total duration</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ValueAs(PayrollEngine.Client.Scripting.PeriodValue,System.Type)">
+            <summary>Convert case period value to custom type</summary>
+            <param name="periodValue">The case value</param>
+            <param name="type">Target type</param>
             <returns>Accumulated total duration</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PeriodValueExtensions.ToString(PayrollEngine.Client.Scripting.PeriodValue)">
@@ -3982,6 +4100,23 @@
             <param name="attributeName">The name of the case field attribute</param>
             <returns>True if the case value attribute has been removed</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeFunction.ShowCaseField(System.String)">
+            <summary>Show the case field</summary>
+            <param name="caseFieldName">The name of the case field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeFunction.HideCaseField(System.String)">
+            <summary>Hide the case field</summary>
+            <param name="caseFieldName">The name of the case field</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeFunction.GetChangeCaseObject``1">
+            <summary>Get case change object</summary>
+            <returns>Data object with change data</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeFunction.SetChangeCaseObject``1(``0)">
+            <summary>Set case change object</summary>
+            <typeparam name="T"></typeparam>
+            <param name="data">Data object to set</param>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseChangeFunction.GetValueSlots(System.String)">
             <summary>Get the case slot values, grouped by case value</summary>
             <param name="caseFieldName">The name of the case field</param>
@@ -4999,14 +5134,12 @@
             <summary>Add a new case issue</summary>
             <param name="message">The issue message</param>
             <param name="number">The issue number</param>
-            <returns>Always false</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction.AddIssue(System.String,System.String,System.Int32)">
             <summary>Add a new case field issue</summary>
             <param name="caseFieldName">Name of the case field</param>
             <param name="message">The issue message</param>
             <param name="number">The issue number</param>
-            <returns>Always false</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction.Validate">
             <summary>Entry point for the runtime</summary>
@@ -5394,11 +5527,9 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.AddIssue(System.String)">
             <summary>Add a new case issue</summary>
-            <returns>Always false</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.AddIssue(System.String,System.String)">
             <summary>Add a new case field issue</summary>
-            <returns>Always false</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.Validate">
             <summary>Entry point for the runtime</summary>
@@ -5684,45 +5815,49 @@
             <param name="employeeId">The employee id, use 0 to ignore the employee culture</param>
             <returns>The most derived calendar name</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.Function.IsWorkDay(System.String,System.DateTime)">
-            <summary>Test for working day</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.IsCalendarWorkDay(System.String,System.Nullable{System.DateTime})">
+            <summary>Test for calendar working day</summary>
             <param name="calendarName">The calendar name</param>
-            <param name="moment">Test day</param>
+            <param name="moment">Test day (default: today)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetPreviousWorkDay(System.String,System.DateTime)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.IsCalendarWorkDay(System.Nullable{System.DateTime})">
+            <summary>Test for calendar working day</summary>
+            <param name="moment">Work date (default: today)</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetPreviousWorkDay(System.String,System.Nullable{System.DateTime})">
             <summary>Get previous working day</summary>
             <param name="calendarName">The calendar name</param>
-            <param name="moment">The start moment</param>
+            <param name="moment">The start moment (default: today)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetPreviousWorkDays(System.String,System.DateTime,System.Int32)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetPreviousWorkDays(System.String,System.Nullable{System.DateTime},System.Int32)">
             <summary>Get previous working days</summary>
             <param name="calendarName">The calendar name</param>
-            <param name="moment">The start moment (not included in results)</param>
+            <param name="moment">The start moment (default: today, not included in results)</param>
             <param name="count">The number of days (default: 1)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetNextWorkDay(System.String,System.DateTime)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetNextWorkDay(System.String,System.Nullable{System.DateTime})">
             <summary>Get next working day</summary>
             <param name="calendarName">The calendar name</param>
-            <param name="moment">The start moment</param>
+            <param name="moment">The start moment (default: today)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetNextWorkDays(System.String,System.DateTime,System.Int32)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetNextWorkDays(System.String,System.Nullable{System.DateTime},System.Int32)">
             <summary>Get next working days</summary>
             <param name="calendarName">The calendar name</param>
-            <param name="moment">The start moment (not included in results)</param>
+            <param name="moment">The start moment (default: today, not included in results)</param>
             <param name="count">The number of days (default: 1)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetDerivedCalendarPeriod(System.DateTime,System.Int32,System.Int32,System.Int32)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetCalendarPeriod(System.Nullable{System.DateTime},System.Int32,System.Int32,System.Int32)">
             <summary>Gets the calendar period</summary>
-            <param name="moment">Moment within the period</param>
+            <param name="moment">Moment within the period (default: today)</param>
             <param name="divisionId">The division id, use 0 to ignore the division culture</param>
             <param name="employeeId">The employee id, use 0 to ignore the employee culture</param>
             <param name="offset">The period offset (default: 0/current)</param>
             <returns>The period start and end date</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetCalendarPeriod(System.String,System.DateTime,System.Int32,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.Function.GetCalendarPeriod(System.String,System.Nullable{System.DateTime},System.Int32,System.String)">
             <summary>Gets the calendar period</summary>
             <param name="calendarName">The calendar name</param>
-            <param name="moment">Moment within the period</param>
+            <param name="moment">Moment within the period (default: today)</param>
             <param name="offset">The period offset (default: 0/current)</param>
             <param name="culture">The calendar culture (default: tenant culture)</param>
             <returns>The period start and end date</returns>
@@ -5902,8 +6037,17 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayrollId">
             <summary>The payroll id</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.DivisionId">
+            <summary>The division id</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayrollCulture">
             <summary>The payroll culture</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCalendarPeriod(System.Nullable{System.DateTime},System.Int32)">
+            <summary>Gets the calendar period</summary>
+            <param name="moment">Moment within the period (default: today)</param>
+            <param name="offset">The period offset (default: 0/current)</param>
+            <returns>The period start and end date</returns>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EmployeeId">
             <summary>The employee id</summary>
@@ -6215,13 +6359,19 @@
             <param name="valueDate">The value date</param>
             <returns>Raw case value from a specific date</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRawCaseValues(System.Collections.Generic.IList{System.String},System.DateTime)">
+            <summary>Get multiple raw case values from a specific date</summary>
+            <param name="caseFieldNames">The case field names</param>
+            <param name="valueDate">The value date</param>
+            <returns>Raw case value from a specific date</returns>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRawCaseValue``1(System.String,System.DateTime)">
             <summary>Get raw payroll value from a specific date</summary>
             <param name="caseFieldName">The case field name</param>
             <param name="valueDate">The value date</param>
             <returns>Raw case value from a specific date</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRawCaseValues(System.String,PayrollEngine.Client.Scripting.DatePeriod)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetPeriodRawCaseValues(System.String,PayrollEngine.Client.Scripting.DatePeriod)">
             <summary>Get raw case values created within a date period</summary>
             <param name="caseFieldName">The case field name</param>
             <param name="period">The case value creation period</param>
@@ -6233,7 +6383,7 @@
             <remarks>Case value tags and attributes are not supported</remarks>
             <returns>Raw case values from a date period</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRawCaseValues(System.String,System.Int32)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetPeriodRawCaseValues(System.String,System.Int32)">
             <summary>Get raw case values created within an offset period</summary>
             <param name="caseFieldName">The case field name</param>
             <param name="periodOffset">The offset period</param>
@@ -6245,6 +6395,30 @@
             <param name="startDate">The date after the case value was created</param>
             <param name="endDate">The date before the case value was created</param>
             <returns>Raw case values from the current period</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCaseObjectValues``1(System.Boolean,System.Boolean)">
+            <summary>Get case data object with the current period value</summary>
+            <param name="recursive">Recursive objects (default: true)</param>
+            <param name="writeable">Writeable values only</param>
+            <returns>Data object with change data</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCaseObject``1(System.Collections.Generic.List{PayrollEngine.Client.Scripting.CasePayrollValue},System.DateTime)">
+            <summary>Get case data object by y moment within the payroll values</summary>
+            <param name="caseValues">Case payroll values</param>
+            <param name="moment">Value moment</param>
+            <returns>Data object with change data</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetRawCaseObject``1(System.DateTime,System.Boolean)">
+            <summary>Get case object from a specific date</summary>
+            <param name="valueDate">Value date</param>
+            <param name="recursive">Recursive objects (default: true)</param>
+            <returns>Data object with change data</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetPeriodRawCaseObjects``1(System.Collections.Generic.List{System.DateTime},System.Boolean)">
+            <summary>Get case object from a date period</summary>
+            <param name="moments">Value moments</param>
+            <param name="recursive">Recursive objects (default: true)</param>
+            <returns>Data object with change data</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCaseValues(System.String[])">
             <summary>Get multiple case values of the current period</summary>
@@ -7544,6 +7718,92 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.GetValue">
             <summary>Entry point for the runtime</summary>
             <remarks>Internal usage only, do not call this method</remarks>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.HourPeriod">
+            <summary>An immutable hour period between the start and end time</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.#ctor(System.Decimal,System.Decimal)">
+            <summary>Create a period from start to end</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.#ctor(System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>Create a period from conditional start to conditional end</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.FromStart(System.Decimal,System.Decimal)">
+            <summary>
+            Create time from start time and duration
+            </summary>
+            <param name="start">Period start</param>
+            <param name="hours">Duration time</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.FromStart(System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            Create time from start time and duration
+            </summary>
+            <param name="start">Period start</param>
+            <param name="hours">Duration time</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.FromEnd(System.Decimal,System.Decimal)">
+            <summary>
+            Create time from end time and duration
+            </summary>
+            <param name="hours">Duration time</param>
+            <param name="end">Period end</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.FromEnd(System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            Create time from end time and duration
+            </summary>
+            <param name="hours">Duration time</param>
+            <param name="end">Period end</param>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.HourPeriod.Start">
+            <summary>The period start time</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.HourPeriod.End">
+            <summary>The period end time</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.HourPeriod.IsMoment">
+            <summary>Test if start and end are equal</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.HourPeriod.IsEmpty">
+            <summary>Test if period is empty</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.HourPeriod.Hours">
+            <summary>The period hours</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.HourPeriod.Duration">
+            <summary>The period duration</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.GetStartDate(System.DateTime)">
+            <summary>Get start date</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.GetEndDate(System.DateTime)">
+            <summary>Get end date</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.Equals(System.Object)">
+            <summary>Determines whether the specified <see cref="T:System.Object" /> is equal to this instance</summary>
+            <param name="source">The object to compare with the current object</param>
+            <returns>True if the specified <see cref="T:System.Object" /> is equal to this instance</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.GetHashCode">
+            <summary>Returns a hash code for this instance</summary>
+            <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.op_Equality(PayrollEngine.Client.Scripting.HourPeriod,PayrollEngine.Client.Scripting.HourPeriod)">
+            <summary>Compare two time periods for equal values</summary>
+            <param name="left">The left period to compare</param>
+            <param name="right">The right period to compare</param>
+            <returns>True if the periods are equal</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.op_Inequality(PayrollEngine.Client.Scripting.HourPeriod,PayrollEngine.Client.Scripting.HourPeriod)">
+            <summary>Compare two time periods for different values</summary>
+            <param name="left">The left period to compare</param>
+            <param name="right">The right period to compare</param>
+            <returns>True if the periods are different</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.HourPeriod.ToString">
+            <summary>Returns a <see cref="T:System.String" /> that represents this instance</summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.CaseValueResult">
             <summary>Case value result</summary>
@@ -9626,6 +9886,9 @@
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.PayrollId">
             <summary>The payroll id</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.DivisionId">
+            <summary>The division id</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.EvaluationDate">
             <summary>The evaluation date</summary>
         </member>
@@ -9673,8 +9936,15 @@
             <returns>The case value tas, empty on unknown case field</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetCaseValue(System.String,System.DateTime)">
-            <summary>Get case values by date range</summary>
+            <summary>Get case value from a specific moment</summary>
             <param name="caseFieldName">The case field name</param>
+            <param name="valueDate">The value date</param>
+            <remarks>Use nested tuples to reduce the tuple item count to 7</remarks>
+            <returns>Case value from a specific date</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetCaseValues(System.Collections.Generic.IList{System.String},System.DateTime)">
+            <summary>Get case values from a specific moment</summary>
+            <param name="caseFieldNames">The case field names</param>
             <param name="valueDate">The value date</param>
             <remarks>Use nested tuples to reduce the tuple item count to 7</remarks>
             <returns>Case value from a specific date</returns>
@@ -10149,8 +10419,8 @@
             <param name="employeeId">The employee id, use 0 to ignore the employee calendar</param>
             <returns>The most derived calendar name</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IRuntime.IsWorkDay(System.String,System.DateTime)">
-            <summary>Test for working day</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IRuntime.IsCalendarWorkDay(System.String,System.DateTime)">
+            <summary>Test for calendar working day</summary>
             <param name="calendarName">The calendar name</param>
             <param name="moment">Test day</param>
         </member>
@@ -10649,92 +10919,6 @@
         <member name="M:PayrollEngine.Client.Scripting.SystemActionProvider.GetSystemActionScripts(PayrollEngine.FunctionType)">
             <summary>Get the system action scripts</summary>
             <param name="functionType">The function type</param>
-        </member>
-        <member name="T:PayrollEngine.Client.Scripting.TimePeriod">
-            <summary>An immutable time period between the start and end time</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.#ctor(System.Decimal,System.Decimal)">
-            <summary>Create a period from start to end</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.#ctor(System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
-            <summary>Create a period from conditional start to conditional end</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.FromStart(System.Decimal,System.Decimal)">
-            <summary>
-            Create time from start time and duration
-            </summary>
-            <param name="start">Period start</param>
-            <param name="hours">Duration time</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.FromStart(System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
-            <summary>
-            Create time from start time and duration
-            </summary>
-            <param name="start">Period start</param>
-            <param name="hours">Duration time</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.FromEnd(System.Decimal,System.Decimal)">
-            <summary>
-            Create time from end time and duration
-            </summary>
-            <param name="hours">Duration time</param>
-            <param name="end">Period end</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.FromEnd(System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
-            <summary>
-            Create time from end time and duration
-            </summary>
-            <param name="hours">Duration time</param>
-            <param name="end">Period end</param>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.TimePeriod.Start">
-            <summary>The period start time</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.TimePeriod.End">
-            <summary>The period end time</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.TimePeriod.IsMoment">
-            <summary>Test if start and end are equal</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.TimePeriod.IsEmpty">
-            <summary>Test if period is empty</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.TimePeriod.Hours">
-            <summary>The period hours</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.TimePeriod.Duration">
-            <summary>The period duration</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.GetStartDate(System.DateTime)">
-            <summary>Get start date</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.GetEndDate(System.DateTime)">
-            <summary>Get end date</summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.Equals(System.Object)">
-            <summary>Determines whether the specified <see cref="T:System.Object" /> is equal to this instance</summary>
-            <param name="source">The object to compare with the current object</param>
-            <returns>True if the specified <see cref="T:System.Object" /> is equal to this instance</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.GetHashCode">
-            <summary>Returns a hash code for this instance</summary>
-            <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.op_Equality(PayrollEngine.Client.Scripting.TimePeriod,PayrollEngine.Client.Scripting.TimePeriod)">
-            <summary>Compare two time periods for equal values</summary>
-            <param name="left">The left period to compare</param>
-            <param name="right">The right period to compare</param>
-            <returns>True if the periods are equal</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.op_Inequality(PayrollEngine.Client.Scripting.TimePeriod,PayrollEngine.Client.Scripting.TimePeriod)">
-            <summary>Compare two time periods for different values</summary>
-            <param name="left">The left period to compare</param>
-            <param name="right">The right period to compare</param>
-            <returns>True if the periods are different</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.TimePeriod.ToString">
-            <summary>Returns a <see cref="T:System.String" /> that represents this instance</summary>
-            <returns>A <see cref="T:System.String" /> that represents this instance</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Key">
             <summary>Represent a key for lookups or results</summary>

@@ -53,7 +53,7 @@ internal sealed class CaseScriptParser : ScriptParserBase, ICaseScriptParser
             throw new ArgumentException(nameof(caseName));
         }
 
-        return GetScript<CaseAvailableFunctionAttribute, CaseAvailableScriptAttribute>
+        return GetScript<CaseValidateFunctionAttribute, CaseValidateScriptAttribute>
         (query.TenantIdentifier, query.SourceCode,
             x => string.Equals(x.RegulationName, regulationName),
             x => string.Equals(x.CaseName, caseName));

@@ -1,11 +1,11 @@
 ﻿/* Extensions */
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting;
 
@@ -1632,77 +1632,77 @@ public static class DatePeriodExtensions
     }
 }
 
-/// <summary><see cref="TimePeriod">TimePeriod</see> extension methods</summary>
-public static class TimePeriodExtensions
+/// <summary><see cref="HourPeriod">TimePeriod</see> extension methods</summary>
+public static class HourPeriodExtensions
 {
     /// <summary>Test if a specific time moment is before this period</summary>
     /// <param name="period">The period</param>
     /// <param name="test">The moment to test</param>
     /// <returns>True, if the moment is before this period</returns>
-    public static bool IsBefore(this TimePeriod period, decimal test) =>
+    public static bool IsBefore(this HourPeriod period, decimal test) =>
         test < period.Start;
 
     /// <summary>Test if a specific time period is before this period</summary>
     /// <param name="period">The period</param>
     /// <param name="testPeriod">The period to test</param>
     /// <returns>True, if the period is before this period</returns>
-    public static bool IsBefore(this TimePeriod period, TimePeriod testPeriod) =>
+    public static bool IsBefore(this HourPeriod period, HourPeriod testPeriod) =>
         testPeriod.End < period.Start;
 
     /// <summary>Test if a specific time moment is after this period</summary>
     /// <param name="period">The period</param>
     /// <param name="test">The moment to test</param>
     /// <returns>True, if the moment is after this period</returns>
-    public static bool IsAfter(this TimePeriod period, decimal test) =>
+    public static bool IsAfter(this HourPeriod period, decimal test) =>
         test > period.End;
 
     /// <summary>Test if a specific time period is after this period</summary>
     /// <param name="period">The period</param>
     /// <param name="testPeriod">The period to test</param>
     /// <returns>True, if the period is after this period</returns>
-    public static bool IsAfter(this TimePeriod period, TimePeriod testPeriod) =>
+    public static bool IsAfter(this HourPeriod period, HourPeriod testPeriod) =>
         testPeriod.Start > period.End;
 
     /// <summary>Test if a specific time moment is within the period, including open periods</summary>
     /// <param name="period">The period</param>
     /// <param name="test">The moment to test</param>
     /// <returns>True, if the moment is within this period</returns>
-    public static bool IsWithin(this TimePeriod period, decimal test) =>
+    public static bool IsWithin(this HourPeriod period, decimal test) =>
         test.IsWithin(period.Start, period.End);
 
     /// <summary>Test if a specific time period is within the period, including open periods</summary>
     /// <param name="period">The period</param>
     /// <param name="testPeriod">The period to test</param>
     /// <returns>True, if the test period is within this period</returns>
-    public static bool IsWithin(this TimePeriod period, TimePeriod testPeriod) =>
+    public static bool IsWithin(this HourPeriod period, HourPeriod testPeriod) =>
         IsWithin(period, testPeriod.Start) && IsWithin(period, testPeriod.End);
 
     /// <summary>Test if a specific time moment is within or before the period, including open periods</summary>
     /// <param name="period">The period</param>
     /// <param name="test">The moment to test</param>
     /// <returns>True, if the moment is within or before this period</returns>
-    public static bool IsWithinOrBefore(this TimePeriod period, decimal test) =>
+    public static bool IsWithinOrBefore(this HourPeriod period, decimal test) =>
         test <= period.End;
 
     /// <summary>Test if a specific time moment is within or after the period, including open periods</summary>
     /// <param name="period">The period</param>
     /// <param name="test">The moment to test</param>
     /// <returns>True, if the moment is within or after this period</returns>
-    public static bool IsWithinOrAfter(this TimePeriod period, decimal test) =>
+    public static bool IsWithinOrAfter(this HourPeriod period, decimal test) =>
         test >= period.Start;
 
     /// <summary>Test if period is overlapping this period</summary>
     /// <param name="period">The period</param>
     /// <param name="testPeriod">The period to test</param>
     /// <returns>True, if the period is overlapping this period</returns>
-    public static bool IsOverlapping(this TimePeriod period, TimePeriod testPeriod) =>
+    public static bool IsOverlapping(this HourPeriod period, HourPeriod testPeriod) =>
         testPeriod.Start < period.End && period.Start < testPeriod.End;
 
     /// <summary>Get the intersection of a time period with this period</summary>
     /// <param name="period">The period</param>
     /// <param name="intersectPeriod">The period to intersect</param>
     /// <returns>The intersecting time period, null if no intersection is present</returns>
-    public static TimePeriod Intersect(this TimePeriod period, TimePeriod intersectPeriod)
+    public static HourPeriod Intersect(this HourPeriod period, HourPeriod intersectPeriod)
     {
         if (!IsOverlapping(period, intersectPeriod))
         {
@@ -1717,7 +1717,7 @@ public static class TimePeriodExtensions
     /// <param name="period">The period</param>
     /// <param name="intersectPeriod">The period to intersect</param>
     /// <returns>The intersecting duration in hours, 0 if no intersection is present</returns>
-    public static decimal IntersectHours(this TimePeriod period, TimePeriod intersectPeriod)
+    public static decimal IntersectHours(this HourPeriod period, HourPeriod intersectPeriod)
     {
         var intersect = Intersect(period, intersectPeriod);
         return intersect == null ? 0 : (decimal)intersect.Duration.TotalHours;
@@ -1726,7 +1726,7 @@ public static class TimePeriodExtensions
     /// <summary>Total duration of all time periods</summary>
     /// <param name="timePeriods">The time periods</param>
     /// <returns>Accumulated total duration</returns>
-    public static TimeSpan TotalDuration(this IEnumerable<TimePeriod> timePeriods)
+    public static TimeSpan TotalDuration(this IEnumerable<HourPeriod> timePeriods)
     {
         var duration = TimeSpan.Zero;
         return timePeriods.Aggregate(duration, (current, period) => current.Add(period.Duration));
@@ -1735,7 +1735,7 @@ public static class TimePeriodExtensions
     /// <summary>Test if any period is overlapping another period</summary>
     /// <param name="timePeriods">The time periods to test</param>
     /// <returns>True, if the period is overlapping this period</returns>
-    public static bool HasOverlapping(this IEnumerable<TimePeriod> timePeriods)
+    public static bool HasOverlapping(this IEnumerable<HourPeriod> timePeriods)
     {
         var periodList = timePeriods.ToList();
         for (var current = 1; current < periodList.Count; current++)
@@ -1755,20 +1755,20 @@ public static class TimePeriodExtensions
     /// <param name="timePeriods">The time periods to test</param>
     /// <param name="test">The moment to test</param>
     /// <returns>True, if the moment is within this period</returns>
-    public static bool IsWithinAny(this IEnumerable<TimePeriod> timePeriods, decimal test) =>
+    public static bool IsWithinAny(this IEnumerable<HourPeriod> timePeriods, decimal test) =>
         timePeriods.Any(periodValue => periodValue.IsWithin(test));
 
     /// <summary>Test if a specific time period is within any time period</summary>
     /// <param name="timePeriods">The time periods to test</param>
     /// <param name="testPeriod">The period to test</param>
     /// <returns>True, if the test period is within this period</returns>
-    public static bool IsWithinAny(this IEnumerable<TimePeriod> timePeriods, TimePeriod testPeriod) =>
+    public static bool IsWithinAny(this IEnumerable<HourPeriod> timePeriods, HourPeriod testPeriod) =>
         timePeriods.Any(periodValue => periodValue.IsWithin(testPeriod));
 
     /// <summary>Get limits period, from the earliest start to the latest end</summary>
     /// <param name="timePeriods">The time periods to evaluate</param>
     /// <returns>Time period including all time periods, an anytime period for empty collections</returns>
-    public static TimePeriod Limits(this IEnumerable<TimePeriod> timePeriods)
+    public static HourPeriod Limits(this IEnumerable<HourPeriod> timePeriods)
     {
         decimal? start = null;
         decimal? end = null;
@@ -1792,9 +1792,9 @@ public static class TimePeriodExtensions
     /// <param name="timePeriods">The time periods to test</param>
     /// <param name="intersectPeriod">The period to intersect</param>
     /// <returns>List of intersecting time periods</returns>
-    public static List<TimePeriod> Intersections(this IEnumerable<TimePeriod> timePeriods, TimePeriod intersectPeriod)
+    public static List<HourPeriod> Intersections(this IEnumerable<HourPeriod> timePeriods, HourPeriod intersectPeriod)
     {
-        var intersections = new List<TimePeriod>();
+        var intersections = new List<HourPeriod>();
         foreach (var timePeriod in timePeriods)
         {
             var intersection = timePeriod.Intersect(intersectPeriod);
@@ -1826,8 +1826,15 @@ public static class CaseValueExtensions
         {
             return defaultValue;
         }
-        return (T)Convert.ChangeType(caseValue.Value, typeof(T));
+        return (T)ValueAs(caseValue, typeof(T));
     }
+
+    /// <summary>Convert the case value to custom type</summary>
+    /// <param name="caseValue">The case value</param>
+    /// <param name="type">Target type</param>
+    /// <returns>Accumulated total duration</returns>
+    public static object ValueAs(this CaseValue caseValue, Type type) =>
+        Convert.ChangeType(caseValue.Value, type);
 
     /// <summary>Convert case value to string/></summary>
     public static string ToString(this CaseValue value) =>
@@ -1975,33 +1982,83 @@ public static class CaseValueExtensions
 /// <summary><see cref="PayrollValue">PayrollValue</see> extension methods</summary>
 public static class PayrollValueExtensions
 {
-
     /// <summary>Convert payroll case value to custom type</summary>
     /// <param name="payrollValue">The payroll value</param>
     /// <param name="defaultValue">The default value</param>
-    /// <returns>Accumulated total duration</returns>
-    public static T ValueAs<T>(this PayrollValue payrollValue, T defaultValue = default)
+    public static T ValueAs<T>(this PayrollValue payrollValue, T defaultValue = default) =>
+        (T)Convert(payrollValue, typeof(T), defaultValue);
+
+    /// <summary>Convert payroll case value to custom type</summary>
+    /// <param name="payrollValue">The payroll value</param>
+    /// <param name="type">Target type</param>
+    /// <param name="defaultValue">The default value</param>
+    public static object Convert(this PayrollValue payrollValue, Type type, object defaultValue = null)
     {
-        if (payrollValue == null || payrollValue.Value == null)
+        if (payrollValue?.Value == null)
         {
             return defaultValue;
         }
-        return (T)payrollValue.Value;
+
+        if (type == typeof(string))
+        {
+            return (string)payrollValue.Value;
+        }
+        if (type == typeof(bool))
+        {
+            return (bool)payrollValue.Value;
+        }
+        if (type == typeof(bool?))
+        {
+            return (bool?)payrollValue.Value;
+        }
+        if (type == typeof(int))
+        {
+            return (int)payrollValue.Value;
+        }
+        if (type == typeof(int?))
+        {
+            return (int?)payrollValue.Value;
+        }
+        if (type == typeof(decimal))
+        {
+            return (decimal)payrollValue.Value;
+        }
+        if (type == typeof(decimal?))
+        {
+            return (decimal?)payrollValue.Value;
+        }
+        if (type == typeof(DateTime))
+        {
+            return (DateTime)payrollValue.Value;
+        }
+        if (type == typeof(DateTime?))
+        {
+            return (DateTime?)payrollValue.Value;
+        }
+        return payrollValue.Value;
     }
 
-    /// <summary>Convert payroll case value to string/></summary>
+    /// <summary>Convert payroll case value to string</summary>
     public static string ToString(this PayrollValue value) =>
         ValueAs<string>(value);
 
-    /// <summary>Convert payroll case value to int/></summary>
+    /// <summary>Convert payroll case value to bool</summary>
+    public static bool ToBoolean(this PayrollValue value) =>
+        ValueAs<bool>(value);
+
+    /// <summary>Convert payroll case value to nullable bool</summary>
+    public static bool? ToNullableBoolean(this PayrollValue value) =>
+        ValueAs<bool?>(value);
+
+    /// <summary>Convert payroll case value to int</summary>
     public static int ToInt(this PayrollValue value) =>
         ValueAs<int>(value);
 
-    /// <summary>Convert payroll case value to nullable int/></summary>
+    /// <summary>Convert payroll case value to nullable int</summary>
     public static int? ToNullableInt(this PayrollValue value) =>
         ValueAs<int?>(value);
 
-    /// <summary>Convert payroll case value to decimal/></summary>
+    /// <summary>Convert payroll case value to decimal</summary>
     public static decimal ToDecimal(this PayrollValue value) =>
         ValueAs<decimal>(value);
 
@@ -2158,8 +2215,15 @@ public static class PeriodValueExtensions
         {
             return defaultValue;
         }
-        return (T)Convert.ChangeType(periodValue.Value, typeof(T));
+        return (T)ValueAs(periodValue, typeof(T));
     }
+
+    /// <summary>Convert case period value to custom type</summary>
+    /// <param name="periodValue">The case value</param>
+    /// <param name="type">Target type</param>
+    /// <returns>Accumulated total duration</returns>
+    public static object ValueAs(this PeriodValue periodValue, Type type) =>
+        Convert.ChangeType(periodValue.Value, type);
 
     /// <summary>Convert case period value to string/></summary>
     public static string ToString(this PeriodValue value) =>

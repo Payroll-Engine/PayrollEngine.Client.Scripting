@@ -63,10 +63,10 @@ public interface IRuntime
     /// <returns>The most derived calendar name</returns>
     string GetDerivedCalendar(int divisionId, int employeeId);
 
-    /// <summary>Test for working day</summary>
+    /// <summary>Test for calendar working day</summary>
     /// <param name="calendarName">The calendar name</param>
     /// <param name="moment">Test day</param>
-    bool IsWorkDay(string calendarName, DateTime moment);
+    bool IsCalendarWorkDay(string calendarName, DateTime moment);
 
     /// <summary>Get previous working days</summary>
     /// <param name="calendarName">The calendar name</param>

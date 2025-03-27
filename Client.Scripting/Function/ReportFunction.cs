@@ -778,7 +778,7 @@ public abstract partial class ReportFunction : Function
     /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
     /// <param name="regulationDate">The regulation date (default: UTC now)</param>
     /// <returns>Data table including for any case filed a column</returns>
-    protected DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
+    public DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
         IEnumerable<string> caseFieldNames, DatePeriod period,
         DateTime? regulationDate = null, DateTime? evaluationDate = null) =>
         ExecuteRawCaseValueQuery(tableName, payrollId, employeeId: 0, caseFieldNames,
@@ -795,7 +795,7 @@ public abstract partial class ReportFunction : Function
     /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
     /// <param name="regulationDate">The regulation date (default: UTC now)</param>
     /// <returns>Data table including for any case filed a column</returns>
-    protected DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
+    public DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
         int employeeId, IEnumerable<string> caseFieldNames, DatePeriod period,
         DateTime? regulationDate = null, DateTime? evaluationDate = null) =>
         ExecuteRawCaseValueQuery(tableName, payrollId, employeeId: employeeId, caseFieldNames,
@@ -812,7 +812,7 @@ public abstract partial class ReportFunction : Function
     /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
     /// <param name="regulationDate">The regulation date (default: UTC now)</param>
     /// <returns>Data table including for any case filed a column</returns>
-    protected DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
+    public DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
         IEnumerable<string> caseFieldNames,
         DateTime? periodStart = null, DateTime? periodEnd = null,
         DateTime? regulationDate = null, DateTime? evaluationDate = null) =>
@@ -831,7 +831,7 @@ public abstract partial class ReportFunction : Function
     /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
     /// <param name="regulationDate">The regulation date (default: UTC now)</param>
     /// <returns>Data table including for any case filed a column</returns>
-    protected DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
+    public DataTable ExecuteRawCaseValueQuery(string tableName, int payrollId,
         int employeeId, IEnumerable<string> caseFieldNames,
         DateTime? startDate = null, DateTime? endDate = null,
         DateTime? regulationDate = null, DateTime? evaluationDate = null)
@@ -972,7 +972,7 @@ public abstract partial class ReportFunction : Function
     /// <param name="queryName">The query name</param>
     /// <param name="parameterName">The parameter name</param>
     /// <returns>The object id, null for unknown payrun</returns>
-    protected int? ResolveIdentifierParameter(string queryName, string parameterName)
+    public int? ResolveIdentifierParameter(string queryName, string parameterName)
     {
         if (string.IsNullOrWhiteSpace(queryName))
         {
@@ -1020,7 +1020,7 @@ public abstract partial class ReportFunction : Function
     /// <param name="queryName">The query name</param>
     /// <param name="parameterName">The parameter name</param>
     /// <returns>The object id, null for unknown payrun</returns>
-    protected int? ResolveNameParameter(string queryName, string parameterName)
+    public int? ResolveNameParameter(string queryName, string parameterName)
     {
         if (string.IsNullOrWhiteSpace(queryName))
         {

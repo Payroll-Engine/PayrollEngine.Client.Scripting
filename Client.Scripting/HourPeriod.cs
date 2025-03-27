@@ -1,15 +1,15 @@
-﻿/* TimePeriod */
+﻿/* HourPeriod */
 
 using System;
 using System.Text.Json.Serialization;
 
 namespace PayrollEngine.Client.Scripting;
 
-/// <summary>An immutable time period between the start and end time</summary>
-public sealed class TimePeriod
+/// <summary>An immutable hour period between the start and end time</summary>
+public sealed class HourPeriod
 {
     /// <summary>Create a period from start to end</summary>
-    public TimePeriod(decimal start, decimal end)
+    public HourPeriod(decimal start, decimal end)
     {
         if (end < start)
         {
@@ -24,7 +24,7 @@ public sealed class TimePeriod
     }
 
     /// <summary>Create a period from conditional start to conditional end</summary>
-    public TimePeriod(decimal? start, decimal? end) :
+    public HourPeriod(decimal? start, decimal? end) :
         this(start ?? 0m, end ?? 0m)
     {
     }
@@ -34,7 +34,7 @@ public sealed class TimePeriod
     /// </summary>
     /// <param name="start">Period start</param>
     /// <param name="hours">Duration time</param>
-    public static TimePeriod FromStart(decimal start, decimal hours) =>
+    public static HourPeriod FromStart(decimal start, decimal hours) =>
         new(start, start + hours);
 
     /// <summary>
@@ -42,7 +42,7 @@ public sealed class TimePeriod
     /// </summary>
     /// <param name="start">Period start</param>
     /// <param name="hours">Duration time</param>
-    public static TimePeriod FromStart(decimal? start, decimal? hours) =>
+    public static HourPeriod FromStart(decimal? start, decimal? hours) =>
         FromStart(start ?? 0m, hours ?? 0m);
 
     /// <summary>
@@ -50,7 +50,7 @@ public sealed class TimePeriod
     /// </summary>
     /// <param name="hours">Duration time</param>
     /// <param name="end">Period end</param>
-    public static TimePeriod FromEnd(decimal hours, decimal end) =>
+    public static HourPeriod FromEnd(decimal hours, decimal end) =>
         new(end - hours, end);
 
     /// <summary>
@@ -58,7 +58,7 @@ public sealed class TimePeriod
     /// </summary>
     /// <param name="hours">Duration time</param>
     /// <param name="end">Period end</param>
-    public static TimePeriod FromEnd(decimal? hours, decimal? end) =>
+    public static HourPeriod FromEnd(decimal? hours, decimal? end) =>
         FromEnd(hours ?? 0m, end ?? 0m);
 
     /// <summary>The period start time</summary>
@@ -101,7 +101,7 @@ public sealed class TimePeriod
     /// <returns>True if the specified <see cref="object" /> is equal to this instance</returns>
     public override bool Equals(object source)
     {
-        var compare = source as TimePeriod;
+        var compare = source as HourPeriod;
         if (compare == null)
         {
             return false;
@@ -123,7 +123,7 @@ public sealed class TimePeriod
     /// <param name="left">The left period to compare</param>
     /// <param name="right">The right period to compare</param>
     /// <returns>True if the periods are equal</returns>
-    public static bool operator ==(TimePeriod left, TimePeriod right)
+    public static bool operator ==(HourPeriod left, HourPeriod right)
     {
         if (ReferenceEquals(left, right))
         {
@@ -140,13 +140,13 @@ public sealed class TimePeriod
     /// <param name="left">The left period to compare</param>
     /// <param name="right">The right period to compare</param>
     /// <returns>True if the periods are different</returns>
-    public static bool operator !=(TimePeriod left, TimePeriod right) =>
+    public static bool operator !=(HourPeriod left, HourPeriod right) =>
         !(left == right);
 
     /// <summary>Returns a <see cref="string" /> that represents this instance</summary>
     /// <returns>A <see cref="string" /> that represents this instance</returns>
     public override string ToString() =>
-        $"{Start} - {End}";
+        $"{Start:0.##} - {End:0.##}";
 
     #endregion
 

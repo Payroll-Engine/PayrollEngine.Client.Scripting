@@ -1,11 +1,11 @@
 ﻿/* Function */
 
 using System;
+using System.Linq;
 using System.Text.Json;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Globalization;
-using System.Linq;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -111,59 +111,64 @@ public abstract partial class Function : IDisposable
     public string GetDerivedCalendar(int divisionId = 0, int employeeId = 0) =>
         Runtime.GetDerivedCalendar(divisionId, employeeId);
 
-    /// <summary>Test for working day</summary>
+    /// <summary>Test for calendar working day</summary>
     /// <param name="calendarName">The calendar name</param>
-    /// <param name="moment">Test day</param>
-    public bool IsWorkDay(string calendarName, DateTime moment) =>
-        Runtime.IsWorkDay(calendarName, moment);
+    /// <param name="moment">Test day (default: today)</param>
+    public bool IsCalendarWorkDay(string calendarName, DateTime? moment = null) =>
+        Runtime.IsCalendarWorkDay(calendarName, moment ?? Date.Today);
+
+    /// <summary>Test for calendar working day</summary>
+    /// <param name="moment">Work date (default: today)</param>
+    public bool IsCalendarWorkDay(DateTime? moment = null) =>
+        IsCalendarWorkDay(GetDerivedCalendar(), moment);
 
     /// <summary>Get previous working day</summary>
     /// <param name="calendarName">The calendar name</param>
-    /// <param name="moment">The start moment</param>
-    public DateTime GetPreviousWorkDay(string calendarName, DateTime moment) =>
-        GetPreviousWorkDays(calendarName, moment, 1).FirstOrDefault(DateTime.MinValue);
+    /// <param name="moment">The start moment (default: today)</param>
+    public DateTime GetPreviousWorkDay(string calendarName, DateTime? moment = null) =>
+        GetPreviousWorkDays(calendarName, moment).FirstOrDefault(DateTime.MinValue);
 
     /// <summary>Get previous working days</summary>
     /// <param name="calendarName">The calendar name</param>
-    /// <param name="moment">The start moment (not included in results)</param>
+    /// <param name="moment">The start moment (default: today, not included in results)</param>
     /// <param name="count">The number of days (default: 1)</param>
-    public List<DateTime> GetPreviousWorkDays(string calendarName, DateTime moment, int count) =>
-        Runtime.GetPreviousWorkDays(calendarName, moment, count);
+    public List<DateTime> GetPreviousWorkDays(string calendarName, DateTime? moment = null, int count = 1) =>
+        Runtime.GetPreviousWorkDays(calendarName, moment ?? Date.Today, count);
 
     /// <summary>Get next working day</summary>
     /// <param name="calendarName">The calendar name</param>
-    /// <param name="moment">The start moment</param>
-    public DateTime GetNextWorkDay(string calendarName, DateTime moment) =>
-        GetNextWorkDays(calendarName, moment, 1).FirstOrDefault(DateTime.MinValue);
+    /// <param name="moment">The start moment (default: today)</param>
+    public DateTime GetNextWorkDay(string calendarName, DateTime? moment = null) =>
+        GetNextWorkDays(calendarName, moment).FirstOrDefault(DateTime.MinValue);
 
     /// <summary>Get next working days</summary>
     /// <param name="calendarName">The calendar name</param>
-    /// <param name="moment">The start moment (not included in results)</param>
+    /// <param name="moment">The start moment (default: today, not included in results)</param>
     /// <param name="count">The number of days (default: 1)</param>
-    public List<DateTime> GetNextWorkDays(string calendarName, DateTime moment, int count) =>
-        Runtime.GetNextWorkDays(calendarName, moment, count);
+    public List<DateTime> GetNextWorkDays(string calendarName, DateTime? moment = null, int count = 1) =>
+        Runtime.GetNextWorkDays(calendarName, moment ?? Date.Today, count);
 
     /// <summary>Gets the calendar period</summary>
-    /// <param name="moment">Moment within the period</param>
+    /// <param name="moment">Moment within the period (default: today)</param>
     /// <param name="divisionId">The division id, use 0 to ignore the division culture</param>
     /// <param name="employeeId">The employee id, use 0 to ignore the employee culture</param>
     /// <param name="offset">The period offset (default: 0/current)</param>
     /// <returns>The period start and end date</returns>
-    public DatePeriod GetDerivedCalendarPeriod(DateTime moment,
+    public DatePeriod GetCalendarPeriod(DateTime? moment = null,
         int divisionId = 0, int employeeId = 0, int offset = 0) =>
         GetCalendarPeriod(GetDerivedCalendar(divisionId, employeeId), moment,
             offset, GetDerivedCulture(divisionId, employeeId));
 
     /// <summary>Gets the calendar period</summary>
     /// <param name="calendarName">The calendar name</param>
-    /// <param name="moment">Moment within the period</param>
+    /// <param name="moment">Moment within the period (default: today)</param>
     /// <param name="offset">The period offset (default: 0/current)</param>
     /// <param name="culture">The calendar culture (default: tenant culture)</param>
     /// <returns>The period start and end date</returns>
-    public DatePeriod GetCalendarPeriod(string calendarName, DateTime moment,
+    public DatePeriod GetCalendarPeriod(string calendarName, DateTime? moment = null,
         int offset = 0, string culture = null)
     {
-        var period = (Tuple<DateTime, DateTime>)Runtime.GetCalendarPeriod(calendarName, moment, offset, culture);
+        var period = (Tuple<DateTime, DateTime>)Runtime.GetCalendarPeriod(calendarName, moment ?? Date.Today, offset, culture);
         return new(period.Item1, period.Item2);
     }
 

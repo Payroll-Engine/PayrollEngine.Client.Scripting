@@ -6,7 +6,7 @@ namespace PayrollEngine.Client.Scripting.Runtime;
 /// <summary>Runtime  during the execution of a payroll scripting function</summary>
 public interface IPayrollRuntime : IRuntime
 {
-   
+
     #region Employee
 
     /// <summary>The employee id</summary>
@@ -33,6 +33,13 @@ public interface IPayrollRuntime : IRuntime
 
     /// <summary>The payroll id</summary>
     int PayrollId { get; }
+
+    #endregion
+
+    #region Division
+
+    /// <summary>The division id</summary>
+    int DivisionId { get; }
 
     #endregion
 
@@ -88,13 +95,21 @@ public interface IPayrollRuntime : IRuntime
     /// <returns>The case value tas, empty on unknown case field</returns>
     List<string> GetCaseValueTags(string caseFieldName, DateTime valueDate);
 
-    /// <summary>Get case values by date range</summary>
+    /// <summary>Get case value from a specific moment</summary>
     /// <param name="caseFieldName">The case field name</param>
     /// <param name="valueDate">The value date</param>
     /// <remarks>Use nested tuples to reduce the tuple item count to 7</remarks>
     /// <returns>Case value from a specific date</returns>
     Tuple<string, DateTime, Tuple<DateTime?, DateTime?>, object, DateTime?, List<string>, Dictionary<string, object>> GetCaseValue(
         string caseFieldName, DateTime valueDate);
+
+    /// <summary>Get case values from a specific moment</summary>
+    /// <param name="caseFieldNames">The case field names</param>
+    /// <param name="valueDate">The value date</param>
+    /// <remarks>Use nested tuples to reduce the tuple item count to 7</remarks>
+    /// <returns>Case value from a specific date</returns>
+    List<Tuple<string, DateTime, Tuple<DateTime?, DateTime?>, object, DateTime?, List<string>, Dictionary<string, object>>> GetCaseValues(
+        IList<string> caseFieldNames, DateTime valueDate);
 
     /// <summary>Get case values by date range</summary>
     /// <param name="caseFieldName">The case field name</param>

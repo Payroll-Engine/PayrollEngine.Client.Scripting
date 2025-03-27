@@ -536,6 +536,44 @@ public abstract partial class CaseChangeFunction : CaseFunction
     public bool RemoveCaseValueAttribute(string caseFieldName, string attributeName) =>
         Runtime.RemoveCaseValueAttribute(caseFieldName, attributeName);
 
+    /// <summary>Show the case field</summary>
+    /// <param name="caseFieldName">The name of the case field</param>
+    public void ShowCaseField(string caseFieldName) =>
+        SetCaseFieldAttribute(caseFieldName, InputAttributes.Hidden, false);
+
+    /// <summary>Hide the case field</summary>
+    /// <param name="caseFieldName">The name of the case field</param>
+    public void HideCaseField(string caseFieldName) =>
+        SetCaseFieldAttribute(caseFieldName, InputAttributes.Hidden, true);
+
+    /// <summary>Get case change object</summary>
+    /// <returns>Data object with change data</returns>
+    public T GetChangeCaseObject<T>() where T : class, ICaseObject, new()
+    {
+        var caseObject = new T();
+        foreach (var propertyInfo in CaseObject.GetProperties<T>())
+        {
+            // copy case value to property
+            var value = GetValue(propertyInfo.CaseFieldName);
+            caseObject.SetValue(propertyInfo.CaseFieldName, value);
+        }
+        return caseObject;
+    }
+
+    /// <summary>Set case change object</summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="data">Data object to set</param>
+    public void SetChangeCaseObject<T>(T data) where T : class, ICaseObject, new()
+    {
+        ArgumentNullException.ThrowIfNull(data);
+        foreach (var propertyInfo in CaseObject.GetProperties<T>())
+        {
+            // copy property value to case value
+            var propertyValue = data.GetValue(propertyInfo.CaseFieldName);
+            SetValue(propertyInfo.CaseFieldName, propertyValue);
+        }
+    }
+
     /// <summary>Get the case slot values, grouped by case value</summary>
     /// <param name="caseFieldName">The name of the case field</param>
     /// <returns>The case values in a dictionary grouped by case slot value</returns>
