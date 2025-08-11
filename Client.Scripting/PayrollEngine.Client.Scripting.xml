@@ -4561,7 +4561,7 @@
             <summary>Set without file attachments</summary>
             <param name="context">The action context</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SeAttachmentOptional(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseInputActions.SetAttachmentOptional(PayrollEngine.Client.Scripting.Function.CaseChangeActionContext)">
             <summary>Set optional file attachments</summary>
             <param name="context">The action context</param>
         </member>

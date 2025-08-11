@@ -894,8 +894,8 @@ public class CaseInputActions : CaseChangeActionsBase
 
     /// <summary>Set optional file attachments</summary>
     /// <param name="context">The action context</param>
-    [CaseBuildAction("SeAttachmentOptional", "Set optional file attachments", "FieldInput", "Field")]
-    public void SeAttachmentOptional(CaseChangeActionContext context) =>
+    [CaseBuildAction("SetAttachmentOptional", "Set optional file attachments", "FieldInput", "Field")]
+    public void SetAttachmentOptional(CaseChangeActionContext context) =>
         SetFieldAttachmentOptional(context, context.CaseFieldName);
 
     /// <summary>Set mandatory file attachments</summary>
