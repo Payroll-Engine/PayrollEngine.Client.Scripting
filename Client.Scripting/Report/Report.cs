@@ -1637,7 +1637,7 @@ public static class DataRowExtensions
         {
             return json;
         }
-        if (type == typeof(DateTime) && DateTime.TryParse(json, out var dateValue))
+        if (type == typeof(DateTime) && DateTime.TryParse(json, CultureInfo.InvariantCulture, out var dateValue))
         {
             return dateValue.ToUtc();
         }

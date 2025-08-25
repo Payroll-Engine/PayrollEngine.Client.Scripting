@@ -9,7 +9,7 @@ namespace PayrollEngine.Client.Scripting;
 
 /// <summary>Case object attribute</summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-public class CaseObjectAttribute(string ns) : Attribute
+public sealed class CaseObjectAttribute(string ns) : Attribute
 {
     /// <summary>Object namespace</summary>
     public string Ns { get; } = ns;
@@ -17,7 +17,7 @@ public class CaseObjectAttribute(string ns) : Attribute
 
 /// <summary>Case field ignore attribute</summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class CaseFieldIgnoreAttribute : Attribute;
+public sealed class CaseFieldIgnoreAttribute : Attribute;
 
 /// <summary>Case object extension methods</summary>
 public static class CaseObjectExtensions
