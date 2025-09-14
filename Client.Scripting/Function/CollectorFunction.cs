@@ -138,9 +138,11 @@ public abstract partial class CollectorFunction : PayrunFunction
     /// <param name="slot">The result slot</param>
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
+    /// <param name="culture">The result culture</param>
     public void AddPayrunResult(string name, object value, ValueType? valueType = null, string source = null,
-        string slot = null, IEnumerable<string> tags = null, Dictionary<string, object> attributes = null) =>
-        AddPayrunResult(name, value, PeriodStart, PeriodEnd, valueType, source, slot, tags, attributes);
+        string slot = null, IEnumerable<string> tags = null,
+        Dictionary<string, object> attributes = null, string culture = null) =>
+        AddPayrunResult(name, value, PeriodStart, PeriodEnd, valueType, source, slot, tags, attributes, culture);
 
     /// <summary>Add payrun result</summary>
     /// <param name="name">The result name</param>
@@ -152,9 +154,10 @@ public abstract partial class CollectorFunction : PayrunFunction
     /// <param name="slot">The result slot</param>
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
+    /// <param name="culture">The result culture</param>
     public void AddPayrunResult(string name, object value, DateTime startDate, DateTime endDate,
         ValueType? valueType = null, string source = null, string slot = null,
-        IEnumerable<string> tags = null, Dictionary<string, object> attributes = null)
+        IEnumerable<string> tags = null, Dictionary<string, object> attributes = null, string culture = null)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -168,7 +171,8 @@ public abstract partial class CollectorFunction : PayrunFunction
         source ??= GetType().Name;
         var json = JsonSerializer.Serialize(value);
         valueType ??= value.GetValueType();
-        Runtime.AddPayrunResult(source, name, json, (int)valueType.Value, startDate, endDate, slot, tags?.ToList(), attributes);
+        Runtime.AddPayrunResult(source, name, json, (int)valueType.Value, startDate, endDate, 
+            slot, tags?.ToList(), attributes, culture);
     }
 
     #endregion
@@ -181,9 +185,10 @@ public abstract partial class CollectorFunction : PayrunFunction
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The collector custom result attributes</param>
     /// <param name="valueType">The result value type (numeric), default is the collector value type</param>
+    /// <param name="culture">The result culture</param>
     public void AddCustomResult(string source, decimal value, IEnumerable<string> tags = null,
-        Dictionary<string, object> attributes = null, ValueType? valueType = null) =>
-        AddCustomResult(source, value, PeriodStart, PeriodEnd, tags, attributes, valueType);
+        Dictionary<string, object> attributes = null, ValueType? valueType = null, string culture = null) =>
+        AddCustomResult(source, value, PeriodStart, PeriodEnd, tags, attributes, valueType, culture);
 
     /// <summary>Adds a custom collector result</summary>
     /// <param name="source">The value source</param>
@@ -193,10 +198,11 @@ public abstract partial class CollectorFunction : PayrunFunction
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The collector custom result attributes</param>
     /// <param name="valueType">The result value type (numeric), default is the collector value type</param>
+    /// <param name="culture">The result culture</param>
     public void AddCustomResult(string source, decimal value, DateTime startDate, DateTime endDate,
         IEnumerable<string> tags = null, Dictionary<string, object> attributes = null,
-        ValueType? valueType = null) =>
-        Runtime.AddCustomResult(source, value, startDate, endDate, tags?.ToList(), attributes, (int?)valueType);
+        ValueType? valueType = null, string culture = null) =>
+        Runtime.AddCustomResult(source, value, startDate, endDate, tags?.ToList(), attributes, (int?)valueType, culture);
 
     #endregion
 

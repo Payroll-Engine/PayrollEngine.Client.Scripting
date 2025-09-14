@@ -86,13 +86,12 @@ public partial class CaseValidateFunction : CaseChangeFunction
             return;
         }
         var values = JsonSerializer.Deserialize<Dictionary<string, object>>(attribute);
-        if (!values.ContainsKey(name))
+        if (!values.Remove(name))
         {
             return;
         }
 
         // remove value
-        values.Remove(name);
         SetCaseAttribute(InputAttributes.EditInfo, values.Count > 0 ? JsonSerializer.Serialize(values) : null);
     }
 

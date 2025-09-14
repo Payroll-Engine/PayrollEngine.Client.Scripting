@@ -16,7 +16,7 @@ public interface ICollectorRuntime : IPayrunRuntime
     string CollectMode { get; }
 
     /// <summary>Negated collector result</summary>
-    bool  Negated{ get; }
+    bool Negated { get; }
 
     /// <summary>The threshold value</summary>
     decimal? CollectorThreshold { get; }
@@ -95,8 +95,10 @@ public interface ICollectorRuntime : IPayrunRuntime
     /// <param name="slot">The result slot</param>
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
+    /// <param name="culture">The result culture</param>
     void AddPayrunResult(string source, string name, string value, int valueType,
-        DateTime startDate, DateTime endDate, string slot, List<string> tags, Dictionary<string, object> attributes);
+        DateTime startDate, DateTime endDate, string slot, List<string> tags,
+        Dictionary<string, object> attributes, string culture);
 
     /// <summary>Add a custom collector result</summary>
     /// <param name="source">The value source</param>
@@ -106,8 +108,9 @@ public interface ICollectorRuntime : IPayrunRuntime
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The collector result attributes</param>
     /// <param name="valueType">The result value type (numeric), default is the collector value type</param>
+    /// <param name="culture">The result culture</param>
     void AddCustomResult(string source, decimal value, DateTime startDate, DateTime endDate,
-        List<string> tags, Dictionary<string, object> attributes, int? valueType);
+        List<string> tags, Dictionary<string, object> attributes, int? valueType, string culture);
 
     #endregion
 

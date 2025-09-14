@@ -328,6 +328,7 @@ public interface IActionMethod
 public interface IActionMethod<in T> : IActionMethod
 {
     /// <summary>Evaluate the value</summary>
+    // ReSharper disable once UnusedMemberInSuper.Global
     object EvaluateValue(T value);
 }
 

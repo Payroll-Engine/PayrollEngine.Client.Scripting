@@ -146,9 +146,11 @@ public abstract partial class WageTypeFunction : PayrunFunction
     /// <param name="slot">The result slot</param>
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
+    /// <param name="culture">The result culture</param>
     public void AddPayrunResult(string name, object value, ValueType? valueType = null, string source = null,
-        string slot = null, IEnumerable<string> tags = null, Dictionary<string, object> attributes = null) =>
-        AddPayrunResult(name, value, PeriodStart, PeriodEnd, valueType, source, slot, tags, attributes);
+        string slot = null, IEnumerable<string> tags = null, 
+        Dictionary<string, object> attributes = null, string culture = null) =>
+        AddPayrunResult(name, value, PeriodStart, PeriodEnd, valueType, source, slot, tags, attributes, culture);
 
     /// <summary>Add payrun result</summary>
     /// <param name="name">The result name</param>
@@ -160,9 +162,10 @@ public abstract partial class WageTypeFunction : PayrunFunction
     /// <param name="slot">The result slot</param>
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
+    /// <param name="culture">The result culture</param>
     public void AddPayrunResult(string name, object value, DateTime startDate, DateTime endDate,
         ValueType? valueType = null, string source = null, string slot = null,
-        IEnumerable<string> tags = null, Dictionary<string, object> attributes = null)
+        IEnumerable<string> tags = null, Dictionary<string, object> attributes = null, string culture = null)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -176,7 +179,7 @@ public abstract partial class WageTypeFunction : PayrunFunction
         source ??= GetType().Name;
         var json = JsonSerializer.Serialize(value);
         valueType ??= value.GetValueType();
-        Runtime.AddPayrunResult(source, name, json, (int)valueType.Value, startDate, endDate, slot, tags?.ToList(), attributes);
+        Runtime.AddPayrunResult(source, name, json, (int)valueType.Value, startDate, endDate, slot, tags?.ToList(), attributes, culture);
     }
 
     #endregion
@@ -188,9 +191,10 @@ public abstract partial class WageTypeFunction : PayrunFunction
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
     /// <param name="valueType">The result value type (numeric), default is the wage type value type</param>
+    /// <param name="culture">The result culture</param>
     public void AddCustomResult(string source, IEnumerable<string> tags = null,
-        Dictionary<string, object> attributes = null, ValueType? valueType = null) =>
-        AddCustomResult(source, PeriodStart, PeriodEnd, tags, attributes, valueType);
+        Dictionary<string, object> attributes = null, ValueType? valueType = null, string culture = null) =>
+        AddCustomResult(source, PeriodStart, PeriodEnd, tags, attributes, valueType, culture);
 
     /// <summary>Add wage type custom result from case field values, using the current period</summary>
     /// <param name="source">The value source</param>
@@ -198,9 +202,10 @@ public abstract partial class WageTypeFunction : PayrunFunction
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
     /// <param name="valueType">The result value type (numeric), default is the wage type value type</param>
+    /// <param name="culture">The result culture</param>
     public void AddCustomResult(string source, decimal value, IEnumerable<string> tags = null,
-        Dictionary<string, object> attributes = null, ValueType? valueType = null) =>
-        AddCustomResult(source, value, PeriodStart, PeriodEnd, tags, attributes, valueType);
+        Dictionary<string, object> attributes = null, ValueType? valueType = null, string culture = null) =>
+        AddCustomResult(source, value, PeriodStart, PeriodEnd, tags, attributes, valueType, culture);
 
     /// <summary>Add wage type custom result from case field values</summary>
     /// <param name="source">The value source</param>
@@ -209,9 +214,10 @@ public abstract partial class WageTypeFunction : PayrunFunction
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
     /// <param name="valueType">The result value type (numeric), default is the wage type value type</param>
+    /// <param name="culture">The result culture</param>
     public void AddCustomResult(string source, DateTime startDate, DateTime endDate,
         IEnumerable<string> tags = null, Dictionary<string, object> attributes = null,
-        ValueType? valueType = null)
+        ValueType? valueType = null, string culture = null)
     {
         var tagList = tags?.ToList();
         var caseValues = GetPeriodCaseValues(new DatePeriod(startDate, endDate), source);
@@ -222,7 +228,7 @@ public abstract partial class WageTypeFunction : PayrunFunction
                 if (periodValue.Value is decimal decimalValue)
                 {
                     var period = new DatePeriod(periodValue.Start, periodValue.End);
-                    AddCustomResult(source, decimalValue, period.Start, period.End, tagList, attributes, valueType);
+                    AddCustomResult(source, decimalValue, period.Start, period.End, tagList, attributes, valueType, culture);
                 }
             }
         }
@@ -236,10 +242,11 @@ public abstract partial class WageTypeFunction : PayrunFunction
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
     /// <param name="valueType">The result value type (numeric), default is the wage type value type</param>
+    /// <param name="culture">The result culture</param>
     public void AddCustomResult(string source, decimal value, DateTime startDate,
         DateTime endDate, IEnumerable<string> tags = null, Dictionary<string, object> attributes = null,
-        ValueType? valueType = null) =>
-        Runtime.AddCustomResult(source, value, startDate, endDate, tags?.ToList(), attributes, (int?)valueType);
+        ValueType? valueType = null, string culture = null) =>
+        Runtime.AddCustomResult(source, value, startDate, endDate, tags?.ToList(), attributes, (int?)valueType, culture);
 
     #endregion
 

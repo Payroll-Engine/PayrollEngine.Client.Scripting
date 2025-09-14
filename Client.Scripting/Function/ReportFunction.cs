@@ -617,7 +617,7 @@ public abstract partial class ReportFunction : Function
                 {"TenantId", TenantId.ToString()},
                 {"PayrollId", payrollId.ToString()},
                 {"EmployeeId", employeeId.ToString()},
-                {"CaseType", CaseType.Employee.ToString()},
+                {"CaseType", nameof(CaseType.Employee)},
                 // fallback culture
                 {"Culture", culture ?? UserCulture},
                 {"CaseFieldNames", JsonSerializer.Serialize(columnNames)}
@@ -1100,13 +1100,12 @@ public abstract partial class ReportFunction : Function
             return;
         }
         var values = JsonSerializer.Deserialize<Dictionary<string, object>>(attribute);
-        if (!values.ContainsKey(name))
+        if (!values.Remove(name))
         {
             return;
         }
 
         // remove value
-        values.Remove(name);
         SetReportAttribute(InputAttributes.EditInfo, values.Count > 0 ? JsonSerializer.Serialize(values) : null);
     }
 
