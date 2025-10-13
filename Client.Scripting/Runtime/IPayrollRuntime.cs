@@ -132,6 +132,11 @@ public interface IPayrollRuntime : IRuntime
 
     #region Regulation Lookups
 
+    /// <summary>Test for existing lookup</summary>
+    /// <param name="lookupName">The name of the lookup</param>
+    /// <returns>True on existing lookup</returns>
+    bool HasLookup(string lookupName);
+
     /// <summary>Get lookup value by key</summary>
     /// <param name="lookupName">The name of the lookup</param>
     /// <param name="lookupKey">The lookup value key</param>

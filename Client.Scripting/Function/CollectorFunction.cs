@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using System.Text.Json;
 using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
@@ -127,55 +126,6 @@ public abstract partial class CollectorFunction : PayrunFunction
         }
         return value;
     }
-
-    #region Payrun Results
-
-    /// <summary>Add payrun result using the current period</summary>
-    /// <param name="name">The result name</param>
-    /// <param name="value">The result value</param>
-    /// <param name="valueType">The result value type</param>
-    /// <param name="source">The result source</param>
-    /// <param name="slot">The result slot</param>
-    /// <param name="tags">The result tags</param>
-    /// <param name="attributes">The wage type custom result attributes</param>
-    /// <param name="culture">The result culture</param>
-    public void AddPayrunResult(string name, object value, ValueType? valueType = null, string source = null,
-        string slot = null, IEnumerable<string> tags = null,
-        Dictionary<string, object> attributes = null, string culture = null) =>
-        AddPayrunResult(name, value, PeriodStart, PeriodEnd, valueType, source, slot, tags, attributes, culture);
-
-    /// <summary>Add payrun result</summary>
-    /// <param name="name">The result name</param>
-    /// <param name="value">The result value</param>
-    /// <param name="startDate">The start date</param>
-    /// <param name="endDate">The end date</param>
-    /// <param name="valueType">The result value type</param>
-    /// <param name="source">The result source</param>
-    /// <param name="slot">The result slot</param>
-    /// <param name="tags">The result tags</param>
-    /// <param name="attributes">The wage type custom result attributes</param>
-    /// <param name="culture">The result culture</param>
-    public void AddPayrunResult(string name, object value, DateTime startDate, DateTime endDate,
-        ValueType? valueType = null, string source = null, string slot = null,
-        IEnumerable<string> tags = null, Dictionary<string, object> attributes = null, string culture = null)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException(nameof(name));
-        }
-        if (value == null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
-        source ??= GetType().Name;
-        var json = JsonSerializer.Serialize(value);
-        valueType ??= value.GetValueType();
-        Runtime.AddPayrunResult(source, name, json, (int)valueType.Value, startDate, endDate, 
-            slot, tags?.ToList(), attributes, culture);
-    }
-
-    #endregion
 
     #region Custom Results
 

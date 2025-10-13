@@ -5678,30 +5678,6 @@
             <param name="query">The result query</param>
             <returns>Consolidated employee collector results</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CollectorFunction.AddPayrunResult(System.String,System.Object,System.Nullable{PayrollEngine.Client.Scripting.ValueType},System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
-            <summary>Add payrun result using the current period</summary>
-            <param name="name">The result name</param>
-            <param name="value">The result value</param>
-            <param name="valueType">The result value type</param>
-            <param name="source">The result source</param>
-            <param name="slot">The result slot</param>
-            <param name="tags">The result tags</param>
-            <param name="attributes">The wage type custom result attributes</param>
-            <param name="culture">The result culture</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.CollectorFunction.AddPayrunResult(System.String,System.Object,System.DateTime,System.DateTime,System.Nullable{PayrollEngine.Client.Scripting.ValueType},System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
-            <summary>Add payrun result</summary>
-            <param name="name">The result name</param>
-            <param name="value">The result value</param>
-            <param name="startDate">The start date</param>
-            <param name="endDate">The end date</param>
-            <param name="valueType">The result value type</param>
-            <param name="source">The result source</param>
-            <param name="slot">The result slot</param>
-            <param name="tags">The result tags</param>
-            <param name="attributes">The wage type custom result attributes</param>
-            <param name="culture">The result culture</param>
-        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CollectorFunction.AddCustomResult(System.String,System.Decimal,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.Nullable{PayrollEngine.Client.Scripting.ValueType},System.String)">
             <summary>Adds a custom collector result, using the current period</summary>
             <param name="source">The value source</param>
@@ -6462,6 +6438,11 @@
             <param name="prefix">The slot prefix</param>
             <returns>The slot name matching the value and prefix, otherwise null</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.HasLookup(System.String)">
+            <summary>Test for existing lookup</summary>
+            <param name="lookupName">The lookup name</param>
+            <returns>True on existing lookup</returns>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookup``1(System.String,System.String,System.String)">
             <summary>Get lookup value</summary>
             <param name="lookupName">The lookup name</param>
@@ -6724,6 +6705,30 @@
             <summary>Set employee runtime value as serialized type</summary>
             <param name="key">The value key</param>
             <param name="value">The employee runtime value</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.AddPayrunResult(System.String,System.Object,System.Nullable{PayrollEngine.Client.Scripting.ValueType},System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>Add payrun result using the current period</summary>
+            <param name="name">The result name</param>
+            <param name="value">The result value</param>
+            <param name="valueType">The result value type</param>
+            <param name="source">The result source</param>
+            <param name="slot">The result slot</param>
+            <param name="tags">The result tags</param>
+            <param name="attributes">The wage type custom result attributes</param>
+            <param name="culture">The result culture</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.AddPayrunResult(System.String,System.Object,System.DateTime,System.DateTime,System.Nullable{PayrollEngine.Client.Scripting.ValueType},System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>Add payrun result</summary>
+            <param name="name">The result name</param>
+            <param name="value">The result value</param>
+            <param name="startDate">The start date</param>
+            <param name="endDate">The end date</param>
+            <param name="valueType">The result value type</param>
+            <param name="source">The result source</param>
+            <param name="slot">The result slot</param>
+            <param name="tags">The result tags</param>
+            <param name="attributes">The wage type custom result attributes</param>
+            <param name="culture">The result culture</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetWageTypeCycleResults(PayrollEngine.Client.Scripting.WageTypeCycleResultQuery)">
             <summary>Get employee wage types results by query</summary>
@@ -7580,30 +7585,6 @@
             <summary>Get consolidated and current period employee wage type results by query</summary>
             <param name="query">The result query</param>
             <returns>Consolidated employee collector results</returns>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeFunction.AddPayrunResult(System.String,System.Object,System.Nullable{PayrollEngine.Client.Scripting.ValueType},System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
-            <summary>Add payrun result using the current period</summary>
-            <param name="name">The result name</param>
-            <param name="value">The result value</param>
-            <param name="valueType">The result value type</param>
-            <param name="source">The result source</param>
-            <param name="slot">The result slot</param>
-            <param name="tags">The result tags</param>
-            <param name="attributes">The wage type custom result attributes</param>
-            <param name="culture">The result culture</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeFunction.AddPayrunResult(System.String,System.Object,System.DateTime,System.DateTime,System.Nullable{PayrollEngine.Client.Scripting.ValueType},System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
-            <summary>Add payrun result</summary>
-            <param name="name">The result name</param>
-            <param name="value">The result value</param>
-            <param name="startDate">The start date</param>
-            <param name="endDate">The end date</param>
-            <param name="valueType">The result value type</param>
-            <param name="source">The result source</param>
-            <param name="slot">The result slot</param>
-            <param name="tags">The result tags</param>
-            <param name="attributes">The wage type custom result attributes</param>
-            <param name="culture">The result culture</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeFunction.AddCustomResult(System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.Nullable{PayrollEngine.Client.Scripting.ValueType},System.String)">
             <summary>Add wage type custom result from case field values, using the current period</summary>
@@ -9839,19 +9820,6 @@
             <param name="name">The attribute name</param>
             <param name="value">The attribute value</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.AddPayrunResult(System.String,System.String,System.String,System.Int32,System.DateTime,System.DateTime,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
-            <summary>Add a payrun result</summary>
-            <param name="source">The result source</param>
-            <param name="name">The result name</param>
-            <param name="value">The result value</param>
-            <param name="valueType">The result value type</param>
-            <param name="startDate">The start date</param>
-            <param name="endDate">The end date</param>
-            <param name="slot">The result slot</param>
-            <param name="tags">The result tags</param>
-            <param name="attributes">The wage type custom result attributes</param>
-            <param name="culture">The result culture</param>
-        </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.ICollectorRuntime.AddCustomResult(System.String,System.Decimal,System.DateTime,System.DateTime,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.Nullable{System.Int32},System.String)">
             <summary>Add a custom collector result</summary>
             <param name="source">The value source</param>
@@ -9976,6 +9944,11 @@
             <param name="caseFieldNames">The name of the case fields</param>
             <returns>The period values of multiple cases</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.HasLookup(System.String)">
+            <summary>Test for existing lookup</summary>
+            <param name="lookupName">The name of the lookup</param>
+            <returns>True on existing lookup</returns>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetLookup(System.String,System.String,System.String)">
             <summary>Get lookup value by key</summary>
             <param name="lookupName">The name of the lookup</param>
@@ -10083,6 +10056,19 @@
             <summary>Set employee runtime value</summary>
             <param name="key">The value key</param>
             <param name="value">The employee runtime value, use null to remove the runtime value</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.AddPayrunResult(System.String,System.String,System.String,System.Int32,System.DateTime,System.DateTime,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>Add a payrun result</summary>
+            <param name="source">The result source</param>
+            <param name="name">The result name</param>
+            <param name="value">The result value</param>
+            <param name="valueType">The result value type</param>
+            <param name="startDate">The start date</param>
+            <param name="endDate">The end date</param>
+            <param name="slot">The result slot</param>
+            <param name="tags">The result tags</param>
+            <param name="attributes">The wage type custom result attributes</param>
+            <param name="culture">The result culture</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetWageTypeResults(System.Collections.Generic.IList{System.Decimal},System.DateTime,System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String})">
             <summary>Gets the wage type range results</summary>
@@ -10544,19 +10530,6 @@
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IWageTypeRuntime.DisableCollector(System.String)">
             <summary>Disable collector for the current employee job</summary>
             <param name="collectorName">Name of the collector</param>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IWageTypeRuntime.AddPayrunResult(System.String,System.String,System.String,System.Int32,System.DateTime,System.DateTime,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
-            <summary>Add a payrun result</summary>
-            <param name="source">The result source</param>
-            <param name="name">The result name</param>
-            <param name="value">The result value</param>
-            <param name="valueType">The result value type</param>
-            <param name="startDate">The start date</param>
-            <param name="endDate">The end date</param>
-            <param name="slot">The result slot</param>
-            <param name="tags">The result tags</param>
-            <param name="attributes">The wage type custom result attributes</param>
-            <param name="culture">The result culture</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IWageTypeRuntime.AddCustomResult(System.String,System.Decimal,System.DateTime,System.DateTime,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object},System.Nullable{System.Int32},System.String)">
             <summary>Add a wage type custom result</summary>

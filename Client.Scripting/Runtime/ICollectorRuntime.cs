@@ -83,22 +83,7 @@ public interface ICollectorRuntime : IPayrunRuntime
 
     #endregion
 
-    #region Results
-
-    /// <summary>Add a payrun result</summary>
-    /// <param name="source">The result source</param>
-    /// <param name="name">The result name</param>
-    /// <param name="value">The result value</param>
-    /// <param name="valueType">The result value type</param>
-    /// <param name="startDate">The start date</param>
-    /// <param name="endDate">The end date</param>
-    /// <param name="slot">The result slot</param>
-    /// <param name="tags">The result tags</param>
-    /// <param name="attributes">The wage type custom result attributes</param>
-    /// <param name="culture">The result culture</param>
-    void AddPayrunResult(string source, string name, string value, int valueType,
-        DateTime startDate, DateTime endDate, string slot, List<string> tags,
-        Dictionary<string, object> attributes, string culture);
+    #region Custom Results
 
     /// <summary>Add a custom collector result</summary>
     /// <param name="source">The value source</param>
@@ -114,7 +99,7 @@ public interface ICollectorRuntime : IPayrunRuntime
 
     #endregion
 
-    #region Retro
+    #region Retro Payrun
 
     /// <summary>Schedule a retro payrun</summary>
     /// <param name="scheduleDate">The payrun schedule date, must be before the current period</param>

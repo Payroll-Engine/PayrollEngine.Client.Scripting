@@ -907,6 +907,12 @@ public abstract partial class PayrollFunction : Function
 
     #region Lookups
 
+    /// <summary>Test for existing lookup</summary>
+    /// <param name="lookupName">The lookup name</param>
+    /// <returns>True on existing lookup</returns>
+    public bool HasLookup(string lookupName) =>
+        Runtime.HasLookup(lookupName);
+
     /// <summary>Get lookup value</summary>
     /// <param name="lookupName">The lookup name</param>
     /// <param name="lookupKey">The lookup key</param>
