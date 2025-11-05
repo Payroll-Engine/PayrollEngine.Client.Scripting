@@ -978,6 +978,16 @@ public abstract partial class PayrollFunction : Function
         return string.IsNullOrWhiteSpace(value) ? default : value.ObjectValueJson<T>(objectKey);
     }
 
+    /// <summary>Apply a range value to the lookup ranges, and multiplying the lookup value with the range amount</summary>
+    /// <param name="lookupName">The lookup name</param>
+    /// <param name="rangeValue">The range value</param>
+    /// <param name="valueFieldName">Value field name</param>
+    /// <remarks>Only numeric JSON lookup values are supported.
+    /// The first lookup range value must be zero.</remarks>
+    /// <returns>Summary of all lookup ranges</returns>
+    public decimal ApplyRangeValue(string lookupName, decimal rangeValue, string valueFieldName = null) =>
+        Runtime.ApplyRangeValue(lookupName, rangeValue, valueFieldName);
+
     #endregion
 
     #region Actions

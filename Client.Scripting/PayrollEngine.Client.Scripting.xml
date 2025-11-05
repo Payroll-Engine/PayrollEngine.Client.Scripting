@@ -6470,6 +6470,15 @@
             <param name="lookupKey">The lookup key (optional)</param>
             <param name="culture">The culture, null for the system culture (optional)</param>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.ApplyRangeValue(System.String,System.Decimal,System.String)">
+            <summary>Apply a range value to the lookup ranges, and multiplying the lookup value with the range amount</summary>
+            <param name="lookupName">The lookup name</param>
+            <param name="rangeValue">The range value</param>
+            <param name="valueFieldName">Value field name</param>
+            <remarks>Only numeric JSON lookup values are supported.
+            The first lookup range value must be zero.</remarks>
+            <returns>Summary of all lookup ranges</returns>
+        </member>
         <member name="F:PayrollEngine.Client.Scripting.Function.PayrollFunction.ConditionConsequentMarker">
             <summary>Condition consequent marker</summary>
         </member>
@@ -9963,6 +9972,15 @@
             <param name="lookupKey">The lookup key</param>
             <param name="culture">The value culture</param>
             <returns>The lookup value matching tho the lookup key</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.ApplyRangeValue(System.String,System.Decimal,System.String)">
+            <summary>Apply a range value to the lookup ranges, and multiplying the lookup value with the range amount</summary>
+            <param name="lookupName">The lookup name</param>
+            <param name="rangeValue">The range value</param>
+            <param name="valueFieldName">Value field name</param>
+            <remarks>Only numeric JSON lookup values are supported.
+            The first lookup range value must be zero.</remarks>
+            <returns>Summary of all lookup ranges</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IPayrunEmployeeAvailableRuntime">
             <summary>Runtime for the payrun employee available function <see cref="T:PayrollEngine.Client.Scripting.Function.PayrunEmployeeAvailableFunction"/></summary>

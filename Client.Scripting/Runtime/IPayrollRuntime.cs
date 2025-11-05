@@ -152,6 +152,15 @@ public interface IPayrollRuntime : IRuntime
     /// <returns>The lookup value matching tho the lookup key</returns>
     string GetRangeLookup(string lookupName, decimal rangeValue, string lookupKey = null, string culture = null);
 
+    /// <summary>Apply a range value to the lookup ranges, and multiplying the lookup value with the range amount</summary>
+    /// <param name="lookupName">The lookup name</param>
+    /// <param name="rangeValue">The range value</param>
+    /// <param name="valueFieldName">Value field name</param>
+    /// <remarks>Only numeric JSON lookup values are supported.
+    /// The first lookup range value must be zero.</remarks>
+    /// <returns>Summary of all lookup ranges</returns>
+    decimal ApplyRangeValue(string lookupName, decimal rangeValue, string valueFieldName = null);
+
     #endregion
 
 }
