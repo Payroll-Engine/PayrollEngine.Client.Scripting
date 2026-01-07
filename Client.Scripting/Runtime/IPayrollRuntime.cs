@@ -36,6 +36,13 @@ public interface IPayrollRuntime : IRuntime
 
     #endregion
 
+    #region Namespace
+
+    /// <summary>The script namespace</summary>
+    string Namespace { get; }
+
+    #endregion
+
     #region Division
 
     /// <summary>The division id</summary>

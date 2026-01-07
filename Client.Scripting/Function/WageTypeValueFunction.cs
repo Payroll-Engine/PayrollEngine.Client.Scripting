@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
+// ReSharper disable EmptyRegion
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -20,7 +21,7 @@ namespace PayrollEngine.Client.Scripting.Function;
 /// (int)Employee["Wage"] > 0 ? Employee["ManagementWage"] : PayrollValue.Empty
 /// </code>
 /// <code language="c#">
-/// // Example from running collector
+/// // Example from running collector.
 /// Collector["MyCollector"]
 /// </code>
 /// <code language="c#">
@@ -44,8 +45,8 @@ namespace PayrollEngine.Client.Scripting.Function;
 /// SetResult("MyResult", 5300, 2, "KST1"); return WageType[2300]
 /// </code>
 /// <code language="c#">
-/// // Example with average wage type result from the last 3 periods on legal payrun jobs
-/// GetWageTypeResults(2300, new PeriodResultQuery(3, PayrunJobStatus.Legal)).DefaultIfEmpty().Average()
+/// // Example with average wage type result from the last 3 periods on complete payrun jobs
+/// GetWageTypeResults(2300, new PeriodResultQuery(3, PayrunJobStatus.Complete)).DefaultIfEmpty().Average()
 /// </code>
 /// </example>
 /// <seealso cref="WageTypeResultFunction">Wage Type Result Function</seealso>
@@ -68,19 +69,25 @@ public partial class WageTypeValueFunction : WageTypeFunction
     }
 
     /// <summary>The execution count</summary>
+    [ActionProperty("Wage type value execution count")]
     public int ExecutionCount => Runtime.ExecutionCount;
 
     /// <summary>Restart execution of wage type calculation</summary>
     public void RestartExecution() => Runtime.RestartExecution();
 
+    #region Action
+    #endregion
+
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
     public object GetValue()
     {
-        // ReSharper disable EmptyRegion
+        #region ActionInvoke
+        #endregion
+
         #region Function
         #endregion
-        // ReSharper restore EmptyRegion
+
         // compiler will optimize this out if the code provides a return
         return null;
     }

@@ -16,12 +16,6 @@ public abstract partial class Function : IDisposable
     /// <summary>The function runtime</summary>
     protected dynamic Runtime { get; }
 
-    /// <summary>The default namespace name for function actions</summary>
-    public const string DefaultActionNamespace = "System";
-
-    /// <summary>The input namespace name for function actions</summary>
-    public const string InputActionNamespace = "Input";
-
     /// <summary>New function instance</summary>
     /// <param name="runtime">The function runtime</param>
     protected Function(object runtime)
@@ -63,15 +57,18 @@ public abstract partial class Function : IDisposable
     public int UserId { get; }
 
     /// <summary>The user identifier</summary>
+    [ActionProperty("User identifier")]
     public string UserIdentifier { get; }
 
     /// <summary>The user culture</summary>
+    [ActionProperty("User culture")]
     public string UserCulture { get; }
 
     /// <summary>The user type</summary>
     public UserType UserType { get; }
 
     /// <summary>Test for self employee self-service (user is employee)</summary>
+    [ActionProperty("Test for self service user")]
     public bool SelfServiceUser =>
         UserType == UserType.Employee;
 
@@ -110,6 +107,25 @@ public abstract partial class Function : IDisposable
     /// <returns>The most derived calendar name</returns>
     public string GetDerivedCalendar(int divisionId = 0, int employeeId = 0) =>
         Runtime.GetDerivedCalendar(divisionId, employeeId);
+
+    /// <summary>
+    /// Count the calendar days from a date period
+    /// </summary>
+    /// <param name="start">The period start date</param>
+    /// <param name="end">The period end date</param>
+    /// <param name="culture">The calendar culture</param>
+    public int GetCalendarDayCount(DateTime start, DateTime end, string culture = null) =>
+        GetCalendarDayCount(GetDerivedCalendar(), start, end, culture);
+
+    /// <summary>
+    /// Count the calendar days from a date period
+    /// </summary>
+    /// <param name="calendarName">The calendar name</param>
+    /// <param name="start">The period start date</param>
+    /// <param name="end">The period end date</param>
+    /// <param name="culture">The calendar culture</param>
+    public int GetCalendarDayCount(string calendarName, DateTime start, DateTime end, string culture = null) =>
+        Runtime.GetCalendarDayCount(calendarName, start, end, culture);
 
     /// <summary>Test for calendar working day</summary>
     /// <param name="calendarName">The calendar name</param>
@@ -320,20 +336,7 @@ public abstract partial class Function : IDisposable
     /// <param name="defaultValue">Default value</param>
     /// <param name="provider">Format provider (default <see cref="CultureInfo.InvariantCulture"/>) </param>
     /// <remarks>Supports json elements</remarks>
-    public T ChangeValueType<T>(object value, T defaultValue = default,
-        IFormatProvider provider = null) =>
-        ChangeValueType(value, typeof(T), defaultValue, provider);
-
-    /// <summary>
-    /// Change value type
-    /// </summary>
-    /// <param name="value">Value to change</param>
-    /// <param name="conversionType">Target value type</param>
-    /// <param name="defaultValue">Default value</param>
-    /// <param name="provider">Format provider (default <see cref="CultureInfo.InvariantCulture"/>) </param>
-    /// <remarks>Supports json elements</remarks>
-    public T ChangeValueType<T>(object value, Type conversionType,
-        T defaultValue = default, IFormatProvider provider = null)
+    public T ChangeValueType<T>(object value, T defaultValue = default, IFormatProvider provider = null)
     {
         if (value == null)
         {

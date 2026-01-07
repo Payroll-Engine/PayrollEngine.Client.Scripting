@@ -47,29 +47,25 @@ public static class ActionReflector
 
         // setup action cache
         var actions = new List<ActionInfo>();
-        foreach (var type in assembly.GetTypes().Where(x => !x.IsGenericType && !x.IsNested))
+
+        // each type
+        var types = assembly.GetTypes().Where(x => IsFunctionType(x) && !x.IsGenericType && !x.IsNested);
+        foreach (var type in types)
         {
-
-            // action provider attribute
-            var providerAttribute = GetProviderAttribute(type);
-            if (providerAttribute == null)
-            {
-                continue;
-            }
-
-            foreach (var typeMethod in type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+            // each method
+            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            foreach (var method in methods)
             {
                 // action attribute
-                var actionAttribute = GetActionAttribute(typeMethod);
+                var actionAttribute = GetActionAttribute(method);
                 if (actionAttribute == null)
                 {
                     continue;
                 }
 
                 // action attribute
-                var actionInfo = new ActionInfo(providerAttribute.Type)
+                var actionInfo = new ActionInfo(type)
                 {
-                    Namespace = providerAttribute.Namespace,
                     Name = GetPropertyValue<string>(actionAttribute,
                         nameof(ActionAttribute.Name)),
                     Description = GetPropertyValue<string>(actionAttribute,
@@ -82,7 +78,7 @@ public static class ActionReflector
                 actions.Add(actionInfo);
 
                 // action parameter attributes (optional)
-                var parameterAttributes = GetActionParameterAttributes(typeMethod,
+                var parameterAttributes = GetActionParameterAttributes(method,
                     typeof(ActionParameterAttribute));
                 if (parameterAttributes != null)
                 {
@@ -92,7 +88,7 @@ public static class ActionReflector
                             nameof(ActionParameterAttribute.Name));
 
                         // test parameter
-                        if (!typeMethod.GetParameters().Any(x => string.Equals(x.Name, name)))
+                        if (!method.GetParameters().Any(x => string.Equals(x.Name, name)))
                         {
                             throw new PayrollException($"Invalid action parameter {actionInfo.Name}.{name}");
                         }
@@ -131,7 +127,7 @@ public static class ActionReflector
                 }
 
                 // action issue attributes (optional)
-                var issuesAttributes = GetActionParameterAttributes(typeMethod, typeof(ActionIssueAttribute));
+                var issuesAttributes = GetActionParameterAttributes(method, typeof(ActionIssueAttribute));
                 if (issuesAttributes != null)
                 {
                     foreach (var issueAttribute in issuesAttributes)
@@ -151,26 +147,25 @@ public static class ActionReflector
         }
 
         // order by action name
-        actions.Sort((x, y) => string.CompareOrdinal(x.FullName, y.FullName));
+        actions.Sort((x, y) => string.CompareOrdinal(x.Name, y.Name));
         return actions;
     }
 
     /// <summary>
-    /// Get action provider attribute
+    /// Test for function type
     /// </summary>
-    /// <param name="type">Action member type</param>
-    private static ActionProviderAttribute GetProviderAttribute(MemberInfo type)
+    /// <param name="type">Type to test</param>
+    private static bool IsFunctionType(Type type)
     {
-        var providerAttributeName = typeof(ActionProviderAttribute).FullName;
-        foreach (var typeAttribute in type.GetCustomAttributes())
+        while (type != null)
         {
-            // provider attribute type
-            if (string.Equals(providerAttributeName, typeAttribute.GetType().FullName))
+            if (type == typeof(Function.Function))
             {
-                return typeAttribute as ActionProviderAttribute;
+                return true;
             }
+            type = type.BaseType;
         }
-        return null;
+        return false;
     }
 
     /// <summary>

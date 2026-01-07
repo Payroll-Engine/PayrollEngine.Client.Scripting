@@ -12,4 +12,7 @@ public interface ICollectorApplyRuntime : ICollectorRuntime
 
     /// <summary>The wage type result value</summary>
     decimal WageTypeValue { get; }
+
+    /// <summary>Get collector apply actions</summary>
+    string[] GetApplyActions();
 }

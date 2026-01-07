@@ -2,12 +2,12 @@
 //#define CACHE_LOG
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Collections.Generic;
 using PayrollEngine.Client.Scripting.Function;
 
-namespace PayrollEngine.Client.Scripting.Cache;
+namespace PayrollEngine.Client.Scripting;
 
 
 /// <summary>Result cache cycle</summary>
@@ -24,13 +24,13 @@ public enum ResultCacheCycle
 public abstract class ConsolidatedResultCacheBase
 {
     /// <summary>The caching start date</summary>
-    public DateTime CycleStartDate { get; }
+    private DateTime CycleStartDate { get; }
 
     /// <summary>The result cache cycle</summary>
-    public ResultCacheCycle CacheCycle { get; }
+    private ResultCacheCycle CacheCycle { get; }
 
     /// <summary>The payrun job status</summary>
-    public PayrunJobStatus? JobStatus { get; }
+    protected PayrunJobStatus? JobStatus { get; }
 
     /// <summary>Cache constructor</summary>
     /// <param name="cycleStartDate">The cycle start date</param>
@@ -81,19 +81,11 @@ public abstract class ConsolidatedResultCacheBase
             return null;
         }
 
-        // job status
+        // mismatching job status
         if (query.JobStatus != JobStatus)
         {
-            if (!query.JobStatus.HasValue || !JobStatus.HasValue)
-            {
-                // mismatching job status
-                return null;
-            }
-            // test matching job status by bit mask, duplicated in backend database stored procedure GetConsolidatedXxxResults
-            if ((query.JobStatus.Value & JobStatus.Value) != query.JobStatus.Value)
-            {
-                return null;
-            }
+            function.LogWarning($"Mismatching cache query job status: {query.JobStatus} vs {JobStatus}");
+            return null;
         }
 
         // periods: duplicated in backend domain scripting type PayrunRuntime
@@ -113,7 +105,7 @@ public abstract class ConsolidatedResultCacheBase
         }
 
         // order periods from newest to oldest
-        return [..periodStarts.OrderByDescending(x => x)];
+        return [.. periodStarts.OrderByDescending(x => x)];
     }
 
     // Duplicated in backend payroll repository command
@@ -352,7 +344,7 @@ public class WageTypeConsolidatedResultCache : ConsolidatedResultCacheBase
                 var cacheStartDate = GetCacheStartDate(function);
                 // initialize cache
                 var query = new WageTypeConsolidatedResultQuery(new List<decimal>(),
-                    cacheStartDate, PayrunJobStatus.Legal);
+                    cacheStartDate, JobStatus);
                 ConsolidatedResults = function.GetConsolidatedWageTypeResults(query);
 
 #if CACHE_LOG

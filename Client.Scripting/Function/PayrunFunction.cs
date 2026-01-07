@@ -42,6 +42,7 @@ public abstract partial class PayrunFunction : PayrollFunction
     public int PayrunId { get; }
 
     /// <summary>The payrun name</summary>
+    [ActionProperty("Payrun name")]
     public string PayrunName { get; }
 
     #endregion
@@ -55,22 +56,28 @@ public abstract partial class PayrunFunction : PayrollFunction
     public DatePeriod RetroPeriod { get; }
 
     /// <summary>True for a retro payrun</summary>
+    [ActionProperty("Test for retro payrun")]
     public bool IsRetroPayrun => RetroPeriod != null;
 
     /// <summary>True for a retro payrun within the current cycle</summary>
+    [ActionProperty("Test for cycle retro payrun")]
     public bool IsCycleRetroPayrun =>
         RetroPeriod != null && Cycle.IsWithin(RetroPeriod);
 
-    /// <summary>True for a forecast payrun</summary>
+    /// <summary>Forecast name</summary>
+    [ActionProperty("Forecast name")]
     public string Forecast { get; }
 
     /// <summary>True for a forecast payrun</summary>
+    [ActionProperty("Test for forecast")]
     public bool IsForecast => !string.IsNullOrWhiteSpace(Forecast);
 
     /// <summary>The cycle name</summary>
+    [ActionProperty("Cycle name")]
     public string CycleName { get; }
 
     /// <summary>The period name</summary>
+    [ActionProperty("Period name")]
     public string PeriodName { get; }
 
     /// <summary>Get payrun job attribute value</summary>
@@ -78,6 +85,8 @@ public abstract partial class PayrunFunction : PayrollFunction
         Runtime.GetPayrunJobAttribute(attributeName);
 
     /// <summary>Get employee attribute typed value</summary>
+    /// <param name="attributeName">Name of the attribute</param>
+    /// <param name="defaultValue">The default value</param>
     public T GetPayrunJobAttribute<T>(string attributeName, T defaultValue = default) =>
         ChangeValueType(GetPayrunJobAttribute(attributeName), defaultValue);
 
@@ -166,33 +175,42 @@ public abstract partial class PayrunFunction : PayrollFunction
 
     #region Payrun Results
 
-    /// <summary>Add payrun result using the current period</summary>
+    /// <summary>Get payrun result</summary>
+    /// <param name="name">The result name</param>
+    public object GetPayrunResult(string name) =>
+        Runtime.GetPayrunResult(GetType().Name, name);
+
+    /// <summary>Get payrun result</summary>
+    /// <param name="name">The result name</param>
+    /// <param name="defaultValue">The default value</param>
+    public T GetPayrunResult<T>(string name, T defaultValue = default) =>
+        ChangeValueType(GetPayrunResult(name), defaultValue);
+
+    /// <summary>Set payrun result using the current period</summary>
     /// <param name="name">The result name</param>
     /// <param name="value">The result value</param>
     /// <param name="valueType">The result value type</param>
-    /// <param name="source">The result source</param>
     /// <param name="slot">The result slot</param>
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
     /// <param name="culture">The result culture</param>
-    public void AddPayrunResult(string name, object value, ValueType? valueType = null, string source = null,
+    public void SetPayrunResult(string name, object value, ValueType? valueType = null,
         string slot = null, IEnumerable<string> tags = null,
         Dictionary<string, object> attributes = null, string culture = null) =>
-        AddPayrunResult(name, value, PeriodStart, PeriodEnd, valueType, source, slot, tags, attributes, culture);
+        SetPayrunResult(name, value, PeriodStart, PeriodEnd, valueType, slot, tags, attributes, culture);
 
-    /// <summary>Add payrun result</summary>
+    /// <summary>Set payrun result</summary>
     /// <param name="name">The result name</param>
     /// <param name="value">The result value</param>
     /// <param name="startDate">The start date</param>
     /// <param name="endDate">The end date</param>
     /// <param name="valueType">The result value type</param>
-    /// <param name="source">The result source</param>
     /// <param name="slot">The result slot</param>
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
     /// <param name="culture">The result culture</param>
-    public void AddPayrunResult(string name, object value, DateTime startDate, DateTime endDate,
-        ValueType? valueType = null, string source = null, string slot = null,
+    public void SetPayrunResult(string name, object value, DateTime startDate, DateTime endDate,
+        ValueType? valueType = null, string slot = null,
         IEnumerable<string> tags = null, Dictionary<string, object> attributes = null, string culture = null)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -204,15 +222,23 @@ public abstract partial class PayrunFunction : PayrollFunction
             throw new ArgumentNullException(nameof(value));
         }
 
-        source ??= GetType().Name;
+        var source = GetType().Name;
         var json = JsonSerializer.Serialize(value);
         valueType ??= value.GetValueType();
-        Runtime.AddPayrunResult(source, name, json, (int)valueType.Value, startDate, endDate, slot, tags?.ToList(), attributes, culture);
+        Runtime.SetPayrunResult(source, name, json, (int)valueType.Value, startDate, endDate, slot, tags?.ToList(), attributes, culture);
     }
 
     #endregion
 
-    #region Wage Type Results
+    #region Wage Type
+
+    /// <summary>Get wage type number by name</summary>
+    /// <param name="wageTypeName">The wage type name</param>
+    public decimal GetWageTypeNumber(string wageTypeName) => Runtime.GetWageTypeNumber(wageTypeName);
+
+    /// <summary>Get wage type name by number</summary>
+    /// <param name="wageTypeNumber">The wage type number</param>
+    public string GetWageTypeName(decimal wageTypeNumber) => Runtime.GetWageTypeName(wageTypeNumber);
 
     /// <summary>Get employee wage types results by query</summary>
     /// <param name="query">The cycle query</param>
@@ -286,7 +312,7 @@ public abstract partial class PayrunFunction : PayrollFunction
 
     #endregion
 
-    #region Collector Results
+    #region Collector
 
     /// <summary>Get employee collector results by query</summary>
     /// <param name="query">The cycle query</param>

@@ -29,8 +29,8 @@ public static class CaseObjectExtensions
 
     /// <summary>Get case field name</summary>
     /// <param name="property">Property</param>
-    public static string GetCaseFieldName(this PropertyInfo property) =>
-        GetNamespace(property) + property.Name;
+    public static string GetCaseFieldName(this PropertyInfo property) => 
+        property.GetNamespace() + property.Name;
 }
 
 /// <summary>Case object</summary>

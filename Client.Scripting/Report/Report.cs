@@ -293,7 +293,7 @@ public class OrderBy
     /// <summary>And with another order by expression</summary>
     /// <param name="orderBy">The order by clause</param>
     /// <returns>Updated query order by</returns>
-    public virtual OrderBy AndThenBy(OrderBy orderBy)
+    public OrderBy AndThenBy(OrderBy orderBy)
     {
         return new($"{Expression}, {orderBy.Expression}");
     }
@@ -823,7 +823,7 @@ public class Filter : ExpressionBase
 
     /// <summary>Group existing filters</summary>
     /// <returns>Updated query filter</returns>
-    public virtual Filter Group()
+    public Filter Group()
     {
         if (Expression.StartsWith('(') && Expression.EndsWith(')'))
         {
@@ -834,14 +834,14 @@ public class Filter : ExpressionBase
 
     /// <summary>And with another filter expression</summary>
     /// <returns>Updated query filter</returns>
-    public virtual Filter And(Filter filter)
+    public Filter And(Filter filter)
     {
         return new($"{Group()} and {filter.Group()}");
     }
 
     /// <summary>Or with another filter expression</summary>
     /// <returns>Updated query filter</returns>
-    public virtual Filter Or(Filter expression)
+    public Filter Or(Filter expression)
     {
         return new($"{Expression} or {expression.Expression}");
     }
@@ -1025,45 +1025,46 @@ public abstract class ExpressionBase
 /// <summary>Data set extension methods</summary>
 public static class DataSetExtensions
 {
-    /// <summary>Test for  data set rows</summary>
     /// <param name="dataSet">The system data set to convert</param>
-    /// <returns>True if any row is available</returns>
-    public static bool HasRows(this DataSet dataSet)
+    extension(DataSet dataSet)
     {
-        if (dataSet?.Tables == null || dataSet.Tables.Count == 0)
+        /// <summary>Test for  data set rows</summary>
+        /// <returns>True if any row is available</returns>
+        public bool HasRows()
         {
-            return false;
+            if (dataSet?.Tables == null || dataSet.Tables.Count == 0)
+            {
+                return false;
+            }
+            return dataSet.Tables.Cast<DataTable>().Any(table => table.Rows.Count > 0);
         }
-        return dataSet.Tables.Cast<DataTable>().Any(table => table.Rows.Count > 0);
-    }
 
-    /// <summary>Get data set table rows values as dictionary</summary>
-    /// <param name="dataSet">The payroll data set to convert</param>
-    /// <returns>The data table values as dictionary, key is table column name</returns>
-    public static Dictionary<string, List<Dictionary<string, object>>> AsDictionary(this DataSet dataSet)
-    {
-        var values = new Dictionary<string, List<Dictionary<string, object>>>();
-        foreach (DataTable table in dataSet.Tables)
+        /// <summary>Get data set table rows values as dictionary</summary>
+        /// <returns>The data table values as dictionary, key is table column name</returns>
+        public Dictionary<string, List<Dictionary<string, object>>> AsDictionary()
         {
-            values.Add(table.TableName, table.AsDictionary());
+            var values = new Dictionary<string, List<Dictionary<string, object>>>();
+            foreach (DataTable table in dataSet.Tables)
+            {
+                values.Add(table.TableName, table.AsDictionary());
+            }
+            return values;
         }
-        return values;
-    }
 
-    /// <summary>Get data set as json</summary>
-    /// <param name="dataSet">The payroll data set to convert</param>
-    /// <param name="namingPolicy">Naming policy (default: camel case)</param>
-    /// <param name="ignoreNull">Ignore null values (default: true)</param>
-    public static string Json(this DataSet dataSet, JsonNamingPolicy namingPolicy = null,
-        bool ignoreNull = true)
-    {
-        return JsonSerializer.Serialize(AsDictionary(dataSet), new JsonSerializerOptions
+        /// <summary>Get data set as json</summary>
+        /// <param name="namingPolicy">Naming policy (default: camel case)</param>
+        /// <param name="ignoreNull">Ignore null values (default: true)</param>
+        public string Json(JsonNamingPolicy namingPolicy = null,
+            bool ignoreNull = true)
         {
-            WriteIndented = true,
-            PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
-            DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
-        });
+            return JsonSerializer.Serialize(dataSet.AsDictionary(), new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
+            });
+        }
     }
 }
 
@@ -1071,391 +1072,351 @@ public static class DataSetExtensions
 /// <summary>Data table extension methods</summary>
 public static class DataTableExtensions
 {
-    /// <summary>Remove the table primary key</summary>
     /// <param name="table">The table</param>
-    public static void RemovePrimaryKey(this DataTable table)
+    extension(DataTable table)
     {
-        if (table != null)
+        /// <summary>Remove the table primary key</summary>
+        public void RemovePrimaryKey()
         {
-            table.PrimaryKey = [];
-        }
-    }
-
-    /// <summary>Test for table column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    public static bool ContainsColumn(this DataTable table, string columnName) =>
-        table.Columns.Contains(columnName);
-
-    /// <summary>Add table column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    /// <param name="expression">The compute expression</param>
-    public static DataColumn AddColumn<T>(this DataTable table, string columnName, string expression = null) =>
-        AddColumn(table, columnName, typeof(T), expression);
-
-    /// <summary>Add table column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    /// <param name="type">The column type</param>
-    /// <param name="expression">The compute expression</param>
-    public static DataColumn AddColumn(this DataTable table, string columnName, Type type, string expression = null)
-    {
-        if (string.IsNullOrWhiteSpace(columnName))
-        {
-            throw new ArgumentException(nameof(columnName));
-        }
-
-        if (expression == null)
-        {
-            return table.Columns.Add(columnName, type);
-        }
-        return table.Columns.Add(columnName, type, expression);
-    }
-
-    /// <summary>Add table relation column with initial value</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    /// <param name="relationValue">Value to set to all rows</param>
-    public static DataColumn AddRelationColumn<T>(this DataTable table, string columnName, object relationValue)
-    {
-        var column = AddColumn(table, columnName, typeof(T));
-        foreach (var row in table.AsEnumerable())
-        {
-            row[columnName] = relationValue;
-        }
-        return column;
-    }
-
-    /// <summary>Add table relation integer column with initial value</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    /// <param name="relationId">Value to set to all rows</param>
-    public static DataColumn AddRelationColumn(this DataTable table, string columnName, int relationId) =>
-        AddRelationColumn<int>(table, columnName, relationId);
-
-    /// <summary>Add localization column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="culture">Localization culture</param>
-    /// <param name="columnName">Name of the source column</param>
-    /// <param name="localizationsColumnName">Name of the localizations column (default: columnNameLocalizations)</param>
-    /// <remarks>Requires </remarks>
-    public static DataColumn AddLocalizationColumn(this DataTable table, string culture, string columnName,
-        string localizationsColumnName = null)
-    {
-        localizationsColumnName ??= $"{columnName}Localizations";
-        if (!table.Columns.Contains(columnName) || !table.Columns.Contains(localizationsColumnName))
-        {
-            return null;
-        }
-
-        var localizationColumnName = $"{columnName}Localization";
-        var column = AddColumn(table, localizationColumnName, typeof(string));
-        foreach (var row in table.AsEnumerable())
-        {
-            var localizationsJson = row[localizationsColumnName] as string;
-            if (string.IsNullOrWhiteSpace(localizationsJson))
+            if (table != null)
             {
-                continue;
-            }
-
-            var original = row[columnName] as string;
-            var localizations = JsonSerializer.Deserialize<Dictionary<string, string>>(localizationsJson);
-            row[localizationColumnName] = culture.GetLocalization(localizations, original);
-        }
-        return column;
-    }
-
-    /// <summary>Insert table column at certain list position</summary>
-    /// <param name="table">The table</param>
-    /// <param name="index">The column list position</param>
-    /// <param name="columnName">Name of the column</param>
-    /// <param name="expression">The compute expression</param>
-    public static DataColumn InsertColumn<T>(this DataTable table, int index, string columnName, string expression = null)
-    {
-        if (index > table.Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index));
-        }
-
-        var column = AddColumn<T>(table, columnName, expression);
-        // change column position
-        column.SetOrdinal(index);
-        return column;
-    }
-
-    /// <summary>Ensure table column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    /// <param name="expression">The compute expression</param>
-    public static DataColumn EnsureColumn<T>(this DataTable table, string columnName, string expression = null) =>
-        EnsureColumn(table, columnName, typeof(T), expression);
-
-    /// <summary>Ensure table column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    /// <param name="type">The column type</param>
-    /// <param name="expression">The compute expression</param>
-    public static DataColumn EnsureColumn(this DataTable table, string columnName, Type type, string expression = null)
-    {
-        if (!ContainsColumn(table, columnName))
-        {
-            return AddColumn(table, columnName, type, expression);
-        }
-        return table.Columns[columnName];
-    }
-
-    /// <summary>Ensure table columns</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columns">The columns to ensure</param>
-    public static void EnsureColumns<T>(this DataTable table, IEnumerable<string> columns)
-    {
-        foreach (var column in columns)
-        {
-            if (!table.Columns.Contains(column))
-            {
-                table.Columns.Add(column, typeof(T));
+                table.PrimaryKey = [];
             }
         }
-    }
 
-    /// <summary>Ensure table column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columns">The columns to ensure</param>
-    public static void EnsureColumns(this DataTable table, DataColumnCollection columns)
-    {
-        foreach (DataColumn column in columns)
+        /// <summary>Test for table column</summary>
+        /// <param name="columnName">Name of the column</param>
+        public bool ContainsColumn(string columnName) =>
+            table.Columns.Contains(columnName);
+
+        /// <summary>Add table column</summary>
+        /// <param name="columnName">Name of the column</param>
+        /// <param name="expression">The compute expression</param>
+        public DataColumn AddColumn<T>(string columnName, string expression = null) => table.AddColumn(columnName, typeof(T), expression);
+
+        /// <summary>Add table column</summary>
+        /// <param name="columnName">Name of the column</param>
+        /// <param name="type">The column type</param>
+        /// <param name="expression">The compute expression</param>
+        public DataColumn AddColumn(string columnName, Type type, string expression = null)
         {
-            if (!table.Columns.Contains(column.ColumnName))
+            if (string.IsNullOrWhiteSpace(columnName))
             {
-                table.Columns.Add(column.ColumnName, column.DataType);
+                throw new ArgumentException(nameof(columnName));
+            }
+
+            if (expression == null)
+            {
+                return table.Columns.Add(columnName, type);
+            }
+            return table.Columns.Add(columnName, type, expression);
+        }
+
+        /// <summary>Add table relation column with initial value</summary>
+        /// <param name="columnName">Name of the column</param>
+        /// <param name="relationValue">Value to set to all rows</param>
+        public DataColumn AddRelationColumn<T>(string columnName, object relationValue)
+        {
+            var column = table.AddColumn(columnName, typeof(T));
+            foreach (var row in table.AsEnumerable())
+            {
+                row[columnName] = relationValue;
+            }
+            return column;
+        }
+
+        /// <summary>Add table relation integer column with initial value</summary>
+        /// <param name="columnName">Name of the column</param>
+        /// <param name="relationId">Value to set to all rows</param>
+        public DataColumn AddRelationColumn(string columnName, int relationId) => table.AddRelationColumn<int>(columnName, relationId);
+
+        /// <summary>Add localization column</summary>
+        /// <param name="culture">Localization culture</param>
+        /// <param name="columnName">Name of the source column</param>
+        /// <param name="localizationsColumnName">Name of the localizations column (default: columnNameLocalizations)</param>
+        /// <remarks>Requires </remarks>
+        public DataColumn AddLocalizationColumn(string culture, string columnName,
+            string localizationsColumnName = null)
+        {
+            localizationsColumnName ??= $"{columnName}Localizations";
+            if (!table.Columns.Contains(columnName) || !table.Columns.Contains(localizationsColumnName))
+            {
+                return null;
+            }
+
+            var localizationColumnName = $"{columnName}Localization";
+            var column = table.AddColumn(localizationColumnName, typeof(string));
+            foreach (var row in table.AsEnumerable())
+            {
+                var localizationsJson = row[localizationsColumnName] as string;
+                if (string.IsNullOrWhiteSpace(localizationsJson))
+                {
+                    continue;
+                }
+
+                var original = row[columnName] as string;
+                var localizations = JsonSerializer.Deserialize<Dictionary<string, string>>(localizationsJson);
+                row[localizationColumnName] = culture.GetLocalization(localizations, original);
+            }
+            return column;
+        }
+
+        /// <summary>Insert table column at certain list position</summary>
+        /// <param name="index">The column list position</param>
+        /// <param name="columnName">Name of the column</param>
+        /// <param name="expression">The compute expression</param>
+        public DataColumn InsertColumn<T>(int index, string columnName, string expression = null)
+        {
+            if (index > table.Columns.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            var column = table.AddColumn<T>(columnName, expression);
+            // change column position
+            column.SetOrdinal(index);
+            return column;
+        }
+
+        /// <summary>Ensure table column</summary>
+        /// <param name="columnName">Name of the column</param>
+        /// <param name="expression">The compute expression</param>
+        public DataColumn EnsureColumn<T>(string columnName, string expression = null) => table.EnsureColumn(columnName, typeof(T), expression);
+
+        /// <summary>Ensure table column</summary>
+        /// <param name="columnName">Name of the column</param>
+        /// <param name="type">The column type</param>
+        /// <param name="expression">The compute expression</param>
+        public DataColumn EnsureColumn(string columnName, Type type, string expression = null)
+        {
+            if (!table.ContainsColumn(columnName))
+            {
+                return table.AddColumn(columnName, type, expression);
+            }
+            return table.Columns[columnName];
+        }
+
+        /// <summary>Ensure table columns</summary>
+        /// <param name="columns">The columns to ensure</param>
+        public void EnsureColumns<T>(IEnumerable<string> columns)
+        {
+            foreach (var column in columns)
+            {
+                if (!table.Columns.Contains(column))
+                {
+                    table.Columns.Add(column, typeof(T));
+                }
             }
         }
-    }
 
-    /// <summary>Rename table column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="oldColumnName">Existing name of the column</param>
-    /// <param name="newColumnName">Existing name of the column</param>
-    /// <returns>The column name</returns>
-    public static string RenameColumn(this DataTable table, string oldColumnName, string newColumnName)
-    {
-        if (table == null)
+        /// <summary>Ensure table column</summary>
+        /// <param name="columns">The columns to ensure</param>
+        public void EnsureColumns(DataColumnCollection columns)
         {
-            return null;
-        }
-        var column = table.Columns[oldColumnName];
-        if (column == null)
-        {
-            return null;
-        }
-        column.ColumnName = newColumnName;
-        return newColumnName;
-    }
-
-    /// <summary>Remove table column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    public static void RemoveColumn(this DataTable table, string columnName) =>
-        table?.Columns.Remove(columnName);
-
-    /// <summary>Set the table primary key column</summary>
-    /// <param name="table">The table</param>
-    /// <param name="columnName">Name of the column</param>
-    public static void SetPrimaryKey(this DataTable table, string columnName)
-    {
-        if (table != null)
-        {
-            var column = table.Columns[columnName];
-            table.PrimaryKey = [column];
-        }
-    }
-
-    /// <summary>Get table rows</summary>
-    /// <param name="table">The table</param>
-    /// <returns>A row collection</returns>
-    public static EnumerableRowCollection Rows(this DataTable table) =>
-        table.AsEnumerable();
-
-    /// <summary>Test for any table rows</summary>
-    /// <param name="table">The table</param>
-    /// <returns>True if rows are present</returns>
-    public static bool HasRows(this DataTable table) =>
-        table != null && table.Rows.Count > 0;
-
-    /// <summary>Find row by value search</summary>
-    /// <param name="table">The table</param>
-    /// <param name="column">The search column name</param>
-    /// <param name="value">The search key</param>
-    /// <returns>The matching data ro or null</returns>
-    public static DataRow FindFirstRow<T>(this DataTable table, string column, T value) =>
-        table.AsEnumerable().FirstOrDefault(x => Equals(x.GetValue<T>(column), value));
-
-    /// <summary>Get row table value by value search</summary>
-    /// <param name="table">The table</param>
-    /// <param name="keyColumn">The search column name</param>
-    /// <param name="keyValue">The search key</param>
-    /// <param name="valueColumn">The value column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The data row value</returns>
-    public static T GetRowValue<T>(this DataTable table, string keyColumn, object keyValue,
-        string valueColumn, T defaultValue = default)
-    {
-        var dataRow = FindFirstRow(table, keyColumn, keyValue);
-        return dataRow != null ? dataRow.GetValue(valueColumn, defaultValue) : defaultValue;
-    }
-
-    /// <summary>Test for single row table</summary>
-    /// <param name="table">The table</param>
-    /// <returns>True for a single row collection</returns>
-    public static bool IsSingleRow(this DataTable table) =>
-        table != null && table.Rows.Count == 1;
-
-    /// <summary>Get single row table</summary>
-    /// <param name="table">The table</param>
-    /// <returns>The single row</returns>
-    public static DataRow SingleRow(this DataTable table)
-    {
-        if (!IsSingleRow(table))
-        {
-            throw new ScriptException($"Table {table.TableName} is not single, count={table.Rows.Count}.");
-        }
-        return table.Rows[0];
-    }
-
-    /// <summary>Get as single row table</summary>
-    /// <param name="table">The table</param>
-    /// <returns>The single row, null on table with multiple rows</returns>
-    public static DataRow AsSingleRow(this DataTable table) =>
-        IsSingleRow(table) ? SingleRow(table) : null;
-
-    /// <summary>Get single row id</summary>
-    /// <param name="table">The table</param>
-    /// <returns>The data row id</returns>
-    public static int SingleRowId(this DataTable table) =>
-        IsSingleRow(table) ? SingleRow(table).Id() : 0;
-
-    /// <summary>Get single row name</summary>
-    /// <param name="table">The table</param>
-    /// <returns>The data row name</returns>
-    public static string SingleRowName(this DataTable table) =>
-        IsSingleRow(table) ? SingleRow(table).Name() : null;
-
-    /// <summary>Get single row identifier</summary>
-    /// <param name="table">The table</param>
-    /// <returns>The data row identifier</returns>
-    public static string SingleRowIdentifier(this DataTable table) =>
-        IsSingleRow(table) ? SingleRow(table).Identifier() : null;
-
-    /// <summary>Get single row table value</summary>
-    /// <param name="table">The table</param>
-    /// <param name="column">The column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The data row value</returns>
-    public static T SingleRowValue<T>(this DataTable table, string column, T defaultValue = default) =>
-        IsSingleRow(table) ? SingleRow(table).GetValue(column, defaultValue) : defaultValue;
-
-    /// <summary>Select table rows by filter</summary>
-    /// <param name="table">The table</param>
-    /// <param name="filterExpression">The filter matching the rows to delete</param>
-    public static IEnumerable<DataRow> SelectRows(this DataTable table, string filterExpression) =>
-        table.Select(filterExpression);
-
-    /// <summary>Selects rows by function</summary>
-    /// <param name="table">The table</param>
-    /// <param name="selectFunc">Select functions</param>
-    /// <returns>The selected data rows</returns>
-    public static List<DataRow> SelectRows(this DataTable table, Func<DataRow, bool> selectFunc) =>
-        Enumerable.Where(table.AsEnumerable(), selectFunc).ToList();
-
-    /// <summary>Test for rows</summary>
-    /// <param name="table">The table</param>
-    public static bool Any(this DataTable table) =>
-        table.Rows.Count > 0;
-
-    /// <summary>Test for rows by function</summary>
-    /// <param name="table">The table</param>
-    /// <param name="anyFunc">Any functions</param>
-    public static bool Any(this DataTable table, Func<DataRow, bool> anyFunc) =>
-        table.AsEnumerable().Any(anyFunc);
-
-    /// <summary>Delete table rows by filter</summary>
-    /// <param name="table">The table</param>
-    /// <param name="filterExpression">The filter matching the rows to delete</param>
-    /// <returns>The deleted row count</returns>
-    public static int DeleteRows(this DataTable table, string filterExpression)
-    {
-        var deleteCount = 0;
-        var deleteRows = SelectRows(table, filterExpression);
-        foreach (var deleteRow in deleteRows)
-        {
-            deleteRow.Delete();
-            deleteCount++;
-        }
-        if (deleteCount > 0)
-        {
-            table.AcceptChanges();
-        }
-        return deleteCount;
-    }
-
-    /// <summary>Get data table as dictionary</summary>
-    /// <param name="dataTable">The data table</param>
-    /// <returns>List of row dictionaries</returns>
-    public static List<Dictionary<string, object>> AsDictionary(this DataTable dataTable)
-    {
-        var values = new List<Dictionary<string, object>>();
-        foreach (DataRow row in dataTable.AsEnumerable())
-        {
-            values.Add(row.AsDictionary());
-        }
-        return values;
-    }
-
-    /// <summary>Get data table as json</summary>
-    /// <param name="dataTable">The data table</param>
-    /// <param name="namingPolicy">Naming policy (default: camel case)</param>
-    /// <param name="ignoreNull">Ignore null values (default: true)</param>
-    public static string Json(this DataTable dataTable, JsonNamingPolicy namingPolicy = null,
-        bool ignoreNull = true)
-    {
-        return JsonSerializer.Serialize(AsDictionary(dataTable), new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
-            DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
-        });
-    }
-
-    /// <summary>Get data table rows value</summary>
-    /// <param name="table">The data table</param>
-    /// <param name="column">The column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The data table rows value</returns>
-    public static List<T> GetValues<T>(this DataTable table, string column, T defaultValue = default) =>
-        table.Select().GetValues(column, defaultValue);
-
-    /// <summary>Get data table rows JSON value as dictionary</summary>
-    /// <param name="table">The data table</param>
-    /// <param name="column">The column name</param>
-    /// <param name="keyField">The json object key field</param>
-    /// <param name="valueField">The json object value field</param>
-    /// <returns>The data table rows value</returns>
-    public static Dictionary<string, string> GetDictionary(this DataTable table,
-        string column, string keyField, string valueField)
-    {
-        var values = new Dictionary<string, string>();
-        foreach (var row in table.AsEnumerable())
-        {
-            var objectValues = row.GetDictionary<string, string>(column);
-            if (objectValues != null && objectValues.ContainsKey(keyField) &&
-                objectValues.TryGetValue(valueField, out var value))
+            foreach (DataColumn column in columns)
             {
-                values.Add(objectValues[keyField], value);
+                if (!table.Columns.Contains(column.ColumnName))
+                {
+                    table.Columns.Add(column.ColumnName, column.DataType);
+                }
             }
         }
-        return values;
+
+        /// <summary>Rename table column</summary>
+        /// <param name="oldColumnName">Existing name of the column</param>
+        /// <param name="newColumnName">Existing name of the column</param>
+        /// <returns>The column name</returns>
+        public string RenameColumn(string oldColumnName, string newColumnName)
+        {
+            if (table == null)
+            {
+                return null;
+            }
+            var column = table.Columns[oldColumnName];
+            if (column == null)
+            {
+                return null;
+            }
+            column.ColumnName = newColumnName;
+            return newColumnName;
+        }
+
+        /// <summary>Remove table column</summary>
+        /// <param name="columnName">Name of the column</param>
+        public void RemoveColumn(string columnName) =>
+            table?.Columns.Remove(columnName);
+
+        /// <summary>Set the table primary key column</summary>
+        /// <param name="columnName">Name of the column</param>
+        public void SetPrimaryKey(string columnName)
+        {
+            if (table != null)
+            {
+                var column = table.Columns[columnName];
+                table.PrimaryKey = [column];
+            }
+        }
+
+        /// <summary>Get table rows</summary>
+        /// <returns>A row collection</returns>
+        public EnumerableRowCollection Rows() =>
+            table.AsEnumerable();
+
+        /// <summary>Test for any table rows</summary>
+        /// <returns>True if rows are present</returns>
+        public bool HasRows() =>
+            table != null && table.Rows.Count > 0;
+
+        /// <summary>Find row by value search</summary>
+        /// <param name="column">The search column name</param>
+        /// <param name="value">The search key</param>
+        /// <returns>The matching data ro or null</returns>
+        public DataRow FindFirstRow<T>(string column, T value) =>
+            table.AsEnumerable().FirstOrDefault(x => Equals(x.GetValue<T>(column), value));
+
+        /// <summary>Get row table value by value search</summary>
+        /// <param name="keyColumn">The search column name</param>
+        /// <param name="keyValue">The search key</param>
+        /// <param name="valueColumn">The value column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The data row value</returns>
+        public T GetRowValue<T>(string keyColumn, object keyValue,
+            string valueColumn, T defaultValue = default)
+        {
+            var dataRow = table.FindFirstRow(keyColumn, keyValue);
+            return dataRow != null ? dataRow.GetValue(valueColumn, defaultValue) : defaultValue;
+        }
+
+        /// <summary>Test for single row table</summary>
+        /// <returns>True for a single row collection</returns>
+        public bool IsSingleRow() =>
+            table != null && table.Rows.Count == 1;
+
+        /// <summary>Get single row table</summary>
+        /// <returns>The single row</returns>
+        public DataRow SingleRow()
+        {
+            if (!table.IsSingleRow())
+            {
+                throw new ScriptException($"Table {table.TableName} is not single, count={table.Rows.Count}.");
+            }
+            return table.Rows[0];
+        }
+
+        /// <summary>Get as single row table</summary>
+        /// <returns>The single row, null on table with multiple rows</returns>
+        public DataRow AsSingleRow() => table.IsSingleRow() ? table.SingleRow() : null;
+
+        /// <summary>Get single row id</summary>
+        /// <returns>The data row id</returns>
+        public int SingleRowId() => table.IsSingleRow() ? table.SingleRow().Id() : 0;
+
+        /// <summary>Get single row name</summary>
+        /// <returns>The data row name</returns>
+        public string SingleRowName() => table.IsSingleRow() ? table.SingleRow().Name() : null;
+
+        /// <summary>Get single row identifier</summary>
+        /// <returns>The data row identifier</returns>
+        public string SingleRowIdentifier() => table.IsSingleRow() ? table.SingleRow().Identifier() : null;
+
+        /// <summary>Get single row table value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The data row value</returns>
+        public T SingleRowValue<T>(string column, T defaultValue = default) => table.IsSingleRow() ? table.SingleRow().GetValue(column, defaultValue) : defaultValue;
+
+        /// <summary>Select table rows by filter</summary>
+        /// <param name="filterExpression">The filter matching the rows to delete</param>
+        public IEnumerable<DataRow> SelectRows(string filterExpression) =>
+            table.Select(filterExpression);
+
+        /// <summary>Selects rows by function</summary>
+        /// <param name="selectFunc">Select functions</param>
+        /// <returns>The selected data rows</returns>
+        public List<DataRow> SelectRows(Func<DataRow, bool> selectFunc) =>
+            Enumerable.Where(table.AsEnumerable(), selectFunc).ToList();
+
+        /// <summary>Test for rows</summary>
+        public bool Any() =>
+            table.Rows.Count > 0;
+
+        /// <summary>Test for rows by function</summary>
+        /// <param name="anyFunc">Any functions</param>
+        public bool Any(Func<DataRow, bool> anyFunc) =>
+            table.AsEnumerable().Any(anyFunc);
+
+        /// <summary>Delete table rows by filter</summary>
+        /// <param name="filterExpression">The filter matching the rows to delete</param>
+        /// <returns>The deleted row count</returns>
+        public int DeleteRows(string filterExpression)
+        {
+            var deleteCount = 0;
+            var deleteRows = table.SelectRows(filterExpression);
+            foreach (var deleteRow in deleteRows)
+            {
+                deleteRow.Delete();
+                deleteCount++;
+            }
+            if (deleteCount > 0)
+            {
+                table.AcceptChanges();
+            }
+            return deleteCount;
+        }
+
+        /// <summary>Get data table as dictionary</summary>
+        /// <returns>List of row dictionaries</returns>
+        public List<Dictionary<string, object>> AsDictionary()
+        {
+            var values = new List<Dictionary<string, object>>();
+            foreach (DataRow row in table.AsEnumerable())
+            {
+                values.Add(row.AsDictionary());
+            }
+            return values;
+        }
+
+        /// <summary>Get data table as json</summary>
+        /// <param name="namingPolicy">Naming policy (default: camel case)</param>
+        /// <param name="ignoreNull">Ignore null values (default: true)</param>
+        public string Json(JsonNamingPolicy namingPolicy = null,
+            bool ignoreNull = true)
+        {
+            return JsonSerializer.Serialize(table.AsDictionary(), new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
+            });
+        }
+
+        /// <summary>Get data table rows value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The data table rows value</returns>
+        public List<T> GetValues<T>(string column, T defaultValue = default) =>
+            table.Select().GetValues(column, defaultValue);
+
+        /// <summary>Get data table rows JSON value as dictionary</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="keyField">The json object key field</param>
+        /// <param name="valueField">The json object value field</param>
+        /// <returns>The data table rows value</returns>
+        public Dictionary<string, string> GetDictionary(string column, string keyField, string valueField)
+        {
+            var values = new Dictionary<string, string>();
+            foreach (var row in table.AsEnumerable())
+            {
+                var objectValues = row.GetDictionary<string, string>(column);
+                if (objectValues != null && objectValues.ContainsKey(keyField) &&
+                    objectValues.TryGetValue(valueField, out var value))
+                {
+                    values.Add(objectValues[keyField], value);
+                }
+            }
+            return values;
+        }
     }
 }
 
@@ -1463,732 +1424,680 @@ public static class DataTableExtensions
 /// <summary>Data row extension methods</summary>
 public static class DataRowExtensions
 {
-    /// <summary>Get data row id</summary>
     /// <param name="dataRow">The data row</param>
-    /// <returns>The data row id</returns>
-    public static int Id(this DataRow dataRow) =>
-        GetValue<int>(dataRow, "Id");
-
-    /// <summary>Get data row name</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <returns>The data row name</returns>
-    public static string Name(this DataRow dataRow) =>
-        GetValue<string>(dataRow, "Name");
-
-    /// <summary>Get data row identifier</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <returns>The data row identifier</returns>
-    public static string Identifier(this DataRow dataRow) =>
-        GetValue<string>(dataRow, "Identifier");
-
-    /// <summary>Get data row object status</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <returns>The data row object status</returns>
-    public static ObjectStatus ObjectStatus(this DataRow dataRow) =>
-        GetEnumValue(dataRow, "Status", Scripting.ObjectStatus.Inactive);
-
-    /// <summary>Get data row values as dictionary</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <returns>The data rows values as dictionary, key is the column name</returns>
-    public static Dictionary<string, object> AsDictionary(this DataRow dataRow)
+    extension(DataRow dataRow)
     {
-        var values = new Dictionary<string, object>();
-        foreach (DataColumn column in dataRow.Table.Columns)
+        /// <summary>Get data row id</summary>
+        /// <returns>The data row id</returns>
+        public int Id() => dataRow.GetValue<int>("Id");
+
+        /// <summary>Get data row name</summary>
+        /// <returns>The data row name</returns>
+        public string Name() => dataRow.GetValue<string>("Name");
+
+        /// <summary>Get data row identifier</summary>
+        /// <returns>The data row identifier</returns>
+        public string Identifier() => dataRow.GetValue<string>("Identifier");
+
+        /// <summary>Get data row object status</summary>
+        /// <returns>The data row object status</returns>
+        public ObjectStatus ObjectStatus() => dataRow.GetEnumValue("Status", Scripting.ObjectStatus.Inactive);
+
+        /// <summary>Get data row values as dictionary</summary>
+        /// <returns>The data rows values as dictionary, key is the column name</returns>
+        public Dictionary<string, object> AsDictionary()
         {
-            values.Add(column.ColumnName, GetValue<object>(dataRow, column.ColumnName));
-        }
-        return values;
-    }
-
-    /// <summary>Get data row as json</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="namingPolicy">Naming policy (default: camel case)</param>
-    /// <param name="ignoreNull">Ignore null values (default: true)</param>
-    public static string Json(this DataRow dataRow, JsonNamingPolicy namingPolicy = null,
-        bool ignoreNull = true)
-    {
-        ArgumentNullException.ThrowIfNull(dataRow);
-        return JsonSerializer.Serialize(AsDictionary(dataRow), new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
-            DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
-        });
-    }
-
-    /// <summary>Get data row enum value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The data row enum value</returns>
-    public static T GetEnumValue<T>(this DataRow dataRow, string column, T defaultValue = default)
-        where T : struct
-    {
-        if (!typeof(T).IsEnum)
-        {
-            throw new ScriptException($"Invalid enum value type: {typeof(T)}.");
-        }
-        var valueText = GetValue(dataRow, column, defaultValue.ToString());
-        if (string.IsNullOrWhiteSpace(valueText) || !Enum.TryParse(valueText, true, out T enumValue))
-        {
-            return defaultValue;
-        }
-        return enumValue;
-    }
-
-    /// <summary>Get data row value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The data row value</returns>
-    public static T GetValue<T>(this DataRow dataRow, string column, T defaultValue = default)
-    {
-        if (dataRow == null)
-        {
-            throw new ArgumentNullException(nameof(dataRow));
-        }
-        if (string.IsNullOrWhiteSpace(column))
-        {
-            throw new ArgumentException(nameof(column));
-        }
-
-        var value = dataRow[column];
-        if (value is null or DBNull)
-        {
-            return defaultValue;
-        }
-        if (value is T typeValue)
-        {
-            return typeValue;
-        }
-        if (value is string stringValue)
-        {
-            // json escaping
-            stringValue = stringValue.Trim('"');
-            return (T)JsonSerializer.Deserialize(stringValue, typeof(T));
-        }
-
-        try
-        {
-            return (T)Convert.ChangeType(value, typeof(T));
-        }
-        catch (Exception exception)
-        {
-            throw new ScriptException($"Error in column {column}: convert value {value} to type {typeof(T)}.", exception);
-        }
-    }
-
-    /// <summary>Set data row value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="value">The value to set</param>
-    public static void SetValue<T>(this DataRow dataRow, string column, T value) =>
-        SetValue(dataRow, column, value, typeof(T));
-
-    /// <summary>Set data row value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="value">The value to set</param>
-    /// <param name="type">The value type</param>
-    public static void SetValue(this DataRow dataRow, string column, object value, Type type = null)
-    {
-        if (string.IsNullOrWhiteSpace(column))
-        {
-            throw new ArgumentException(nameof(column));
-        }
-
-        type ??= typeof(string);
-        dataRow.Table.EnsureColumn(column, type);
-        dataRow[column] = value;
-    }
-
-    /// <summary>Get data row json value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The data row value</returns>
-    public static T GetJsonValue<T>(this DataRow dataRow, string column, object defaultValue = null) =>
-        (T)GetJsonValue(dataRow, column, typeof(T), defaultValue);
-
-    /// <summary>Get data row json value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="type">The value type</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The data row value</returns>
-    public static object GetJsonValue(this DataRow dataRow, string column,
-        Type type, object defaultValue = null)
-    {
-        if (string.IsNullOrWhiteSpace(column))
-        {
-            throw new ArgumentException(nameof(column));
-        }
-        if (type == null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-
-        if (dataRow[column] is not string json)
-        {
-            return defaultValue;
-        }
-        if (type == typeof(string) && !json.StartsWith('"'))
-        {
-            return json;
-        }
-        if (type == typeof(DateTime) && DateTime.TryParse(json, CultureInfo.InvariantCulture, out var dateValue))
-        {
-            return dateValue.ToUtc();
-        }
-        return string.IsNullOrWhiteSpace(json) ? defaultValue :
-            JsonSerializer.Deserialize(json, type);
-    }
-
-    /// <summary>Set data row json value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="value">The value to set</param>
-    public static void SetJsonValue<T>(this DataRow dataRow, string column, T value) =>
-        SetJsonValue(dataRow, typeof(T), column, value);
-
-    /// <summary>Set data row json value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="type">The value type</param>
-    /// <param name="column">The column name</param>
-    /// <param name="value">The value to set</param>
-    public static void SetJsonValue(this DataRow dataRow, Type type, string column, object value)
-    {
-        if (type == null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-        if (string.IsNullOrWhiteSpace(column))
-        {
-            throw new ArgumentException(nameof(column));
-        }
-        if (value == null)
-        {
-            return;
-        }
-        dataRow[column] = JsonSerializer.Serialize(value);
-    }
-
-    /// <summary>Get default payroll value type</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <returns>The payroll value tye</returns>
-    public static ValueType GetPayrollValueType(this DataRow dataRow) =>
-        GetPayrollValueType(dataRow, nameof(ValueType));
-
-    /// <summary>Get payroll value type</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="defaultType">The default value type</param>
-    /// <returns>The payroll value tye</returns>
-    public static ValueType GetPayrollValueType(this DataRow dataRow,
-        string column, ValueType defaultType = ValueType.String) =>
-        GetEnumValue(dataRow, column, defaultType);
-
-    /// <summary>Get default payroll value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The payroll value</returns>
-    public static T GetPayrollValue<T>(this DataRow dataRow, T defaultValue = default) =>
-        (T)GetPayrollValue(dataRow, (object)defaultValue);
-
-    /// <summary>Get payroll value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="valueColumn">The value column name</param>
-    /// <param name="valueTypeColumn">The value type column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The payroll value</returns>
-    public static T GetPayrollValue<T>(this DataRow dataRow,
-        string valueColumn, string valueTypeColumn, T defaultValue = default) =>
-        (T)GetPayrollValue(dataRow, valueColumn, valueTypeColumn, (object)defaultValue);
-
-    /// <summary>Get default payroll value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The payroll value</returns>
-    public static object GetPayrollValue(this DataRow dataRow, object defaultValue = null) =>
-        GetPayrollValue(dataRow, "Value", nameof(ValueType), defaultValue);
-
-    /// <summary>Get payroll value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="valueColumn">The value column name</param>
-    /// <param name="valueTypeColumn">The value type column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The payroll value</returns>
-    public static object GetPayrollValue(this DataRow dataRow,
-        string valueColumn, string valueTypeColumn, object defaultValue = null) =>
-        GetJsonValue(dataRow, valueColumn,
-            GetPayrollValueType(dataRow, valueTypeColumn).GetDataType(), defaultValue);
-
-    /// <summary>Get data row localized name</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="culture">The culture</param>
-    /// <returns>The localized data row name</returns>
-    public static string GetLocalizedName(this DataRow dataRow, string culture) =>
-        GetLocalizedValue(dataRow, "Name", culture);
-
-    /// <summary>Get data row localized identifier</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="culture">The culture</param>
-    /// <returns>The localized data row identifier</returns>
-    public static string GetLocalizedIdentifier(this DataRow dataRow, string culture) =>
-        GetLocalizedValue(dataRow, "Identifier", culture);
-
-    /// <summary>Get data row localized value using the ValueColumnLocalizations column</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="valueColumn">The value column name</param>
-    /// <param name="culture">The culture</param>
-    /// <returns>The localized data row value</returns>
-    public static string GetLocalizedValue(this DataRow dataRow, string valueColumn, string culture) =>
-        GetLocalizedValue(dataRow, valueColumn, $"{valueColumn}Localizations", culture);
-
-    /// <summary>Get data row localized value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="valueColumn">The value column name</param>
-    /// <param name="localizationColumn">The localization column name</param>
-    /// <param name="culture">The culture</param>
-    /// <returns>The localized data row value</returns>
-    public static string GetLocalizedValue(this DataRow dataRow, string valueColumn, string localizationColumn,
-        string culture)
-    {
-        if (dataRow == null)
-        {
-            throw new ArgumentNullException(nameof(dataRow));
-        }
-
-        var value = GetValue<string>(dataRow, valueColumn);
-
-        culture ??= CultureInfo.CurrentCulture.Name;
-        var valueLocalization = JsonSerializer.Deserialize<
-            Dictionary<string, string>>(GetValue<string>(dataRow, localizationColumn));
-        if (valueLocalization != null && valueLocalization.TryGetValue(culture, out var localValue))
-        {
-            value = localValue;
-        }
-
-        return value;
-    }
-
-    /// <summary>Get data row values</summary>
-    /// <param name="dataRows">The data rows</param>
-    /// <returns>The data rows values</returns>
-    public static List<object> GetValues(this IEnumerable<DataRow> dataRows)
-    {
-        if (dataRows == null)
-        {
-            throw new ArgumentNullException(nameof(dataRows));
-        }
-        var values = new List<object>();
-        foreach (DataRow row in dataRows)
-        {
-            foreach (DataColumn column in row.Table.Columns)
+            var values = new Dictionary<string, object>();
+            foreach (DataColumn column in dataRow.Table.Columns)
             {
-                values.Add(row[column.ColumnName]);
+                values.Add(column.ColumnName, dataRow.GetValue<object>(column.ColumnName));
+            }
+            return values;
+        }
+
+        /// <summary>Get data row as json</summary>
+        /// <param name="namingPolicy">Naming policy (default: camel case)</param>
+        /// <param name="ignoreNull">Ignore null values (default: true)</param>
+        public string Json(JsonNamingPolicy namingPolicy = null,
+            bool ignoreNull = true)
+        {
+            ArgumentNullException.ThrowIfNull(dataRow);
+            return JsonSerializer.Serialize(dataRow.AsDictionary(), new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = namingPolicy ?? JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = ignoreNull ? JsonIgnoreCondition.WhenWritingNull : default
+            });
+        }
+
+        /// <summary>Get data row enum value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The data row enum value</returns>
+        public T GetEnumValue<T>(string column, T defaultValue = default)
+            where T : struct
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ScriptException($"Invalid enum value type: {typeof(T)}.");
+            }
+            var valueText = dataRow.GetValue(column, defaultValue.ToString());
+            if (string.IsNullOrWhiteSpace(valueText) || !Enum.TryParse(valueText, true, out T enumValue))
+            {
+                return defaultValue;
+            }
+            return enumValue;
+        }
+
+        /// <summary>Get data row value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The data row value</returns>
+        public T GetValue<T>(string column, T defaultValue = default)
+        {
+            if (dataRow == null)
+            {
+                throw new ArgumentNullException(nameof(dataRow));
+            }
+            if (string.IsNullOrWhiteSpace(column))
+            {
+                throw new ArgumentException(nameof(column));
+            }
+
+            var value = dataRow[column];
+            if (value is null or DBNull)
+            {
+                return defaultValue;
+            }
+            if (value is T typeValue)
+            {
+                return typeValue;
+            }
+            if (value is string stringValue)
+            {
+                // json escaping
+                stringValue = stringValue.Trim('"');
+                return (T)JsonSerializer.Deserialize(stringValue, typeof(T));
+            }
+
+            try
+            {
+                return (T)Convert.ChangeType(value, typeof(T));
+            }
+            catch (Exception exception)
+            {
+                throw new ScriptException($"Error in column {column}: convert value {value} to type {typeof(T)}.", exception);
             }
         }
-        return values;
+
+        /// <summary>Set data row value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="value">The value to set</param>
+        public void SetValue<T>(string column, T value) => dataRow.SetValue(column, value, typeof(T));
+
+        /// <summary>Set data row value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="value">The value to set</param>
+        /// <param name="type">The value type</param>
+        public void SetValue(string column, object value, Type type = null)
+        {
+            if (string.IsNullOrWhiteSpace(column))
+            {
+                throw new ArgumentException(nameof(column));
+            }
+
+            type ??= typeof(string);
+            dataRow.Table.EnsureColumn(column, type);
+            dataRow[column] = value;
+        }
+
+        /// <summary>Get data row json value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The data row value</returns>
+        public T GetJsonValue<T>(string column, object defaultValue = null) =>
+            (T)dataRow.GetJsonValue(column, typeof(T), defaultValue);
+
+        /// <summary>Get data row json value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="type">The value type</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The data row value</returns>
+        public object GetJsonValue(string column,
+            Type type, object defaultValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(column))
+            {
+                throw new ArgumentException(nameof(column));
+            }
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (dataRow[column] is not string json)
+            {
+                return defaultValue;
+            }
+            if (type == typeof(string) && !json.StartsWith('"'))
+            {
+                return json;
+            }
+            if (type == typeof(DateTime) && DateTime.TryParse(json, CultureInfo.InvariantCulture, out var dateValue))
+            {
+                return dateValue.ToUtc();
+            }
+            return string.IsNullOrWhiteSpace(json) ? defaultValue :
+                JsonSerializer.Deserialize(json, type);
+        }
+
+        /// <summary>Set data row json value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="value">The value to set</param>
+        public void SetJsonValue<T>(string column, T value) => dataRow.SetJsonValue(column, value);
+
+        /// <summary>Set data row json value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="value">The value to set</param>
+        public void SetJsonValue(string column, object value)
+        {
+            if (string.IsNullOrWhiteSpace(column))
+            {
+                throw new ArgumentException(nameof(column));
+            }
+            if (value == null)
+            {
+                return;
+            }
+            dataRow[column] = JsonSerializer.Serialize(value);
+        }
+
+        /// <summary>Get default payroll value type</summary>
+        /// <returns>The payroll value tye</returns>
+        public ValueType GetPayrollValueType() => dataRow.GetPayrollValueType(nameof(ValueType));
+
+        /// <summary>Get payroll value type</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="defaultType">The default value type</param>
+        /// <returns>The payroll value tye</returns>
+        public ValueType GetPayrollValueType(string column, ValueType defaultType = ValueType.String) =>
+            dataRow.GetEnumValue(column, defaultType);
+
+        /// <summary>Get default payroll value</summary>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The payroll value</returns>
+        public T GetPayrollValue<T>(T defaultValue = default) =>
+            (T)dataRow.GetPayrollValue((object)defaultValue);
+
+        /// <summary>Get payroll value</summary>
+        /// <param name="valueColumn">The value column name</param>
+        /// <param name="valueTypeColumn">The value type column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The payroll value</returns>
+        public T GetPayrollValue<T>(string valueColumn, string valueTypeColumn, T defaultValue = default) =>
+            (T)dataRow.GetPayrollValue(valueColumn, valueTypeColumn, (object)defaultValue);
+
+        /// <summary>Get default payroll value</summary>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The payroll value</returns>
+        public object GetPayrollValue(object defaultValue = null) => dataRow.GetPayrollValue("Value", nameof(ValueType), defaultValue);
+
+        /// <summary>Get payroll value</summary>
+        /// <param name="valueColumn">The value column name</param>
+        /// <param name="valueTypeColumn">The value type column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The payroll value</returns>
+        public object GetPayrollValue(string valueColumn, string valueTypeColumn, object defaultValue = null) =>
+            dataRow.GetJsonValue(valueColumn, dataRow.GetPayrollValueType(valueTypeColumn).GetDataType(), defaultValue);
+
+        /// <summary>Get data row localized name</summary>
+        /// <param name="culture">The culture</param>
+        /// <returns>The localized data row name</returns>
+        public string GetLocalizedName(string culture) => dataRow.GetLocalizedValue("Name", culture);
+
+        /// <summary>Get data row localized identifier</summary>
+        /// <param name="culture">The culture</param>
+        /// <returns>The localized data row identifier</returns>
+        public string GetLocalizedIdentifier(string culture) => dataRow.GetLocalizedValue("Identifier", culture);
+
+        /// <summary>Get data row localized value using the ValueColumnLocalizations column</summary>
+        /// <param name="valueColumn">The value column name</param>
+        /// <param name="culture">The culture</param>
+        /// <returns>The localized data row value</returns>
+        public string GetLocalizedValue(string valueColumn, string culture) => dataRow.GetLocalizedValue(valueColumn, $"{valueColumn}Localizations", culture);
+
+        /// <summary>Get data row localized value</summary>
+        /// <param name="valueColumn">The value column name</param>
+        /// <param name="localizationColumn">The localization column name</param>
+        /// <param name="culture">The culture</param>
+        /// <returns>The localized data row value</returns>
+        public string GetLocalizedValue(string valueColumn, string localizationColumn,
+            string culture)
+        {
+            if (dataRow == null)
+            {
+                throw new ArgumentNullException(nameof(dataRow));
+            }
+
+            var value = dataRow.GetValue<string>(valueColumn);
+
+            culture ??= CultureInfo.CurrentCulture.Name;
+            var valueLocalization = JsonSerializer.Deserialize<
+                Dictionary<string, string>>(dataRow.GetValue<string>(localizationColumn));
+            if (valueLocalization != null && valueLocalization.TryGetValue(culture, out var localValue))
+            {
+                value = localValue;
+            }
+
+            return value;
+        }
     }
 
-    /// <summary>Get data rows value</summary>
     /// <param name="dataRows">The data rows</param>
-    /// <param name="column">The column name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The data rows value</returns>
-    public static List<T> GetValues<T>(this IEnumerable<DataRow> dataRows, string column, T defaultValue = default)
+    extension(IEnumerable<DataRow> dataRows)
     {
-        if (dataRows == null)
+        /// <summary>Get data row values</summary>
+        /// <returns>The data rows values</returns>
+        public List<object> GetValues()
         {
-            throw new ArgumentNullException(nameof(dataRows));
-        }
-        if (string.IsNullOrWhiteSpace(column))
-        {
-            throw new ArgumentException(nameof(column));
+            if (dataRows == null)
+            {
+                throw new ArgumentNullException(nameof(dataRows));
+            }
+            var values = new List<object>();
+            foreach (DataRow row in dataRows)
+            {
+                foreach (DataColumn column in row.Table.Columns)
+                {
+                    values.Add(row[column.ColumnName]);
+                }
+            }
+            return values;
         }
 
-        var values = new List<T>();
-        foreach (DataRow dataRow in dataRows)
+        /// <summary>Get data rows value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The data rows value</returns>
+        public List<T> GetValues<T>(string column, T defaultValue = default)
         {
-            values.Add(GetValue(dataRow, column, defaultValue));
+            if (dataRows == null)
+            {
+                throw new ArgumentNullException(nameof(dataRows));
+            }
+            if (string.IsNullOrWhiteSpace(column))
+            {
+                throw new ArgumentException(nameof(column));
+            }
+
+            var values = new List<T>();
+            foreach (DataRow dataRow in dataRows)
+            {
+                values.Add(dataRow.GetValue(column, defaultValue));
+            }
+            return values;
         }
-        return values;
     }
 
-    /// <summary>Get data row JSON value as list</summary>
     /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <returns>The list</returns>
-    public static List<T> GetListValue<T>(this DataRow dataRow, string column)
+    extension(DataRow dataRow)
     {
-        if (dataRow == null)
+        /// <summary>Get data row JSON value as list</summary>
+        /// <param name="column">The column name</param>
+        /// <returns>The list</returns>
+        public List<T> GetListValue<T>(string column)
         {
-            throw new ArgumentNullException(nameof(dataRow));
-        }
-        if (string.IsNullOrWhiteSpace(column))
-        {
-            throw new ArgumentException(nameof(column));
-        }
+            if (dataRow == null)
+            {
+                throw new ArgumentNullException(nameof(dataRow));
+            }
+            if (string.IsNullOrWhiteSpace(column))
+            {
+                throw new ArgumentException(nameof(column));
+            }
 
-        var value = dataRow[column];
-        if (value is null or DBNull)
-        {
-            return [];
-        }
-        if (value is IEnumerable<T> enumerable)
-        {
-            return [.. enumerable];
-        }
-        if (value is string json)
-        {
-            if (string.IsNullOrWhiteSpace(json))
+            var value = dataRow[column];
+            if (value is null or DBNull)
             {
                 return [];
             }
-            return JsonSerializer.Deserialize<List<T>>(json);
-        }
-
-        throw new ArgumentException($"{value} from column {column} is not a JSON list.", nameof(column));
-    }
-
-    /// <summary>Get data row JSON value as dictionary</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <returns>The dictionary</returns>
-    public static Dictionary<TKey, TValue> GetDictionary<TKey, TValue>(this DataRow dataRow, string column)
-    {
-        if (dataRow == null)
-        {
-            throw new ArgumentNullException(nameof(dataRow));
-        }
-        if (string.IsNullOrWhiteSpace(column))
-        {
-            throw new ArgumentException(nameof(column));
-        }
-
-        var value = dataRow[column];
-        return value switch
-        {
-            null or DBNull => new(),
-            IDictionary<TKey, TValue> dictionary => new(dictionary),
-            string json => string.IsNullOrWhiteSpace(json)
-                ? new()
-                : JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(json),
-            _ => throw new ArgumentException($"{value} from column {column} is not a JSON dictionary.", nameof(column))
-        };
-    }
-
-    /// <summary>Get attributes column value as attribute dictionary</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <returns>The attributes dictionary</returns>
-    public static Dictionary<string, object> GetAttributes(this DataRow dataRow) =>
-        GetAttributes(dataRow, "Attributes");
-
-    /// <summary>Get data row json value as attribute dictionary</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <returns>The attributes dictionary</returns>
-    public static Dictionary<string, object> GetAttributes(this DataRow dataRow, string column) =>
-        GetDictionary<string, object>(dataRow, column);
-
-    /// <summary>Get value from attributes column</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="attribute">The attribute name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The attribute value</returns>
-    public static T GetAttribute<T>(this DataRow dataRow, string attribute, T defaultValue = default) =>
-        GetAttribute(dataRow, "Attributes", attribute, defaultValue);
-
-    /// <summary>Get attribute from a data row json value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="attribute">The attribute name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The attribute value</returns>
-    public static T GetAttribute<T>(this DataRow dataRow, string column, string attribute, T defaultValue = default) =>
-        (T)Convert.ChangeType(GetAttribute(dataRow, column, attribute, (object)defaultValue), typeof(T));
-
-    /// <summary>Get value from attributes column</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="attribute">The attribute name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The attribute value</returns>
-    public static object GetAttribute(this DataRow dataRow, string attribute, object defaultValue = null) =>
-        GetAttribute(dataRow, "Attributes", attribute, defaultValue);
-
-    /// <summary>Get attribute from a data row json value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="attribute">The attribute name</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The attribute value</returns>
-    public static object GetAttribute(this DataRow dataRow, string column, string attribute, object defaultValue = null)
-    {
-        if (string.IsNullOrWhiteSpace(attribute))
-        {
-            throw new ArgumentException(nameof(attribute));
-        }
-
-        var attributes = GetAttributes(dataRow, column);
-        if (!attributes.TryGetValue(attribute, out var value))
-        {
-            return defaultValue;
-        }
-
-        if (value is JsonElement jsonElement)
-        {
-            value = jsonElement.GetValue();
-        }
-        return value ?? defaultValue;
-    }
-
-    /// <summary>Get data row json value as localizations dictionary</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <returns>The attributes dictionary</returns>
-    public static Dictionary<string, string> GetLocalizations(this DataRow dataRow, string column) =>
-        GetDictionary<string, string>(dataRow, column);
-
-    /// <summary>Get attribute from a data row json value</summary>
-    /// <param name="dataRow">The data row</param>
-    /// <param name="column">The column name</param>
-    /// <param name="culture">The culture</param>
-    /// <param name="defaultValue">The default value</param>
-    /// <returns>The attribute value</returns>
-    public static string GetLocalization(this DataRow dataRow, string column, string culture, string defaultValue = null) =>
-        culture.GetLocalization(GetLocalizations(dataRow, column), defaultValue);
-
-    /// <summary>Transpose item collection to table columns with values</summary>
-    /// <remarks>Use the function return value null, to suppress further item operations</remarks>
-    /// <param name="target">The target data row</param>
-    /// <param name="items">The items to transpose</param>
-    /// <param name="columnName">The column name function (mandatory)</param>
-    /// <param name="itemValue">The item value function (mandatory)</param>
-    /// <param name="columnType">The column type function, default is string</param>
-    /// <param name="defaultValue">The default value function, default is none</param>
-    public static void TransposeFrom<T>(this DataRow target, IEnumerable<T> items,
-        Func<T, string> columnName, Func<T, object> itemValue,
-        Func<T, Type> columnType = null, Func<T, object> defaultValue = null)
-    {
-        if (items == null)
-        {
-            throw new ArgumentNullException(nameof(items));
-        }
-        if (columnName == null)
-        {
-            throw new ArgumentNullException(nameof(columnName));
-        }
-        if (itemValue == null)
-        {
-            throw new ArgumentNullException(nameof(itemValue));
-        }
-
-        foreach (var item in items)
-        {
-            // column name
-            var name = columnName(item);
-            if (string.IsNullOrWhiteSpace(name))
+            if (value is IEnumerable<T> enumerable)
             {
-                continue;
+                return [.. enumerable];
             }
-
-            //  column
-            DataColumn column;
-            if (!target.Table.Columns.Contains(name))
+            if (value is string json)
             {
-                // new column
-                Type type = columnType?.Invoke(item) ?? typeof(T);
-                column = new(name, type);
-
-                // default value
-                if (defaultValue != null)
+                if (string.IsNullOrWhiteSpace(json))
                 {
-                    column.DefaultValue = defaultValue.Invoke(item);
+                    return [];
                 }
-                target.Table.Columns.Add(column);
-            }
-            else
-            {
-                column = target.Table.Columns[name];
-            }
-            if (column == null)
-            {
-                continue;
+                return JsonSerializer.Deserialize<List<T>>(json);
             }
 
-            // item/row value
-            var value = itemValue(item);
-            if (value == null)
+            throw new ArgumentException($"{value} from column {column} is not a JSON list.", nameof(column));
+        }
+
+        /// <summary>Get data row JSON value as dictionary</summary>
+        /// <param name="column">The column name</param>
+        /// <returns>The dictionary</returns>
+        public Dictionary<TKey, TValue> GetDictionary<TKey, TValue>(string column)
+        {
+            if (dataRow == null)
             {
-                continue;
+                throw new ArgumentNullException(nameof(dataRow));
             }
+            if (string.IsNullOrWhiteSpace(column))
+            {
+                throw new ArgumentException(nameof(column));
+            }
+
+            var value = dataRow[column];
+            return value switch
+            {
+                null or DBNull => new(),
+                IDictionary<TKey, TValue> dictionary => new(dictionary),
+                string json => string.IsNullOrWhiteSpace(json)
+                    ? new()
+                    : JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(json),
+                _ => throw new ArgumentException($"{value} from column {column} is not a JSON dictionary.", nameof(column))
+            };
+        }
+
+        /// <summary>Get attributes column value as attribute dictionary</summary>
+        /// <returns>The attributes dictionary</returns>
+        public Dictionary<string, object> GetAttributes() => dataRow.GetAttributes("Attributes");
+
+        /// <summary>Get data row json value as attribute dictionary</summary>
+        /// <param name="column">The column name</param>
+        /// <returns>The attributes dictionary</returns>
+        public Dictionary<string, object> GetAttributes(string column) => dataRow.GetDictionary<string, object>(column);
+
+        /// <summary>Get value from attributes column</summary>
+        /// <param name="attribute">The attribute name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The attribute value</returns>
+        public T GetAttribute<T>(string attribute, T defaultValue = default) => dataRow.GetAttribute("Attributes", attribute, defaultValue);
+
+        /// <summary>Get attribute from a data row json value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="attribute">The attribute name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The attribute value</returns>
+        public T GetAttribute<T>(string column, string attribute, T defaultValue = default) =>
+            (T)Convert.ChangeType(dataRow.GetAttribute(column, attribute, (object)defaultValue), typeof(T));
+
+        /// <summary>Get value from attributes column</summary>
+        /// <param name="attribute">The attribute name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The attribute value</returns>
+        public object GetAttribute(string attribute, object defaultValue = null) => dataRow.GetAttribute("Attributes", attribute, defaultValue);
+
+        /// <summary>Get attribute from a data row json value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="attribute">The attribute name</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The attribute value</returns>
+        public object GetAttribute(string column, string attribute, object defaultValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(attribute))
+            {
+                throw new ArgumentException(nameof(attribute));
+            }
+
+            var attributes = dataRow.GetAttributes(column);
+            if (!attributes.TryGetValue(attribute, out var value))
+            {
+                return defaultValue;
+            }
+
             if (value is JsonElement jsonElement)
             {
                 value = jsonElement.GetValue();
             }
-            target[name] = value;
-        }
-    }
-
-    /// <summary>Transpose dictionary to table columns with values</summary>
-    /// <remarks>Use the function return value null, to suppress further item operations
-    /// Transpose dynamic object: row.TransposeFrom((IDictionary&lt;string, object&gt;)dynamicObject);</remarks>
-    /// <param name="target">The target data row</param>
-    /// <param name="items">The items to transpose</param>
-    /// <param name="columnName">The column name function (mandatory)</param>
-    /// <param name="itemValue">The item value function (mandatory)</param>
-    /// <param name="columnType">The column type function, default is string</param>
-    /// <param name="defaultValue">The default value function, default is none</param>
-    public static void TransposeFrom<TKey, TValue>(this DataRow target, IDictionary<TKey, TValue> items,
-        Func<TKey, string> columnName = null, Func<TValue, object> itemValue = null,
-        Func<TKey, Type> columnType = null, Func<TKey, object> defaultValue = null)
-    {
-        if (items == null)
-        {
-            throw new ArgumentNullException(nameof(items));
+            return value ?? defaultValue;
         }
 
-        foreach (var item in items)
+        /// <summary>Get data row json value as localizations dictionary</summary>
+        /// <param name="column">The column name</param>
+        /// <returns>The attributes dictionary</returns>
+        public Dictionary<string, string> GetLocalizations(string column) => dataRow.GetDictionary<string, string>(column);
+
+        /// <summary>Get attribute from a data row json value</summary>
+        /// <param name="column">The column name</param>
+        /// <param name="culture">The culture</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The attribute value</returns>
+        public string GetLocalization(string column, string culture, string defaultValue = null) =>
+            culture.GetLocalization(dataRow.GetLocalizations(column), defaultValue);
+
+        /// <summary>Transpose item collection to table columns with values</summary>
+        /// <remarks>Use the function return value null, to suppress further item operations</remarks>
+        /// <param name="items">The items to transpose</param>
+        /// <param name="columnName">The column name function (mandatory)</param>
+        /// <param name="itemValue">The item value function (mandatory)</param>
+        /// <param name="columnType">The column type function, default is string</param>
+        /// <param name="defaultValue">The default value function, default is none</param>
+        public void TransposeFrom<T>(IEnumerable<T> items,
+            Func<T, string> columnName, Func<T, object> itemValue,
+            Func<T, Type> columnType = null, Func<T, object> defaultValue = null)
         {
-            // column name
-            var name = item.Key.ToString();
-            if (columnName != null)
+            if (items == null)
             {
-                name = columnName(item.Key);
+                throw new ArgumentNullException(nameof(items));
             }
-            if (string.IsNullOrWhiteSpace(name))
+            if (columnName == null)
             {
-                continue;
+                throw new ArgumentNullException(nameof(columnName));
             }
-
-            //  column
-            DataColumn column;
-            if (!target.Table.Columns.Contains(name))
+            if (itemValue == null)
             {
-                // new column
-                Type type = columnType?.Invoke(item.Key) ?? typeof(TValue);
-                column = new(name, type);
-
-                // default value
-                if (defaultValue != null)
-                {
-                    column.DefaultValue = defaultValue.Invoke(item.Key);
-                }
-                target.Table.Columns.Add(column);
-            }
-            else
-            {
-                column = target.Table.Columns[name];
-            }
-            if (column == null)
-            {
-                continue;
+                throw new ArgumentNullException(nameof(itemValue));
             }
 
-            // item/row value
-            var value = item.Value as object;
-            if (itemValue != null)
+            foreach (var item in items)
             {
-                value = itemValue(item.Value);
-            }
-            if (value == null)
-            {
-                continue;
-            }
-            if (value is JsonElement jsonElement)
-            {
-                value = jsonElement.GetValue();
-            }
-            target[name] = value;
-        }
-    }
-
-    /// <summary>Transpose data row items to table columns with values</summary>
-    /// <remarks>Use the function return value null, to suppress further item operations</remarks>
-    /// <param name="target">The target data row</param>
-    /// <param name="source">The source data row</param>
-    /// <param name="columnName">The column name function, default is the source column name</param>
-    /// <param name="itemValue">The item value function, default is the source column value</param>
-    /// <param name="columnType">The column type function, default is the source column type</param>
-    /// <param name="defaultValue">The default value function, default is none</param>
-    public static void TransposeFrom(this DataRow target, DataRow source,
-        Func<DataColumn, string> columnName = null, Func<object, object> itemValue = null,
-        Func<DataColumn, Type> columnType = null, Func<DataColumn, object> defaultValue = null)
-    {
-        if (source == null)
-        {
-            throw new ArgumentNullException(nameof(source));
-        }
-
-        foreach (DataColumn sourceColumn in source.Table.Columns)
-        {
-            // column name
-            var name = sourceColumn.ColumnName;
-            if (columnName != null)
-            {
-                name = columnName(sourceColumn);
-            }
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                continue;
-            }
-
-            //  new column
-            DataColumn targetColumn;
-            if (!target.Table.Columns.Contains(name))
-            {
-                // column type
-                Type type = sourceColumn.DataType;
-                if (columnType != null)
-                {
-                    type = columnType.Invoke(sourceColumn);
-                }
-                if (columnType == null)
+                // column name
+                var name = columnName(item);
+                if (string.IsNullOrWhiteSpace(name))
                 {
                     continue;
                 }
 
-                // create column
-                targetColumn = new(name, type);
-
-                // default value
-                if (defaultValue != null)
+                //  column
+                DataColumn column;
+                if (!dataRow.Table.Columns.Contains(name))
                 {
-                    targetColumn.DefaultValue = defaultValue.Invoke(sourceColumn);
+                    // new column
+                    Type type = columnType?.Invoke(item) ?? typeof(T);
+                    column = new(name, type);
+
+                    // default value
+                    if (defaultValue != null)
+                    {
+                        column.DefaultValue = defaultValue.Invoke(item);
+                    }
+                    dataRow.Table.Columns.Add(column);
                 }
-                target.Table.Columns.Add(targetColumn);
+                else
+                {
+                    column = dataRow.Table.Columns[name];
+                }
+                if (column == null)
+                {
+                    continue;
+                }
+
+                // item/row value
+                var value = itemValue(item);
+                if (value == null)
+                {
+                    continue;
+                }
+                if (value is JsonElement jsonElement)
+                {
+                    value = jsonElement.GetValue();
+                }
+                dataRow[name] = value;
             }
-            else
+        }
+
+        /// <summary>Transpose dictionary to table columns with values</summary>
+        /// <remarks>Use the function return value null, to suppress further item operations
+        /// Transpose dynamic object: row.TransposeFrom((IDictionary&lt;string, object&gt;)dynamicObject);</remarks>
+        /// <param name="items">The items to transpose</param>
+        /// <param name="columnName">The column name function (mandatory)</param>
+        /// <param name="itemValue">The item value function (mandatory)</param>
+        /// <param name="columnType">The column type function, default is string</param>
+        /// <param name="defaultValue">The default value function, default is none</param>
+        public void TransposeFrom<TKey, TValue>(IDictionary<TKey, TValue> items,
+            Func<TKey, string> columnName = null, Func<TValue, object> itemValue = null,
+            Func<TKey, Type> columnType = null, Func<TKey, object> defaultValue = null)
+        {
+            if (items == null)
             {
-                targetColumn = target.Table.Columns[name];
-            }
-            if (targetColumn == null)
-            {
-                continue;
-            }
-            if (targetColumn.DataType != sourceColumn.DataType)
-            {
-                throw new ScriptException($"Mismatching types in column {sourceColumn.ColumnName}:" +
-                                           $" source: {sourceColumn.DataType.Name}, target: {targetColumn.DataType.Name}.");
+                throw new ArgumentNullException(nameof(items));
             }
 
-            // item/row value
-            var value = source[sourceColumn];
-            if (itemValue != null)
+            foreach (var item in items)
             {
-                value = itemValue(value);
+                // column name
+                var name = item.Key.ToString();
+                if (columnName != null)
+                {
+                    name = columnName(item.Key);
+                }
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
+                //  column
+                DataColumn column;
+                if (!dataRow.Table.Columns.Contains(name))
+                {
+                    // new column
+                    Type type = columnType?.Invoke(item.Key) ?? typeof(TValue);
+                    column = new(name, type);
+
+                    // default value
+                    if (defaultValue != null)
+                    {
+                        column.DefaultValue = defaultValue.Invoke(item.Key);
+                    }
+                    dataRow.Table.Columns.Add(column);
+                }
+                else
+                {
+                    column = dataRow.Table.Columns[name];
+                }
+                if (column == null)
+                {
+                    continue;
+                }
+
+                // item/row value
+                var value = item.Value as object;
+                if (itemValue != null)
+                {
+                    value = itemValue(item.Value);
+                }
+                if (value == null)
+                {
+                    continue;
+                }
+                if (value is JsonElement jsonElement)
+                {
+                    value = jsonElement.GetValue();
+                }
+                dataRow[name] = value;
             }
-            if (value == null)
+        }
+
+        /// <summary>Transpose data row items to table columns with values</summary>
+        /// <remarks>Use the function return value null, to suppress further item operations</remarks>
+        /// <param name="source">The source data row</param>
+        /// <param name="columnName">The column name function, default is the source column name</param>
+        /// <param name="itemValue">The item value function, default is the source column value</param>
+        /// <param name="columnType">The column type function, default is the source column type</param>
+        /// <param name="defaultValue">The default value function, default is none</param>
+        public void TransposeFrom(DataRow source,
+            Func<DataColumn, string> columnName = null, Func<object, object> itemValue = null,
+            Func<DataColumn, Type> columnType = null, Func<DataColumn, object> defaultValue = null)
+        {
+            if (source == null)
             {
-                continue;
+                throw new ArgumentNullException(nameof(source));
             }
-            if (value is JsonElement jsonElement)
+
+            foreach (DataColumn sourceColumn in source.Table.Columns)
             {
-                value = jsonElement.GetValue();
+                // column name
+                var name = sourceColumn.ColumnName;
+                if (columnName != null)
+                {
+                    name = columnName(sourceColumn);
+                }
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
+                //  new column
+                DataColumn targetColumn;
+                if (!dataRow.Table.Columns.Contains(name))
+                {
+                    // column type
+                    Type type = sourceColumn.DataType;
+                    if (columnType != null)
+                    {
+                        type = columnType.Invoke(sourceColumn);
+                    }
+                    if (columnType == null)
+                    {
+                        continue;
+                    }
+
+                    // create column
+                    targetColumn = new(name, type);
+
+                    // default value
+                    if (defaultValue != null)
+                    {
+                        targetColumn.DefaultValue = defaultValue.Invoke(sourceColumn);
+                    }
+                    dataRow.Table.Columns.Add(targetColumn);
+                }
+                else
+                {
+                    targetColumn = dataRow.Table.Columns[name];
+                }
+                if (targetColumn == null)
+                {
+                    continue;
+                }
+                if (targetColumn.DataType != sourceColumn.DataType)
+                {
+                    throw new ScriptException($"Mismatching types in column {sourceColumn.ColumnName}:" +
+                                              $" source: {sourceColumn.DataType.Name}, target: {targetColumn.DataType.Name}.");
+                }
+
+                // item/row value
+                var value = source[sourceColumn];
+                if (itemValue != null)
+                {
+                    value = itemValue(value);
+                }
+                if (value == null)
+                {
+                    continue;
+                }
+                if (value is JsonElement jsonElement)
+                {
+                    value = jsonElement.GetValue();
+                }
+                dataRow[name] = value;
             }
-            target[name] = value;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
+// ReSharper disable EmptyRegion
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -47,23 +48,30 @@ public partial class CollectorApplyFunction : CollectorFunction
     }
 
     /// <summary>The wage type number</summary>
+    [ActionProperty("Wage type number")]
     public decimal WageTypeNumber { get; }
 
     /// <summary>The wage type name</summary>
+    [ActionProperty("Wage type name")]
     public string WageTypeName { get; }
 
     /// <summary>The wage type result value</summary>
+    [ActionProperty("Wage type value")]
     public decimal WageTypeValue { get; }
+
+    #region Action
+    #endregion
 
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
-    public decimal? GetValue()
+    public object GetValue()
     {
-        // ReSharper disable EmptyRegion
+        #region ActionInvoke
+        #endregion
+
         #region Function
         #endregion
-        // ReSharper restore EmptyRegion
-        // compiler will optimize this out if the code provides a return
+
         return null;
     }
 }

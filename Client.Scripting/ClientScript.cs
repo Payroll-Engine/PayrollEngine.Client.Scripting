@@ -161,29 +161,22 @@ public enum PayrunExecutionPhase
 }
 
 /// <summary>The payrun job type</summary>
-[Flags]
 public enum PayrunJobStatus
 {
     /// <summary>Draft Legal results (default)</summary>
-    Draft = 0x0000,
+    Draft,
     /// <summary>Legal results are released for processing</summary>
-    Release = 0x0001,
+    Release,
     /// <summary>Legal results are processed</summary>
-    Process = 0x0002,
+    Process,
     /// <summary>Legal results has been processed successfully</summary>
-    Complete = 0x0004,
+    Complete,
     /// <summary>Forecast results</summary>
-    Forecast = 0x0008,
+    Forecast,
     /// <summary>Unreleased Job has been aborted</summary>
-    Abort = 0x0010,
+    Abort,
     /// <summary>Released Job has been canceled</summary>
-    Cancel = 0x0020,
-    /// <summary>Working status, including draft, release and process</summary>
-    Working = Draft | Release | Process,
-    /// <summary>Legal status, including release, process and complete</summary>
-    Legal = Release | Process | Complete,
-    /// <summary>Final status, including complete, forecast, abort and cancel</summary>
-    Final = Complete | Forecast | Abort | Cancel
+    Cancel
 }
 
 /// <summary>The data merge schema change</summary>
@@ -338,29 +331,25 @@ public class ScriptDictionary<TKey, TValue>
 
 #endregion
 
-#region Actions
+#region Action Attributes
 
-/// <summary>Action provider type</summary>
-[AttributeUsage(AttributeTargets.Class)]
-public sealed class ActionProviderAttribute : Attribute
+/// <summary>Attribute for action property</summary>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class ActionPropertyAttribute : Attribute
 {
-    /// <summary>The extension function type</summary>
-    public Type Type { get; }
+    /// <summary>The property name</summary>
+    public string Name { get; }
 
-    /// <summary>The extension namespace</summary>
-    public string Namespace { get; }
+    /// <summary>The property description</summary>
+    public string Description { get; }
 
-    /// <summary>Initializes a new instance of the <see cref="ActionProviderAttribute"/> class</summary>
-    /// <param name="namespace">The extension namespace</param>
-    /// <param name="type">The extension function type</param>
-    public ActionProviderAttribute(string @namespace, Type type)
+    /// <summary>Initializes a new instance of the <see cref="ActionAttribute"/> class</summary>
+    /// <param name="name">The property name (default prop-def name)</param>
+    /// <param name="description">The property description</param>
+    public ActionPropertyAttribute(string description = null, string name = null)
     {
-        if (string.IsNullOrWhiteSpace(@namespace))
-        {
-            throw new ArgumentException(nameof(@namespace));
-        }
-        Namespace = @namespace;
-        Type = type ?? throw new ArgumentNullException(nameof(type));
+        Description = description;
+        Name = name;
     }
 }
 
@@ -470,99 +459,113 @@ public abstract class ActionAttribute : Attribute
     }
 }
 
+/// <summary>Attribute for case action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public class CaseActionAttribute(string name, string description = null, params string[] categories) :
+    ActionAttribute(name, description, categories);
+
 /// <summary>Attribute for case available action</summary>
-public sealed class CaseAvailableActionAttribute : ActionAttribute
-{
-    /// <summary>Initializes a new instance of the <see cref="CaseAvailableActionAttribute"/> class</summary>
-    /// <param name="name">The action name</param>
-    /// <param name="description">The action description</param>
-    /// <param name="categories">The action categories</param>
-    public CaseAvailableActionAttribute(string name, string description = null, params string[] categories) :
-        base(name, description, categories)
-    {
-    }
-}
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public sealed class CaseAvailableActionAttribute(string name, string description = null, params string[] categories) :
+    CaseActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case change action</summary>
-public abstract class CaseChangeActionAttribute : ActionAttribute
-{
-    /// <summary>Initializes a new instance of the <see cref="CaseBuildActionAttribute"/> class</summary>
-    /// <param name="name">The action name</param>
-    /// <param name="description">The action description</param>
-    /// <param name="categories">The action categories</param>
-    protected CaseChangeActionAttribute(string name, string description = null, params string[] categories) :
-        base(name, description, categories)
-    {
-    }
-}
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public class CaseChangeActionAttribute(string name, string description = null, params string[] categories) :
+    ActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case build action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
 [AttributeUsage(AttributeTargets.Method)]
-public sealed class CaseBuildActionAttribute : CaseChangeActionAttribute
-{
-    /// <summary>Initializes a new instance of the <see cref="CaseBuildActionAttribute"/> class</summary>
-    /// <param name="name">The action name</param>
-    /// <param name="description">The action description</param>
-    /// <param name="categories">The action categories</param>
-    public CaseBuildActionAttribute(string name, string description = null, params string[] categories) :
-        base(name, description, categories)
-    {
-    }
-}
+public sealed class CaseBuildActionAttribute(string name, string description = null, params string[] categories) :
+    CaseChangeActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case validate action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
 [AttributeUsage(AttributeTargets.Method)]
-public sealed class CaseValidateActionAttribute : CaseChangeActionAttribute
-{
-    /// <summary>Initializes a new instance of the <see cref="CaseValidateActionAttribute"/> class</summary>
-    /// <param name="name">The action name</param>
-    /// <param name="description">The action description</param>
-    /// <param name="categories">The action categories</param>
-    public CaseValidateActionAttribute(string name, string description = null, params string[] categories) :
-        base(name, description, categories)
-    {
-    }
-}
+public sealed class CaseValidateActionAttribute(string name, string description = null, params string[] categories) :
+    CaseChangeActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case change action</summary>
-public abstract class CaseRelationActionAttribute : ActionAttribute
-{
-    /// <summary>Initializes a new instance of the <see cref="CaseRelationActionAttribute"/> class</summary>
-    /// <param name="name">The action name</param>
-    /// <param name="description">The action description</param>
-    /// <param name="categories">The action categories</param>
-    protected CaseRelationActionAttribute(string name, string description = null, params string[] categories) :
-        base(name, description, categories)
-    {
-    }
-}
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public class CaseRelationActionAttribute(string name, string description = null, params string[] categories) :
+    ActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case relation build action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
 [AttributeUsage(AttributeTargets.Method)]
-public sealed class CaseRelationBuildActionAttribute : CaseRelationActionAttribute
-{
-    /// <summary>Initializes a new instance of the <see cref="CaseRelationBuildActionAttribute"/> class</summary>
-    /// <param name="name">The action name</param>
-    /// <param name="description">The action description</param>
-    /// <param name="categories">The action categories</param>
-    public CaseRelationBuildActionAttribute(string name, string description = null, params string[] categories) :
-        base(name, description, categories)
-    {
-    }
-}
+public sealed class CaseRelationBuildActionAttribute(string name, string description = null, params string[] categories) :
+    CaseRelationActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case validate action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
 [AttributeUsage(AttributeTargets.Method)]
-public sealed class CaseRelationValidateActionAttribute : CaseRelationActionAttribute
-{
-    /// <summary>Initializes a new instance of the <see cref="CaseRelationValidateActionAttribute"/> class</summary>
-    /// <param name="name">The action name</param>
-    /// <param name="description">The action description</param>
-    /// <param name="categories">The action categories</param>
-    public CaseRelationValidateActionAttribute(string name, string description = null, params string[] categories) :
-        base(name, description, categories)
-    {
-    }
-}
+public sealed class CaseRelationValidateActionAttribute(string name, string description = null, params string[] categories) :
+    CaseRelationActionAttribute(name, description, categories);
+
+/// <summary>Attribute for collector action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public class CollectorActionAttribute(string name, string description = null, params string[] categories) :
+    ActionAttribute(name, description, categories);
+
+/// <summary>Attribute for collector start action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public sealed class CollectorStartActionAttribute(string name, string description = null, params string[] categories) :
+    CollectorActionAttribute(name, description, categories);
+
+/// <summary>Attribute for collector apply action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public sealed class CollectorApplyActionAttribute(string name, string description = null, params string[] categories) :
+    CollectorActionAttribute(name, description, categories);
+
+/// <summary>Attribute for collector end action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public sealed class CollectorEndActionAttribute(string name, string description = null, params string[] categories) :
+    CollectorActionAttribute(name, description, categories);
+
+/// <summary>Attribute for wage type action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public class WageTypeActionAttribute(string name, string description = null, params string[] categories) :
+    ActionAttribute(name, description, categories);
+
+/// <summary>Attribute for wage type value action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public sealed class WageTypeValueActionAttribute(string name, string description = null, params string[] categories) :
+    WageTypeActionAttribute(name, description, categories);
+
+/// <summary>Attribute for wage type result action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public sealed class WageTypeResultActionAttribute(string name, string description = null, params string[] categories) :
+    WageTypeActionAttribute(name, description, categories);
 
 #endregion

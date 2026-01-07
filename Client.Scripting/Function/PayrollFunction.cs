@@ -4,101 +4,32 @@ using System;
 using System.Linq;
 using System.Text.Json;
 using System.Reflection;
-using System.Globalization;
 using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-#region Action
-
-/// <summary>Action context</summary>
-public interface IActionContext
-{
-    /// <summary>The function</summary>
-    PayrollFunction Function { get; }
-}
-
-/// <summary>Condition action context</summary>
-public interface IConditionActionContext : IActionContext
-{
-    /// <summary>The issues</summary>
-    public List<ActionIssue> Issues { get; }
-}
-
-/// <summary>Action issue</summary>
-public class ActionIssue
-{
-    /// <summary>The issue message</summary>
-    public string Message { get; }
-
-    /// <summary>The localization key</summary>
-    public string LocalizationKey { get; }
-
-    /// <summary>The validation issue parameters</summary>
-    public object[] Parameters { get; }
-
-    /// <summary>Constructor</summary>
-    public ActionIssue(string message, string localizationKey = null,
-        params object[] parameters)
-    {
-        if (string.IsNullOrWhiteSpace(message))
-        {
-            throw new ArgumentException(nameof(message));
-        }
-
-        Message = message;
-        LocalizationKey = localizationKey;
-        Parameters = parameters;
-    }
-}
-
-/// <summary>Condition action context</summary>
-public abstract class ConditionActionContextBase<TFunc> : IConditionActionContext
-    where TFunc : PayrollFunction
-{
-    /// <summary>The function</summary>
-    public TFunc Function { get; }
-    PayrollFunction IActionContext.Function => Function;
-
-    /// <summary>The action issues</summary>
-    public List<ActionIssue> Issues { get; } = [];
-
-    /// <summary>Constructor</summary>
-    protected ConditionActionContextBase(TFunc function)
-    {
-        Function = function ?? throw new ArgumentNullException(nameof(function));
-    }
-
-    /// <summary>Test for any issue</summary>
-    public bool HasIssues => Issues.Any();
-
-    /// <summary>Add an action issue</summary>
-    public void AddIssue(string message) =>
-        Issues.Add(new(message));
-
-    /// <summary>Clear all issues</summary>
-    public void ClearIssues() =>
-        Issues.Clear();
-}
-
-/// <summary>Payroll action context</summary>
-public abstract class PayrollActionContext<TFunc> : ConditionActionContextBase<TFunc>
-    where TFunc : PayrollFunction
-{
-    /// <summary>Constructor</summary>
-    /// <param name="function">The function</param>
-    protected PayrollActionContext(TFunc function) :
-        base(function)
-    {
-    }
-}
-
-#endregion
-
-/// <summary>Base class for any script function</summary>
+/// <summary>Base class for any payroll function</summary>
 // ReSharper disable once PartialTypeWithSinglePart
 public abstract partial class PayrollFunction : Function
 {
+    /// <summary>String type name</summary>
+    protected const string StringType = "String";
+
+    /// <summary>Integer type name</summary>
+    protected const string IntType = "Int";
+
+    /// <summary>Numeric type name</summary>
+    protected const string NumericType = "Num";
+
+    /// <summary>Decimal type name</summary>
+    protected const string DecimalType = "Dec";
+
+    /// <summary>Date type name</summary>
+    protected const string DateType = "Date";
+
+    /// <summary>Boolean type name</summary>
+    protected const string BooleanType = "Bool";
+
     /// <summary>New function instance</summary>
     /// <param name="runtime">The function runtime</param>
     protected PayrollFunction(object runtime) :
@@ -106,6 +37,9 @@ public abstract partial class PayrollFunction : Function
     {
         // payroll
         PayrollId = Runtime.PayrollId;
+
+        // regulation
+        Namespace = Runtime.Namespace;
 
         // division
         DivisionId = Runtime.DivisionId;
@@ -151,10 +85,21 @@ public abstract partial class PayrollFunction : Function
 
     #endregion
 
-    #region Payrol
+    #region Payroll
 
     /// <summary>The payroll id</summary>
     public int PayrollId { get; }
+
+    #endregion
+
+    #region Namespace
+
+    /// <summary>The function regulation namespace</summary>
+    [ActionProperty("Regulation namespace")]
+    public string Namespace { get; }
+
+    /// <summary>Test for function regulation namespace</summary>
+    public bool HasNamespace => !string.IsNullOrWhiteSpace(Namespace);
 
     #endregion
 
@@ -182,6 +127,14 @@ public abstract partial class PayrollFunction : Function
         GetCalendarPeriod(GetDerivedCalendar(DivisionId, EmployeeId ?? 0), moment,
             offset, GetDerivedCulture(DivisionId, EmployeeId ?? 0));
 
+    /// <summary>
+    /// Count the calendar days from a date period
+    /// </summary>
+    /// <param name="culture">The calendar culture</param>
+    public int GetCalendarDayCount(string culture = null) =>
+        GetCalendarDayCount(GetDerivedCalendar(DivisionId, EmployeeId ?? 0),
+            PeriodStart, PeriodEnd, culture);
+
     #endregion
 
     #region Employee
@@ -190,6 +143,7 @@ public abstract partial class PayrollFunction : Function
     public int? EmployeeId { get; }
 
     /// <summary>The employee identifier</summary>
+    [ActionProperty("Employee identifier")]
     public string EmployeeIdentifier { get; }
 
     /// <summary>Get employee attribute value</summary>
@@ -205,15 +159,18 @@ public abstract partial class PayrollFunction : Function
     #region Cycle
 
     /// <summary>The current cycle start date</summary>
+    [ActionProperty("Cycle start date")]
     public DateTime CycleStart => Cycle.Start;
 
     /// <summary>The current cycle end date</summary>
+    [ActionProperty("Cycle end date")]
     public DateTime CycleEnd => Cycle.End;
 
     /// <summary>The current cycle</summary>
     public DatePeriod Cycle { get; }
 
     /// <summary>The day count of the current cycle</summary>
+    [ActionProperty("Cycle day count")]
     public double CycleDays => Cycle.TotalDays;
 
     /// <summary>The previous cycle</summary>
@@ -290,6 +247,7 @@ public abstract partial class PayrollFunction : Function
     #region Date/Period
 
     /// <summary>The evaluation date</summary>
+    [ActionProperty("Evaluation date")]
     public DateTime EvaluationDate { get; }
 
     /// <summary>The evaluation period</summary>
@@ -299,9 +257,11 @@ public abstract partial class PayrollFunction : Function
     public ScriptDictionary<int, DatePeriod> Periods { get; }
 
     /// <summary>The current period start date</summary>
+    [ActionProperty("Period start date")]
     public DateTime PeriodStart => Period.Start;
 
     /// <summary>The current period end date</summary>
+    [ActionProperty("Period end date")]
     public DateTime PeriodEnd => Period.End;
 
     /// <summary>The current period</summary>
@@ -945,6 +905,18 @@ public abstract partial class PayrollFunction : Function
         return GetLookup<T>(lookupName, JsonSerializer.Serialize(lookupKeyValues), culture);
     }
 
+    /// <summary>Get object lookup by range value</summary>
+    /// <param name="lookupName">The lookup name</param>
+    /// <param name="objectKey">The object key</param>
+    /// <param name="lookupKey">The lookup key (optional)</param>
+    /// <param name="culture">The culture, null for the system culture (optional)</param>
+    public T GetObjectLookup<T>(string lookupName, string objectKey,
+        string lookupKey = null, string culture = null)
+    {
+        var value = GetLookup<string>(lookupName, lookupKey, culture);
+        return string.IsNullOrWhiteSpace(value) ? default : value.ObjectValueJson<T>(objectKey);
+    }
+
     /// <summary>Get lookup by range value</summary>
     /// <param name="lookupName">The lookup name</param>
     /// <param name="rangeValue">The range value</param>
@@ -990,652 +962,66 @@ public abstract partial class PayrollFunction : Function
 
     #endregion
 
-    #region Actions
+    #region Issue
 
-    /// <summary>Condition consequent marker</summary>
-    private const char ConditionConsequentMarker = '?';
-
-    /// <summary>Condition alternative marker</summary>
-    private const char ConditionAlternativeMarker = ':';
-
-    /// <summary>Condition action separator</summary>
-    private const char ConditionActionSeparator = ';';
-
-    /// <summary>Function action, using extension methods</summary>
-    private sealed class Action
+    /// <summary>
+    /// Get issue from attribute
+    /// </summary>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="parameters">Message parameters</param>
+    public string GetAttributeIssue(string attributeName, params object[] parameters)
     {
-        internal string Namespace { get; init; }
-        internal string MethodName { get; init; }
-        internal string MethodParameters { get; init; }
+        // issue attribute
+        var attribute = FindIssueAttribute(attributeName);
+        if (attribute == null)
+        {
+            throw new ScriptException($"Missing action issue attribute {attributeName} on type {GetType()}.");
+        }
+        if (attribute.ParameterCount != parameters.Length)
+        {
+            throw new ScriptException($"Mismatching action parameter count on issue attribute {attributeName} (expected={attribute.ParameterCount}, actual={parameters.Length}.");
+        }
 
-        public override string ToString() => $"{Namespace}.{MethodName}({MethodParameters})";
+        // localized message from lookup
+        var format = GetLocalIssueMessage(attribute.Name, attribute.Message);
+        //context.Function.LogWarning($"AddIssue: format={format}, parameters={string.Join(",", parameters)}");
+        var message = string.Format(format, parameters);
+        return message;
     }
 
-    private sealed class ConditionNode
+    private ActionIssueAttribute FindIssueAttribute(string issueName)
     {
-        private string Expression { get; }
-        internal string ConditionAction { get; }
-        internal List<ConditionNode> ConsequentNodes { get; }
-        internal List<ConditionNode> AlternativeNodes { get; }
-
-        internal bool IsCondition => ConsequentNodes != null || AlternativeNodes != null;
-        internal bool IsAction => !IsCondition;
-
-        internal ConditionNode(string conditionAction)
+        foreach (var method in GetType().GetMethods())
         {
-            if (string.IsNullOrWhiteSpace(conditionAction))
+            // issue attribute
+            var attribute = method.GetCustomAttributes<ActionIssueAttribute>()
+                .FirstOrDefault(x => string.Equals(x.Name, issueName));
+            if (attribute != null)
             {
-                throw new ArgumentException(nameof(conditionAction));
-            }
-            Expression = conditionAction;
-            ConditionAction = conditionAction;
-        }
-
-        internal ConditionNode(string expression, string conditionAction,
-            List<ConditionNode> consequentNodes, List<ConditionNode> alternativeNodes)
-        {
-            if (string.IsNullOrWhiteSpace(expression))
-            {
-                throw new ArgumentException(nameof(expression));
-            }
-            if (string.IsNullOrWhiteSpace(conditionAction))
-            {
-                throw new ArgumentException(nameof(conditionAction));
-            }
-            Expression = expression;
-            ConditionAction = conditionAction;
-            if ((consequentNodes == null || !consequentNodes.Any()) &&
-                (alternativeNodes == null || !alternativeNodes.Any()))
-            {
-                throw new ArgumentException(nameof(consequentNodes));
-            }
-            ConsequentNodes = consequentNodes;
-            AlternativeNodes = alternativeNodes;
-        }
-
-        public override string ToString() => Expression;
-    }
-
-    /// <summary>Function action cache</summary>
-    private static class ActionCache
-    {
-        // action cache
-        // key: namespace + method name
-        // value: tuple
-        //   - provider attribute (target type and namespace)
-        //   - action attribute (attribute type and method name)
-        private static readonly Dictionary<string, Tuple<ActionProviderAttribute, ActionAttribute, MethodInfo>> Methods = new();
-
-        internal static MethodInfo GetActionMethod<TAttribute>(Type functionType, Action action)
-            where TAttribute : ActionAttribute
-        {
-            if (functionType == null)
-            {
-                throw new ArgumentNullException(nameof(functionType));
-            }
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            var key = $"{action.Namespace}.{action.MethodName}";
-            if (!Methods.Any())
-            {
-                // setup action cache
-                foreach (var type in functionType.Assembly.GetTypes().Where(x => !x.IsGenericType && !x.IsNested))
-                {
-                    // action provider attribute
-                    foreach (var providerAttribute in type.GetCustomAttributes<ActionProviderAttribute>())
-                    {
-                        foreach (var typeMethod in type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
-                        {
-                            // action attribute
-                            var actionAttribute = typeMethod.GetCustomAttribute<ActionAttribute>();
-                            if (actionAttribute == null)
-                            {
-                                continue;
-                            }
-                            var methodKey = $"{providerAttribute.Namespace}.{typeMethod.Name}";
-                            Methods.Add(methodKey, new(providerAttribute, actionAttribute, typeMethod));
-                        }
-                    }
-                }
-            }
-
-            // missing method
-            if (!Methods.ContainsKey(key))
-            {
-                return null;
-            }
-
-            var attributeType = typeof(TAttribute);
-            var method = Methods[key];
-
-            // test function type
-            if (method.Item1.Type.IsAssignableFrom(functionType) &&
-                // action namespace
-                string.Equals(method.Item1.Namespace, action.Namespace) &&
-                // action method type
-                attributeType.IsInstanceOfType(method.Item2) &&
-                // method name
-                string.Equals(method.Item3.Name, action.MethodName))
-            {
-                return method.Item3;
-            }
-
-            return null;
-        }
-    }
-
-    /// <summary>Test for disabled action</summary>
-    /// <param name="expression">The action expression</param>
-    /// <returns>List of extension methods</returns>
-    protected bool IsDisabledAction(string expression) =>
-        !string.IsNullOrWhiteSpace(expression) && expression.StartsWith("'");
-
-    /// <summary>Get type extension methods from the current assembly</summary>
-    /// <param name="context">The action context</param>
-    /// <param name="expression">The action expression</param>
-    /// <returns>List of extension methods</returns>
-    protected bool InvokeAction<TContext, TAction>(TContext context, string expression)
-        where TContext : IActionContext
-        where TAction : ActionAttribute
-    {
-        if (context == null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
-        if (string.IsNullOrWhiteSpace(expression))
-        {
-            throw new ArgumentException(nameof(expression));
-        }
-
-        // ignore disabled actions
-        if (IsDisabledAction(expression))
-        {
-            return false;
-        }
-
-        var functionType = typeof(TContext);
-        var action = ParseAction(expression);
-        var method = GetActionMethod<TAction>(action);
-        if (method == null)
-        {
-            LogError($"Unknown function action {action} of type {typeof(TAction)}");
-            return false;
-        }
-
-        // parameters
-        var parameters = method.GetParameters();
-        if (parameters.Length < 1)
-        {
-            // missing context parameter
-            LogError($"Invalid function action {action} parameter count {parameters.Length}");
-            return false;
-        }
-
-        // context parameter
-        if (functionType != parameters[0].ParameterType &&
-            !functionType.IsSubclassOf(parameters[0].ParameterType))
-        {
-            LogError($"Invalid action function argument {parameters[0].ParameterType}, expected {functionType}");
-            return false;
-        }
-
-        // parameter values
-        // parameter 1: action context
-        var parameterValues = new List<object> { context };
-
-        // further parameters: dynamic user parameters
-        var parameterOffset = parameterValues.Count;
-        if (action.MethodParameters != null && parameters.Length > parameterOffset)
-        {
-            var tokens = ParseMethodParameters(action.MethodParameters);
-            //LogWarning($"InvokeAction: action.MethodParameters={action.MethodParameters}, tokens.Count={tokens.Count}");
-            if (tokens.Count > parameters.Length - parameterValues.Count)
-            {
-                LogError($"Too many action parameter for method {method.Name} ({tokens.Count}): {action.MethodParameters}");
-                return false;
-            }
-
-            for (var index = parameterOffset; index < parameters.Length; index++)
-            {
-                var parameter = parameters[index];
-                var tokenIndex = index - parameterOffset;
-                if (tokenIndex >= tokens.Count)
-                {
-                    // optional parameters
-                    if (!parameter.IsOptional)
-                    {
-                        LogError($"Missing action parameter {parameter.Name} for method {method.Name}");
-                        return false;
-                    }
-                    parameterValues.Add(parameter.DefaultValue);
-                    break;
-                }
-
-                // parameter value
-                try
-                {
-                    var parameterValue = GetActionParameterValue(tokens[tokenIndex], parameter.ParameterType);
-                    if (parameterValue != null)
-                    {
-                        parameterValues.Add(parameterValue);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    throw new ScriptException($"Action argument {parameter.Name} error: {exception.GetBaseException().Message}", exception);
-                }
+                return attribute;
             }
         }
-
-        if (parameterValues.Count != parameters.Length)
-        {
-            LogError($"Mismatching action parameter for method {method.Name}: expected={parameters.Length}, actual={parameterValues.Count}");
-            return false;
-        }
-
-        // extended method invocation
-        try
-        {
-            // create instance of declaring type: requires a default constructor
-            if (method.DeclaringType == null)
-            {
-                throw new ScriptException($"Missing declaring type for method {method.Name}.");
-            }
-            var actionsInstance = Activator.CreateInstance(method.DeclaringType);
-
-            //LogWarning($"Invoking action {action} on method {method.Name}");
-            method.Invoke(actionsInstance, parameterValues.ToArray());
-            if (actionsInstance is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
-        catch (Exception exception)
-        {
-            throw new ScriptException($"Action {method.Name} failed: {exception.GetBaseException().Message}", exception);
-        }
-        return true;
-    }
-
-    private static List<string> ParseMethodParameters(string parameters)
-    {
-        var result = new List<string>();
-
-        var subParameterCount = 0;
-        var curIndex = 0;
-        var startIndex = 0;
-        foreach (var parameter in parameters)
-        {
-            switch (parameter)
-            {
-                case '(':
-                    subParameterCount++;
-                    break;
-                case ')':
-                    subParameterCount--;
-                    break;
-                case ',':
-                    // ignore parameter separator from sub methods
-                    if (subParameterCount == 0)
-                    {
-                        var curParameter = parameters.Substring(startIndex, curIndex - startIndex).Trim();
-                        result.Add(curParameter);
-                        startIndex = curIndex + 1;
-                    }
-                    break;
-            }
-
-            curIndex++;
-        }
-
-        if (startIndex == 0 && curIndex > 0)
-        {
-            // simple parameter
-            var curParameter = parameters.Substring(0, curIndex).Trim();
-            result.Add(curParameter);
-        }
-        else if (startIndex > 0 && startIndex < curIndex - 1)
-        {
-            // remaining parameter
-            var curParameter = parameters.Substring(startIndex + 1).Trim();
-            result.Add(curParameter);
-        }
-        return result;
-    }
-
-    /// <summary>Convert action parameter type</summary>
-    private static object GetActionParameterValue(string value, Type type)
-    {
-        var underlyingType = Nullable.GetUnderlyingType(type);
-        // an underlying nullable type, so the type is nullable
-        // apply logic for null or empty test
-        if (underlyingType != null && string.IsNullOrWhiteSpace(value))
-        {
-            return null;
-        }
-        return Convert.ChangeType(value, underlyingType ?? type, CultureInfo.InvariantCulture);
-    }
-
-    /// <summary>Get action methods by namespace</summary>
-    private MethodInfo GetActionMethod<TAttribute>(Action action)
-        where TAttribute : ActionAttribute =>
-        ActionCache.GetActionMethod<TAttribute>(GetType(), action);
-
-    /// <summary>Parse action from reference</summary>
-    private static Action ParseAction(string expression)
-    {
-        // name
-        var name = expression;
-
-        // parameter
-        string parameters = null;
-        var paramStartIndex = expression.IndexOf("(", StringComparison.InvariantCulture);
-        if (paramStartIndex > 0)
-        {
-            var paramEndIndex = expression.LastIndexOf(")", StringComparison.InvariantCulture);
-            if (paramEndIndex > paramStartIndex)
-            {
-                name = expression.Substring(0, paramStartIndex);
-                parameters = expression.Substring(paramStartIndex + 1, paramEndIndex - paramStartIndex - 1);
-            }
-        }
-
-        // namespace
-        var @namespace = DefaultActionNamespace;
-        var namespaceIndex = name.LastIndexOf(".", StringComparison.InvariantCulture);
-        if (namespaceIndex > 0 && (paramStartIndex < 0 || namespaceIndex < paramStartIndex))
-        {
-            @namespace = name.Substring(0, namespaceIndex);
-            name = name.Substring(namespaceIndex + 1);
-        }
-
-        return new() { Namespace = @namespace, MethodName = name, MethodParameters = parameters };
-    }
-
-    /// <summary>Invoke condition action</summary>
-    /// <param name="context">The action context</param>
-    /// <param name="action">The action</param>
-    /// <returns>True if action was invoked</returns>
-    protected bool InvokeConditionAction<TContext, TAction>(TContext context, string action)
-        where TContext : IConditionActionContext
-        where TAction : ActionAttribute
-    {
-        // ignore disabled actions
-        if (IsDisabledAction(action))
-        {
-            return false;
-        }
-
-        // parse conditional action
-        var node = ParseConditionNode(action);
-        if (node == null)
-        {
-            return InvokeAction<TContext, TAction>(context, action);
-        }
-
-        // invoke conditional action
-        return InvokeConditionAction<TContext, TAction>(context, node);
-    }
-
-    private bool InvokeConditionAction<TContext, TAction>(TContext context, ConditionNode node)
-        where TContext : IConditionActionContext
-        where TAction : ActionAttribute
-    {
-        // loop until the action invocation or null consequent/alternative
-        while (node != null)
-        {
-            // inverted condition action
-            var invert = false;
-            var action = node.ConditionAction;
-            if (node.IsCondition && node.ConditionAction.StartsWith('!'))
-            {
-                invert = true;
-                action = action.RemoveFromStart("!");
-            }
-
-            // invoke condition action
-            if (!InvokeAction<TContext, TAction>(context, action))
-            {
-                return false;
-            }
-
-            // action node
-            if (node.IsAction)
-            {
-                //LogWarning($"Invoked action: {node.Action}, expression={node.Expression}");
-                return true;
-            }
-
-            // condition: use issues counter as condition trigger
-            var consequent = !context.Issues.Any();
-            if (invert)
-            {
-                consequent = !consequent;
-            }
-            // clear temporary condition issues
-            context.Issues.Clear();
-
-            //LogWarning($"Consequent: {consequent},  node-Consequent{node.Consequent}, node-Alternative{node.Alternative}");
-
-            // next node
-            node = InvokeConditionNodes<TContext, TAction>(context,
-                consequent ? node.ConsequentNodes : node.AlternativeNodes);
-        }
-        return false;
-    }
-
-    private ConditionNode InvokeConditionNodes<TContext, TAction>(TContext context, List<ConditionNode> nodes)
-        where TContext : IConditionActionContext
-        where TAction : ActionAttribute
-    {
-        if (nodes == null || !nodes.Any())
-        {
-            return null;
-        }
-
-        // single-action condition
-        if (nodes.Count == 1)
-        {
-            return nodes[0];
-        }
-
-        // multi-action condition
-        foreach (var conditionNode in nodes)
-        {
-            // ignore condition nodes on multi-action expression
-            if (!conditionNode.IsAction)
-            {
-                continue;
-            }
-
-            // invoke condition multi-action
-            if (!InvokeAction<TContext, TAction>(context, conditionNode.ConditionAction))
-            {
-                return null;
-            }
-        }
-        // no sub node support
         return null;
     }
 
-    private ConditionNode ParseConditionNode(string expression)
+    /// <summary>Get localized issue value</summary>
+    /// <param name="key">The issue key</param>
+    /// <param name="defaultMessage">The default message</param>
+    /// <remarks>Lookup name=Namespace.Actions, lookup key=issue name
+    /// Format example: Invalid Email (1)</remarks>
+    private string GetLocalIssueMessage(string key, string defaultMessage)
     {
-        //LogWarning($"$$$ Parsing expression [{expression}] $$$");
-        if (string.IsNullOrWhiteSpace(expression))
+        var lookupName = Namespace.EnsureEnd(".Action");
+        //LogInfo($"GetIssueMessage: lookupName={lookupName}, localizationKey={key}");
+        var message = GetLookup<string>(lookupName, key, UserCulture) ?? defaultMessage;
+
+        // prepare parameter placeholders for string format
+        for (var i = 0; i < 10; i++)
         {
-            return null;
+            message = message.Replace($"({i})", $"{{{i}}}");
         }
-
-        var startExpression = expression;
-
-        var consequentIndex = expression.IndexOf($" {ConditionConsequentMarker} ", StringComparison.InvariantCultureIgnoreCase);
-        var alternativeIndex = expression.IndexOf($" {ConditionAlternativeMarker} ", StringComparison.InvariantCultureIgnoreCase);
-        // alternative marker at the end of line
-        if (alternativeIndex < 0 && expression.EndsWith(ConditionAlternativeMarker))
-        {
-            alternativeIndex = expression.Length - 1;
-        }
-        // only one marker present
-        if (consequentIndex < 0 && alternativeIndex >= 0 || alternativeIndex < 0 && consequentIndex >= 0)
-        {
-            //LogWarning($"!!! consequentIndex < 0 && alternativeIndex >= 0 || alternativeIndex < 0 && consequentIndex >= 0 [{expression}]");
-            return null;
-        }
-        // no condition: action
-        if (consequentIndex < 0 && alternativeIndex < 0)
-        {
-            return new ConditionNode(expression);
-        }
-        // invalid condition syntax: missing ':' or ':' before ?
-        if (alternativeIndex < consequentIndex)
-        {
-            //LogWarning($"!!! alternativeIndex < consequentIndex [{expression}]");
-            return null;
-        }
-
-        var conditionAction = expression.Substring(0, consequentIndex);
-
-        // remove condition action from expression
-        expression = expression.Substring(consequentIndex + 1).Trim().
-            RemoveFromStart($"{ConditionConsequentMarker}").Trim();
-
-        // find alternative location
-        alternativeIndex = FindAlternateIndex(expression);
-        if (alternativeIndex < 0)
-        {
-            LogError($"Missing condition alternate marker ':' in expression [{startExpression}]");
-            return null;
-        }
-
-        // consequent
-        var consequentNodes = new List<ConditionNode>();
-        var consequentExpressions = expression.Substring(0, alternativeIndex);
-        foreach (var consequentExpression in GetConditionExpressions(consequentExpressions))
-        {
-            var node = ParseConditionNode(consequentExpression);
-            if (node != null)
-            {
-                consequentNodes.Add(node);
-            }
-        }
-
-        // alternative
-        var alternativeNodes = new List<ConditionNode>();
-        var alternativeExpressions = expression.Substring(alternativeIndex + 1);
-        foreach (var alternativeExpression in GetConditionExpressions(alternativeExpressions))
-        {
-            var node = ParseConditionNode(alternativeExpression);
-            if (node != null)
-            {
-                alternativeNodes.Add(node);
-            }
-        }
-
-        // one part is required
-        if (!consequentNodes.Any()! && alternativeNodes.Any())
-        {
-            LogError($"Missing condition consequent or alternative: {startExpression}");
-            return null;
-        }
-
-        //LogWarning($"!!! dynamic expression=[{conditionAction} ? {consequent?.Expression} : {alternative?.Expression}]");
-        return new ConditionNode(startExpression, conditionAction, consequentNodes, alternativeNodes);
-    }
-
-    private static List<string> GetConditionExpressions(string expression)
-    {
-        // empty expression
-        if (string.IsNullOrWhiteSpace(expression))
-        {
-            return [];
-        }
-
-        expression = expression.Trim();
-
-        // single action expression
-        if (!expression.Contains(ConditionActionSeparator))
-        {
-            return [expression];
-        }
-
-        // single or multi-action expression
-        var nodes = new List<string>();
-        var nodeIndex = 0;
-        for (var index = 0; index < expression.Length; index++)
-        {
-            var c = expression[index];
-
-            // action separator
-            if (c == ConditionActionSeparator)
-            {
-                if (index > 0 && index < expression.Length - 1)
-                {
-                    var left = expression[index - 1];
-                    var right = expression[index + 1];
-                    // ReSharper disable once GrammarMistakeInComment
-                    // previous character is letter (action name) or parameter closing character )
-                    // next character must be a space
-                    if ((char.IsLetter(left) || left == ')') && right == ' ')
-                    {
-                        var node = expression.Substring(nodeIndex, index).Trim();
-                        nodes.Add(node);
-                        nodeIndex = index + 1;
-                    }
-                }
-            }
-            index++;
-        }
-
-        // ending expression
-        if (nodeIndex < expression.Length)
-        {
-            var node = expression.Substring(nodeIndex).Trim();
-            nodes.Add(node);
-        }
-
-        return nodes;
-    }
-
-    private static int FindAlternateIndex(string expression)
-    {
-        if (string.IsNullOrWhiteSpace(expression) || expression.Length < 2)
-        {
-            return -1;
-        }
-
-        var consequentCount = 0;
-        for (var index = 1; index < expression.Length; index++)
-        {
-            switch (expression[index])
-            {
-                case ConditionConsequentMarker:
-                    // consequent mask: ' ? '
-                    if (index < expression.Length - 1 &&
-                        expression[index - 1] == ' ' && expression[index + 1] == ' ')
-                    {
-                        consequentCount++;
-                    }
-                    break;
-                case ConditionAlternativeMarker:
-                    // alternative mask: ' : ' or at the end of line ' :''
-                    if (expression[index - 1] == ' ' &&
-                        (index == expression.Length - 1 || expression[index + 1] == ' '))
-                    {
-                        if (consequentCount == 0)
-                        {
-                            return index;
-                        }
-                        consequentCount--;
-                    }
-                    break;
-            }
-        }
-        return -1;
+        return message;
     }
 
     #endregion
-
 }

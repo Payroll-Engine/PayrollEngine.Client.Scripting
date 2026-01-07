@@ -25,6 +25,7 @@ public abstract partial class CaseFunction : PayrollFunction
     }
 
     /// <summary>The case name</summary>
+    [ActionProperty("Case name")]
     public string CaseName { get; }
 
     /// <summary>The case type</summary>
@@ -36,5 +37,5 @@ public abstract partial class CaseFunction : PayrollFunction
 
     /// <summary>Get case attribute typed value</summary>
     public T GetCaseAttribute<T>(string attributeName, T defaultValue = default) =>
-        ChangeValueType<T>(Runtime.GetCaseAttribute(attributeName));
+        ChangeValueType<T>(Runtime.GetCaseAttribute(attributeName)) ?? defaultValue;
 }

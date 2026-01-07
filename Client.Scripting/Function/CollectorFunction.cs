@@ -31,12 +31,11 @@ public abstract partial class CollectorFunction : PayrunFunction
         CollectorAverage = Runtime.CollectorAverage;
 
         // lookups
-        Collector = new(collectorName => Runtime.GetCollectorValue(collectorName));
-        ResultAttribute = new(name => new PayrollValue(Runtime.GetResultAttribute(name)),
-            (name, value) => Runtime.SetResultAttribute(name, value));
-        ResultAttributePayrollValue = new(name => new PayrollValue(Runtime.GetResultAttribute(name)),
-            (name, value) => Runtime.SetResultAttribute(name, value.Value));
-    }
+        Collector = new(GetCollectorValue);
+        ResultAttribute = new(name => new PayrollValue(GetResultAttribute(name)),
+            SetResultAttribute);
+        ResultAttributePayrollValue = new(name => new PayrollValue(GetResultAttribute(name)),
+            (name, value) => SetResultAttribute(name, value.Value));    }
 
     /// <summary>New function instance without runtime (scripting development)</summary>
     /// <param name="sourceFileName">The name of the source file</param>
@@ -55,50 +54,75 @@ public abstract partial class CollectorFunction : PayrunFunction
     public ScriptDictionary<string, PayrollValue> ResultAttributePayrollValue { get; }
 
     /// <summary>The collector name</summary>
+    [ActionProperty("Collector name")]
     public string CollectorName { get; }
 
     /// <summary>The collector groups</summary>
     public string[] CollectorGroups { get; }
 
     /// <summary>The collect mode</summary>
+    [ActionProperty("Collect mode")]
     public string CollectMode { get; }
 
     /// <summary>Negated collector result</summary>
+    [ActionProperty("Test for negated collector")]
     public bool Negated { get; }
 
     /// <summary>The threshold value</summary>
+    [ActionProperty("Threshold value")]
     public decimal? CollectorThreshold { get; }
 
     /// <summary>The minimum allowed value</summary>
+    [ActionProperty("Minimum allowed collector result")]
     public decimal? CollectorMinResult { get; }
 
     /// <summary>The maximum allowed value</summary>
+    [ActionProperty("Maximum allowed collector result")]
     public decimal? CollectorMaxResult { get; }
 
     /// <summary>The current collector result</summary>
+    [ActionProperty("Collector result value")]
     public decimal CollectorResult { get; }
 
     /// <summary>Collected values count</summary>
+    [ActionProperty("Collected values count")]
     public decimal CollectorCount { get; }
 
     /// <summary>The summary of the collected value</summary>
+    [ActionProperty("Summary of collected values")]
     public decimal CollectorSummary { get; }
 
     /// <summary>The minimum collected value</summary>
+    [ActionProperty("Maximum collected value")]
     public decimal CollectorMinimum { get; }
 
     /// <summary>The maximum collected value</summary>
+    [ActionProperty("Minimum collected value")]
     public decimal CollectorMaximum { get; }
 
     /// <summary>The average of the collected value</summary>
+    [ActionProperty("Average of collected values")]
     public decimal CollectorAverage { get; }
 
     /// <summary>Resets the collector to his initial state</summary>
     public void Reset() => Runtime.Reset();
 
+    /// <summary>Get collector runtime result</summary>
+    public decimal GetCollectorValue(string collectorName) =>
+        Runtime.GetCollectorValue(collectorName);
+
+    /// <summary>Get collector result attribute value</summary>
+    public object GetResultAttribute(string attributeName) =>
+        Runtime.GetResultAttribute(attributeName);
+
+    /// <summary>Set collector result attribute value</summary>
+    public void SetResultAttribute(string attributeName, object value) =>
+        Runtime.SetResultAttribute(attributeName, value);
+
     /// <summary>Get the collector result tags</summary>
     /// <returns>The collector result tags</returns>
-    public List<string> GetResultTags() => Runtime.GetResultTags();
+    public List<string> GetResultTags() =>
+        Runtime.GetResultTags();
 
     /// <summary>Set the collector result tags</summary>
     /// <param name="tags">The result tags</param>

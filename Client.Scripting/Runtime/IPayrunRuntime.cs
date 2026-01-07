@@ -85,7 +85,12 @@ public interface IPayrunRuntime : IPayrollRuntime
 
     #region Payrun Results
 
-    /// <summary>Add a payrun result</summary>
+    /// <summary>Get payrun result value</summary>
+    /// <param name="source">The result source</param>
+    /// <param name="name">The result name</param>
+    object GetPayrunResult(string source, string name);
+
+    /// <summary>Set payrun result</summary>
     /// <param name="source">The result source</param>
     /// <param name="name">The result name</param>
     /// <param name="value">The result value</param>
@@ -96,13 +101,21 @@ public interface IPayrunRuntime : IPayrollRuntime
     /// <param name="tags">The result tags</param>
     /// <param name="attributes">The wage type custom result attributes</param>
     /// <param name="culture">The result culture</param>
-    void AddPayrunResult(string source, string name, string value, int valueType,
+    void SetPayrunResult(string source, string name, object value, int valueType,
         DateTime startDate, DateTime endDate, string slot, List<string> tags,
         Dictionary<string, object> attributes, string culture);
 
     #endregion
 
-    #region Wage Type Results
+    #region Wage Type
+
+    /// <summary>Get wage type number by name</summary>
+    /// <param name="wageTypeName">The wage type name</param>
+    decimal GetWageTypeNumber(string wageTypeName);
+
+    /// <summary>Get wage type name by number</summary>
+    /// <param name="wageTypeNumber">The wage type number</param>
+    string GetWageTypeName(decimal wageTypeNumber);
 
     /// <summary>Gets the wage type range results</summary>
     /// <param name="wageTypeNumbers">The wage type numbers</param>
@@ -161,7 +174,7 @@ public interface IPayrunRuntime : IPayrollRuntime
 
     #endregion
 
-    #region Collector Results
+    #region Collector
 
     /// <summary>Gets the collector range results</summary>
     /// <param name="collectorNames">Name of the collectors</param>

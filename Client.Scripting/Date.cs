@@ -95,8 +95,72 @@ public static class Date
         dateValue = dateValue.Trim('"');
 
         // predefined constants
+        var dateTime = ParsePredefined(dateValue);
+        if (dateTime != null)
+        {
+            return dateTime;
+        }
+
+        // offset
+        dateTime = ParseOffset(dateValue);
+        if (dateTime != null)
+        {
+            return dateTime;
+        }
+
+        // date time parsing
+        if (DateTime.TryParse(dateValue, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var parameter))
+        {
+            return parameter;
+        }
+
+        return null;
+    }
+
+    private static DateTime? ParseOffset(string dateValue)
+    {
+        // offset
+        if (!dateValue.StartsWith("offset:", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return null;
+        }
+        var offset = dateValue.Substring("offset:".Length);
+        if (string.IsNullOrWhiteSpace(offset))
+        {
+            return null;
+        }
+
+        // count
+        var countText = offset.Substring(0, offset.Length - 1).TrimStart('+');
+        if (!int.TryParse(countText, out var count))
+        {
+            return null;
+        }
+
+        // offset with count
+        switch (offset[^1])
+        {
+            // days
+            case 'd':
+                return Today.AddDays(count);
+            // weeks
+            case 'w':
+                return Today.AddDays(DaysInWeek * count);
+            // months
+            case 'm':
+                return Today.AddMonths(count);
+            // years
+            case 'y':
+                return Today.AddYears(count);
+        }
+        return null;
+    }
+
+    private static DateTime? ParsePredefined(string dateValue)
+    {
         switch (dateValue.ToLower())
         {
+            // ReSharper disable StringLiteralTypo
             case "yesterday":
                 return Yesterday;
             case "today":
@@ -118,44 +182,10 @@ public static class Date
                 return new(Today.Year, 1, 1);
             case "nextyear":
                 return new(Today.AddYears(1).Year, 1, 1);
+            default:
+                return null;
+                // ReSharper restore StringLiteralTypo
         }
-
-        // offset
-        if (dateValue.StartsWith("offset:", StringComparison.InvariantCultureIgnoreCase))
-        {
-            var offset = dateValue.Substring("offset:".Length);
-            if (!string.IsNullOrWhiteSpace(offset))
-            {
-                var valueText = offset.Substring(0, offset.Length - 1).TrimStart('+');
-                if (int.TryParse(valueText, out var value))
-                {
-
-                    switch (offset[^1])
-                    {
-                        // days
-                        case 'd':
-                            return Today.AddDays(value);
-                        // weeks
-                        case 'w':
-                            return Today.AddDays(DaysInWeek * value);
-                        // months
-                        case 'm':
-                            return Today.AddMonths(value);
-                        // years
-                        case 'y':
-                            return Today.AddYears(value);
-                    }
-                }
-            }
-        }
-
-        // date time parsing
-        if (DateTime.TryParse(dateValue, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var parameter))
-        {
-            return parameter;
-        }
-
-        return null;
     }
 
     #endregion

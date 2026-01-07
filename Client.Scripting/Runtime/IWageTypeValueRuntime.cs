@@ -9,4 +9,7 @@ public interface IWageTypeValueRuntime : IWageTypeRuntime
 
     /// <summary>Restart execution of wage type calculation</summary>
     void RestartExecution();
+
+    /// <summary>Get wage type value actions</summary>
+    string[] GetValueActions();
 }

@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
+// ReSharper disable EmptyRegion
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -42,14 +43,6 @@ public partial class CaseValidateFunction : CaseChangeFunction
         base(sourceFileName)
     {
     }
-
-    /// <summary>Get case validate actions</summary>
-    public string[] GetValidateActions() =>
-        Runtime.GetValidateActions();
-
-    /// <summary>Get case field validate actions</summary>
-    public string[] GetFieldValidateActions(string caseFieldName) =>
-        Runtime.GetFieldValidateActions(caseFieldName);
 
     #region Info
 
@@ -97,74 +90,48 @@ public partial class CaseValidateFunction : CaseChangeFunction
 
     #endregion
 
+    #region Issue
+
     /// <summary>Test for issues</summary>
     public bool HasIssues() => Runtime.HasIssues();
 
-    /// <summary>Add a new case issue</summary>
-    public void AddIssue(string message) =>
-        Runtime.AddIssue(message);
+    /// <summary>Add a new case validation issue</summary>
+    public void AddCaseIssue(string message) =>
+        Runtime.AddCaseIssue(message);
 
-    /// <summary>Add a new case field issue</summary>
-    public void AddIssue(string caseFieldName, string message) =>
-        Runtime.AddIssue(caseFieldName, message);
+    /// <summary>Add a new case field validation issue</summary>
+    public void AddCaseFieldIssue(string caseFieldName, string message) =>
+        Runtime.AddCaseFieldIssue(caseFieldName, message);
+
+    /// <summary>Add case issue from attribute</summary>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="parameters">Message parameters</param>
+    public void AddCaseAttributeIssue(string attributeName, params object[] parameters) =>
+        AddCaseIssue(GetAttributeIssue(attributeName, parameters));
+
+    /// <summary>Add case field issue from attribute</summary>
+    /// <param name="caseFieldName">Case field name</param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="parameters">Message parameters</param>
+    public void AddFieldAttributeIssue(string caseFieldName, string attributeName, params object[] parameters) =>
+        AddCaseFieldIssue(caseFieldName, GetAttributeIssue(attributeName, parameters));
+
+    #endregion
+
+    #region Action
+    #endregion
 
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Validate()
     {
-        // case field validation
-        if (!InvokeCaseFieldActions())
-        {
-            return false;
-        }
+        #region ActionInvoke
+        #endregion
 
-        // case validation
-        if (!InvokeCaseValidateActions())
-        {
-            return false;
-        }
-
-        // ReSharper disable EmptyRegion
         #region Function
         #endregion
-        // ReSharper restore EmptyRegion
 
         // compiler will optimize this out if the code provides a return
         return null;
-    }
-
-    private bool InvokeCaseValidateActions()
-    {
-        var context = new CaseChangeActionContext(this);
-        foreach (var action in GetValidateActions())
-        {
-            InvokeConditionAction<CaseChangeActionContext, CaseChangeActionAttribute>(context, action);
-            if (!context.HasIssues)
-            {
-                continue;
-            }
-            context.Issues.ForEach(x => AddIssue(x.Message));
-            return false;
-        }
-        return true;
-    }
-
-    private bool InvokeCaseFieldActions()
-    {
-        foreach (var fieldName in FieldNames)
-        {
-            var context = new CaseChangeActionContext(this, fieldName);
-            foreach (var action in GetFieldValidateActions(fieldName))
-            {
-                InvokeConditionAction<CaseChangeActionContext, CaseChangeActionAttribute>(context, action);
-                if (!context.HasIssues)
-                {
-                    continue;
-                }
-                context.Issues.ForEach(x => AddIssue(fieldName, x.Message));
-                return false;
-            }
-        }
-        return true;
     }
 }

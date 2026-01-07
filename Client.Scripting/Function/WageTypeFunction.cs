@@ -25,8 +25,8 @@ public abstract partial class WageTypeFunction : PayrunFunction
         Attribute = new(name => new PayrollValue(GetResultAttribute(name)), SetResultAttribute);
         AttributePayrollValue = new(name => new(GetResultAttribute(name)),
             (name, value) => SetResultAttribute(name, value.Value));
-        WageType = new(wageTypeNumber => Runtime.GetWageTypeValue(wageTypeNumber));
-        Collector = new(collectorName => Runtime.GetCollectorValue(collectorName));
+        WageType = new(GetWageType);
+        Collector = new(GetCollector);
     }
 
     /// <summary>New function instance without runtime (scripting development)</summary>
@@ -49,22 +49,43 @@ public abstract partial class WageTypeFunction : PayrunFunction
     public ScriptDictionary<string, decimal> Collector { get; }
 
     /// <summary>The wage type number</summary>
+    [ActionProperty("Wage type number")]
     public decimal WageTypeNumber { get; }
 
     /// <summary>The wage type name</summary>
+    [ActionProperty("Wage type name")]
     public string WageTypeName { get; }
 
     /// <summary>The wage type description</summary>
+    [ActionProperty("Wage type description")]
     public string WageTypeDescription { get; }
 
     /// <summary>The wage type calendar</summary>
     public string WageTypeCalendar { get; }
+
+    /// <summary>Gets the wage type value</summary>
+    /// <param name="wageTypeNumber">The wage type number</param>
+    /// <returns>The wage type value</returns>
+    public decimal GetWageType(decimal wageTypeNumber) => 
+        Runtime.GetWageType(wageTypeNumber);
+
+    /// <summary>Gets the wage type value</summary>
+    /// <param name="wageTypeName">The wage type name</param>
+    /// <returns>The wage type value</returns>
+    public decimal GetWageType(string wageTypeName) => 
+        Runtime.GetWageType(wageTypeName);
 
     /// <summary>The wage type collectors</summary>
     public string[] Collectors => Runtime.Collectors;
 
     /// <summary>The wage type collector groups</summary>
     public string[] CollectorGroups => Runtime.CollectorGroups;
+
+    /// <summary>Gets the collector value</summary>
+    /// <param name="collectorName">Name of the collector</param>
+    /// <returns>The collector value</returns>
+    public decimal GetCollector(string collectorName) => 
+        Runtime.GetCollector(collectorName);
 
     /// <summary>Reenable disabled collector for the current employee job</summary>
     /// <param name="collectorName">Name of the collector</param>

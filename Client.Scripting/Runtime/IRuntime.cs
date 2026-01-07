@@ -63,6 +63,15 @@ public interface IRuntime
     /// <returns>The most derived calendar name</returns>
     string GetDerivedCalendar(int divisionId, int employeeId);
 
+    /// <summary>
+    /// Count the calendar days from a date period
+    /// </summary>
+    /// <param name="calendarName">The calendar name</param>
+    /// <param name="start">The period start date</param>
+    /// <param name="end">The period end date</param>
+    /// <param name="culture">The calendar culture</param>
+    int GetCalendarDayCount(string calendarName, DateTime start, DateTime end, string culture);
+
     /// <summary>Test for calendar working day</summary>
     /// <param name="calendarName">The calendar name</param>
     /// <param name="moment">Test day</param>
@@ -71,15 +80,13 @@ public interface IRuntime
     /// <summary>Get previous working days</summary>
     /// <param name="calendarName">The calendar name</param>
     /// <param name="moment">The start moment (not included in results)</param>
-    /// <param name="count">The number of days (default: 1)</param>
-    List<DateTime> GetPreviousWorkDays(string calendarName, DateTime moment, int count);
+    List<DateTime> GetPreviousWorkDays(string calendarName, DateTime moment);
 
     /// <summary>Get next working days</summary>
     /// <param name="calendarName">The calendar name</param>
     /// <param name="moment">The start moment (not included in results)</param>
-    /// <param name="count">The number of days (default: 1)</param>
     /// <returns>Returns true for valid time units</returns>
-    List<DateTime> GetNextWorkDays(string calendarName, DateTime moment, int count);
+    List<DateTime> GetNextWorkDays(string calendarName, DateTime moment);
 
     /// <summary>Gets the calendar period</summary>
     /// <param name="calendarName">The calendar name</param>

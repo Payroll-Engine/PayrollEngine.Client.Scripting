@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Collections.Generic;
 using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
+// ReSharper disable EmptyRegion
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -42,14 +43,6 @@ public partial class CaseBuildFunction : CaseChangeFunction
         base(sourceFileName)
     {
     }
-
-    /// <summary>Get case build actions</summary>
-    public string[] GetBuildActions() =>
-        Runtime.GetBuildActions();
-
-    /// <summary>Get case field build actions</summary>
-    public string[] GetFieldBuildActions(string caseFieldName) =>
-        Runtime.GetFieldBuildActions(caseFieldName);
 
     #region Validation
 
@@ -118,40 +111,20 @@ public partial class CaseBuildFunction : CaseChangeFunction
 
     #endregion
 
+    #region Action
+    #endregion
+
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Build()
     {
-        InvokeCaseFieldActions();
-        InvokeCaseBuildActions();
+        #region ActionInvoke
+        #endregion
 
-        // ReSharper disable EmptyRegion
         #region Function
         #endregion
-        // ReSharper restore EmptyRegion
 
         // compiler will optimize this out if the code provides a return
         return null;
-    }
-
-    private void InvokeCaseBuildActions()
-    {
-        var context = new CaseChangeActionContext(this);
-        foreach (var action in GetBuildActions())
-        {
-            InvokeConditionAction<CaseChangeActionContext, CaseChangeActionAttribute>(context, action);
-        }
-    }
-
-    private void InvokeCaseFieldActions()
-    {
-        foreach (var fieldName in FieldNames)
-        {
-            var context = new CaseChangeActionContext(this, fieldName);
-            foreach (var action in GetFieldBuildActions(fieldName))
-            {
-                InvokeConditionAction<CaseChangeActionContext, CaseChangeActionAttribute>(context, action);
-            }
-        }
     }
 }

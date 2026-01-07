@@ -13,7 +13,7 @@ namespace PayrollEngine.Client.Scripting;
 public class Key
 {
     /// <summary>The key values</summary>
-    public object[] Values { get; }
+    private object[] Values { get; }
 
     /// <summary>Initializes a new instance of the <see cref="Key"/> class</summary>
     /// <param name="values">The values</param>

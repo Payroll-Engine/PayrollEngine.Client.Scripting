@@ -889,24 +889,7 @@ public abstract partial class ReportFunction : Function
         }
 
         // case values (dictionary of case field name/value, grouped by creation date)
-        var caseValuesByDate = new Dictionary<DateTime, Dictionary<string, object>>();
-        foreach (var fieldTable in fieldTables)
-        {
-            foreach (var dataRow in fieldTable.Table.AsEnumerable())
-            {
-                var value = dataRow.GetPayrollValue();
-                if (value == null)
-                {
-                    continue;
-                }
-                var date = dataRow.GetValue<DateTime>("Created");
-                if (!caseValuesByDate.ContainsKey(date))
-                {
-                    caseValuesByDate.Add(date, new());
-                }
-                caseValuesByDate[date][fieldTable.CaseFieldName] = value;
-            }
-        }
+        var caseValuesByDate = GetCaseValuesByDate(fieldTables);
         if (!caseValuesByDate.Any())
         {
             return table;
@@ -937,6 +920,31 @@ public abstract partial class ReportFunction : Function
         }
 
         return table;
+    }
+
+    private static Dictionary<DateTime, Dictionary<string, object>> GetCaseValuesByDate(
+        List<(string CaseFieldName, Type DbType, DataTable Table)> fieldTables)
+    {
+        // case values (dictionary of case field name/value, grouped by creation date)
+        var values = new Dictionary<DateTime, Dictionary<string, object>>();
+        foreach (var fieldTable in fieldTables)
+        {
+            foreach (var dataRow in fieldTable.Table.AsEnumerable())
+            {
+                var value = dataRow.GetPayrollValue();
+                if (value == null)
+                {
+                    continue;
+                }
+                var date = dataRow.GetValue<DateTime>("Created");
+                if (!values.ContainsKey(date))
+                {
+                    values.Add(date, new());
+                }
+                values[date][fieldTable.CaseFieldName] = value;
+            }
+        }
+        return values;
     }
 
     #endregion

@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 // ReSharper restore RedundantUsingDirective
+// ReSharper disable EmptyRegion
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -27,9 +28,7 @@ public partial class CaseRelationValidateFunction : CaseRelationFunction
     {
     }
 
-    /// <summary>Get case relation validate actions</summary>
-    public string[] GetValidateActions() =>
-        Runtime.GetValidateActions();
+    #region Issue
 
     /// <summary>Test for issues</summary>
     public bool HasIssues() => Runtime.HasIssues();
@@ -37,47 +36,45 @@ public partial class CaseRelationValidateFunction : CaseRelationFunction
     /// <summary>Add a new case issue</summary>
     /// <param name="message">The issue message</param>
     /// <param name="number">The issue number</param>
-    public void AddIssue(string message, int number = 0) =>
-        Runtime.AddIssue(message, number);
+    public void AddCaseIssue(string message, int number = 0) =>
+        Runtime.AddCaseIssue(message, number);
 
     /// <summary>Add a new case field issue</summary>
     /// <param name="caseFieldName">Name of the case field</param>
     /// <param name="message">The issue message</param>
     /// <param name="number">The issue number</param>
-    public void AddIssue(string caseFieldName, string message, int number = 0) =>
-        Runtime.AddIssue(caseFieldName, message, number);
+    public void AddCaseFieldIssue(string caseFieldName, string message, int number = 0) =>
+        Runtime.AddCaseFieldIssue(caseFieldName, message, number);
+
+    /// <summary>Add case issue from attribute</summary>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="parameters">Message parameters</param>
+    public void AddCaseAttributeIssue(string attributeName, params object[] parameters) =>
+        AddCaseIssue(GetAttributeIssue(attributeName, parameters));
+
+    /// <summary>Add case field issue from attribute</summary>
+    /// <param name="caseFieldName">Case field name</param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="parameters">Message parameters</param>
+    public void AddAttributeIssue(string caseFieldName, string attributeName, params object[] parameters) =>
+        AddCaseFieldIssue(caseFieldName, GetAttributeIssue(attributeName, parameters));
+
+    #endregion
+
+    #region Action
+    #endregion
 
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Validate()
     {
-        if (!InvokeValidateActions())
-        {
-            return false;
-        }
+        #region ActionInvoke
+        #endregion
 
-        // ReSharper disable EmptyRegion
         #region Function
         #endregion
-        // ReSharper restore EmptyRegion
 
         // compiler will optimize this out if the code provides a return
         return null;
-    }
-
-    private bool InvokeValidateActions()
-    {
-        var context = new CaseRelationActionContext(this);
-        foreach (var action in GetValidateActions())
-        {
-            InvokeConditionAction<CaseRelationActionContext, CaseRelationValidateActionAttribute>(context, action);
-            if (!context.HasIssues)
-            {
-                continue;
-            }
-            context.Issues.ForEach(x => AddIssue(x.Message));
-            return false;
-        }
-        return true;
     }
 }

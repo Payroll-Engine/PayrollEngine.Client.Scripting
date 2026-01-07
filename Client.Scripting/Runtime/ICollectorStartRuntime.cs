@@ -10,4 +10,7 @@ public interface ICollectorStartRuntime : ICollectorRuntime
     /// <summary>Sets the collector values</summary>
     /// <param name="values">The values to set</param>
     void SetValues(decimal[] values);
+
+    /// <summary>Get collector start actions</summary>
+    string[] GetStartActions();
 }

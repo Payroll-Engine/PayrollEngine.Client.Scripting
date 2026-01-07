@@ -14,12 +14,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="PayrollEngine.Client.Core" Version="0.9.0-beta.13" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<!-- script core -->
 		<EmbeddedResource Include="ClientScript.cs">
 			<LogicalName>ClientScript.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Cache\Cache.cs">
-			<LogicalName>Cache\Cache.cs</LogicalName>
+		<EmbeddedResource Include="Cache.cs">
+			<LogicalName>Cache.cs</LogicalName>
 		</EmbeddedResource>
 		<EmbeddedResource Include="Extensions.cs">
 			<LogicalName>Extensions.cs</LogicalName>
@@ -31,7 +36,7 @@
 			<LogicalName>DatePeriod.cs</LogicalName>
 		</EmbeddedResource>
 		<EmbeddedResource Include="CaseObject.cs">
-		  <LogicalName>CaseObject.cs</LogicalName>
+			<LogicalName>CaseObject.cs</LogicalName>
 		</EmbeddedResource>
 		<EmbeddedResource Include="HourPeriod.cs">
 			<LogicalName>HourPeriod.cs</LogicalName>
@@ -64,18 +69,15 @@
 			<LogicalName>Function\PayrollFunction.cs</LogicalName>
 		</EmbeddedResource>
 
-		<!-- collector -->
-		<EmbeddedResource Include="Function\CollectorFunction.cs">
-			<LogicalName>Function\CollectorFunction.cs</LogicalName>
+		<!-- actions -->
+		<EmbeddedResource Include="Function\Action.cs">
+			<LogicalName>Function\Action.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CollectorStartFunction.cs">
-			<LogicalName>Function\CollectorStartFunction.cs</LogicalName>
+		<EmbeddedResource Include="Function\PayrollFunction.Action.cs">
+			<LogicalName>Function\PayrollFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CollectorApplyFunction.cs">
-			<LogicalName>Function\CollectorApplyFunction.cs</LogicalName>
-		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CollectorEndFunction.cs">
-			<LogicalName>Function\CollectorEndFunction.cs</LogicalName>
+		<EmbeddedResource Include="Function\PayrunFunction.Action.cs">
+			<LogicalName>Function\PayrunFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
 
 		<!-- case -->
@@ -94,20 +96,20 @@
 		<EmbeddedResource Include="Function\CaseValidateFunction.cs">
 			<LogicalName>Function\CaseValidateFunction.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CaseAction.cs">
-			<LogicalName>Function\CaseAction.cs</LogicalName>
+		<EmbeddedResource Include="Function\CaseFunction.Action.cs">
+			<LogicalName>Function\CaseFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CaseAvailableActions.cs">
-			<LogicalName>Function\CaseAvailableActions.cs</LogicalName>
+		<EmbeddedResource Include="Function\CaseBuildFunction.Action.cs">
+			<LogicalName>Function\CaseBuildFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CaseBuildActions.cs">
-			<LogicalName>Function\CaseBuildActions.cs</LogicalName>
+		<EmbeddedResource Include="Function\CaseAvailableFunction.Action.cs">
+			<LogicalName>Function\CaseAvailableFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CaseValidateActions.cs">
-			<LogicalName>Function\CaseValidateActions.cs</LogicalName>
+		<EmbeddedResource Include="Function\CaseChangeFunction.Action.cs">
+			<LogicalName>Function\CaseChangeFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CaseInputActions.cs">
-			<LogicalName>Function\CaseInputActions.cs</LogicalName>
+		<EmbeddedResource Include="Function\CaseValidateFunction.Action.cs">
+			<LogicalName>Function\CaseValidateFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
 
 		<!-- case relation -->
@@ -120,11 +122,40 @@
 		<EmbeddedResource Include="Function\CaseRelationValidateFunction.cs">
 			<LogicalName>Function\CaseRelationValidateFunction.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CaseRelationBuildActions.cs">
-			<LogicalName>Function\CaseRelationBuildActions.cs</LogicalName>
+		<EmbeddedResource Include="Function\CaseRelationFunction.Action.cs">
+			<LogicalName>Function\CaseRelationFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Function\CaseRelationValidateActions.cs">
-			<LogicalName>Function\CaseRelationValidateActions.cs</LogicalName>
+		<EmbeddedResource Include="Function\CaseRelationBuildFunction.Action.cs">
+			<LogicalName>Function\CaseRelationBuildFunction.Action.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CaseRelationValidateFunction.Action.cs">
+			<LogicalName>Function\CaseRelationValidateFunction.Action.cs</LogicalName>
+		</EmbeddedResource>
+
+		<!-- collector -->
+		<EmbeddedResource Include="Function\CollectorFunction.cs">
+			<LogicalName>Function\CollectorFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorStartFunction.cs">
+			<LogicalName>Function\CollectorStartFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorApplyFunction.cs">
+			<LogicalName>Function\CollectorApplyFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorEndFunction.cs">
+			<LogicalName>Function\CollectorEndFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorFunction.Action.cs">
+			<LogicalName>Function\CollectorFunction.Action.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorApplyFunction.Action.cs">
+			<LogicalName>Function\CollectorApplyFunction.Action.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorStartFunction.Action.cs">
+			<LogicalName>Function\CollectorStartFunction.Action.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\CollectorEndFunction.Action.cs">
+			<LogicalName>Function\CollectorEndFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
 
 		<!-- wage type -->
@@ -136,6 +167,15 @@
 		</EmbeddedResource>
 		<EmbeddedResource Include="Function\WageTypeResultFunction.cs">
 			<LogicalName>Function\WageTypeResultFunction.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\WageTypeFunction.Action.cs">
+			<LogicalName>Function\WageTypeFunction.Action.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\WageTypeValueFunction.Action.cs">
+			<LogicalName>Function\WageTypeValueFunction.Action.cs</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Function\WageTypeResultFunction.Action.cs">
+			<LogicalName>Function\WageTypeResultFunction.Action.cs</LogicalName>
 		</EmbeddedResource>
 
 		<!-- payrun -->
@@ -180,11 +220,6 @@
 
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
-		<PackageReference Include="PayrollEngine.Client.Core" Version="0.9.0-beta.12" />
-	</ItemGroup>
-
 	<!-- include xml documention files and json schemas to the nuget package -->
 	<ItemGroup>
 		<None Include="$(OutputDir)*.xml" Pack="true">
@@ -194,6 +229,7 @@
 			<PackageCopyToOutput>true</PackageCopyToOutput>
 		</None>
 	</ItemGroup>
+
 	<ItemGroup>
 		<None Include="..\README.md">
 			<Pack>True</Pack>

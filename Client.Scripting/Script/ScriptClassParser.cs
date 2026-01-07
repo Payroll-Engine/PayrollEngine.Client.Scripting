@@ -36,20 +36,20 @@ public class ScriptClassParser
     ];
 
     /// <summary>The syntax tree</summary>
-    public ClassDeclarationSyntax ClassSyntax { get; }
+    private ClassDeclarationSyntax ClassSyntax { get; }
 
     /// <summary>The attribute syntax</summary>
-    public AttributeSyntax AttributeSyntax { get; }
+    private AttributeSyntax AttributeSyntax { get; }
 
     /// <summary>the function attribute</summary>
-    public FunctionAttribute FunctionAttribute { get; }
+    private FunctionAttribute FunctionAttribute { get; }
 
     /// <summary>The class name</summary>
-    public string ClassName => ClassSyntax.Identifier.ValueText;
+    private string ClassName => ClassSyntax.Identifier.ValueText;
 
     /// <summary>Initializes a new instance of the <see cref="ScriptMethodParser"/> class</summary>
     /// <param name="classSyntaxTree">The function class code syntax tree</param>
-    public ScriptClassParser(ClassDeclarationSyntax classSyntaxTree)
+    private ScriptClassParser(ClassDeclarationSyntax classSyntaxTree)
     {
         ClassSyntax = classSyntaxTree ?? throw new ArgumentNullException(nameof(classSyntaxTree));
 

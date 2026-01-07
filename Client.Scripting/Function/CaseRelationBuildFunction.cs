@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
+// ReSharper disable EmptyRegion
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -38,32 +39,21 @@ public partial class CaseRelationBuildFunction : CaseRelationFunction
     {
     }
 
-    /// <summary>Get case relation build actions</summary>
-    public string[] GetBuildActions() =>
-        Runtime.GetBuildActions();
+    #region Action
+    #endregion
 
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
     public bool? Build()
     {
-        InvokeBuildActions();
+        #region ActionInvoke
+        #endregion
 
-        // ReSharper disable EmptyRegion
         #region Function
 
         #endregion
-        // ReSharper restore EmptyRegion
 
         // compiler will optimize this out if the code provides a return
         return null;
-    }
-
-    private void InvokeBuildActions()
-    {
-        var context = new CaseRelationActionContext(this);
-        foreach (var action in GetBuildActions())
-        {
-            InvokeConditionAction<CaseRelationActionContext, CaseRelationBuildActionAttribute>(context, action);
-        }
     }
 }

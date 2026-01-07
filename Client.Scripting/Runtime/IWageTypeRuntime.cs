@@ -24,6 +24,16 @@ public interface IWageTypeRuntime : IPayrunRuntime
     /// <summary>The wage type collector groups</summary>
     string[] CollectorGroups { get; }
 
+    /// <summary>Gets the wage type value</summary>
+    /// <param name="wageTypeNumber">The wage type number</param>
+    /// <returns>The wage type value</returns>
+    decimal GetWageType(decimal wageTypeNumber);
+
+    /// <summary>Gets the wage type value</summary>
+    /// <param name="wageTypeName">The wage type name</param>
+    /// <returns>The wage type value</returns>
+    decimal GetWageType(string wageTypeName);
+
     /// <summary>Get the wage type result tags</summary>
     /// <returns>The wage type result tags</returns>
     List<string> GetResultTags();
@@ -47,15 +57,12 @@ public interface IWageTypeRuntime : IPayrunRuntime
     /// <returns>The wage type attribute value</returns>
     object GetWageTypeAttribute(string attributeName);
 
-    /// <summary>Gets the wage type value</summary>
-    /// <param name="wageTypeNumber">The wage type number</param>
-    /// <returns>The wage type value</returns>
-    decimal GetWageTypeValue(decimal wageTypeNumber);
+    #region Collector
 
     /// <summary>Gets the collector value</summary>
     /// <param name="collectorName">Name of the collector</param>
     /// <returns>The collector value</returns>
-    decimal GetCollectorValue(string collectorName);
+    decimal GetCollector(string collectorName);
 
     /// <summary>Reenable disabled collector for the current employee job</summary>
     /// <param name="collectorName">Name of the collector</param>
@@ -64,6 +71,8 @@ public interface IWageTypeRuntime : IPayrunRuntime
     /// <summary>Disable collector for the current employee job</summary>
     /// <param name="collectorName">Name of the collector</param>
     void DisableCollector(string collectorName);
+
+    #endregion
 
     #region Custom Results
 

@@ -1,117 +1,8 @@
 ﻿/* CaseRelationFunction */
 
 using System;
-using System.Linq;
 
 namespace PayrollEngine.Client.Scripting.Function;
-
-#region Action
-
-/// <summary>Case relation action context </summary>
-public class CaseRelationActionContext : PayrollActionContext<CaseRelationFunction>
-{
-    /// <summary>Constructor</summary>
-    /// <param name="function">The function</param>
-    public CaseRelationActionContext(CaseRelationFunction function) :
-        base(function)
-    {
-    }
-}
-
-/// <summary>Case change action case value</summary>
-public class CaseRelationActionValueContext : PayrollActionValueContext<CaseRelationFunction>
-{
-    /// <summary>Constructor</summary>
-    /// <param name="function">The function</param>
-    public CaseRelationActionValueContext(CaseRelationFunction function) :
-        base(function)
-    {
-    }
-
-    /// <inheritdoc />
-    public override CaseValue GetCaseChangeValue(string caseFieldName)
-    {
-        // source case field
-        if (Function.GetSourceFieldNames().Any(x => string.Equals(x, caseFieldName)))
-        {
-            return new CaseValue(caseFieldName, Date.Now,
-                Function.GetSourceStart(caseFieldName),
-                Function.GetSourceEnd(caseFieldName),
-                new PayrollValue(Function.GetSourceValue(caseFieldName)));
-        }
-
-        // target case field
-        if (Function.GetTargetFieldNames().Any(x => string.Equals(x, caseFieldName)))
-        {
-            return new CaseValue(caseFieldName, Date.Now,
-                Function.GetTargetStart(caseFieldName),
-                Function.GetTargetEnd(caseFieldName),
-                new PayrollValue(Function.GetTargetValue(caseFieldName)));
-        }
-
-        throw new ScriptException($"Unknown case change field {caseFieldName}.");
-    }
-}
-
-/// <summary>Case relation action case change value</summary>
-public class CaseRelationActionCaseValue<TValue> : ActionCaseValue<CaseRelationActionValueContext, CaseRelationFunction, TValue>
-{
-    /// <summary>Default constructor</summary>
-    public CaseRelationActionCaseValue(CaseRelationActionValueContext context, object sourceValue, DateTime? valueDate = null) :
-        base(context, sourceValue, valueDate)
-    {
-    }
-}
-
-/// <summary>Base class for case change actions</summary>
-public abstract class CaseRelationActionsBase : CaseActionsBase
-{
-    /// <summary>Compare culture</summary>
-    protected static StringComparison GetCompareCulture(bool ignoreCase) =>
-        ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
-
-
-    /// <summary>New source action</summary>
-    protected static CaseRelationActionCaseValue<TValue> GetSourceActionValue<TValue>(CaseRelationActionContext context,
-        string source)
-    {
-        if (string.IsNullOrWhiteSpace(source))
-        {
-            throw new ArgumentException("Invalid case relation source.", nameof(source));
-        }
-
-        try
-        {
-            return new CaseRelationActionCaseValue<TValue>(new(context.Function), ActionCaseValueBase.ToCaseValueReference(source));
-        }
-        catch (Exception exception)
-        {
-            context.Function.LogError($"Invalid case field name {source}: {exception.GetBaseException().Message}");
-            return null;
-        }
-    }
-
-    /// <summary>New action</summary>
-    protected static CaseRelationActionCaseValue<TValue> GetActionValue<TValue>(CaseRelationActionContext context,
-        object value, DateTime? valueDate = null)
-    {
-        try
-        {
-            return new CaseRelationActionCaseValue<TValue>(new(context.Function), value, valueDate);
-        }
-        catch (Exception exception)
-        {
-            context.Function.LogError($"Invalid case action value {value}: {exception.GetBaseException().Message}");
-            return null;
-        }
-    }
-
-    /// <summary>Resolve action value</summary>
-    protected static TValue ResolveActionValue<TValue>(CaseRelationActionContext context, object value) =>
-        GetActionValue<TValue>(context, value).ResolvedValue;
-}
-
-#endregion
 
 /// <summary>Base class for case relation functions</summary>
 // ReSharper disable once PartialTypeWithSinglePart
@@ -146,15 +37,19 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     #region Source Case
 
     /// <summary>Gets the name of the source case</summary>
+    [ActionProperty("Source case name")]
     public string SourceCaseName => Runtime.SourceCaseName;
 
     /// <summary>Gets the source case slot</summary>
+    [ActionProperty("Source case slot")]
     public string SourceCaseSlot => Runtime.SourceCaseSlot;
 
     /// <summary>Get the source case cancellation date</summary>
+    [ActionProperty("Source case cancellation date")]
     public DateTime? SourceCaseCancellationDate => Runtime.SourceCaseCancellationDate;
 
     /// <summary>Get the source cancellation state</summary>
+    [ActionProperty("Test is source case is canceled")]
     public bool SourceCaseCancellation => SourceCaseCancellationDate.HasValue;
 
     /// <summary>Get start date of the source case value by the case field name</summary>
@@ -313,15 +208,19 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     #region Target Case
 
     /// <summary>Gets the name of the target case</summary>
+    [ActionProperty("Target case name")]
     public string TargetCaseName => Runtime.TargetCaseName;
 
     /// <summary>Gets the target case slot</summary>
+    [ActionProperty("Target case slot")]
     public string TargetCaseSlot => Runtime.TargetCaseSlot;
 
     /// <summary>Get the target case cancellation date</summary>
+    [ActionProperty("Target case cancellation date")]
     public DateTime? TargetCaseCancellationDate => Runtime.TargetCaseCancellationDate;
 
     /// <summary>Get the target cancellation state</summary>
+    [ActionProperty("Test if target case is canceled")]
     public bool TargetCaseCancellation => TargetCaseCancellationDate.HasValue;
 
     /// <summary>Get or set the start date of the target case value by the case field name</summary>

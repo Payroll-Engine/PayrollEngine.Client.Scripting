@@ -1,0 +1,445 @@
+﻿/* PayrollFunction.Action */
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace PayrollEngine.Client.Scripting.Function;
+
+/// <summary>Payroll function</summary>
+public partial class PayrollFunction
+{
+    /// <summary>None value</summary>
+    protected dynamic None => null;
+
+    /// <summary>Null value</summary>
+    protected dynamic Null => null;
+
+    #region Case Value
+
+    /// <summary>Test for case field value</summary>
+    /// <param name="field">Object field name</param>
+    /// <returns>True if field exists</returns>
+    [ActionParameter("field", "The case field name", [StringType])]
+    [CollectorAction("HasFieldValue", "Test for case field value", "Case")]
+    public bool HasFieldValue(string field) =>
+        GetCaseValueType(field) != null;
+
+    /// <summary>Get case filed value</summary>
+    /// <param name="field">Object field name</param>
+    [ActionParameter("field", "The case field name", [StringType])]
+    [CollectorAction("GetFieldValue", "Get case field value", "Case")]
+    public ActionValue GetFieldValue(string field) =>
+        new(GetCaseValue<object>(field));
+
+    #endregion
+
+    #region Lookup
+
+    /// <summary>Test for lookup value</summary>
+    [ActionParameter("lookup", "The lookup name", [StringType])]
+    [ActionParameter("key", "The lookup key", [StringType])]
+    [ActionParameter("range", "The range value", [DecimalType])]
+    [ActionParameter("field", "The JSON value field name (optional)")]
+    [CollectorAction("HasLookupValue", "Test for lookup value", "Lookup")]
+    public bool HasLookupValue(string lookup, string key,
+        decimal? range = null, string field = null) =>
+        GetLookupValue(lookup, key, range, field).HasValue;
+
+    /// <summary>Get lookup value</summary>
+    [ActionParameter("lookup", "The lookup name", [StringType])]
+    [ActionParameter("key", "The lookup key", [StringType])]
+    [ActionParameter("range", "The range value", [DecimalType])]
+    [ActionParameter("field", "The JSON value field name (optional)")]
+    [CollectorAction("GetLookupValue", "Get range lookup object value", "Lookup")]
+    public ActionValue GetLookupValue(string lookup, string key,
+        decimal? range = null, string field = null)
+    {
+        // range value
+        if (range != null)
+        {
+            // range object lookup
+            if (!string.IsNullOrWhiteSpace(field))
+            {
+                return new ActionValue(GetRangeObjectLookup<object>(
+                    lookupName: lookup,
+                    rangeValue: range.Value,
+                    lookupKey: key,
+                    objectKey: field));
+            }
+            // range value lookup
+            return new ActionValue(GetRangeLookup<object>(
+                lookupName: lookup,
+                lookupKey: key,
+                rangeValue: range.Value));
+        }
+
+        // object lookup
+        if (!string.IsNullOrWhiteSpace(field))
+        {
+            return new(GetObjectLookup<object>(
+                lookupName: lookup,
+                lookupKey: key,
+                objectKey: field));
+        }
+
+        // lookup
+        return new(GetLookup<object>(
+            lookupName: lookup,
+            lookupKey: key));
+    }
+
+    /// <summary>Apply a range value to the lookup ranges considering the lookup range mode</summary>
+    /// <param name="lookup">Lookup name</param>
+    /// <param name="range">Range value</param>
+    /// <param name="field">Object field name</param>
+    [ActionParameter("lookup", "The lookup name", [StringType])]
+    [ActionParameter("range", "The range value", [DecimalType])]
+    [ActionParameter("field", "The JSON value field name (optional)")]
+    [CollectorAction("ApplyRangeLookupValue", "Apply a range value to the lookup ranges considering the lookup range mode", "Lookup")]
+    public ActionValue ApplyRangeLookupValue(string lookup, decimal range, string field = null) =>
+        ApplyRangeValue(
+            lookupName: lookup,
+            rangeValue: range,
+            valueFieldName: field);
+
+    #endregion
+
+    #region Math
+
+    /// <summary>Get the smallest collection value</summary>
+    /// <param name="values">Value collection</param>
+    [ActionParameter("values", "Value collection", [NumericType, DateType])]
+    [CollectorAction("Min", "Get the smallest collection value", "Math")]
+    public ActionValue Min(params ActionValue[] values)
+    {
+        // empty
+        if (values.Length == 0)
+        {
+            return ActionValue.Null;
+        }
+        // single value
+        if (values.Length == 1)
+        {
+            return values[0];
+        }
+        // multiple values
+        var min = values[0];
+        for (var i = 1; i < values.Length; i++)
+        {
+            min = Min(min, values[i]);
+        }
+        return min;
+    }
+
+    /// <summary>Get the minimum value</summary>
+    /// <param name="left">Left value</param>
+    /// <param name="right">Right value</param>
+    [ActionParameter("left", "The left compare value", [NumericType, DateType])]
+    [ActionParameter("right", "The right compare value", [NumericType, DateType])]
+    [CollectorAction("Min", "Get the minimum value", "Math")]
+    public ActionValue Min(ActionValue left, ActionValue right)
+    {
+        // null
+        if (left?.Value == null && right?.Value == null)
+        {
+            return ActionValue.Null;
+        }
+        if (left?.Value == null)
+        {
+            return right;
+        }
+        if (right?.Value == null)
+        {
+            return left;
+        }
+
+        // numeric compare
+        if (left.TryToDecimal(out var leftValue) &&
+            right.TryToDecimal(out var rightValue))
+        {
+            return Math.Min(leftValue, rightValue);
+        }
+
+        // date compare
+        if (left.TryToDateTime(out var leftDate) &&
+            right.TryToDateTime(out var rightDate))
+        {
+            return leftDate <= rightDate ? leftDate : rightDate;
+        }
+
+        return ActionValue.Null;
+    }
+
+    /// <summary>Get largest value of collection</summary>
+    /// <param name="values">Value collection</param>
+    [ActionParameter("values", "Value collection", [NumericType, DateType])]
+    [CollectorAction("Max", "Get the largest collection value", "Math")]
+    public ActionValue Max(params ActionValue[] values)
+    {
+        // empty
+        if (values.Length == 0)
+        {
+            return ActionValue.Null;
+        }
+        // single value
+        if (values.Length == 1)
+        {
+            return values[0];
+        }
+        // multiple values
+        var max = values[0];
+        for (var i = 1; i < values.Length; i++)
+        {
+            max = Max(max, values[i]);
+        }
+        return max;
+    }
+
+    /// <summary>Get the maximum value</summary>
+    /// <param name="left">Left value</param>
+    /// <param name="right">Right value</param>
+    [ActionParameter("left", "The left compare value", [NumericType, DateType])]
+    [ActionParameter("right", "The right compare value", [NumericType, DateType])]
+    [CollectorAction("Max", "Get the maximum value", "Math")]
+    public ActionValue Max(ActionValue left, ActionValue right)
+    {
+        // null
+        if (left?.Value == null && right?.Value == null)
+        {
+            return ActionValue.Null;
+        }
+        if (left?.Value == null)
+        {
+            return right;
+        }
+        if (right?.Value == null)
+        {
+            return left;
+        }
+
+        // numeric compare
+        if (left.TryToDecimal(out var leftValue) &&
+            right.TryToDecimal(out var rightValue))
+        {
+            return Math.Max(leftValue, rightValue);
+        }
+
+        // date compare
+        if (left.TryToDateTime(out var leftDate) &&
+            right.TryToDateTime(out var rightDate))
+        {
+            return leftDate >= rightDate ? leftDate : rightDate;
+        }
+
+        return ActionValue.Null;
+    }
+
+    /// <summary>Ensure value is within a value range</summary>
+    /// <param name="value">The value to limit</param>
+    /// <param name="min">Left value</param>
+    /// <param name="max">Right value</param>
+    [ActionParameter("value", "The value to limit", [NumericType, DateType])]
+    [ActionParameter("min", "The minimum value", [NumericType, DateType])]
+    [ActionParameter("max", "The maximum value", [NumericType, DateType])]
+    [CollectorAction("Range", "Ensure value is within a value range", "Math")]
+    public ActionValue Range(ActionValue value, ActionValue min, ActionValue max)
+    {
+        // null
+        if (min?.Value == null && max?.Value == null)
+        {
+            return value;
+        }
+        if (min?.Value == null)
+        {
+            return Min(value, max);
+        }
+        if (max?.Value == null)
+        {
+            return Max(value, min);
+        }
+
+        // numeric range
+        if (value.TryToDecimal(out var decimalValue) &&
+            min.TryToDecimal(out var minDecimalValue) &&
+            max.TryToDecimal(out var maxDecimalValue))
+        {
+            var minDecimal = Math.Min(minDecimalValue, maxDecimalValue);
+            var maxDecimal = Math.Max(minDecimalValue, maxDecimalValue);
+
+            // no limits
+            if (minDecimal == decimal.MinValue || maxDecimal == decimal.MaxValue)
+            {
+                return decimalValue;
+            }
+            // no range
+            if (minDecimal == maxDecimal)
+            {
+                return minDecimal;
+            }
+            // less than min
+            if (decimalValue < minDecimal)
+            {
+                return minDecimal;
+            }
+            // more than max
+            if (decimalValue > maxDecimal)
+            {
+                return maxDecimal;
+            }
+            // value in range
+            return decimalValue;
+        }
+
+        // date range
+        if (value.TryToDateTime(out var dateValue) &&
+             min.TryToDateTime(out var minDateValue) &&
+             max.TryToDateTime(out var maxDateValue))
+        {
+            var minDate = Date.Min(minDateValue, maxDateValue);
+            var maxDate = Date.Max(minDateValue, maxDateValue);
+
+            // no limits
+            if (minDate == DateTime.MinValue || maxDate == DateTime.MaxValue)
+            {
+                return dateValue;
+            }
+            // no range
+            if (minDate == maxDate)
+            {
+                return minDate;
+            }
+            // less than min
+            if (dateValue < minDate)
+            {
+                return minDate;
+            }
+            // more than max
+            if (dateValue > maxDate)
+            {
+                return maxDate;
+            }
+            // value in range
+            return dateValue;
+        }
+
+        return ActionValue.Null;
+    }
+
+    #endregion
+
+    #region String
+
+    /// <summary>Concat multiple strings</summary>
+    /// <param name="values">Values to concat</param>
+    /// <returns>True, if source is listed in tests</returns>
+    [ActionParameter("values", "Value collection", [StringType])]
+    [CollectorAction("Concat", "Concat multiple strings", "String")]
+    public ActionValue Concat(params ActionValue[] values)
+    {
+        // string concat
+        var stringValues = new List<string>();
+        foreach (var value in values)
+        {
+            if (value.IsString)
+            {
+                stringValues.Add(value.AsString);
+            }
+        }
+        return stringValues.Any() ? string.Concat(stringValues) : ActionValue.Null;
+    }
+
+    /// <summary>Test if value is from a specific value domain</summary>
+    /// <param name="source">Object to test</param>
+    /// <param name="values">Available values</param>
+    /// <returns>True, if source is listed in tests</returns>
+    [ActionParameter("values", "Value collection", [NumericType, DateType, StringType])]
+    [CollectorAction("Contains", "Test if value is from a specific value domain", "String")]
+    public bool Contains(ActionValue source, params ActionValue[] values)
+    {
+        // test values
+        if (!values.Any())
+        {
+            return false;
+        }
+
+        // numeric
+        if (source.TryToDecimal(out var sourceNumeric))
+        {
+            return values.Select(
+                x => x.TryToDecimal(out var testNumeric) ? testNumeric : 0).Contains(sourceNumeric);
+        }
+
+        // date
+        if (source.TryToDateTime(out var sourceDate))
+        {
+            return values.Select(
+                x => x.TryToDateTime(out var testDate) ? testDate : DateTime.MinValue).Contains(sourceDate);
+        }
+
+        // string
+        if (source.IsString)
+        {
+            if (string.IsNullOrWhiteSpace(source.AsString))
+            {
+                return false;
+            }
+            return values.Select(x => x.AsString).Contains(source.AsString);
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region System
+
+    /// <summary>Returns true whether the value is Null</summary>
+    [ActionParameter("value", "Value to test")]
+    [CollectorAction("IsNull", "Returns true whether the value is Null", "System")]
+    public ActionValue IsNull(ActionValue value) =>
+        value == null || value.IsNull;
+
+    /// <summary>Returns true whether the value is not Null</summary>
+    [ActionParameter("value", "Value to test")]
+    [CollectorAction("IsNotNull", "Returns true whether the value is not Null", "System")]
+    public ActionValue IsNotNull(ActionValue value) =>
+        value != null && !value.IsNull;
+
+    /// <summary>Returns the second value in case the first value is null</summary>
+    [ActionParameter("first", "Value to return if defined")]
+    [ActionParameter("second", "Value to return if first value is undefined")]
+    [CollectorAction("IfNull", "Returns the second value in case the first value is null", "System")]
+    public ActionValue IfNull(ActionValue first, ActionValue second) =>
+        IsNull(first) ? second : first;
+
+    /// <summary>Returns one of two values, depending on the evaluation of an expression</summary>
+    [ActionParameter("expression", "Expression to evaluate")]
+    [ActionParameter("onTrue", "Value or expression returned if expr is True")]
+    [ActionParameter("onFalse", "Value or expression returned if expr is False")]
+    [CollectorAction("IIf", "Returns one of two parts, depending on the evaluation of an expression", "System")]
+    public ActionValue IIf(bool expression, ActionValue onTrue, ActionValue onFalse) =>
+        expression ? onTrue : onFalse;
+
+    /// <summary>Set namespace to a name</summary>
+    [ActionParameter("name", "Name to be extended")]
+    [ActionParameter("namespace", "Namespace to apply (default: regulation namespace)")]
+    [CollectorAction("SetNamespace", "Set namespace to a name", "System")]
+    public string SetNamespace(string name, string @namespace = null)
+    {
+        if (string.IsNullOrWhiteSpace(@namespace) && string.IsNullOrWhiteSpace(Namespace))
+        {
+            return name;
+        }
+        return name.EnsureEnd(@namespace ?? Namespace);
+    }
+
+    /// <summary>Log a message</summary>
+    [ActionParameter("message", "Message to log")]
+    [ActionParameter("level", "Log level (default: Information)")]
+    [CollectorAction("Log", "Log a message", "System")]
+    public void Log(string message, LogLevel level = LogLevel.Information) =>
+        Log(level, message);
+
+    #endregion
+
+}

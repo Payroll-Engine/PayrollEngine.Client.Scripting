@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using PayrollEngine.Client.Scripting;
 // ReSharper restore RedundantUsingDirective
+// ReSharper disable EmptyRegion
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -34,14 +35,18 @@ public partial class CollectorEndFunction : CollectorFunction
     /// <summary>Set collector values</summary>
     public void SetValues(decimal[] values) => Runtime.SetValues(values);
 
+    #region Action
+    #endregion
+
     /// <summary>Entry point for the runtime</summary>
     /// <remarks>Internal usage only, do not call this method</remarks>
     public object End()
     {
-        // ReSharper disable EmptyRegion
+        #region ActionInvoke
+        #endregion
+
         #region Function
         #endregion
-        // ReSharper restore EmptyRegion
         // compiler will optimize this out if the code provides a return
         return null;
     }

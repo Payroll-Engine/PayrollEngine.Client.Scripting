@@ -6,4 +6,7 @@ public interface IWageTypeResultRuntime : IWageTypeRuntime
 {
     /// <summary>The wage type value</summary>
     decimal WageTypeValue { get; }
+
+    /// <summary>Get wage type result actions</summary>
+    string[] GetResultActions();
 }

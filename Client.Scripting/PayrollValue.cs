@@ -69,7 +69,7 @@ public class PayrollValue
 
     /// <summary>Test if the payroll value is numeric</summary>
     [JsonIgnore]
-    public virtual bool IsNumeric => Value != null && Value.GetType().IsNumericType();
+    public bool IsNumeric => Value != null && Value.GetType().IsNumericType();
 
     #region Casting operators
 
