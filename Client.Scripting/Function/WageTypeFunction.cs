@@ -61,6 +61,7 @@ public abstract partial class WageTypeFunction : PayrunFunction
     public string WageTypeDescription { get; }
 
     /// <summary>The wage type calendar</summary>
+    [ActionProperty("Wage type calendar")]
     public string WageTypeCalendar { get; }
 
     /// <summary>Gets the wage type value</summary>

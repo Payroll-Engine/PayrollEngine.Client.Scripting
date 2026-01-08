@@ -93,11 +93,11 @@ public abstract partial class CollectorFunction : PayrunFunction
     public decimal CollectorSummary { get; }
 
     /// <summary>The minimum collected value</summary>
-    [ActionProperty("Maximum collected value")]
+    [ActionProperty("Minimum collected value")]
     public decimal CollectorMinimum { get; }
 
     /// <summary>The maximum collected value</summary>
-    [ActionProperty("Minimum collected value")]
+    [ActionProperty("Maximum collected value")]
     public decimal CollectorMaximum { get; }
 
     /// <summary>The average of the collected value</summary>
