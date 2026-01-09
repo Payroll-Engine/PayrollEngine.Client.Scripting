@@ -47,9 +47,9 @@ The following example shows how the wage types 'WageTypeValue' are calculated wh
 # Salary limits condition
 ? ^^Salary >= 1000 && ^^Salary <= 10000
 # Salary tax rate limits condition
-? ^^SalaryTasRate >= 0.01 && ^^SalaryTasRate <= 0.03
+? ^^SalaryTaxRate >= 0.01 && ^^SalaryTaxRate <= 0.03
 # Wage type result (last action)
-^^Salary * ^^SalaryTasRate
+^^Salary * ^^SalaryTaxRate
 ```
 
 > Changes in case value that occur during the pay period are taken into account in the calculation.
