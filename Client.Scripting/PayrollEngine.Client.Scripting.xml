@@ -5233,11 +5233,17 @@
             <summary>Get case filed value</summary>
             <param name="field">Object field name</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.HasLookupValue(System.String,System.String,System.Nullable{System.Decimal},System.String)">
-            <summary>Test for lookup value</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.HasLookupValue(System.String,PayrollEngine.Client.Scripting.Function.ActionValue,System.String)">
+            <summary>Test for lookup value by key or range value</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookupValue(System.String,System.String,System.Nullable{System.Decimal},System.String)">
-            <summary>Get lookup value</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.HasLookupValue(System.String,PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue,System.String)">
+            <summary>Test for lookup value by key and range value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookupValue(System.String,PayrollEngine.Client.Scripting.Function.ActionValue,System.String)">
+            <summary>Get lookup value by key or range value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookupValue(System.String,PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue,System.String)">
+            <summary>Get lookup value by key and range value</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.ApplyRangeLookupValue(System.String,System.Decimal,System.String)">
             <summary>Apply a range value to the lookup ranges considering the lookup range mode</summary>

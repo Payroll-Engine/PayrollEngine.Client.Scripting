@@ -1,8 +1,8 @@
 ﻿/* PayrollFunction.Action */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
@@ -36,57 +36,85 @@ public partial class PayrollFunction
 
     #region Lookup
 
-    /// <summary>Test for lookup value</summary>
+    /// <summary>Test for lookup value by key or range value</summary>
     [ActionParameter("lookup", "The lookup name", [StringType])]
-    [ActionParameter("key", "The lookup key", [StringType])]
-    [ActionParameter("range", "The range value", [DecimalType])]
+    [ActionParameter("keyOrRangeValue", "The lookup key or range value")]
     [ActionParameter("field", "The JSON value field name (optional)")]
-    [CollectorAction("HasLookupValue", "Test for lookup value", "Lookup")]
-    public bool HasLookupValue(string lookup, string key,
-        decimal? range = null, string field = null) =>
-        GetLookupValue(lookup, key, range, field).HasValue;
+    [CollectorAction("HasLookupValue", "Test for lookup value by key", "Lookup")]
+    public bool HasLookupValue(string lookup, ActionValue keyOrRangeValue, string field = null) =>
+        GetLookupValue(lookup, keyOrRangeValue, field).HasValue;
 
-    /// <summary>Get lookup value</summary>
+    /// <summary>Test for lookup value by key and range value</summary>
     [ActionParameter("lookup", "The lookup name", [StringType])]
     [ActionParameter("key", "The lookup key", [StringType])]
-    [ActionParameter("range", "The range value", [DecimalType])]
     [ActionParameter("field", "The JSON value field name (optional)")]
-    [CollectorAction("GetLookupValue", "Get range lookup object value", "Lookup")]
-    public ActionValue GetLookupValue(string lookup, string key,
-        decimal? range = null, string field = null)
+    [CollectorAction("HasLookupValue", "Test for lookup value by key and range value", "Lookup")]
+    public bool HasLookupValue(string lookup, ActionValue key, ActionValue rangeValue, string field = null) =>
+        GetLookupValue(lookup, key, rangeValue, field).HasValue;
+
+    /// <summary>Get lookup value by key or range value</summary>
+    [ActionParameter("lookup", "The lookup name", [StringType])]
+    [ActionParameter("keyOrRangeValue", "The lookup key or range value")]
+    [ActionParameter("field", "The JSON value field name (optional)")]
+    [CollectorAction("GetLookupValue", "Get lookup value by key or range value", "Lookup")]
+    public ActionValue GetLookupValue(string lookup, ActionValue keyOrRangeValue, string field = null)
     {
         // range value
-        if (range != null)
+        if (keyOrRangeValue.IsNumeric)
         {
-            // range object lookup
-            if (!string.IsNullOrWhiteSpace(field))
+            // basic range lookup value
+            if (string.IsNullOrWhiteSpace(field))
             {
-                return new ActionValue(GetRangeObjectLookup<object>(
+                return new(GetRangeLookup<object>(
                     lookupName: lookup,
-                    rangeValue: range.Value,
-                    lookupKey: key,
-                    objectKey: field));
-            }
-            // range value lookup
-            return new ActionValue(GetRangeLookup<object>(
-                lookupName: lookup,
-                lookupKey: key,
-                rangeValue: range.Value));
-        }
+                    rangeValue: keyOrRangeValue));
 
-        // object lookup
-        if (!string.IsNullOrWhiteSpace(field))
-        {
-            return new(GetObjectLookup<object>(
+            }
+            // object field range lookup value
+            return new(GetRangeObjectLookup<object>(
                 lookupName: lookup,
-                lookupKey: key,
+                rangeValue: keyOrRangeValue,
                 objectKey: field));
         }
 
-        // lookup
-        return new(GetLookup<object>(
+        // key
+        if (string.IsNullOrWhiteSpace(field))
+        {
+            // basic lookup value
+            return new(GetLookup<object>(
+                lookupName: lookup,
+                lookupKey: keyOrRangeValue));
+        }
+        // object field lookup value
+        return new(GetObjectLookup<object>(
             lookupName: lookup,
-            lookupKey: key));
+            lookupKey: keyOrRangeValue,
+            objectKey: field));
+    }
+
+    /// <summary>Get lookup value by key and range value</summary>
+    [ActionParameter("lookup", "The lookup name", [StringType])]
+    [ActionParameter("key", "The lookup key")]
+    [ActionParameter("rangeValue", "The lookup key or range value")]
+    [ActionParameter("field", "The JSON value field name (optional)")]
+    [CollectorAction("GetLookupValue", "Get lookup value by key and value field name", "Lookup")]
+    public ActionValue GetLookupValue(string lookup, ActionValue key, ActionValue rangeValue, string field = null)
+    {
+        // basic range lookup value
+        if (string.IsNullOrWhiteSpace(field))
+        {
+            return new(GetRangeLookup<object>(
+                lookupName: lookup,
+                lookupKey: key,
+                rangeValue: rangeValue));
+
+        }
+        // object field range lookup value
+        return new(GetRangeObjectLookup<object>(
+            lookupName: lookup,
+            lookupKey: key,
+            rangeValue: rangeValue,
+            objectKey: field));
     }
 
     /// <summary>Apply a range value to the lookup ranges considering the lookup range mode</summary>

@@ -92,6 +92,15 @@ The following values can be referenced when performing actions:
 <sup>3)</sup> Value is saved in the payroll results.<br/>
 <sup>4)</sup> Value for the current payroll `Period` (default) and payroll `Cycle` (e.g., year-to-date).<br/>
 
+There are different ways to reference a lookup value: by value `key`, and/or by `rangeValue` and the JSON `field` name:
+- `^#LookupName(key)`
+- `^#LookupName(key, field)`
+- `^#LookupName(rangeValue)`
+- `^#LookupName(rangeValue, field)`
+- `^#LookupName(key, rangeValue)`
+- `^#LookupName(key, rangeValue, field)`
+
+
 ### Action Value
 The following value types can be used in actions:
 - `String`

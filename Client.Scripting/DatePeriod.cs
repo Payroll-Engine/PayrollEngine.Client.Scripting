@@ -85,13 +85,13 @@ public sealed class DatePeriod
     private bool GetHasEnd() => End != Date.MaxValue;
 
     /// <summary>The period start</summary>
-    public DateTime Start { get; }
+    public DateTime Start { get; init; }
 
     /// <summary>Check for start</summary>
     public bool HasStart { get; }
 
     /// <summary>The period end</summary>
-    public DateTime End { get; }
+    public DateTime End { get; init; }
 
     /// <summary>Check for end</summary>
     [JsonIgnore]
