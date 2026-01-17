@@ -265,7 +265,7 @@ The following function properties can be used in read mode in an action:
 | `WageTypeNumber`      | Wage type number                 | `Decimal`   | `WageTypeFunction`      |
 | `WageTypeName`        | Wage type name                   | `String`    | `WageTypeFunction`      |
 | `WageTypeDescription` | Wage type value                  | `String`    | `WageTypeFunction`      |
-| `WageTypeCalendar`    | Wage type calendard              | `String`    | `WageTypeFunction`      |
+| `WageTypeCalendar`    | Wage type calendar               | `String`    | `WageTypeFunction`      |
 | `ExecutionCount`      | Wage type value execution count  | `Int`       | `WageTypeValueFunction` |
 | `WageTypeValue`       | Wage type value                  | `Decimal`   | `WageTypeResultFunction`|
 
@@ -276,8 +276,8 @@ The Payroll Engine offers various predefined actions, see [Client.Scripting](htt
 
 Here are a few examples:
 - `ApplyRangeLookupValue(key, rangeValue, field)` - Apply a range value to the lookup ranges considering the lookup range mode.
-- `Concat(str1, ..strN)` - Concat multiple strings.
-- `Contains(test, sel, ..selN)` - Test if value is from a specific value domain.
+- `Concat(str1, ..., strN)` - Concat multiple strings.
+- `Contains(test, sel, ..., selN)` - Test if value is from a specific value domain.
 - `IIf(expression, onTrue, onFalse)` - Returns one of two parts, depending on the evaluation of an expression.
 - `Log(message, level?)` - Log a message.
 - `Min(left, rigtht)` - Get the minimum value.
