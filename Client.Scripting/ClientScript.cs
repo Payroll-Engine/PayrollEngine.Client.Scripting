@@ -432,7 +432,7 @@ public sealed class ActionIssueAttribute : Attribute
 
 /// <summary>Attribute for action</summary>
 [AttributeUsage(AttributeTargets.Method)]
-public abstract class ActionAttribute : Attribute
+public class ActionAttribute : Attribute
 {
     /// <summary>The action name</summary>
     public string Name { get; }
@@ -447,7 +447,7 @@ public abstract class ActionAttribute : Attribute
     /// <param name="name">The action name</param>
     /// <param name="description">The action description</param>
     /// <param name="categories">The action categories</param>
-    protected ActionAttribute(string name, string description = null, params string[] categories)
+    public ActionAttribute(string name, string description = null, params string[] categories)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -459,12 +459,19 @@ public abstract class ActionAttribute : Attribute
     }
 }
 
+/// <summary>Attribute for payroll action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public class PayrollActionAttribute(string name, string description = null, params string[] categories) :
+    ActionAttribute(name, description, categories);
+
 /// <summary>Attribute for case action</summary>
 /// <param name="name">The action name</param>
 /// <param name="description">The action description</param>
 /// <param name="categories">The action categories</param>
 public class CaseActionAttribute(string name, string description = null, params string[] categories) :
-    ActionAttribute(name, description, categories);
+    PayrollActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case available action</summary>
 /// <param name="name">The action name</param>
@@ -478,7 +485,7 @@ public sealed class CaseAvailableActionAttribute(string name, string description
 /// <param name="description">The action description</param>
 /// <param name="categories">The action categories</param>
 public class CaseChangeActionAttribute(string name, string description = null, params string[] categories) :
-    ActionAttribute(name, description, categories);
+    PayrollActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case build action</summary>
 /// <param name="name">The action name</param>
@@ -501,7 +508,7 @@ public sealed class CaseValidateActionAttribute(string name, string description 
 /// <param name="description">The action description</param>
 /// <param name="categories">The action categories</param>
 public class CaseRelationActionAttribute(string name, string description = null, params string[] categories) :
-    ActionAttribute(name, description, categories);
+    PayrollActionAttribute(name, description, categories);
 
 /// <summary>Attribute for case relation build action</summary>
 /// <param name="name">The action name</param>
@@ -519,12 +526,19 @@ public sealed class CaseRelationBuildActionAttribute(string name, string descrip
 public sealed class CaseRelationValidateActionAttribute(string name, string description = null, params string[] categories) :
     CaseRelationActionAttribute(name, description, categories);
 
+/// <summary>Attribute for payrun action</summary>
+/// <param name="name">The action name</param>
+/// <param name="description">The action description</param>
+/// <param name="categories">The action categories</param>
+public class PayrunActionAttribute(string name, string description = null, params string[] categories) :
+    PayrollActionAttribute(name, description, categories);
+
 /// <summary>Attribute for collector action</summary>
 /// <param name="name">The action name</param>
 /// <param name="description">The action description</param>
 /// <param name="categories">The action categories</param>
 public class CollectorActionAttribute(string name, string description = null, params string[] categories) :
-    ActionAttribute(name, description, categories);
+    PayrunActionAttribute(name, description, categories);
 
 /// <summary>Attribute for collector start action</summary>
 /// <param name="name">The action name</param>
@@ -552,7 +566,7 @@ public sealed class CollectorEndActionAttribute(string name, string description 
 /// <param name="description">The action description</param>
 /// <param name="categories">The action categories</param>
 public class WageTypeActionAttribute(string name, string description = null, params string[] categories) :
-    ActionAttribute(name, description, categories);
+    PayrunActionAttribute(name, description, categories);
 
 /// <summary>Attribute for wage type value action</summary>
 /// <param name="name">The action name</param>

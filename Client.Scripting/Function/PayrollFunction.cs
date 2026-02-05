@@ -27,6 +27,9 @@ public abstract partial class PayrollFunction : Function
     /// <summary>Date type name</summary>
     protected const string DateType = "Date";
 
+    /// <summary>Timespan type name</summary>
+    protected const string TimeSpanType = "TimeSpan";
+
     /// <summary>Boolean type name</summary>
     protected const string BooleanType = "Bool";
 
@@ -162,16 +165,44 @@ public abstract partial class PayrollFunction : Function
     [ActionProperty("Cycle start date")]
     public DateTime CycleStart => Cycle.Start;
 
+    /// <summary>The current cycle start year</summary>
+    [ActionProperty("Cycle start year")]
+    public int CycleStartYear => CycleStart.Year;
+
+    /// <summary>The current cycle start month</summary>
+    [ActionProperty("Cycle start month")]
+    public int CycleStartMonth => CycleStart.Month;
+
+    /// <summary>The current cycle start day</summary>
+    [ActionProperty("Cycle start day")]
+    public int CycleStartDay => CycleStart.Day;
+
     /// <summary>The current cycle end date</summary>
     [ActionProperty("Cycle end date")]
     public DateTime CycleEnd => Cycle.End;
+
+    /// <summary>The current cycle end year</summary>
+    [ActionProperty("Cycle end year")]
+    public int CycleEndYear => CycleEnd.Year;
+
+    /// <summary>The current cycle end month</summary>
+    [ActionProperty("Cycle end month")]
+    public int CycleEndMonth => CycleEnd.Month;
+
+    /// <summary>The current cycle end day</summary>
+    [ActionProperty("Cycle edn day")]
+    public int CycleEndDay => CycleEnd.Day;
+
+    /// <summary>The current cycle duration</summary>
+    [ActionProperty("Cycle duration")]
+    public TimeSpan CycleDuration => Cycle.Duration;
 
     /// <summary>The current cycle</summary>
     public DatePeriod Cycle { get; }
 
     /// <summary>The day count of the current cycle</summary>
     [ActionProperty("Cycle day count")]
-    public double CycleDays => Cycle.TotalDays;
+    public int CycleDays => (int)Math.Round(Cycle.TotalDays);
 
     /// <summary>The previous cycle</summary>
     public DatePeriod PreviousCycle { get; }
@@ -260,15 +291,44 @@ public abstract partial class PayrollFunction : Function
     [ActionProperty("Period start date")]
     public DateTime PeriodStart => Period.Start;
 
+    /// <summary>The current period start year</summary>
+    [ActionProperty("Period start year")]
+    public int PeriodStartYear => PeriodStart.Year;
+
+    /// <summary>The current period start month</summary>
+    [ActionProperty("Period start month")]
+    public int PeriodStartMonth => PeriodStart.Month;
+    
+    /// <summary>The current period start day</summary>
+    [ActionProperty("Period start day")]
+    public int PeriodStartDay => PeriodStart.Day;
+
     /// <summary>The current period end date</summary>
     [ActionProperty("Period end date")]
     public DateTime PeriodEnd => Period.End;
+
+    /// <summary>The current period end year</summary>
+    [ActionProperty("Period end year")]
+    public int PeriodEndYear => PeriodEnd.Year;
+
+    /// <summary>The current period end month</summary>
+    [ActionProperty("Period end month")]
+    public int PeriodEndMonth => PeriodEnd.Month;
+    
+    /// <summary>The current period end day</summary>
+    [ActionProperty("Period end day")]
+    public int PeriodEndDay => PeriodEnd.Day;
+
+    /// <summary>The current period duration</summary>
+    [ActionProperty("Period duration")]
+    public TimeSpan PeriodDuration => Period.Duration;
 
     /// <summary>The current period</summary>
     public DatePeriod Period { get; }
 
     /// <summary>The day count of the current period</summary>
-    public double PeriodDays => Period.TotalDays;
+    [ActionProperty("Period day count")]
+    public int PeriodDays => (int)Math.Round(Period.TotalDays);
 
     /// <summary>The previous period</summary>
     public DatePeriod PreviousPeriod { get; }
@@ -276,10 +336,10 @@ public abstract partial class PayrollFunction : Function
     /// <summary>The next period</summary>
     public DatePeriod NextPeriod { get; }
 
-    /// <summary>True for the first cycle period</summary>
+    /// <summary>Test for the first cycle period</summary>
     public bool FirstCyclePeriod => CycleStart == PeriodStart;
 
-    /// <summary>True for the last cycle period</summary>
+    /// <summary>Test for the last cycle period</summary>
     public bool LastCyclePeriod => PeriodEnd == CycleEnd;
 
     /// <summary>Offset of the current period to the start of the current cycle,<br />

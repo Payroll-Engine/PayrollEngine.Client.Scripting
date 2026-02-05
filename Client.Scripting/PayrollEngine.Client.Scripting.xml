@@ -768,6 +768,18 @@
             <param name="description">The action description</param>
             <param name="categories">The action categories</param>
         </member>
+        <member name="T:PayrollEngine.Client.Scripting.PayrollActionAttribute">
+            <summary>Attribute for payroll action</summary>
+            <param name="name">The action name</param>
+            <param name="description">The action description</param>
+            <param name="categories">The action categories</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrollActionAttribute.#ctor(System.String,System.String,System.String[])">
+            <summary>Attribute for payroll action</summary>
+            <param name="name">The action name</param>
+            <param name="description">The action description</param>
+            <param name="categories">The action categories</param>
+        </member>
         <member name="T:PayrollEngine.Client.Scripting.CaseActionAttribute">
             <summary>Attribute for case action</summary>
             <param name="name">The action name</param>
@@ -860,6 +872,18 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CaseRelationValidateActionAttribute.#ctor(System.String,System.String,System.String[])">
             <summary>Attribute for case validate action</summary>
+            <param name="name">The action name</param>
+            <param name="description">The action description</param>
+            <param name="categories">The action categories</param>
+        </member>
+        <member name="T:PayrollEngine.Client.Scripting.PayrunActionAttribute">
+            <summary>Attribute for payrun action</summary>
+            <param name="name">The action name</param>
+            <param name="description">The action description</param>
+            <param name="categories">The action categories</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.PayrunActionAttribute.#ctor(System.String,System.String,System.String[])">
+            <summary>Attribute for payrun action</summary>
             <param name="name">The action name</param>
             <param name="description">The action description</param>
             <param name="categories">The action categories</param>
@@ -3436,14 +3460,6 @@
         <member name="F:PayrollEngine.Client.Scripting.Function.ActionValueType.TimeSpan">
             <summary>TimeSpan type</summary>
         </member>
-        <member name="T:PayrollEngine.Client.Scripting.Function.ValueTypeExtensions">
-            <summary>Extensions for <see cref="T:PayrollEngine.Client.Scripting.ValueType"/></summary>
-        </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ValueTypeExtensions.ToActionValueType(PayrollEngine.Client.Scripting.ValueType)">
-            <summary>Get the action value type</summary>
-            <param name="valueType">The value type</param>
-            <returns>The action value type</returns>
-        </member>
         <member name="T:PayrollEngine.Client.Scripting.Function.ActionValue">
             <summary>Action value</summary>
         </member>
@@ -3486,8 +3502,14 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.IsDateTime">
             <summary>Test for action date value</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.IsTimeSpan">
+            <summary>Test for action timespan value</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.IsBool">
             <summary>Test for action bool value</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.ValueType">
+            <summary>Get the action value type</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.AsString">
             <summary>Action value as string</summary>
@@ -3504,6 +3526,9 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.AsDateTime">
             <summary>Action value as date</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.AsTimeSpan">
+            <summary>Action value as timespan</summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.TryToBool(System.Boolean@)">
             <summary>Convert acton value to bool</summary>
             <param name="value">Source value</param>
@@ -3518,6 +3543,10 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.TryToDateTime(System.DateTime@)">
             <summary>Convert acton value to datetime</summary>
+            <param name="value">Source value</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.TryToTimeSpan(System.TimeSpan@)">
+            <summary>Convert acton value to timespan</summary>
             <param name="value">Source value</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Implicit(PayrollEngine.Client.Scripting.Function.ActionValue)~System.String">
@@ -3540,6 +3569,12 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Implicit(PayrollEngine.Client.Scripting.Function.ActionValue)~System.Nullable{System.DateTime}">
             <summary>Convert action value to nullable DateTime</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Implicit(PayrollEngine.Client.Scripting.Function.ActionValue)~System.TimeSpan">
+            <summary>Convert action value to TimeSpan</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Implicit(PayrollEngine.Client.Scripting.Function.ActionValue)~System.Nullable{System.TimeSpan}">
+            <summary>Convert action value to nullable TimeSpan</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Implicit(PayrollEngine.Client.Scripting.Function.ActionValue)~System.Boolean">
             <summary>Convert action value to bool</summary>
@@ -3570,6 +3605,9 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Implicit(System.DateTime)~PayrollEngine.Client.Scripting.Function.ActionValue">
             <summary>Implicit datetime conversion</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Implicit(System.TimeSpan)~PayrollEngine.Client.Scripting.Function.ActionValue">
+            <summary>Implicit timespan conversion</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_UnaryPlus(PayrollEngine.Client.Scripting.Function.ActionValue)">
             <summary>Unary plus of an action value</summary>
@@ -3658,6 +3696,33 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.Sqrt">
             <summary>Returns the square root of a specified number</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.Year">
+            <summary>Get year from date value</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.Month">
+            <summary>Get month from date value</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.Day">
+            <summary>Get day from date value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.AddYears(System.Int32)">
+            <summary>Add years to date value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.AddMonths(System.Int32)">
+            <summary>Add months to date value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.AddDays(System.Int32)">
+            <summary>Add days to date value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.Add(System.TimeSpan)">
+            <summary>Add timespan to date value</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.Subtract(System.TimeSpan)">
+            <summary>Subtract timespan to date value</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.Days">
+            <summary>Get day from timespan value</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.Equals(System.Object)">
             <summary>Determines whether the specified <see cref="T:System.Object" /> is equal to this instance</summary>
@@ -5269,6 +5334,12 @@
             <param name="left">Left value</param>
             <param name="right">Right value</param>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.Within(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
+            <summary>Test value is within a value range</summary>
+            <param name="value">The value to test</param>
+            <param name="min">Left value</param>
+            <param name="max">Right value</param>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.Range(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
             <summary>Ensure value is within a value range</summary>
             <param name="value">The value to limit</param>
@@ -5284,6 +5355,30 @@
             <summary>Test if value is from a specific value domain</summary>
             <param name="source">Object to test</param>
             <param name="values">Available values</param>
+            <returns>True, if source is listed in tests</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetTimeSpan(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
+            <summary>Get the timespan between two dates</summary>
+            <returns>Timespan between the dates or none</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.SameYear(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
+            <summary>Test for same date year</summary>
+            <returns>True, if year are equals</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.SameMonth(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
+            <summary>Test for same date month</summary>
+            <returns>True, if year and month are equals</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.SameDay(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
+            <summary>Test for same date day</summary>
+            <returns>True, if year, month and day are equals</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.YearDiff(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
+            <summary>Get years between two dates</summary>
+            <returns>The year (int) od dates, otherwise none</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.Age(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
+            <summary>Get persons age</summary>
             <returns>True, if source is listed in tests</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.IsNull(PayrollEngine.Client.Scripting.Function.ActionValue)">
@@ -5318,6 +5413,9 @@
         </member>
         <member name="F:PayrollEngine.Client.Scripting.Function.PayrollFunction.DateType">
             <summary>Date type name</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.Function.PayrollFunction.TimeSpanType">
+            <summary>Timespan type name</summary>
         </member>
         <member name="F:PayrollEngine.Client.Scripting.Function.PayrollFunction.BooleanType">
             <summary>Boolean type name</summary>
@@ -5373,8 +5471,29 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleStart">
             <summary>The current cycle start date</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleStartYear">
+            <summary>The current cycle start year</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleStartMonth">
+            <summary>The current cycle start month</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleStartDay">
+            <summary>The current cycle start day</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleEnd">
             <summary>The current cycle end date</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleEndYear">
+            <summary>The current cycle end year</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleEndMonth">
+            <summary>The current cycle end month</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleEndDay">
+            <summary>The current cycle end day</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleDuration">
+            <summary>The current cycle duration</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.Cycle">
             <summary>The current cycle</summary>
@@ -5441,8 +5560,29 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodStart">
             <summary>The current period start date</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodStartYear">
+            <summary>The current period start year</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodStartMonth">
+            <summary>The current period start month</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodStartDay">
+            <summary>The current period start day</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodEnd">
             <summary>The current period end date</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodEndYear">
+            <summary>The current period end year</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodEndMonth">
+            <summary>The current period end month</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodEndDay">
+            <summary>The current period end day</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodDuration">
+            <summary>The current period duration</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.Period">
             <summary>The current period</summary>
@@ -5457,10 +5597,10 @@
             <summary>The next period</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.FirstCyclePeriod">
-            <summary>True for the first cycle period</summary>
+            <summary>Test for the first cycle period</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.LastCyclePeriod">
-            <summary>True for the last cycle period</summary>
+            <summary>Test for the last cycle period</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleStartOffset">
             <summary>Offset of the current period to the start of the current cycle,<br />

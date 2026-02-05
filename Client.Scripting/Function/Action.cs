@@ -27,38 +27,6 @@ public enum ActionValueType
     TimeSpan
 }
 
-/// <summary>Extensions for <see cref="ValueType"/></summary>
-public static class ValueTypeExtensions
-{
-    /// <summary>Get the action value type</summary>
-    /// <param name="valueType">The value type</param>
-    /// <returns>The action value type</returns>
-    public static ActionValueType ToActionValueType(this ValueType valueType)
-    {
-        if (valueType.IsInteger())
-        {
-            return ActionValueType.Integer;
-        }
-        if (valueType.IsDecimal())
-        {
-            return ActionValueType.Decimal;
-        }
-        if (valueType.IsString())
-        {
-            return ActionValueType.String;
-        }
-        if (valueType.IsDateTime())
-        {
-            return ActionValueType.DateTime;
-        }
-        if (valueType.IsBoolean())
-        {
-            return ActionValueType.Boolean;
-        }
-        return ActionValueType.None;
-    }
-}
-
 #endregion
 
 #region Action Value
@@ -95,6 +63,8 @@ public sealed class ActionValue
 
     #endregion
 
+    #region Value & Type
+
     /// <summary>Empty instance</summary>
     public static readonly ActionValue Null = new(null);
 
@@ -123,10 +93,54 @@ public sealed class ActionValue
     public bool IsNumeric => IsInt || IsDecimal;
 
     /// <summary>Test for action date value</summary>
-    public bool IsDateTime => TryToDecimal(out _);
+    public bool IsDateTime => TryToDateTime(out _);
+
+    /// <summary>Test for action timespan value</summary>
+    public bool IsTimeSpan => TryToTimeSpan(out _);
 
     /// <summary>Test for action bool value</summary>
     public bool IsBool => TryToBool(out _);
+
+    /// <summary>Get the action value type</summary>
+    public ActionValueType ValueType
+    {
+        get
+        {
+            if (IsNull)
+            {
+                return ActionValueType.None;
+            }
+            if (IsInt)
+            {
+                return ActionValueType.Integer;
+            }
+            // decimal after int
+            if (IsDecimal)
+            {
+                return ActionValueType.Decimal;
+            }
+            if (IsBool)
+            {
+                return ActionValueType.Boolean;
+            }
+            if (IsDateTime)
+            {
+                return ActionValueType.DateTime;
+            }
+            if (IsTimeSpan)
+            {
+                return ActionValueType.TimeSpan;
+            }
+            if (IsString)
+            {
+                return ActionValueType.String;
+            }
+
+            return ActionValueType.None;
+        }
+    }
+
+    #endregion
 
     #region Convert
 
@@ -152,6 +166,11 @@ public sealed class ActionValue
     public DateTime AsDateTime => TryToDateTime(out var value) ?
         value :
         throw new ScriptException($"Invalid date action value {this}");
+
+    /// <summary>Action value as timespan</summary>
+    public TimeSpan AsTimeSpan => TryToTimeSpan(out var value) ?
+        value :
+        throw new ScriptException($"Invalid timespan action value {this}");
 
     /// <summary>Convert acton value to bool</summary>
     /// <param name="value">Source value</param>
@@ -243,13 +262,35 @@ public sealed class ActionValue
         value = Date.MinValue;
         switch (Value)
         {
-            // decimal
+            // date time
             case DateTime dateTime:
                 value = dateTime;
                 return true;
             // date string
             case string s when DateTime.TryParse(s,
                 provider: Culture,
+                result: out var parsed):
+                value = parsed;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>Convert acton value to timespan</summary>
+    /// <param name="value">Source value</param>
+    public bool TryToTimeSpan(out TimeSpan value)
+    {
+        value = TimeSpan.Zero;
+        switch (Value)
+        {
+            // time span
+            case TimeSpan timeSpan:
+                value = timeSpan;
+                return true;
+            // date string
+            case string s when TimeSpan.TryParse(s,
+                formatProvider: Culture,
                 result: out var parsed):
                 value = parsed;
                 return true;
@@ -296,6 +337,16 @@ public sealed class ActionValue
         value != null && value.TryToDateTime(out var dateTime) ?
             dateTime : DateTime.MinValue;
 
+    /// <summary>Convert action value to TimeSpan</summary>
+    public static implicit operator TimeSpan(ActionValue value) =>
+        value != null && value.TryToTimeSpan(out var dateTime) ?
+            dateTime : TimeSpan.MinValue;
+
+    /// <summary>Convert action value to nullable TimeSpan</summary>
+    public static implicit operator TimeSpan?(ActionValue value) =>
+        value != null && value.TryToTimeSpan(out var dateTime) ?
+            dateTime : TimeSpan.MinValue;
+
     /// <summary>Convert action value to bool</summary>
     public static implicit operator bool(ActionValue value) =>
         value != null && value.TryToBool(out var @bool) && @bool;
@@ -327,6 +378,9 @@ public sealed class ActionValue
 
     /// <summary>Implicit datetime conversion</summary>
     public static implicit operator ActionValue(DateTime value) => new(value);
+
+    /// <summary>Implicit timespan conversion</summary>
+    public static implicit operator ActionValue(TimeSpan value) => new(value);
 
     #endregion
 
@@ -381,6 +435,22 @@ public sealed class ActionValue
         {
             return leftValue;
         }
+
+        // time span
+        var leftTimeSpan = left.TryToTimeSpan(out var leftTimeSpanValue);
+        var rightTimeSpan = right.TryToTimeSpan(out var rightTimeSpanValue);
+        if (leftTimeSpan && rightTimeSpan)
+        {
+            return leftTimeSpanValue.Add(rightTimeSpanValue);
+        }
+
+        // date with time span
+        var leftDate = left.TryToDateTime(out var leftDateValue);
+        if (leftDate && rightTimeSpan)
+        {
+            return leftDateValue.Add(rightTimeSpanValue);
+        }
+
         return leftValue + rightValue;
     }
 
@@ -404,6 +474,22 @@ public sealed class ActionValue
         {
             return leftValue;
         }
+
+        // time span
+        var leftTimeSpan = left.TryToTimeSpan(out var leftTimeSpanValue);
+        var rightTimeSpan = right.TryToTimeSpan(out var rightTimeSpanValue);
+        if (leftTimeSpan && rightTimeSpan)
+        {
+            return leftTimeSpanValue.Subtract(rightTimeSpanValue);
+        }
+
+        // date with time span
+        var leftDate = left.TryToDateTime(out var leftDateValue);
+        if (leftDate && rightTimeSpan)
+        {
+            return leftDateValue.Subtract(rightTimeSpanValue);
+        }
+
         return leftValue - rightValue;
     }
 
@@ -497,6 +583,12 @@ public sealed class ActionValue
             return Equals(leftDate, rightDate);
         }
 
+        // timespan compare
+        if (left.TryToTimeSpan(out var leftTimeSpan) && right.TryToTimeSpan(out var rightTimeSpan))
+        {
+            return Equals(leftTimeSpan, rightTimeSpan);
+        }
+
         // string compare (case-insensitive)
         if (left.Value is string leftString && right.Value is string rightString)
         {
@@ -531,6 +623,12 @@ public sealed class ActionValue
             return leftDate < rightDate;
         }
 
+        // timespan compare
+        if (left.TryToTimeSpan(out var leftTimeSpan) && right.TryToTimeSpan(out var rightTimeSpan))
+        {
+            return leftTimeSpan < rightTimeSpan;
+        }
+
         throw new ScriptException($"operator < error in action values {left} and {right}.");
     }
 
@@ -553,6 +651,12 @@ public sealed class ActionValue
         if (left.TryToDateTime(out var leftDate) && right.TryToDateTime(out var rightDate))
         {
             return leftDate > rightDate;
+        }
+
+        // timespan compare
+        if (left.TryToTimeSpan(out var leftTimeSpan) && right.TryToTimeSpan(out var rightTimeSpan))
+        {
+            return leftTimeSpan > rightTimeSpan;
         }
 
         throw new ScriptException($"operator > error in action values {left} and {right}.");
@@ -579,6 +683,12 @@ public sealed class ActionValue
             return leftDate <= rightDate;
         }
 
+        // timespan compare
+        if (left.TryToTimeSpan(out var leftTimeSpan) && right.TryToTimeSpan(out var rightTimeSpan))
+        {
+            return leftTimeSpan <= rightTimeSpan;
+        }
+
         throw new ScriptException($"operator <= error in action values {left} and {right}.");
     }
 
@@ -603,12 +713,18 @@ public sealed class ActionValue
             return leftDate >= rightDate;
         }
 
+        // timespan compare
+        if (left.TryToTimeSpan(out var leftTimeSpan) && right.TryToTimeSpan(out var rightTimeSpan))
+        {
+            return leftTimeSpan >= rightTimeSpan;
+        }
+
         throw new ScriptException($"operator >= error in action values {left} and {right}.");
     }
 
     #endregion
 
-    #region Math
+    #region Decimal
 
     /// <summary>Returns the integral digits of the specified decimal, using a step size</summary>
     /// <param name="decimals">The number of significant decimal places (precision) in the return value</param>
@@ -645,6 +761,46 @@ public sealed class ActionValue
     /// <summary>Returns the square root of a specified number</summary>
     public ActionValue Sqrt() =>
         IsNumeric ? Math.Sqrt((double)AsDecimal) : this;
+
+    #endregion
+
+    #region Date
+
+    /// <summary>Get year from date value</summary>
+    public int Year => 
+        TryToDateTime(out var dateTime) ? dateTime.Year : 0;
+
+    /// <summary>Get month from date value</summary>
+    public int Month => 
+        TryToDateTime(out var dateTime) ? dateTime.Month : 0;
+
+    /// <summary>Get day from date value</summary>
+    public int Day => 
+        TryToDateTime(out var dateTime) ? dateTime.Day : 0;
+
+    /// <summary>Add years to date value</summary>
+    public DateTime AddYears(int years) => 
+        TryToDateTime(out var dateTime) ? dateTime.AddYears(years) : DateTime.MinValue;
+
+    /// <summary>Add months to date value</summary>
+    public DateTime AddMonths(int months) => 
+        TryToDateTime(out var dateTime) ? dateTime.AddMonths(months) : DateTime.MinValue;
+
+    /// <summary>Add days to date value</summary>
+    public DateTime AddDays(int days) => 
+        TryToDateTime(out var dateTime) ? dateTime.AddDays(days) : DateTime.MinValue;
+
+    /// <summary>Add timespan to date value</summary>
+    public DateTime Add(TimeSpan timeSpan) => 
+        TryToDateTime(out var dateTime) ? dateTime.Add(timeSpan) : DateTime.MinValue;
+
+    /// <summary>Subtract timespan to date value</summary>
+    public DateTime Subtract(TimeSpan timeSpan) => 
+        TryToDateTime(out var dateTime) ? dateTime.Subtract(timeSpan) : DateTime.MinValue;
+
+    /// <summary>Get day from timespan value</summary>
+    public int Days => 
+        TryToTimeSpan(out var dateTime) ? dateTime.Days : 0;
 
     #endregion
 

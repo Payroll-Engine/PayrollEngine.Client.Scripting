@@ -13,7 +13,7 @@ public partial class PayrunFunction
 
     /// <summary>Get wage type year-to-date value by wage type number</summary>
     [ActionParameter("number", "The wage type number", [DecimalType])]
-    [CollectorAction("GetCycleWageTypeValue", "Get wage type year-to-date value by wage type number", "WageType")]
+    [PayrunAction("GetCycleWageTypeValue", "Get wage type year-to-date value by wage type number", "WageType")]
     public ActionValue GetCycleWageTypeValue(decimal number)
     {
         var results = GetConsolidatedWageTypeResults(new(number, CycleStart));
@@ -22,14 +22,14 @@ public partial class PayrunFunction
 
     /// <summary>Get wage type year-to-date value by wage type name</summary>
     [ActionParameter("name", "The wage type name", [StringType])]
-    [CollectorAction("GetCycleWageTypeValue", "Get wage type year-to-date value by wage type name", "WageType")]
+    [PayrunAction("GetCycleWageTypeValue", "Get wage type year-to-date value by wage type name", "WageType")]
     public ActionValue GetCycleWageTypeValue(string name) =>
         GetCycleWageTypeValue(GetWageTypeNumber(name));
 
     /// <summary>Get collector year-to-date value</summary>
     /// <param name="name">Collector name</param>
     [ActionParameter("name", "The collector name", [StringType])]
-    [CollectorAction("GetCycleCollectorValue", "Get collector year-to-date value", "Collector")]
+    [PayrunAction("GetCycleCollectorValue", "Get collector year-to-date value", "Collector")]
     public ActionValue GetCycleCollectorValue(string name)
     {
         var results = GetConsolidatedCollectorResults(new([name], CycleStart));
@@ -42,20 +42,20 @@ public partial class PayrunFunction
 
     /// <summary>Get runtime action value</summary>
     [ActionParameter("key", "The value key", [StringType])]
-    [CollectorAction("GetRuntimeValue", "Get payrun runtime value", "Runtime")]
+    [PayrunAction("GetRuntimeValue", "Get payrun runtime value", "Runtime")]
     public ActionValue GetRuntimeValue(string key) =>
         GetEmployeeRuntimeValue(key);
 
     /// <summary>Set runtime action value</summary>
     [ActionParameter("key", "The value key", [StringType])]
     [ActionParameter("value", "The value to set")]
-    [CollectorAction("SetRuntimeValue", "Set payrun runtime value", "Runtime")]
+    [PayrunAction("SetRuntimeValue", "Set payrun runtime value", "Runtime")]
     public void SetRuntimeValue(string key, ActionValue value) =>
         SetEmployeeRuntimeValue(key, value?.Value);
 
     /// <summary>Remove runtime action value</summary>
     [ActionParameter("key", "The value key", [StringType])]
-    [CollectorAction("RemoveRuntimeValue", "Remove payrun runtime value", "Runtime")]
+    [PayrunAction("RemoveRuntimeValue", "Remove payrun runtime value", "Runtime")]
     public void RemoveRuntimeValue(string key) =>
         SetRuntimeValue(key, ActionValue.Null);
 
@@ -65,7 +65,7 @@ public partial class PayrunFunction
 
     /// <summary>Get payrun result value</summary>
     [ActionParameter("name", "The result name", [StringType])]
-    [CollectorAction("GetPayrunResultValue", "Get payrun result value", "Payrun")]
+    [PayrunAction("GetPayrunResultValue", "Get payrun result value", "Payrun")]
     public ActionValue GetPayrunResultValue(string name) =>
         new(GetPayrunResult(name));
 
@@ -73,7 +73,7 @@ public partial class PayrunFunction
     [ActionParameter("name", "The result name", [StringType])]
     [ActionParameter("value", "The value to set")]
     [ActionParameter("type", "The value type (default: Money), [StringType]")]
-    [CollectorAction("SetPayrunResultValue", "Set payrun result value", "Payrun")]
+    [PayrunAction("SetPayrunResultValue", "Set payrun result value", "Payrun")]
     public void SetPayrunResultValue(string name, ActionValue value, string type = null)
     {
         if (value?.Value == null)
