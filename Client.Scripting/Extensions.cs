@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Globalization;
 using System.Collections.Generic;
+//using PayrollEngine.Client.Scripting.Function;
 
 namespace PayrollEngine.Client.Scripting;
 
@@ -2477,6 +2478,22 @@ public static class TupleExtensions
             Value = x.Item5,
             Tags = x.Item6,
             Attributes = x.Item7
+        })
+    ];
+
+    /// <summary>Convert tuple values to a wage type custom result</summary>
+    /// <param name="brackets">The lookup brackets</param>
+    /// <returns>The lookup brackets</returns>
+    public static List<LookupRangeBracket> TupleToLookupRangeBracketList(
+        List<Tuple<string, string, decimal, decimal, decimal?>> brackets) =>
+    [
+        ..brackets.Select(x => new LookupRangeBracket
+        {
+            Key = x.Item1,
+            Value = x.Item2,
+            RangeStart = x.Item3,
+            RangeEnd = x.Item4,
+            RangeValue = x.Item5
         })
     ];
 }

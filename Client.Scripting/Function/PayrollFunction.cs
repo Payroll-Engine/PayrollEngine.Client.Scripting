@@ -976,6 +976,27 @@ public abstract partial class PayrollFunction : Function
         var value = GetLookup<string>(lookupName, lookupKey, culture);
         return string.IsNullOrWhiteSpace(value) ? default : value.ObjectValueJson<T>(objectKey);
     }
+    
+    /// <summary>Get payroll lookup range brackets</summary>
+    /// <param name="lookupName">The name of the lookup</param>
+    /// <param name="rangeValue">The range value (supported by threshold and progressive lookups)</param>
+    /// <returns>List of lookup range brackets</returns>
+    public List<LookupRangeBracket> GetLookupRanges(string lookupName, decimal? rangeValue = null) =>
+        TupleExtensions.TupleToLookupRangeBracketList(Runtime.GetLookupRanges(lookupName, rangeValue));
+    
+    /// <summary>Get threshold lookup range bracket</summary>
+    /// <param name="lookupName">The name of the lookup</param>
+    /// <param name="rangeValue">The range value (supported by threshold and progressive lookups)</param>
+    /// <returns>Matching threshold bracket, null on missing range</returns>
+    public LookupRangeBracket GetLookupThresholdRange(string lookupName, decimal rangeValue) =>
+        GetLookupRanges(lookupName, rangeValue).FirstOrDefault(x => x.RangeValue.HasValue);
+    
+    /// <summary>Get progressive lookup range brackets</summary>
+    /// <param name="lookupName">The name of the lookup</param>
+    /// <param name="rangeValue">The range value (supported by threshold and progressive lookups)</param>
+    /// <returns>Matching progressive brackets</returns>
+    public List<LookupRangeBracket> GetLookupProgressiveRanges(string lookupName, decimal rangeValue) =>
+        GetLookupRanges(lookupName, rangeValue).Where(x => x.RangeValue.HasValue).ToList();
 
     /// <summary>Get lookup by range value</summary>
     /// <param name="lookupName">The lookup name</param>

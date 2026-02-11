@@ -583,3 +583,40 @@ public sealed class WageTypeResultActionAttribute(string name, string descriptio
     WageTypeActionAttribute(name, description, categories);
 
 #endregion
+
+#region Lookup
+
+/// <summary>
+/// A lookup range bracket with computed bounds
+/// </summary>
+public class LookupRangeBracket
+{
+    /// <summary>The lookup value key</summary>
+    public string Key { get; set; }
+
+    /// <summary>The lookup value as JSON</summary>
+    public string Value { get; set; }
+
+    /// <summary>The range start value</summary>
+    public decimal RangeStart { get; set; }
+
+    /// <summary>The range end value (unbound bracket: Decimal.MaxValue)</summary>
+    public decimal RangeEnd { get; set; }
+
+    /// <summary>The original range value from the lookup value</summary>
+    /// <remarks>
+    /// For threshold lookups, the value within the matching bracket is displayed.
+    /// For progressive lookups, it is the sum of all the matching brackets, excluding the final one, which has its own value.
+    /// For all other lookup types, the value is null.
+    /// </remarks>
+    public decimal? RangeValue { get; set; }
+
+    /// <summary>Test for unlimited bracket</summary>
+    public bool IsUnlimited => RangeEnd == Decimal.MaxValue;
+
+    /// <inheritdoc/>
+    public override string ToString() =>
+        $"{Key}: {RangeStart} - {RangeEnd}";
+}
+
+#endregion

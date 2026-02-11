@@ -61,9 +61,9 @@ The following example illustrates how a wage type value is calculated under spec
 # Boolean entry status condition
 ? ^^EntryStatus
 # Salary limits condition
-? ^^Salary >= 1000 && ^^Salary <= 10000
+? ^^Salary >= 1000 AND ^^Salary <= 10000
 # Salary tax rate limits condition
-? ^^SalaryTaxRate >= 0.01 && ^^SalaryTaxRate <= 0.03
+? ^^SalaryTaxRate >= 0.01 AND ^^SalaryTaxRate <= 0.03
 # Wage type result (last action)
 ^^Salary * ^^SalaryTaxRate
 ```
@@ -81,11 +81,12 @@ The following conditions can be used to control the action execution:
 
 The following conditions can be included in an action expression:
 
-| Syntax        | Description                                                                | Example                                            |
+| Syntax      | Description                                                                | Example                                            |
 |:--:|:--|:--|
-| `x && y`      | Logical AND of boolean values `x` and `y`                                  | `? ^^Salary > 1000 && ^^Salary < 5000`             |
-| `x \|\| y`    | Logical OR of two boolean values `x` and `y`                               | `? ^^Salary < 1000 \|\| ^^Salary > 5000`           |
-| `x ? y : z`   | Ternary conditional operator<br />*use `y` when `x` is true, else use `z`* | `^\|SalaryFactor = ^^Salary > 10000 ? 0.05 : 0.03` |
+| `x AND y`   | Logical AND of boolean values `x` and `y`                                  | `? ^^Salary > 1000 AND ^^Salary < 5000`             |
+| `x OR y`    | Logical OR of two boolean values `x` and `y`                               | `? ^^Salary < 1000 OR ^^Salary > 5000`           |
+| `(`, `)`    | Control the evaualtion order                                               | `(^^Salary > 1000 AND ^^Salary < 5000) OR ^\|SalaryCalc > 0` |
+| `x ? y : z` | Ternary conditional operator<br />*use `y` when `x` is true, else use `z`* | `^\|SalaryFactor = ^^Salary > 10000 ? 0.05 : 0.03` |
 
 
 ### Action Reference

@@ -151,6 +151,13 @@ public interface IPayrollRuntime : IRuntime
     /// <returns>The lookup value matching tho the lookup key</returns>
     string GetLookup(string lookupName, string lookupKey, string culture = null);
 
+    /// <summary>Get payroll lookup range brackets</summary>
+    /// <param name="lookupName">The name of the lookup</param>
+    /// <param name="rangeValue">The range value (supported by threshold and progressive lookups)</param>
+    /// <remarks>Use nested tuples to reduce the tuple item count to 7</remarks>
+    /// <returns>List of lookup range brackets</returns>
+    List<Tuple<string, string, decimal, decimal, decimal?>> GetLookupRanges(string lookupName, decimal? rangeValue = null);
+
     /// <summary>Get lookup value by range</summary>
     /// <param name="lookupName">The name of the lookup</param>
     /// <param name="rangeValue">The range value</param>
