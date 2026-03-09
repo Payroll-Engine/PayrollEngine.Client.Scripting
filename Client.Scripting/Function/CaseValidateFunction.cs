@@ -96,10 +96,13 @@ public partial class CaseValidateFunction : CaseChangeFunction
     public bool HasIssues() => Runtime.HasIssues();
 
     /// <summary>Add a new case validation issue</summary>
+    /// <param name="message">The issue message</param>
     public void AddCaseIssue(string message) =>
         Runtime.AddCaseIssue(message);
 
     /// <summary>Add a new case field validation issue</summary>
+    /// <param name="caseFieldName">Name of the case field</param>
+    /// <param name="message">The issue message</param>
     public void AddCaseFieldIssue(string caseFieldName, string message) =>
         Runtime.AddCaseFieldIssue(caseFieldName, message);
 
@@ -114,6 +117,13 @@ public partial class CaseValidateFunction : CaseChangeFunction
     /// <param name="attributeName">Attribute name</param>
     /// <param name="parameters">Message parameters</param>
     public void AddFieldAttributeIssue(string caseFieldName, string attributeName, params object[] parameters) =>
+        AddCaseFieldIssue(caseFieldName, GetAttributeIssue(attributeName, parameters));
+
+    /// <summary>Add case field issue from attribute</summary>
+    /// <param name="caseFieldName">Case field name</param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="parameters">Message parameters</param>
+    public void AddAttributeIssue(string caseFieldName, string attributeName, params object[] parameters) =>
         AddCaseFieldIssue(caseFieldName, GetAttributeIssue(attributeName, parameters));
 
     #endregion

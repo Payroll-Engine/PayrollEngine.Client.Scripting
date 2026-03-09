@@ -40,6 +40,7 @@ public class CaseValue : IEquatable<CaseValue>
 
     /// <summary>Initializes a new instance from a copy</summary>
     /// <param name="copySource">The copy source</param>
+    /// <remarks>Deep copies Tags and Attributes to prevent shared-reference mutations.</remarks>
     public CaseValue(CaseValue copySource)
     {
         CaseFieldName = copySource.CaseFieldName;
@@ -48,8 +49,9 @@ public class CaseValue : IEquatable<CaseValue>
         End = copySource.End;
         Value = copySource.Value;
         CancellationDate = copySource.CancellationDate;
-        Tags = copySource.Tags;
-        Attributes = copySource.Attributes;
+        // deep copy mutable collections
+        Tags = copySource.Tags != null ? [..copySource.Tags] : null;
+        Attributes = copySource.Attributes != null ? new Dictionary<string, object>(copySource.Attributes) : null;
     }
 
     /// <summary>Initializes a new instance</summary>
@@ -101,9 +103,10 @@ public class CaseValue : IEquatable<CaseValue>
             End == compare.End &&
             Value == compare.Value &&
             CancellationDate == compare.CancellationDate &&
-            (Tags?.SequenceEqual(compare.Tags) ?? compare.Tags != null) &&
+            // null-safe: both null → equal, one null → not equal
+            (Tags?.SequenceEqual(compare.Tags) ?? compare.Tags == null) &&
             // ReSharper disable once UsageOfDefaultStructEquality
-            (Attributes?.SequenceEqual(compare.Attributes) ?? compare.Attributes != null);
+            (Attributes?.SequenceEqual(compare.Attributes) ?? compare.Attributes == null);
     }
 
     /// <summary>Returns a <see cref="string" /> that represents this instance</summary>

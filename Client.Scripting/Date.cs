@@ -36,10 +36,12 @@ public static class Date
     public static DateTime Today => Now.Date;
 
     /// <summary>Gets a time instant that is set to the next day</summary>
-    public static readonly DateTime Tomorrow = Today.AddDays(1);
+    /// <remarks>Computed property (not static readonly) so the value updates with Today.</remarks>
+    public static DateTime Tomorrow => Today.AddDays(1);
 
     /// <summary>Gets a time instant that is set to the previous day</summary>
-    public static readonly DateTime Yesterday = Today.AddDays(-1);
+    /// <remarks>Computed property (not static readonly) so the value updates with Today.</remarks>
+    public static DateTime Yesterday => Today.AddDays(-1);
 
     /// <summary>Get the year start date in UTC</summary>
     public static DateTime YearStart(int year) =>

@@ -33,6 +33,9 @@ public interface IPayrunRuntime : IPayrollRuntime
     /// <summary>The period name</summary>
     string PeriodName { get; }
 
+    /// <summary>Test for preview payrun job</summary>
+    bool PreviewJob { get; }
+
     /// <summary>Get payrun job attribute value</summary>
     /// <param name="attributeName">Name of the attribute</param>
     /// <returns>The payrun job attribute value</returns>
@@ -135,10 +138,11 @@ public interface IPayrunRuntime : IPayrollRuntime
     /// <param name="forecast">The forecast</param>
     /// <param name="jobStatus">The job status</param>
     /// <param name="tags">The result tags</param>
+    /// <param name="noRetro">Exclude retro jobs: only original main-job payslip values per period</param>
     /// <returns>The consolidate wage type results</returns>
     IList<Tuple<decimal, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> GetConsolidatedWageTypeResults(
         IList<decimal> wageTypeNumbers, DateTime periodMoment,
-        string forecast = null, int? jobStatus = null, IList<string> tags = null);
+        string forecast = null, int? jobStatus = null, IList<string> tags = null, bool noRetro = false);
 
     /// <summary>Gets the wage type custom results from a time range</summary>
     /// <param name="wageTypeNumbers">The wage type numbers</param>
@@ -158,10 +162,11 @@ public interface IPayrunRuntime : IPayrollRuntime
     /// <param name="forecast">The forecast</param>
     /// <param name="jobStatus">The job status</param>
     /// <param name="tags">The result tags</param>
+    /// <param name="noRetro">Exclude retro jobs: only original main-job payslip values per period</param>
     /// <returns>The consolidate wage type custom results</returns>
     IList<Tuple<decimal, string, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> GetConsolidatedWageTypeCustomResults(
         IList<decimal> wageTypeNumbers, DateTime periodMoment,
-        string forecast = null, int? jobStatus = null, IList<string> tags = null);
+        string forecast = null, int? jobStatus = null, IList<string> tags = null, bool noRetro = false);
 
     /// <summary>Gets the retro wage type results</summary>
     /// <param name="wageTypeNumber">The wage type number</param>
@@ -194,10 +199,11 @@ public interface IPayrunRuntime : IPayrollRuntime
     /// <param name="forecast">The forecast</param>
     /// <param name="jobStatus">The job status</param>
     /// <param name="tags">The result tags</param>
+    /// <param name="noRetro">Exclude retro jobs: only original main-job payslip values per period</param>
     /// <returns>The consolidated collector results</returns>
     IList<Tuple<string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> GetConsolidatedCollectorResults(
         IList<string> collectorNames, DateTime periodMoment,
-        string forecast = null, int? jobStatus = null, IList<string> tags = null);
+        string forecast = null, int? jobStatus = null, IList<string> tags = null, bool noRetro = false);
 
     /// <summary>Gets the collector results from a time range</summary>
     /// <param name="collectorNames">Name of the collectors</param>
@@ -217,10 +223,11 @@ public interface IPayrunRuntime : IPayrollRuntime
     /// <param name="forecast">The forecast</param>
     /// <param name="jobStatus">The job status</param>
     /// <param name="tags">The result tags</param>
+    /// <param name="noRetro">Exclude retro jobs: only original main-job payslip values per period</param>
     /// <returns>The consolidated collector custom results</returns>
     IList<Tuple<string, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> GetConsolidatedCollectorCustomResults(
         IList<string> collectorNames, DateTime periodMoment, string forecast = null,
-        int? jobStatus = null, IList<string> tags = null);
+        int? jobStatus = null, IList<string> tags = null, bool noRetro = false);
 
     #endregion
 

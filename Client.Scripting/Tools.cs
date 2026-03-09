@@ -630,6 +630,9 @@ public abstract class ConsolidatedResultQuery : ResultQueryBase
 
     /// <summary>Moment within the period</summary>
     public DateTime PeriodMoment { get; }
+
+    /// <summary>Exclude retro jobs (incremental jobs with ParentJobId set): only original main-job payslip values per period are returned</summary>
+    public bool NoRetro { get; set; }
 }
 
 /// <summary>Collector consolidated result query</summary>

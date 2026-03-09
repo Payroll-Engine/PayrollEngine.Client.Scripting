@@ -26,6 +26,18 @@ public partial class PayrunFunction
     public ActionValue GetCycleWageTypeValue(string name) =>
         GetCycleWageTypeValue(GetWageTypeNumber(name));
 
+    /// <summary>Get sum of retro corrections for a wage type by number</summary>
+    [ActionParameter("number", "The wage type number", [DecimalType])]
+    [PayrunAction("GetRetroWageTypeValueSum", "Get sum of retro wage type corrections by number", "WageType")]
+    public ActionValue GetRetroWageTypeValueSumByNumber(decimal number) =>
+        GetWageTypeRetroResultSum(number);
+
+    /// <summary>Get sum of retro corrections for a wage type by name</summary>
+    [ActionParameter("name", "The wage type name", [StringType])]
+    [PayrunAction("GetRetroWageTypeValueSum", "Get sum of retro wage type corrections by name", "WageType")]
+    public ActionValue GetRetroWageTypeValueSumByName(string name) =>
+        GetWageTypeRetroResultSum(GetWageTypeNumber(name));
+
     /// <summary>Get collector year-to-date value</summary>
     /// <param name="name">Collector name</param>
     [ActionParameter("name", "The collector name", [StringType])]
@@ -50,8 +62,8 @@ public partial class PayrunFunction
     [ActionParameter("key", "The value key", [StringType])]
     [ActionParameter("value", "The value to set")]
     [PayrunAction("SetRuntimeValue", "Set payrun runtime value", "Runtime")]
-    public void SetRuntimeValue(string key, ActionValue value) =>
-        SetEmployeeRuntimeValue(key, value?.Value);
+    public void SetRuntimeValue(string key, object value) =>
+        SetEmployeeRuntimeValue(key, ActionValue.From(value)?.AsString);
 
     /// <summary>Remove runtime action value</summary>
     [ActionParameter("key", "The value key", [StringType])]
@@ -74,9 +86,10 @@ public partial class PayrunFunction
     [ActionParameter("value", "The value to set")]
     [ActionParameter("type", "The value type (default: Money), [StringType]")]
     [PayrunAction("SetPayrunResultValue", "Set payrun result value", "Payrun")]
-    public void SetPayrunResultValue(string name, ActionValue value, string type = null)
+    public void SetPayrunResultValue(string name, object value, string type = null)
     {
-        if (value?.Value == null)
+        var actionValue = ActionValue.From(value);
+        if (actionValue == null || actionValue.IsNull)
         {
             return;
         }
@@ -86,7 +99,7 @@ public partial class PayrunFunction
         {
             valueType = ValueType.Money;
         }
-        SetPayrunResult(name, value.Value, valueType);
+        SetPayrunResult(name, actionValue.Value, valueType);
     }
 
     #endregion

@@ -39,8 +39,7 @@ public sealed class ActionValue
 
     /// <summary>Value constructor</summary>
     /// <param name="value">Action value</param>
-    /// <param name="culture">Value culture (default: invariant)</param>
-    public ActionValue(object value, CultureInfo culture = null)
+    public ActionValue(object value)
     {
         Value = value switch
         {
@@ -48,7 +47,6 @@ public sealed class ActionValue
             ActionValue actionValue => actionValue.Value,
             _ => value
         };
-        Culture = culture ?? CultureInfo.InvariantCulture;
     }
 
     /// <summary>Create action value from value</summary>
@@ -61,15 +59,18 @@ public sealed class ActionValue
             _ => new(value)
         };
 
+    /// <summary>Unwrap action value to its primitive value</summary>
+    /// <param name="value">The value, possibly an ActionValue wrapper</param>
+    /// <returns>The unwrapped primitive value</returns>
+    public static object ToPrimitive(object value) =>
+        value is ActionValue actionValue ? actionValue.Value : value;
+
     #endregion
 
     #region Value & Type
 
     /// <summary>Empty instance</summary>
     public static readonly ActionValue Null = new(null);
-
-    /// <summary>Value culture</summary>
-    public CultureInfo Culture { get; }
 
     /// <summary>Action primitive value</summary>
     public object Value { get; }
@@ -215,7 +216,7 @@ public sealed class ActionValue
             // numeric string
             case string s when int.TryParse(s,
                 style: NumberStyles.Any,
-                provider: Culture,
+                provider: CultureInfo.InvariantCulture,
                 result: out var parsed):
                 value = parsed;
                 return true;
@@ -246,7 +247,7 @@ public sealed class ActionValue
             // numeric string
             case string s when decimal.TryParse(s,
                 style: NumberStyles.Any,
-                provider: Culture,
+                provider: CultureInfo.InvariantCulture,
                 result: out var parsed):
                 value = parsed;
                 return true;
@@ -268,7 +269,7 @@ public sealed class ActionValue
                 return true;
             // date string
             case string s when DateTime.TryParse(s,
-                provider: Culture,
+                provider: CultureInfo.InvariantCulture,
                 result: out var parsed):
                 value = parsed;
                 return true;
@@ -290,7 +291,7 @@ public sealed class ActionValue
                 return true;
             // date string
             case string s when TimeSpan.TryParse(s,
-                formatProvider: Culture,
+                formatProvider: CultureInfo.InvariantCulture,
                 result: out var parsed):
                 value = parsed;
                 return true;
@@ -315,7 +316,7 @@ public sealed class ActionValue
     /// <summary>Convert action value to nullable int</summary>
     public static implicit operator int?(ActionValue value) =>
         value != null && value.TryToInt(out var numericValue) ?
-            numericValue : 0;
+            numericValue : null;
 
     /// <summary>Convert action value to decimal</summary>
     public static implicit operator decimal(ActionValue value) =>
@@ -325,7 +326,7 @@ public sealed class ActionValue
     /// <summary>Convert action value to nullable decimal</summary>
     public static implicit operator decimal?(ActionValue value) =>
         value != null && value.TryToDecimal(out var numericValue) ?
-            numericValue : 0;
+            numericValue : null;
 
     /// <summary>Convert action value to DateTime</summary>
     public static implicit operator DateTime(ActionValue value) =>
@@ -335,7 +336,7 @@ public sealed class ActionValue
     /// <summary>Convert action value to nullable DateTime</summary>
     public static implicit operator DateTime?(ActionValue value) =>
         value != null && value.TryToDateTime(out var dateTime) ?
-            dateTime : DateTime.MinValue;
+            dateTime : null;
 
     /// <summary>Convert action value to TimeSpan</summary>
     public static implicit operator TimeSpan(ActionValue value) =>
@@ -345,7 +346,7 @@ public sealed class ActionValue
     /// <summary>Convert action value to nullable TimeSpan</summary>
     public static implicit operator TimeSpan?(ActionValue value) =>
         value != null && value.TryToTimeSpan(out var dateTime) ?
-            dateTime : TimeSpan.MinValue;
+            dateTime : null;
 
     /// <summary>Convert action value to bool</summary>
     public static implicit operator bool(ActionValue value) =>
@@ -353,7 +354,7 @@ public sealed class ActionValue
 
     /// <summary>Convert action value to nullable bool</summary>
     public static implicit operator bool?(ActionValue value) =>
-        value != null && value.TryToBool(out var @bool) && @bool;
+        value != null && value.TryToBool(out var @bool) ? @bool : null;
 
     /// <summary>Implicit int conversion</summary>
     public static implicit operator ActionValue(int value) => new(value);
@@ -410,7 +411,7 @@ public sealed class ActionValue
 
     #region Binary operators
 
-    /// <summary>Addition of two action values (decimal, int, string)</summary>
+    /// <summary>Addition of two action values (decimal, int, string, TimeSpan, DateTime+TimeSpan)</summary>
     /// <remarks>Treats undefined values as zero</remarks>
     public static ActionValue operator +(ActionValue left, ActionValue right)
     {
@@ -418,6 +419,21 @@ public sealed class ActionValue
         if (left.IsString && right.IsString)
         {
             return left.AsString + right.AsString;
+        }
+
+        // time span + time span
+        var leftTimeSpan = left.TryToTimeSpan(out var leftTimeSpanValue);
+        var rightTimeSpan = right.TryToTimeSpan(out var rightTimeSpanValue);
+        if (leftTimeSpan && rightTimeSpan)
+        {
+            return leftTimeSpanValue.Add(rightTimeSpanValue);
+        }
+
+        // date + time span
+        var leftDate = left.TryToDateTime(out var leftDateValue);
+        if (leftDate && rightTimeSpan)
+        {
+            return leftDateValue.Add(rightTimeSpanValue);
         }
 
         // numeric
@@ -435,22 +451,6 @@ public sealed class ActionValue
         {
             return leftValue;
         }
-
-        // time span
-        var leftTimeSpan = left.TryToTimeSpan(out var leftTimeSpanValue);
-        var rightTimeSpan = right.TryToTimeSpan(out var rightTimeSpanValue);
-        if (leftTimeSpan && rightTimeSpan)
-        {
-            return leftTimeSpanValue.Add(rightTimeSpanValue);
-        }
-
-        // date with time span
-        var leftDate = left.TryToDateTime(out var leftDateValue);
-        if (leftDate && rightTimeSpan)
-        {
-            return leftDateValue.Add(rightTimeSpanValue);
-        }
-
         return leftValue + rightValue;
     }
 
@@ -458,6 +458,21 @@ public sealed class ActionValue
     /// <remarks>Treats undefined values as zero</remarks>
     public static ActionValue operator -(ActionValue left, ActionValue right)
     {
+        // time span - time span
+        var leftTimeSpan = left.TryToTimeSpan(out var leftTimeSpanValue);
+        var rightTimeSpan = right.TryToTimeSpan(out var rightTimeSpanValue);
+        if (leftTimeSpan && rightTimeSpan)
+        {
+            return leftTimeSpanValue.Subtract(rightTimeSpanValue);
+        }
+
+        // date - time span
+        var leftDate = left.TryToDateTime(out var leftDateValue);
+        if (leftDate && rightTimeSpan)
+        {
+            return leftDateValue.Subtract(rightTimeSpanValue);
+        }
+
         // numeric
         var leftNumeric = left.TryToDecimal(out var leftValue);
         var rightNumeric = right.TryToDecimal(out var rightValue);
@@ -474,22 +489,6 @@ public sealed class ActionValue
         {
             return leftValue;
         }
-
-        // time span
-        var leftTimeSpan = left.TryToTimeSpan(out var leftTimeSpanValue);
-        var rightTimeSpan = right.TryToTimeSpan(out var rightTimeSpanValue);
-        if (leftTimeSpan && rightTimeSpan)
-        {
-            return leftTimeSpanValue.Subtract(rightTimeSpanValue);
-        }
-
-        // date with time span
-        var leftDate = left.TryToDateTime(out var leftDateValue);
-        if (leftDate && rightTimeSpan)
-        {
-            return leftDateValue.Subtract(rightTimeSpanValue);
-        }
-
         return leftValue - rightValue;
     }
 
@@ -831,7 +830,7 @@ public sealed class ActionValue
     /// <summary>Returns a hash code for this instance</summary>
     /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table</returns>
     public override int GetHashCode() =>
-        Value.GetHashCode();
+        Value?.GetHashCode() ?? 0;
 
     /// <summary>Returns a <see cref="string" /> that represents this instance</summary>
     /// <returns>A <see cref="string" /> that represents this instance</returns>

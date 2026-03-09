@@ -587,8 +587,8 @@ public static class DateTimeExtensions
 
         /// <summary>Format a compact date (removes empty time parts)</summary>
         /// <returns>The formatted period start date</returns>
-        public string ToCompactString() => moment.IsMidnight() ? 
-            moment.ToShortDateString() : 
+        public string ToCompactString() => moment.IsMidnight() ?
+            moment.ToShortDateString() :
             $"{moment.ToShortDateString()} {moment.ToShortTimeString()}";
 
         /// <summary>Format a period start date (removes empty time parts), using the current culture</summary>
@@ -597,8 +597,8 @@ public static class DateTimeExtensions
 
         /// <summary>Format a period end date (removed empty time parts, and round last moment values), using the current culture</summary>
         /// <returns>The formatted period end date</returns>
-        public string ToPeriodEndString() => moment.IsMidnight() || moment.IsLastMomentOfDay() ? 
-            moment.ToShortDateString() : 
+        public string ToPeriodEndString() => moment.IsMidnight() || moment.IsLastMomentOfDay() ?
+            moment.ToShortDateString() :
             $"{moment.ToShortDateString()} {moment.ToShortTimeString()}";
 
         /// <summary>Test if the date is in UTC</summary>
@@ -775,7 +775,7 @@ public static class DateTimeExtensions
         /// <summary>Test if a specific day is the last day of the month</summary>
         /// <param name="ignoreLeapYear">Ignore the leap year day</param>
         /// <returns>True if the test day is the last day of the month</returns>
-        public bool IsLastDayOfMonth(bool ignoreLeapYear = false) => 
+        public bool IsLastDayOfMonth(bool ignoreLeapYear = false) =>
             moment.IsLastDayOfMonth(moment.Month(), ignoreLeapYear);
 
         /// <summary>Test if a specific day is the last day of the month</summary>
@@ -1152,8 +1152,15 @@ public static class DictionaryExtensions
         /// <param name="key">The value key</param>
         /// <param name="defaultValue">The default value</param>
         /// <returns>The dictionary value</returns>
-        public T GetValue<T>(string key, T defaultValue = default) =>
-            (T)Convert.ChangeType(dictionary.GetValue(key, (object)defaultValue), typeof(T));
+        public T GetValue<T>(string key, T defaultValue = default)
+        {
+            var value = dictionary.GetValue(key);
+            if (value == null)
+            {
+                return defaultValue;
+            }
+            return (T)value;
+        }
     }
 
     /// <summary>Get value from a string/JSON-string dictionary</summary>
@@ -1319,7 +1326,7 @@ public static class DatePeriodExtensions
                     splitPeriods.Add(new(last.End.NextTick(), period.End));
                 }
             }
-            return splitPeriods;
+            return splitPeriods.Any() ? splitPeriods : [period];
         }
 
         /// <summary>Get period days</summary>
@@ -1460,10 +1467,11 @@ public static class DatePeriodExtensions
 
         /// <summary>Test if any period is overlapping another period</summary>
         /// <returns>True, if the period is overlapping this period</returns>
+        /// <remarks>Fixed: outer loop starts at 0 to include the first element in comparisons.</remarks>
         public bool HasOverlapping()
         {
             var periodList = datePeriods.ToList();
-            for (var current = 1; current < periodList.Count; current++)
+            for (var current = 0; current < periodList.Count; current++)
             {
                 for (var remain = current + 1; remain < periodList.Count; remain++)
                 {
@@ -1568,7 +1576,7 @@ public static class HourPeriodExtensions
         /// <summary>Test if a specific time period is within the period, including open periods</summary>
         /// <param name="testPeriod">The period to test</param>
         /// <returns>True, if the test period is within this period</returns>
-        public bool IsWithin(HourPeriod testPeriod) => 
+        public bool IsWithin(HourPeriod testPeriod) =>
             period.IsWithin(testPeriod.Start) && period.IsWithin(testPeriod.End);
 
         /// <summary>Test if a specific time moment is within or before the period, including open periods</summary>
@@ -1626,10 +1634,11 @@ public static class HourPeriodExtensions
 
         /// <summary>Test if any period is overlapping another period</summary>
         /// <returns>True, if the period is overlapping this period</returns>
+        /// <remarks>Fixed: outer loop starts at 0 to include the first element in comparisons.</remarks>
         public bool HasOverlapping()
         {
             var periodList = timePeriods.ToList();
-            for (var current = 1; current < periodList.Count; current++)
+            for (var current = 0; current < periodList.Count; current++)
             {
                 for (var remain = current + 1; remain < periodList.Count; remain++)
                 {
@@ -2203,7 +2212,7 @@ public static class ValueTypeExtensions
 
         /// <summary>Test if value type is a number</summary>
         /// <returns>True for number value types</returns>
-        public bool IsNumber() => 
+        public bool IsNumber() =>
             valueType.IsInteger() || valueType.IsDecimal();
 
         /// <summary>Test if value type is an integer</summary>
@@ -2376,7 +2385,7 @@ public static class TupleExtensions
     /// <summary>Convert tuple values to case values</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The case period values</returns>
-    public static List<CaseValue> TupleToCaseValues(this List<Tuple<string, DateTime, 
+    public static List<CaseValue> TupleToCaseValues(this List<Tuple<string, DateTime,
         Tuple<DateTime?, DateTime?>, object, DateTime?, List<string>, Dictionary<string, object>>> values)
     {
         var caseValues = new List<CaseValue>();
@@ -2386,7 +2395,7 @@ public static class TupleExtensions
             {
                 if (value != null)
                 {
-                    caseValues.Add(new(value.Item1, value.Item2, value.Item3.Item1, 
+                    caseValues.Add(new(value.Item1, value.Item2, value.Item3.Item1,
                         value.Item3.Item2, new(value.Item4), value.Item5, value.Item6, value.Item7));
                 }
             }
@@ -2401,10 +2410,13 @@ public static class TupleExtensions
         List<Tuple<DateTime, DateTime?, DateTime?, object>>> values)
     {
         var caseValues = new Dictionary<string, CasePayrollValue>();
-        foreach (var value in values)
+        if (values != null)
         {
-            var periodValues = value.Value.Select(x => new PeriodValue(x.Item2, x.Item3, x.Item4));
-            caseValues.Add(value.Key, new(value.Key, periodValues));
+            foreach (var value in values)
+            {
+                var periodValues = value.Value.Select(x => new PeriodValue(x.Item2, x.Item3, x.Item4));
+                caseValues.Add(value.Key, new(value.Key, periodValues));
+            }
         }
         return new(caseValues);
     }
@@ -2412,8 +2424,9 @@ public static class TupleExtensions
     /// <summary>Convert tuple values to a collector result</summary>
     /// <param name="values">The tuple values</param>
     /// <returns>The collector results</returns>
-    public static List<CollectorResult> TupleToCollectorResults(this List<Tuple<string, 
+    public static List<CollectorResult> TupleToCollectorResults(this List<Tuple<string,
         Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> values) =>
+        values == null ? new() :
     [
         ..values.Select(x => new CollectorResult
         {
@@ -2431,6 +2444,7 @@ public static class TupleExtensions
     /// <returns>The collector custom results</returns>
     public static List<CollectorCustomResult> TupleToCollectorCustomResults(
         this List<Tuple<string, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> values) =>
+        values == null ? new() :
     [
         ..values.Select(x => new CollectorCustomResult
         {
@@ -2449,6 +2463,7 @@ public static class TupleExtensions
     /// <returns>The wage type results</returns>
     public static List<WageTypeResult> TupleToWageTypeResults
         (this List<Tuple<decimal, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> values) =>
+        values == null ? new() :
     [
         ..values.Select(x => new WageTypeResult
         {
@@ -2467,6 +2482,7 @@ public static class TupleExtensions
     /// <returns>The wage type custom results</returns>
     public static List<WageTypeCustomResult> TupleToWageTypeCustomResults(
         this List<Tuple<decimal, string, string, Tuple<DateTime, DateTime>, decimal, List<string>, Dictionary<string, object>>> values) =>
+        values == null ? new() :
     [
         ..values.Select(x => new WageTypeCustomResult
         {
@@ -2486,6 +2502,7 @@ public static class TupleExtensions
     /// <returns>The lookup brackets</returns>
     public static List<LookupRangeBracket> TupleToLookupRangeBracketList(
         List<Tuple<string, string, decimal, decimal, decimal?>> brackets) =>
+        brackets == null ? new() :
     [
         ..brackets.Select(x => new LookupRangeBracket
         {

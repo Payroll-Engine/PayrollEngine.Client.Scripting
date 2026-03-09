@@ -336,6 +336,8 @@ public abstract partial class Function : IDisposable
     /// <param name="defaultValue">Default value</param>
     /// <param name="provider">Format provider (default <see cref="CultureInfo.InvariantCulture"/>) </param>
     /// <remarks>Supports json elements</remarks>
+    /// <remarks>Handles JsonElement null values and Nullable&lt;T&gt; target types,
+    /// which Convert.ChangeType does not support natively.</remarks>
     public T ChangeValueType<T>(object value, T defaultValue = default, IFormatProvider provider = null)
     {
         if (value == null)
@@ -345,8 +347,12 @@ public abstract partial class Function : IDisposable
 
         if (value is JsonElement jsonElement)
         {
-            // json value
+            // json value: GetValue() may return null for JsonValueKind.Null
             value = jsonElement.GetValue();
+            if (value == null)
+            {
+                return defaultValue;
+            }
         }
         else if (value is string stringValue && typeof(T) == typeof(DateTime))
         {
@@ -358,10 +364,13 @@ public abstract partial class Function : IDisposable
             }
             value = stringValue;
         }
+
+        // do not unwrap Nullable<T>, when deserializing from JSON, if a value returns as an int instead of a decimal, PayrollValue.Equals would fail.
         return (T)Convert.ChangeType(value, typeof(T), provider ?? CultureInfo.InvariantCulture);
     }
 
     /// <summary>Dispose the function</summary>
-    public virtual void Dispose() =>
-        GC.SuppressFinalize(this);
+    public virtual void Dispose()
+    {
+    }
 }

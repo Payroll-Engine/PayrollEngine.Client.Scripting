@@ -288,7 +288,7 @@ public partial class PayrollFunction
     public ActionValue Within(ActionValue value, ActionValue min, ActionValue max)
     {
         // null
-        if (min?.Value == null || max?.Value == null)
+        if (value?.Value == null || min?.Value == null || max?.Value == null)
         {
             return false;
         }
@@ -330,6 +330,11 @@ public partial class PayrollFunction
     [PayrollAction("Range", "Ensure value is within a value range", "Math")]
     public ActionValue Range(ActionValue value, ActionValue min, ActionValue max)
     {
+        // undefined value
+        if (value?.Value == null)
+        {
+            return ActionValue.Null;
+        }
         // null
         if (min?.Value == null && max?.Value == null)
         {
@@ -458,7 +463,7 @@ public partial class PayrollFunction
         var stringValues = new List<string>();
         foreach (var value in values)
         {
-            if (value.IsString)
+            if (value?.IsString == true)
             {
                 stringValues.Add(value.AsString);
             }
@@ -474,6 +479,12 @@ public partial class PayrollFunction
     [PayrollAction("Contains", "Test if value is from a specific value domain", "String")]
     public bool Contains(ActionValue source, params ActionValue[] values)
     {
+        // undefined source
+        if (source?.Value == null)
+        {
+            return false;
+        }
+
         // test values
         if (!values.Any())
         {
@@ -524,7 +535,8 @@ public partial class PayrollFunction
     [PayrollAction("GetTimeSpan", "Get the timespan between two dates", "Date")]
     public ActionValue GetTimeSpan(ActionValue start, ActionValue end)
     {
-        if (start.TryToDateTime(out var leftDate) &&
+        if (start != null && end != null &&
+            start.TryToDateTime(out var leftDate) &&
             end.TryToDateTime(out var rightDate))
         {
             return rightDate - leftDate;
@@ -539,7 +551,8 @@ public partial class PayrollFunction
     [PayrollAction("SameYear", "Test for same date year", "Date")]
     public ActionValue SameYear(ActionValue left, ActionValue right)
     {
-        if (left.TryToDateTime(out var leftDate) &&
+        if (left != null && right != null &&
+            left.TryToDateTime(out var leftDate) &&
             right.TryToDateTime(out var rightDate))
         {
             return leftDate.Year == rightDate.Year;
@@ -554,7 +567,8 @@ public partial class PayrollFunction
     [PayrollAction("SameMonth", "Test for same date month", "Date")]
     public ActionValue SameMonth(ActionValue left, ActionValue right)
     {
-        if (left.TryToDateTime(out var leftDate) &&
+        if (left != null && right != null &&
+            left.TryToDateTime(out var leftDate) &&
             right.TryToDateTime(out var rightDate))
         {
             return leftDate.Year == rightDate.Year &&
@@ -570,7 +584,8 @@ public partial class PayrollFunction
     [PayrollAction("SameDay", "Test for same date day", "Date")]
     public ActionValue SameDay(ActionValue left, ActionValue right)
     {
-        if (left.TryToDateTime(out var leftDate) &&
+        if (left != null && right != null &&
+            left.TryToDateTime(out var leftDate) &&
             right.TryToDateTime(out var rightDate))
         {
             return leftDate.Year == rightDate.Year &&
@@ -587,7 +602,8 @@ public partial class PayrollFunction
     [PayrollAction("YearDiff", "Test for same date year", "Date")]
     public ActionValue YearDiff(ActionValue start, ActionValue end)
     {
-        if (start.TryToDateTime(out var startDate) &&
+        if (start != null && end != null &&
+            start.TryToDateTime(out var startDate) &&
             end.TryToDateTime(out var endDate))
         {
             return (DateTime.MinValue + endDate.Subtract(startDate)).Year;

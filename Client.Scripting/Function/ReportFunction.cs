@@ -179,8 +179,14 @@ public abstract partial class ReportFunction : Function
     /// <summary>Ensures first string character is lower</summary>
     /// <param name="value">The string value</param>
     /// <returns>String starting lowercase</returns>
-    private static string FirstCharacterToLower(string value) =>
-        char.ToLowerInvariant(value[0]) + value.Substring(1);
+    private static string FirstCharacterToLower(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return value ?? string.Empty;
+        }
+        return char.ToLowerInvariant(value[0]) + value.Substring(1);
+    }
 
     #endregion
 

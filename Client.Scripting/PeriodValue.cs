@@ -22,15 +22,15 @@ public class PeriodValue : PayrollValue
     }
 
     /// <summary>New period payroll value instance</summary>
+    /// <remarks>Fixed: Period is always set, including open-ended periods (null end → Date.MaxValue).</remarks>
     public PeriodValue(DateTime? start, DateTime? end, object value) :
         base(value)
     {
         Start = start;
         End = end;
-        if (end.HasValue)
-        {
-            Period = new(start, end.Value.RoundTickToHour());
-        }
+        Period = end.HasValue
+            ? new(start, end.Value.RoundTickToHour())
+            : new DatePeriod(start, null);
     }
 
     /// <summary>The period start</summary>

@@ -40,6 +40,7 @@ public static class ActionReflector
     /// <returns>List of action infos.</returns>
     public static List<ActionInfo> LoadFrom(Assembly assembly)
     {
+        ArgumentNullException.ThrowIfNull(assembly);
         if (assembly == null)
         {
             throw new ArgumentNullException(nameof(assembly));

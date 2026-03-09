@@ -21,6 +21,7 @@ public abstract partial class PayrunFunction : PayrollFunction
         PayrunName = Runtime.PayrunName;
 
         // payrun job
+        PreviewJob = Runtime.PreviewJob;
         ExecutionPhase = (PayrunExecutionPhase)Runtime.ExecutionPhase;
         RetroPeriod = Runtime.RetroPeriod is not Tuple<DateTime, DateTime> retroPeriod ? null :
             new DatePeriod(retroPeriod.Item1, retroPeriod.Item2);
@@ -48,6 +49,9 @@ public abstract partial class PayrunFunction : PayrollFunction
     #endregion
 
     #region PayrunJob
+
+    /// <summary>Test for preview payrun job</summary>
+    public bool PreviewJob { get; }
 
     /// <summary>The payrun execution phase</summary>
     public PayrunExecutionPhase ExecutionPhase { get; }
@@ -282,7 +286,7 @@ public abstract partial class PayrunFunction : PayrollFunction
     /// <returns>Consolidated employee wage type results</returns>
     public IList<WageTypeResult> GetConsolidatedWageTypeResults(WageTypeConsolidatedResultQuery query) =>
         TupleExtensions.TupleToWageTypeResults(Runtime.GetConsolidatedWageTypeResults(query.WageTypes, query.PeriodMoment,
-            query.Forecast, (int?)query.JobStatus, query.Tags));
+            query.Forecast, (int?)query.JobStatus, query.Tags, query.NoRetro));
 
     /// <summary>Get employee wage type custom results by query</summary>
     /// <param name="query">The result query</param>
@@ -296,7 +300,7 @@ public abstract partial class PayrunFunction : PayrollFunction
     /// <returns>Consolidated employee wage type custom results</returns>
     public IList<WageTypeCustomResult> GetConsolidatedWageTypeCustomResults(WageTypeConsolidatedResultQuery query) =>
         TupleExtensions.TupleToWageTypeCustomResults(Runtime.GetConsolidatedWageTypeCustomResults(query.WageTypes, query.PeriodMoment,
-            query.Forecast, (int?)query.JobStatus, query.Tags));
+            query.Forecast, (int?)query.JobStatus, query.Tags, query.NoRetro));
 
     /// <summary>Get retro employee retro wage type results by periods</summary>
     /// <param name="query">The query</param>
@@ -309,6 +313,18 @@ public abstract partial class PayrunFunction : PayrollFunction
     /// <returns>Retro employee wage type value (difference)</returns>
     public decimal GetWageTypeRetroResultSum(decimal wageTypeNumber) =>
         GetWageTypeRetroResults(new(wageTypeNumber)).DefaultIfEmpty().Sum();
+
+    /// <summary>Get sum of retro corrections for a wage type by number</summary>
+    /// <param name="number">The wage type number</param>
+    /// <returns>Sum of retro corrections</returns>
+    public decimal GetRetroWageTypeValueSum(decimal number) =>
+        GetWageTypeRetroResultSum(number);
+
+    /// <summary>Get sum of retro corrections for a wage type by name</summary>
+    /// <param name="name">The wage type name</param>
+    /// <returns>Sum of retro corrections</returns>
+    public decimal GetRetroWageTypeValueSum(string name) =>
+        GetWageTypeRetroResultSum(GetWageTypeNumber(name));
 
     #endregion
 
@@ -356,14 +372,14 @@ public abstract partial class PayrunFunction : PayrollFunction
     /// <returns>Consolidated employee collector results</returns>
     public IList<CollectorResult> GetConsolidatedCollectorResults(CollectorConsolidatedResultQuery query) =>
         TupleExtensions.TupleToCollectorResults(Runtime.GetConsolidatedCollectorResults(query.Collectors,
-            query.PeriodMoment, query.Forecast, (int?)query.JobStatus, query.Tags));
+            query.PeriodMoment, query.Forecast, (int?)query.JobStatus, query.Tags, query.NoRetro));
 
     /// <summary>Get consolidated employee collector custom results by query</summary>
     /// <param name="query">The result query</param>
     /// <returns>Consolidated employee collector custom results</returns>
     public IList<CollectorCustomResult> GetConsolidatedCollectorCustomResults(CollectorConsolidatedResultQuery query) =>
         TupleExtensions.TupleToCollectorCustomResults(Runtime.GetConsolidatedCollectorCustomResults(query.Collectors,
-            query.PeriodMoment, query.Forecast, (int?)query.JobStatus, query.Tags));
+            query.PeriodMoment, query.Forecast, (int?)query.JobStatus, query.Tags, query.NoRetro));
 
     #endregion
 

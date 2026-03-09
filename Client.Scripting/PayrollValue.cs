@@ -547,8 +547,9 @@ public class PayrollValue
 
     /// <summary>Returns a hash code for this instance</summary>
     /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table</returns>
+    /// <remarks>Null-safe: returns 0 when Value is null to prevent NullReferenceException.</remarks>
     public override int GetHashCode() =>
-        Value.GetHashCode();
+        Value?.GetHashCode() ?? 0;
 
     /// <summary>Returns a <see cref="string" /> that represents this instance</summary>
     /// <returns>A <see cref="string" /> that represents this instance</returns>

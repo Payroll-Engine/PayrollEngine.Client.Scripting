@@ -1595,7 +1595,8 @@ public static class DataRowExtensions
         /// <summary>Set data row json value</summary>
         /// <param name="column">The column name</param>
         /// <param name="value">The value to set</param>
-        public void SetJsonValue<T>(string column, T value) => dataRow.SetJsonValue(column, value);
+        public void SetJsonValue<T>(string column, T value) =>
+            dataRow.SetJsonValue(column, (object)value);
 
         /// <summary>Set data row json value</summary>
         /// <param name="column">The column name</param>

@@ -143,6 +143,10 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     public bool HasPeriods => HasValue;
 
     /// <summary>Total payroll value, summary of period values</summary>
+    /// <remarks>The reference comparison (value != PeriodValues.First()) is intentional:
+    /// it uses the first element as the seed and only accumulates distinct subsequent entries.
+    /// This is required for cancellation mode "Previous" where split periods produce
+    /// multiple entries with equal values that must not be double-counted.</remarks>
     public PayrollValue TotalValue()
     {
         // no values
@@ -205,6 +209,17 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
 
     #region Binary operators
 
+    /// <summary>Find the best matching period value for a given left period.
+    /// First tries exact match; falls back to containment (right period contains left period).
+    /// Required when TimeType differs, e.g. CalendarPeriod (trimmed) vs. Period (open-ended, End=MaxValue).</summary>
+    private static PeriodValue FindMatchingPeriodValue(ReadOnlyCollection<PeriodValue> periodValues, DatePeriod leftPeriod)
+    {
+        var match = periodValues.FirstOrDefault(x => Equals(x.Period, leftPeriod));
+        if (match != null) return match;
+        return periodValues.FirstOrDefault(x =>
+            x.Period.Start <= leftPeriod.Start && x.Period.End >= leftPeriod.End);
+    }
+
     /// <summary>Addition of two case values</summary>
     public static PayrollValue operator +(CasePayrollValue left, CasePayrollValue right)
     {
@@ -212,7 +227,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
         foreach (var leftValue in left.PeriodValues)
         {
             // find matching period
-            var rightValue = right.PeriodValues.FirstOrDefault(x => Equals(x.Period, leftValue.Period));
+            var rightValue = FindMatchingPeriodValue(right.PeriodValues, leftValue.Period);
             if (rightValue == null)
             {
                 continue;
@@ -254,7 +269,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
         // find matching period
         foreach (var leftValue in left.PeriodValues)
         {
-            var rightValue = right.PeriodValues.FirstOrDefault(x => Equals(x.Period, leftValue.Period));
+            var rightValue = FindMatchingPeriodValue(right.PeriodValues, leftValue.Period);
             if (rightValue == null)
             {
                 continue;
@@ -296,7 +311,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
         // find matching period
         foreach (var leftValue in left.PeriodValues)
         {
-            var rightValue = right.PeriodValues.FirstOrDefault(x => Equals(x.Period, leftValue.Period));
+            var rightValue = FindMatchingPeriodValue(right.PeriodValues, leftValue.Period);
             if (rightValue == null)
             {
                 continue;
@@ -338,7 +353,7 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
         // find matching period
         foreach (var leftValue in left.PeriodValues)
         {
-            var rightValue = right.PeriodValues.FirstOrDefault(x => Equals(x.Period, leftValue.Period));
+            var rightValue = FindMatchingPeriodValue(right.PeriodValues, leftValue.Period);
             if (rightValue == null)
             {
                 continue;
@@ -374,12 +389,19 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     }
 
     /// <summary>Remainder of two case values</summary>
+    /// <remarks>Fixed: uses period-matching like other binary operators
+    /// to prevent IndexOutOfRangeException when collections differ in size.</remarks>
     public static PayrollValue operator %(CasePayrollValue left, CasePayrollValue right)
     {
         var result = Empty;
-        for (var i = 0; i < left.PeriodValues.Count; i++)
+        foreach (var leftValue in left.PeriodValues)
         {
-            var periodResult = left.PeriodValues[i] % right.PeriodValues[i];
+            var rightValue = FindMatchingPeriodValue(right.PeriodValues, leftValue.Period);
+            if (rightValue == null)
+            {
+                continue;
+            }
+            var periodResult = leftValue % rightValue;
             result = AddToResult(result, periodResult);
         }
         return result;

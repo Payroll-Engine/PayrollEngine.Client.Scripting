@@ -81,6 +81,12 @@ public abstract class ConsolidatedResultCacheBase
             return null;
         }
 
+        // noRetro queries bypass the cache (cache contains retro entries)
+        if (query.NoRetro)
+        {
+            return null;
+        }
+
         // mismatching job status
         if (query.JobStatus != JobStatus)
         {

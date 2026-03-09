@@ -319,6 +319,10 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CasePayrollValue.TotalValue">
             <summary>Total payroll value, summary of period values</summary>
+            <remarks>The reference comparison (value != PeriodValues.First()) is intentional:
+            it uses the first element as the seed and only accumulates distinct subsequent entries.
+            This is required for cancellation mode "Previous" where split periods produce
+            multiple entries with equal values that must not be double-counted.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CasePayrollValue.ToKey">
             <summary>Get the case value key</summary>
@@ -344,6 +348,11 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CasePayrollValue.op_Implicit(PayrollEngine.Client.Scripting.CasePayrollValue)~System.Nullable{System.DateTime}">
             <summary>Convert case value to nullable DateTime</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.CasePayrollValue.FindMatchingPeriodValue(System.Collections.ObjectModel.ReadOnlyCollection{PayrollEngine.Client.Scripting.PeriodValue},PayrollEngine.Client.Scripting.DatePeriod)">
+            <summary>Find the best matching period value for a given left period.
+            First tries exact match; falls back to containment (right period contains left period).
+            Required when TimeType differs, e.g. CalendarPeriod (trimmed) vs. Period (open-ended, End=MaxValue).</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CasePayrollValue.op_Addition(PayrollEngine.Client.Scripting.CasePayrollValue,PayrollEngine.Client.Scripting.CasePayrollValue)">
             <summary>Addition of two case values</summary>
@@ -383,6 +392,8 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CasePayrollValue.op_Modulus(PayrollEngine.Client.Scripting.CasePayrollValue,PayrollEngine.Client.Scripting.CasePayrollValue)">
             <summary>Remainder of two case values</summary>
+            <remarks>Fixed: uses period-matching like other binary operators
+            to prevent IndexOutOfRangeException when collections differ in size.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CasePayrollValue.op_Modulus(PayrollEngine.Client.Scripting.CasePayrollValue,PayrollEngine.Client.Scripting.PeriodValue)">
             <summary>Remainder of a case value with a period value</summary>
@@ -434,6 +445,7 @@
         <member name="M:PayrollEngine.Client.Scripting.CaseValue.#ctor(PayrollEngine.Client.Scripting.CaseValue)">
             <summary>Initializes a new instance from a copy</summary>
             <param name="copySource">The copy source</param>
+            <remarks>Deep copies Tags and Attributes to prevent shared-reference mutations.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.CaseValue.#ctor(System.String,System.DateTime,System.Nullable{System.DateTime},System.Nullable{System.DateTime},PayrollEngine.Client.Scripting.PayrollValue,System.Nullable{System.DateTime},System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>Initializes a new instance</summary>
@@ -1033,11 +1045,13 @@
         <member name="P:PayrollEngine.Client.Scripting.Date.Today">
             <summary>Gets a time instant that is set to the current day</summary>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Date.Tomorrow">
+        <member name="P:PayrollEngine.Client.Scripting.Date.Tomorrow">
             <summary>Gets a time instant that is set to the next day</summary>
+            <remarks>Computed property (not static readonly) so the value updates with Today.</remarks>
         </member>
-        <member name="F:PayrollEngine.Client.Scripting.Date.Yesterday">
+        <member name="P:PayrollEngine.Client.Scripting.Date.Yesterday">
             <summary>Gets a time instant that is set to the previous day</summary>
+            <remarks>Computed property (not static readonly) so the value updates with Today.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Date.YearStart(System.Int32)">
             <summary>Get the year start date in UTC</summary>
@@ -2350,6 +2364,7 @@
         <member name="M:PayrollEngine.Client.Scripting.DatePeriodExtensions.&lt;G&gt;$305A98C818CDB9CE581A93CE7F02E328.HasOverlapping">
             <summary>Test if any period is overlapping another period</summary>
             <returns>True, if the period is overlapping this period</returns>
+            <remarks>Fixed: outer loop starts at 0 to include the first element in comparisons.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.DatePeriodExtensions.&lt;G&gt;$305A98C818CDB9CE581A93CE7F02E328.IsWithinAny(System.DateTime)">
             <summary>Test if a specific time moment is within any date period</summary>
@@ -2492,6 +2507,7 @@
         <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.&lt;G&gt;$9A3978FAB14A46769BDCAC0F21A8E2E8.HasOverlapping">
             <summary>Test if any period is overlapping another period</summary>
             <returns>True, if the period is overlapping this period</returns>
+            <remarks>Fixed: outer loop starts at 0 to include the first element in comparisons.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.HourPeriodExtensions.&lt;G&gt;$9A3978FAB14A46769BDCAC0F21A8E2E8.IsWithinAny(System.Decimal)">
             <summary>Test if a specific time moment is within any time period</summary>
@@ -3499,20 +3515,21 @@
         <member name="T:PayrollEngine.Client.Scripting.Function.ActionValue">
             <summary>Action value</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.#ctor(System.Object,System.Globalization.CultureInfo)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.#ctor(System.Object)">
             <summary>Value constructor</summary>
             <param name="value">Action value</param>
-            <param name="culture">Value culture (default: invariant)</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.From(System.Object)">
             <summary>Create action value from value</summary>
             <param name="value">Source value</param>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.ToPrimitive(System.Object)">
+            <summary>Unwrap action value to its primitive value</summary>
+            <param name="value">The value, possibly an ActionValue wrapper</param>
+            <returns>The unwrapped primitive value</returns>
+        </member>
         <member name="F:PayrollEngine.Client.Scripting.Function.ActionValue.Null">
             <summary>Empty instance</summary>
-        </member>
-        <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.Culture">
-            <summary>Value culture</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.ActionValue.Value">
             <summary>Action primitive value</summary>
@@ -3661,7 +3678,7 @@
             <summary>Test if action value is false</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Addition(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
-            <summary>Addition of two action values (decimal, int, string)</summary>
+            <summary>Addition of two action values (decimal, int, string, TimeSpan, DateTime+TimeSpan)</summary>
             <remarks>Treats undefined values as zero</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ActionValue.op_Subtraction(PayrollEngine.Client.Scripting.Function.ActionValue,PayrollEngine.Client.Scripting.Function.ActionValue)">
@@ -4874,9 +4891,12 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.AddCaseIssue(System.String)">
             <summary>Add a new case validation issue</summary>
+            <param name="message">The issue message</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.AddCaseFieldIssue(System.String,System.String)">
             <summary>Add a new case field validation issue</summary>
+            <param name="caseFieldName">Name of the case field</param>
+            <param name="message">The issue message</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.AddCaseAttributeIssue(System.String,System.Object[])">
             <summary>Add case issue from attribute</summary>
@@ -4884,6 +4904,12 @@
             <param name="parameters">Message parameters</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.AddFieldAttributeIssue(System.String,System.String,System.Object[])">
+            <summary>Add case field issue from attribute</summary>
+            <param name="caseFieldName">Case field name</param>
+            <param name="attributeName">Attribute name</param>
+            <param name="parameters">Message parameters</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.CaseValidateFunction.AddAttributeIssue(System.String,System.String,System.Object[])">
             <summary>Add case field issue from attribute</summary>
             <param name="caseFieldName">Case field name</param>
             <param name="attributeName">Attribute name</param>
@@ -5311,6 +5337,8 @@
             <param name="defaultValue">Default value</param>
             <param name="provider">Format provider (default <see cref="P:System.Globalization.CultureInfo.InvariantCulture"/>) </param>
             <remarks>Supports json elements</remarks>
+            <remarks>Handles JsonElement null values and Nullable&lt;T&gt; target types,
+            which Convert.ChangeType does not support natively.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.Function.Dispose">
             <summary>Dispose the function</summary>
@@ -6122,6 +6150,12 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetCycleWageTypeValue(System.String)">
             <summary>Get wage type year-to-date value by wage type name</summary>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetRetroWageTypeValueSumByNumber(System.Decimal)">
+            <summary>Get sum of retro corrections for a wage type by number</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetRetroWageTypeValueSumByName(System.String)">
+            <summary>Get sum of retro corrections for a wage type by name</summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetCycleCollectorValue(System.String)">
             <summary>Get collector year-to-date value</summary>
             <param name="name">Collector name</param>
@@ -6129,7 +6163,7 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetRuntimeValue(System.String)">
             <summary>Get runtime action value</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.SetRuntimeValue(System.String,PayrollEngine.Client.Scripting.Function.ActionValue)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.SetRuntimeValue(System.String,System.Object)">
             <summary>Set runtime action value</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.RemoveRuntimeValue(System.String)">
@@ -6138,7 +6172,7 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetPayrunResultValue(System.String)">
             <summary>Get payrun result value</summary>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.SetPayrunResultValue(System.String,PayrollEngine.Client.Scripting.Function.ActionValue,System.String)">
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.SetPayrunResultValue(System.String,System.Object,System.String)">
             <summary>Set payrun result value</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.#ctor(System.Object)">
@@ -6154,6 +6188,9 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrunFunction.PayrunName">
             <summary>The payrun name</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrunFunction.PreviewJob">
+            <summary>Test for preview payrun job</summary>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrunFunction.ExecutionPhase">
             <summary>The payrun execution phase</summary>
@@ -6334,6 +6371,16 @@
             <summary>Get summary of retro wage type results</summary>
             <param name="wageTypeNumber">The wage type number</param>
             <returns>Retro employee wage type value (difference)</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetRetroWageTypeValueSum(System.Decimal)">
+            <summary>Get sum of retro corrections for a wage type by number</summary>
+            <param name="number">The wage type number</param>
+            <returns>Sum of retro corrections</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetRetroWageTypeValueSum(System.String)">
+            <summary>Get sum of retro corrections for a wage type by name</summary>
+            <param name="name">The wage type name</param>
+            <returns>Sum of retro corrections</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetCollectorCycleResults(PayrollEngine.Client.Scripting.CollectorCycleResultQuery)">
             <summary>Get employee collector results by query</summary>
@@ -7674,6 +7721,7 @@
         <member name="M:PayrollEngine.Client.Scripting.PayrollValue.GetHashCode">
             <summary>Returns a hash code for this instance</summary>
             <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table</returns>
+            <remarks>Null-safe: returns 0 when Value is null to prevent NullReferenceException.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PayrollValue.ToString">
             <summary>Returns a <see cref="T:System.String" /> that represents this instance</summary>
@@ -7690,6 +7738,7 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.PeriodValue.#ctor(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Object)">
             <summary>New period payroll value instance</summary>
+            <remarks>Fixed: Period is always set, including open-ended periods (null end → Date.MaxValue).</remarks>
         </member>
         <member name="P:PayrollEngine.Client.Scripting.PeriodValue.Start">
             <summary>The period start</summary>
@@ -9769,6 +9818,9 @@
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.PeriodName">
             <summary>The period name</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.PreviewJob">
+            <summary>Test for preview payrun job</summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetPayrunJobAttribute(System.String)">
             <summary>Get payrun job attribute value</summary>
             <param name="attributeName">Name of the attribute</param>
@@ -9849,13 +9901,14 @@
             <param name="tags">The result tags</param>
             <returns>The wage type date range results</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedWageTypeResults(System.Collections.Generic.IList{System.Decimal},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String})">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedWageTypeResults(System.Collections.Generic.IList{System.Decimal},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String},System.Boolean)">
             <summary>Gets the consolidated wage type results, from the period moment until the current period</summary>
             <param name="wageTypeNumbers">The wage type numbers</param>
             <param name="periodMoment">The period moment</param>
             <param name="forecast">The forecast</param>
             <param name="jobStatus">The job status</param>
             <param name="tags">The result tags</param>
+            <param name="noRetro">Exclude retro jobs: only original main-job payslip values per period</param>
             <returns>The consolidate wage type results</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetWageTypeCustomResults(System.Collections.Generic.IList{System.Decimal},System.DateTime,System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String})">
@@ -9868,13 +9921,14 @@
             <param name="tags">The result tags</param>
             <returns>The consolidate wage type custom results</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedWageTypeCustomResults(System.Collections.Generic.IList{System.Decimal},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String})">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedWageTypeCustomResults(System.Collections.Generic.IList{System.Decimal},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String},System.Boolean)">
             <summary>Gets the consolidated wage type custom results, from the period moment until the current period</summary>
             <param name="wageTypeNumbers">The wage type numbers</param>
             <param name="periodMoment">The period moment</param>
             <param name="forecast">The forecast</param>
             <param name="jobStatus">The job status</param>
             <param name="tags">The result tags</param>
+            <param name="noRetro">Exclude retro jobs: only original main-job payslip values per period</param>
             <returns>The consolidate wage type custom results</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetRetroWageTypeResults(System.Decimal,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String})">
@@ -9895,13 +9949,14 @@
             <param name="tags">The result tags</param>
             <returns>The collector date range results</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedCollectorResults(System.Collections.Generic.IList{System.String},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String})">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedCollectorResults(System.Collections.Generic.IList{System.String},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String},System.Boolean)">
             <summary>Gets the consolidated collector results, from the period moment until the current period</summary>
             <param name="collectorNames">Name of the collectors</param>
             <param name="periodMoment">The period moment</param>
             <param name="forecast">The forecast</param>
             <param name="jobStatus">The job status</param>
             <param name="tags">The result tags</param>
+            <param name="noRetro">Exclude retro jobs: only original main-job payslip values per period</param>
             <returns>The consolidated collector results</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetCollectorCustomResults(System.Collections.Generic.IList{System.String},System.DateTime,System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String})">
@@ -9914,13 +9969,14 @@
             <param name="tags">The result tags</param>
             <returns>The consolidated collector custom results</returns>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedCollectorCustomResults(System.Collections.Generic.IList{System.String},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String})">
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedCollectorCustomResults(System.Collections.Generic.IList{System.String},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String},System.Boolean)">
             <summary>Gets the consolidated collector results, from the period moment until the current period</summary>
             <param name="collectorNames">Name of the collectors</param>
             <param name="periodMoment">The period moment</param>
             <param name="forecast">The forecast</param>
             <param name="jobStatus">The job status</param>
             <param name="tags">The result tags</param>
+            <param name="noRetro">Exclude retro jobs: only original main-job payslip values per period</param>
             <returns>The consolidated collector custom results</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IPayrunStartRuntime">
@@ -11074,6 +11130,9 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.ConsolidatedResultQuery.PeriodMoment">
             <summary>Moment within the period</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.ConsolidatedResultQuery.NoRetro">
+            <summary>Exclude retro jobs (incremental jobs with ParentJobId set): only original main-job payslip values per period are returned</summary>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.CollectorConsolidatedResultQuery">
             <summary>Collector consolidated result query</summary>
