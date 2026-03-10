@@ -41,7 +41,8 @@
     ],
     "output": "_site",
     "globalMetadata": {
-      "_appTitle": "PE Script Reference"
+      "_appTitle": "PE Script Reference",
+      "_appName": "Client Scripting"
     },
     "template": [
       "default",
