@@ -216,7 +216,10 @@ Custom actions can be added via low-code; see [Custom Actions](https://payrollen
 
 ## Developer Reference
 
-The HTML scripting reference is generated with [docfx](https://github.com/dotnet/docfx). The following commands are available in the `docfx` folder:
+The scripting API reference is published at:
+👉 [payroll-engine.github.io/PayrollEngine.Client.Scripting](https://payroll-engine.github.io/PayrollEngine.Client.Scripting/)
+
+The HTML reference is generated with [docfx](https://github.com/dotnet/docfx). The following commands are available in the `docfx` folder:
 
 | Command | Description |
 |:--|:--|
