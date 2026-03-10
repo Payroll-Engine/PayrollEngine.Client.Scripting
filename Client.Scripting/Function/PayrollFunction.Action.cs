@@ -47,7 +47,8 @@ public partial class PayrollFunction
     /// <summary>Test for lookup value by key and range value</summary>
     [ActionParameter("lookup", "The lookup name", [StringType])]
     [ActionParameter("key", "The lookup key", [StringType])]
-    [ActionParameter("field", "The JSON value field name (optional)")]
+    [ActionParameter("rangeValue", "The range value", [NumericType])]
+    [ActionParameter("field", "The JSON value field name (optional)", [StringType])]
     [PayrollAction("HasLookupValue", "Test for lookup value by key and range value", "Lookup")]
     public bool HasLookupValue(string lookup, ActionValue key, ActionValue rangeValue, string field = null) =>
         GetLookupValue(lookup, key, rangeValue, field).HasValue;
@@ -475,6 +476,7 @@ public partial class PayrollFunction
     /// <param name="source">Object to test</param>
     /// <param name="values">Available values</param>
     /// <returns>True, if source is listed in tests</returns>
+    [ActionParameter("source", "The value to test")]
     [ActionParameter("values", "Value collection", [NumericType, DateType, StringType])]
     [PayrollAction("Contains", "Test if value is from a specific value domain", "String")]
     public bool Contains(ActionValue source, params ActionValue[] values)
@@ -599,7 +601,7 @@ public partial class PayrollFunction
     /// <returns>The year (int) od dates, otherwise none</returns>
     [ActionParameter("start", "The start date", [DateType])]
     [ActionParameter("end", "The end date", [DateType])]
-    [PayrollAction("YearDiff", "Test for same date year", "Date")]
+    [PayrollAction("YearDiff", "Get years between two dates", "Date")]
     public ActionValue YearDiff(ActionValue start, ActionValue end)
     {
         if (start != null && end != null &&

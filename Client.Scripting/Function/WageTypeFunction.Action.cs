@@ -10,7 +10,7 @@ public partial class WageTypeFunction
 
     /// <summary>Get wage type value by number</summary>
     /// <param name="number">Wage type number</param>
-    [ActionParameter("number", "Get wage type value by number", [DecimalType])]
+    [ActionParameter("number", "The wage type number", [DecimalType])]
     [WageTypeAction("GetWageTypeValueByNumber", "Get wage type value", "WageType")]
     public ActionValue GetWageTypeValueByNumber(decimal number) =>
         GetWageType(number);

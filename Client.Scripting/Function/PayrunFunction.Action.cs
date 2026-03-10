@@ -84,7 +84,7 @@ public partial class PayrunFunction
     /// <summary>Set payrun result value</summary>
     [ActionParameter("name", "The result name", [StringType])]
     [ActionParameter("value", "The value to set")]
-    [ActionParameter("type", "The value type (default: Money), [StringType]")]
+    [ActionParameter("type", "The value type (default: Money)", [StringType])]
     [PayrunAction("SetPayrunResultValue", "Set payrun result value", "Payrun")]
     public void SetPayrunResultValue(string name, object value, string type = null)
     {

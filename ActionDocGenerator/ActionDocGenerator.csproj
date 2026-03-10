@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>ActionDocGenerator</AssemblyName>
+		<RootNamespace>ActionDocGenerator</RootNamespace>
+		<Description>PayrollEngine No-Code Action Documentation Generator</Description>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Client.Scripting\PayrollEngine.Client.Scripting.csproj" />
+	</ItemGroup>
+
+</Project>

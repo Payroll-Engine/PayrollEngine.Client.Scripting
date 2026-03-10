@@ -18,14 +18,14 @@ public partial class CaseRelationBuildFunction
 
     /// <summary>Get the case relation source field start date</summary>
     /// <param name="field">The case field on the source case</param>
-    [ActionParameter("field", "The case field on the target case", [StringType])]
+    [ActionParameter("field", "The case field on the source case", [StringType])]
     [CaseRelationBuildAction("GetSourceFieldStart", "Get the case relation source field start date", "RelationField")]
     public ActionValue GetSourceFieldStart(string field) =>
         new(GetSourceStart(field));
 
     /// <summary>Get the case relation source field end date</summary>
     /// <param name="field">The case field on the source case</param>
-    [ActionParameter("field", "The case field on the target case", [StringType])]
+    [ActionParameter("field", "The case field on the source case", [StringType])]
     [CaseRelationBuildAction("GetSourceFieldEnd", "Get the case relation source field end date", "RelationField")]
     public ActionValue GetSourceFieldEnd(string field) =>
         new(GetSourceEnd(field));
