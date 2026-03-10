@@ -42,7 +42,7 @@
     "output": "_site",
     "globalMetadata": {
       "_appTitle": "PE Script Reference",
-      "_appName": "Client Scripting"
+      "_appName": ""
     },
     "template": [
       "default",
