@@ -13,38 +13,38 @@ SDK installation is required on the server.
 ## Scripting Functions
 
 All scripting functions are defined in the
-[PayrollEngine.Client.Scripting.Function](api/PayrollEngine.Client.Scripting.Function.html) namespace
+[PayrollEngine.Client.Scripting.Function](xref:PayrollEngine.Client.Scripting.Function) namespace
 and inherit from a common base hierarchy.
 
 <pre>
-<a href="api/PayrollEngine.Client.Scripting.Function.Function.html">Function</a>
-├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrollFunction.html">PayrollFunction</a>
-│   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseFunction.html">CaseFunction</a>
-│   │   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseAvailableFunction.html">CaseAvailableFunction</a>
-│   │   └── <a href="api/PayrollEngine.Client.Scripting.Function.CaseChangeFunction.html">CaseChangeFunction</a>
-│   │       ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseBuildFunction.html">CaseBuildFunction</a>
-│   │       └── <a href="api/PayrollEngine.Client.Scripting.Function.CaseValidateFunction.html">CaseValidateFunction</a>
-│   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseRelationFunction.html">CaseRelationFunction</a>
-│   │   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseRelationBuildFunction.html">CaseRelationBuildFunction</a>
-│   │   └── <a href="api/PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction.html">CaseRelationValidateFunction</a>
-│   └── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunFunction.html">PayrunFunction</a>
-│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunStartFunction.html">PayrunStartFunction</a>
-│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunEndFunction.html">PayrunEndFunction</a>
-│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeAvailableFunction.html">PayrunEmployeeAvailableFunction</a>
-│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeStartFunction.html">PayrunEmployeeStartFunction</a>
-│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeEndFunction.html">PayrunEmployeeEndFunction</a>
-│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunWageTypeAvailableFunction.html">PayrunWageTypeAvailableFunction</a>
-│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.CollectorFunction.html">CollectorFunction</a>
-│       │   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CollectorStartFunction.html">CollectorStartFunction</a>
-│       │   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CollectorApplyFunction.html">CollectorApplyFunction</a>
-│       │   └── <a href="api/PayrollEngine.Client.Scripting.Function.CollectorEndFunction.html">CollectorEndFunction</a>
-│       └── <a href="api/PayrollEngine.Client.Scripting.Function.WageTypeFunction.html">WageTypeFunction</a>
-│           ├── <a href="api/PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.html">WageTypeValueFunction</a>
-│           └── <a href="api/PayrollEngine.Client.Scripting.Function.WageTypeResultFunction.html">WageTypeResultFunction</a>
-└── <a href="api/PayrollEngine.Client.Scripting.Function.ReportFunction.html">ReportFunction</a>
-    ├── <a href="api/PayrollEngine.Client.Scripting.Function.ReportBuildFunction.html">ReportBuildFunction</a>
-    ├── <a href="api/PayrollEngine.Client.Scripting.Function.ReportStartFunction.html">ReportStartFunction</a>
-    └── <a href="api/PayrollEngine.Client.Scripting.Function.ReportEndFunction.html">ReportEndFunction</a>
+<a href="xref:PayrollEngine.Client.Scripting.Function.Function">Function</a>
+├── <a href="xref:PayrollEngine.Client.Scripting.Function.PayrollFunction">PayrollFunction</a>
+│   ├── <a href="xref:PayrollEngine.Client.Scripting.Function.CaseFunction">CaseFunction</a>
+│   │   ├── <a href="xref:PayrollEngine.Client.Scripting.Function.CaseAvailableFunction">CaseAvailableFunction</a>
+│   │   └── <a href="xref:PayrollEngine.Client.Scripting.Function.CaseChangeFunction">CaseChangeFunction</a>
+│   │       ├── <a href="xref:PayrollEngine.Client.Scripting.Function.CaseBuildFunction">CaseBuildFunction</a>
+│   │       └── <a href="xref:PayrollEngine.Client.Scripting.Function.CaseValidateFunction">CaseValidateFunction</a>
+│   ├── <a href="xref:PayrollEngine.Client.Scripting.Function.CaseRelationFunction">CaseRelationFunction</a>
+│   │   ├── <a href="xref:PayrollEngine.Client.Scripting.Function.CaseRelationBuildFunction">CaseRelationBuildFunction</a>
+│   │   └── <a href="xref:PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction">CaseRelationValidateFunction</a>
+│   └── <a href="xref:PayrollEngine.Client.Scripting.Function.PayrunFunction">PayrunFunction</a>
+│       ├── <a href="xref:PayrollEngine.Client.Scripting.Function.PayrunStartFunction">PayrunStartFunction</a>
+│       ├── <a href="xref:PayrollEngine.Client.Scripting.Function.PayrunEndFunction">PayrunEndFunction</a>
+│       ├── <a href="xref:PayrollEngine.Client.Scripting.Function.PayrunEmployeeAvailableFunction">PayrunEmployeeAvailableFunction</a>
+│       ├── <a href="xref:PayrollEngine.Client.Scripting.Function.PayrunEmployeeStartFunction">PayrunEmployeeStartFunction</a>
+│       ├── <a href="xref:PayrollEngine.Client.Scripting.Function.PayrunEmployeeEndFunction">PayrunEmployeeEndFunction</a>
+│       ├── <a href="xref:PayrollEngine.Client.Scripting.Function.PayrunWageTypeAvailableFunction">PayrunWageTypeAvailableFunction</a>
+│       ├── <a href="xref:PayrollEngine.Client.Scripting.Function.CollectorFunction">CollectorFunction</a>
+│       │   ├── <a href="xref:PayrollEngine.Client.Scripting.Function.CollectorStartFunction">CollectorStartFunction</a>
+│       │   ├── <a href="xref:PayrollEngine.Client.Scripting.Function.CollectorApplyFunction">CollectorApplyFunction</a>
+│       │   └── <a href="xref:PayrollEngine.Client.Scripting.Function.CollectorEndFunction">CollectorEndFunction</a>
+│       └── <a href="xref:PayrollEngine.Client.Scripting.Function.WageTypeFunction">WageTypeFunction</a>
+│           ├── <a href="xref:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction">WageTypeValueFunction</a>
+│           └── <a href="xref:PayrollEngine.Client.Scripting.Function.WageTypeResultFunction">WageTypeResultFunction</a>
+└── <a href="xref:PayrollEngine.Client.Scripting.Function.ReportFunction">ReportFunction</a>
+    ├── <a href="xref:PayrollEngine.Client.Scripting.Function.ReportBuildFunction">ReportBuildFunction</a>
+    ├── <a href="xref:PayrollEngine.Client.Scripting.Function.ReportStartFunction">ReportStartFunction</a>
+    └── <a href="xref:PayrollEngine.Client.Scripting.Function.ReportEndFunction">ReportEndFunction</a>
 </pre>
 
 ### Case Functions
@@ -54,9 +54,9 @@ to final validation.
 
 | Function | Base | Description |
 |:--|:--|:--|
-| [CaseAvailableFunction](api/PayrollEngine.Client.Scripting.Function.CaseAvailableFunction.html) | `CaseFunction` | Determines whether a case is offered for input. Returning `false` hides the case from the user entirely. Typical use: role-based or condition-based availability. |
-| [CaseBuildFunction](api/PayrollEngine.Client.Scripting.Function.CaseBuildFunction.html) | `CaseChangeFunction` | Populates or pre-fills case fields before the form is displayed. Used to set default values, apply lookups, or derive field values from existing case data. |
-| [CaseValidateFunction](api/PayrollEngine.Client.Scripting.Function.CaseValidateFunction.html) | `CaseChangeFunction` | Validates case field values when the user submits the form. Can add validation issues that are shown inline. |
+| [CaseAvailableFunction](xref:PayrollEngine.Client.Scripting.Function.CaseAvailableFunction) | `CaseFunction` | Determines whether a case is offered for input. Returning `false` hides the case from the user entirely. Typical use: role-based or condition-based availability. |
+| [CaseBuildFunction](xref:PayrollEngine.Client.Scripting.Function.CaseBuildFunction) | `CaseChangeFunction` | Populates or pre-fills case fields before the form is displayed. Used to set default values, apply lookups, or derive field values from existing case data. |
+| [CaseValidateFunction](xref:PayrollEngine.Client.Scripting.Function.CaseValidateFunction) | `CaseChangeFunction` | Validates case field values when the user submits the form. Can add validation issues that are shown inline. |
 
 ### Case Relation Functions
 
@@ -65,8 +65,8 @@ another via a relation.
 
 | Function | Base | Description |
 |:--|:--|:--|
-| [CaseRelationBuildFunction](api/PayrollEngine.Client.Scripting.Function.CaseRelationBuildFunction.html) | `CaseRelationFunction` | Populates target case fields based on the source case values when a relation is applied. |
-| [CaseRelationValidateFunction](api/PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction.html) | `CaseRelationFunction` | Validates the combined source/target case values within the context of the relation. |
+| [CaseRelationBuildFunction](xref:PayrollEngine.Client.Scripting.Function.CaseRelationBuildFunction) | `CaseRelationFunction` | Populates target case fields based on the source case values when a relation is applied. |
+| [CaseRelationValidateFunction](xref:PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction) | `CaseRelationFunction` | Validates the combined source/target case values within the context of the relation. |
 
 ### Payrun Functions
 
@@ -77,19 +77,19 @@ payrun and employee level through wage type calculation and collector aggregatio
 
 | Function | Base | Description |
 |:--|:--|:--|
-| [PayrunStartFunction](api/PayrollEngine.Client.Scripting.Function.PayrunStartFunction.html) | `PayrunFunction` | Executes once at the start of the entire payrun, before any employee is processed. Used for payrun-level initialization. |
-| [PayrunEndFunction](api/PayrollEngine.Client.Scripting.Function.PayrunEndFunction.html) | `PayrunFunction` | Executes once at the end of the entire payrun, after all employees have been processed. Used for payrun-level finalization. |
-| [PayrunEmployeeAvailableFunction](api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeAvailableFunction.html) | `PayrunFunction` | Determines whether an employee participates in the current payrun. Returning `false` skips the employee entirely. |
-| [PayrunEmployeeStartFunction](api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeStartFunction.html) | `PayrunFunction` | Executes at the start of each employee's payrun processing. Used for per-employee initialization. |
-| [PayrunEmployeeEndFunction](api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeEndFunction.html) | `PayrunFunction` | Executes at the end of each employee's payrun processing. Used for per-employee finalization or result enrichment. |
-| [PayrunWageTypeAvailableFunction](api/PayrollEngine.Client.Scripting.Function.PayrunWageTypeAvailableFunction.html) | `PayrunFunction` | Determines whether a specific wage type is evaluated for an employee in this payrun. Returning `false` skips the wage type calculation. |
+| [PayrunStartFunction](xref:PayrollEngine.Client.Scripting.Function.PayrunStartFunction) | `PayrunFunction` | Executes once at the start of the entire payrun, before any employee is processed. Used for payrun-level initialization. |
+| [PayrunEndFunction](xref:PayrollEngine.Client.Scripting.Function.PayrunEndFunction) | `PayrunFunction` | Executes once at the end of the entire payrun, after all employees have been processed. Used for payrun-level finalization. |
+| [PayrunEmployeeAvailableFunction](xref:PayrollEngine.Client.Scripting.Function.PayrunEmployeeAvailableFunction) | `PayrunFunction` | Determines whether an employee participates in the current payrun. Returning `false` skips the employee entirely. |
+| [PayrunEmployeeStartFunction](xref:PayrollEngine.Client.Scripting.Function.PayrunEmployeeStartFunction) | `PayrunFunction` | Executes at the start of each employee's payrun processing. Used for per-employee initialization. |
+| [PayrunEmployeeEndFunction](xref:PayrollEngine.Client.Scripting.Function.PayrunEmployeeEndFunction) | `PayrunFunction` | Executes at the end of each employee's payrun processing. Used for per-employee finalization or result enrichment. |
+| [PayrunWageTypeAvailableFunction](xref:PayrollEngine.Client.Scripting.Function.PayrunWageTypeAvailableFunction) | `PayrunFunction` | Determines whether a specific wage type is evaluated for an employee in this payrun. Returning `false` skips the wage type calculation. |
 
 #### Wage Type Functions
 
 | Function | Base | Description |
 |:--|:--|:--|
-| [WageTypeValueFunction](api/PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.html) | `WageTypeFunction` | Calculates the numeric value of a wage type for an employee in the current period. The core calculation script — reads case values, applies rates, performs arithmetic. |
-| [WageTypeResultFunction](api/PayrollEngine.Client.Scripting.Function.WageTypeResultFunction.html) | `WageTypeFunction` | Post-processes the calculated wage type result. Used to add custom result attributes, split results, or trigger side effects after the value is determined. |
+| [WageTypeValueFunction](xref:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction) | `WageTypeFunction` | Calculates the numeric value of a wage type for an employee in the current period. The core calculation script — reads case values, applies rates, performs arithmetic. |
+| [WageTypeResultFunction](xref:PayrollEngine.Client.Scripting.Function.WageTypeResultFunction) | `WageTypeFunction` | Post-processes the calculated wage type result. Used to add custom result attributes, split results, or trigger side effects after the value is determined. |
 
 #### Collector Functions
 
@@ -98,9 +98,9 @@ process for each contributing wage type.
 
 | Function | Base | Description |
 |:--|:--|:--|
-| [CollectorStartFunction](api/PayrollEngine.Client.Scripting.Function.CollectorStartFunction.html) | `CollectorFunction` | Executes when the collector is first activated in a payrun. Used to initialize collector state or set starting values. |
-| [CollectorApplyFunction](api/PayrollEngine.Client.Scripting.Function.CollectorApplyFunction.html) | `CollectorFunction` | Executes each time a wage type value is applied to the collector. Can modify or veto the value before it is accumulated. |
-| [CollectorEndFunction](api/PayrollEngine.Client.Scripting.Function.CollectorEndFunction.html) | `CollectorFunction` | Executes after the last wage type has been applied. Used for final adjustments, caps, or result enrichment on the accumulated value. |
+| [CollectorStartFunction](xref:PayrollEngine.Client.Scripting.Function.CollectorStartFunction) | `CollectorFunction` | Executes when the collector is first activated in a payrun. Used to initialize collector state or set starting values. |
+| [CollectorApplyFunction](xref:PayrollEngine.Client.Scripting.Function.CollectorApplyFunction) | `CollectorFunction` | Executes each time a wage type value is applied to the collector. Can modify or veto the value before it is accumulated. |
+| [CollectorEndFunction](xref:PayrollEngine.Client.Scripting.Function.CollectorEndFunction) | `CollectorFunction` | Executes after the last wage type has been applied. Used for final adjustments, caps, or result enrichment on the accumulated value. |
 
 ### Report Functions
 
@@ -109,9 +109,9 @@ and post-processing.
 
 | Function | Base | Description |
 |:--|:--|:--|
-| [ReportBuildFunction](api/PayrollEngine.Client.Scripting.Function.ReportBuildFunction.html) | `ReportFunction` | Defines the report structure: adds or removes report parameters, adjusts queries, and controls which data sets are included based on input parameters. |
-| [ReportStartFunction](api/PayrollEngine.Client.Scripting.Function.ReportStartFunction.html) | `ReportFunction` | Executes at report start after parameters are resolved. Used to prepare or transform data before the main report queries run. |
-| [ReportEndFunction](api/PayrollEngine.Client.Scripting.Function.ReportEndFunction.html) | `ReportFunction` | Executes after all report queries have completed. Used to post-process result sets, merge tables, compute derived columns, or apply final formatting. |
+| [ReportBuildFunction](xref:PayrollEngine.Client.Scripting.Function.ReportBuildFunction) | `ReportFunction` | Defines the report structure: adds or removes report parameters, adjusts queries, and controls which data sets are included based on input parameters. |
+| [ReportStartFunction](xref:PayrollEngine.Client.Scripting.Function.ReportStartFunction) | `ReportFunction` | Executes at report start after parameters are resolved. Used to prepare or transform data before the main report queries run. |
+| [ReportEndFunction](xref:PayrollEngine.Client.Scripting.Function.ReportEndFunction) | `ReportFunction` | Executes after all report queries have completed. Used to post-process result sets, merge tables, compute derived columns, or apply final formatting. |
 
 ---
 
@@ -119,8 +119,8 @@ and post-processing.
 
 | Namespace | Description |
 |:--|:--|
-| [PayrollEngine.Client.Scripting](api/PayrollEngine.Client.Scripting.html) | Action attributes (`CaseAvailableActionAttribute`, `CaseBuildActionAttribute`, …) and the `ActionReflector` for parsing action expressions |
-| [PayrollEngine.Action](api/PayrollEngine.Action.html) | Core action infrastructure: `ActionInfo`, `ActionIssue`, `ActionMethodInfo`, parameter and property metadata |
+| [PayrollEngine.Client.Scripting](xref:PayrollEngine.Client.Scripting) | Action attributes (`CaseAvailableActionAttribute`, `CaseBuildActionAttribute`, …) and the `ActionReflector` for parsing action expressions |
+| [PayrollEngine.Action](xref:PayrollEngine.Action) | Core action infrastructure: `ActionInfo`, `ActionIssue`, `ActionMethodInfo`, parameter and property metadata |
 
 Actions allow payroll specialists to control object behaviour using text expressions in regulation
 JSON — no C# programming required. See
@@ -133,8 +133,8 @@ for the full reference.
 
 | Namespace | Description |
 |:--|:--|
-| [PayrollEngine.Client.Scripting](api/PayrollEngine.Client.Scripting.html) | Central scripting types: `CaseObject`, `PayrollValue`, `CasePayrollValue`, `DatePeriod`, function and script attributes |
-| [PayrollEngine.Client.Scripting.Report](api/PayrollEngine.Client.Scripting.Report.html) | Report-specific types used within report functions |
+| [PayrollEngine.Client.Scripting](xref:PayrollEngine.Client.Scripting) | Central scripting types: `CaseObject`, `PayrollValue`, `CasePayrollValue`, `DatePeriod`, function and script attributes |
+| [PayrollEngine.Client.Scripting.Report](xref:PayrollEngine.Client.Scripting.Report) | Report-specific types used within report functions |
 
 ---
 
@@ -142,12 +142,12 @@ for the full reference.
 
 | Namespace | Description |
 |:--|:--|
-| [PayrollEngine.Client](api/PayrollEngine.Client.html) | HTTP client (`PayrollHttpClient`), API endpoint definitions, console base classes, configuration |
-| [PayrollEngine.Client.Model](api/PayrollEngine.Client.Model.html) | Payroll domain model: `Tenant`, `Employee`, `Case`, `CaseField`, `WageType`, `Collector`, `Payrun`, … |
-| [PayrollEngine.Client.Exchange](api/PayrollEngine.Client.Exchange.html) | Exchange import/export model and visitor pattern for regulation data |
-| [PayrollEngine.Client.QueryExpression](api/PayrollEngine.Client.QueryExpression.html) | Fluent query expression builder for REST API filter parameters |
-| [PayrollEngine.Client.Command](api/PayrollEngine.Client.Command.html) | CLI command base classes |
-| [PayrollEngine.Client.Script](api/PayrollEngine.Client.Script.html) | Script parsers for extracting function code from regulation objects during import/export |
+| [PayrollEngine.Client](xref:PayrollEngine.Client) | HTTP client (`PayrollHttpClient`), API endpoint definitions, console base classes, configuration |
+| [PayrollEngine.Client.Model](xref:PayrollEngine.Client.Model) | Payroll domain model: `Tenant`, `Employee`, `Case`, `CaseField`, `WageType`, `Collector`, `Payrun`, … |
+| [PayrollEngine.Client.Exchange](xref:PayrollEngine.Client.Exchange) | Exchange import/export model and visitor pattern for regulation data |
+| [PayrollEngine.Client.QueryExpression](xref:PayrollEngine.Client.QueryExpression) | Fluent query expression builder for REST API filter parameters |
+| [PayrollEngine.Client.Command](xref:PayrollEngine.Client.Command) | CLI command base classes |
+| [PayrollEngine.Client.Script](xref:PayrollEngine.Client.Script) | Script parsers for extracting function code from regulation objects during import/export |
 
 ---
 
@@ -155,11 +155,11 @@ for the full reference.
 
 | Namespace | Description |
 |:--|:--|
-| [PayrollEngine](api/PayrollEngine.html) | Fundamental shared types: enumerations, extensions, calendar utilities, value types |
-| [PayrollEngine.Data](api/PayrollEngine.Data.html) | Data handling utilities |
-| [PayrollEngine.Document](api/PayrollEngine.Document.html) | Document model types |
-| [PayrollEngine.IO](api/PayrollEngine.IO.html) | IO utilities |
-| [PayrollEngine.Serialization](api/PayrollEngine.Serialization.html) | JSON serialization helpers |
+| [PayrollEngine](xref:PayrollEngine) | Fundamental shared types: enumerations, extensions, calendar utilities, value types |
+| [PayrollEngine.Data](xref:PayrollEngine.Data) | Data handling utilities |
+| [PayrollEngine.Document](xref:PayrollEngine.Document) | Document model types |
+| [PayrollEngine.IO](xref:PayrollEngine.IO) | IO utilities |
+| [PayrollEngine.Serialization](xref:PayrollEngine.Serialization) | JSON serialization helpers |
 
 ---
 
