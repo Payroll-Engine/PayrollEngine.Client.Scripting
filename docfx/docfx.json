@@ -3,7 +3,7 @@
     {
       "src": [
         {
-          "files": [ "Client.Scripting/bin/Release/net10.0/PayrollEngine.*.dll" ],
+          "files": [ "publish/PayrollEngine.*.dll" ],
           "src": "../"
         }
       ],

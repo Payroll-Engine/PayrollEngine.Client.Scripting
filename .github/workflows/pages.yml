@@ -38,7 +38,7 @@ jobs:
             --store-password-in-clear-text
 
       - name: Build
-        run: dotnet build Client.Scripting/PayrollEngine.Client.Scripting.csproj -c Release
+        run: dotnet publish Client.Scripting/PayrollEngine.Client.Scripting.csproj -c Release -o publish
 
       - name: Install DocFX
         run: dotnet tool install -g docfx
