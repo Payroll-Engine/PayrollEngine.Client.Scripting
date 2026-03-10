@@ -16,36 +16,36 @@ All scripting functions are defined in the
 [PayrollEngine.Client.Scripting.Function](api/PayrollEngine.Client.Scripting.Function.html) namespace
 and inherit from a common base hierarchy.
 
-```
-Function
-├── PayrollFunction
-│   ├── CaseFunction
-│   │   ├── CaseAvailableFunction
-│   │   └── CaseChangeFunction
-│   │       ├── CaseBuildFunction
-│   │       └── CaseValidateFunction
-│   ├── CaseRelationFunction
-│   │   ├── CaseRelationBuildFunction
-│   │   └── CaseRelationValidateFunction
-│   └── PayrunFunction
-│       ├── PayrunStartFunction
-│       ├── PayrunEndFunction
-│       ├── PayrunEmployeeAvailableFunction
-│       ├── PayrunEmployeeStartFunction
-│       ├── PayrunEmployeeEndFunction
-│       ├── PayrunWageTypeAvailableFunction
-│       ├── CollectorFunction
-│       │   ├── CollectorStartFunction
-│       │   ├── CollectorApplyFunction
-│       │   └── CollectorEndFunction
-│       └── WageTypeFunction
-│           ├── WageTypeValueFunction
-│           └── WageTypeResultFunction
-└── ReportFunction
-    ├── ReportBuildFunction
-    ├── ReportStartFunction
-    └── ReportEndFunction
-```
+<pre>
+<a href="api/PayrollEngine.Client.Scripting.Function.Function.html">Function</a>
+├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrollFunction.html">PayrollFunction</a>
+│   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseFunction.html">CaseFunction</a>
+│   │   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseAvailableFunction.html">CaseAvailableFunction</a>
+│   │   └── <a href="api/PayrollEngine.Client.Scripting.Function.CaseChangeFunction.html">CaseChangeFunction</a>
+│   │       ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseBuildFunction.html">CaseBuildFunction</a>
+│   │       └── <a href="api/PayrollEngine.Client.Scripting.Function.CaseValidateFunction.html">CaseValidateFunction</a>
+│   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseRelationFunction.html">CaseRelationFunction</a>
+│   │   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CaseRelationBuildFunction.html">CaseRelationBuildFunction</a>
+│   │   └── <a href="api/PayrollEngine.Client.Scripting.Function.CaseRelationValidateFunction.html">CaseRelationValidateFunction</a>
+│   └── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunFunction.html">PayrunFunction</a>
+│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunStartFunction.html">PayrunStartFunction</a>
+│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunEndFunction.html">PayrunEndFunction</a>
+│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeAvailableFunction.html">PayrunEmployeeAvailableFunction</a>
+│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeStartFunction.html">PayrunEmployeeStartFunction</a>
+│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunEmployeeEndFunction.html">PayrunEmployeeEndFunction</a>
+│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.PayrunWageTypeAvailableFunction.html">PayrunWageTypeAvailableFunction</a>
+│       ├── <a href="api/PayrollEngine.Client.Scripting.Function.CollectorFunction.html">CollectorFunction</a>
+│       │   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CollectorStartFunction.html">CollectorStartFunction</a>
+│       │   ├── <a href="api/PayrollEngine.Client.Scripting.Function.CollectorApplyFunction.html">CollectorApplyFunction</a>
+│       │   └── <a href="api/PayrollEngine.Client.Scripting.Function.CollectorEndFunction.html">CollectorEndFunction</a>
+│       └── <a href="api/PayrollEngine.Client.Scripting.Function.WageTypeFunction.html">WageTypeFunction</a>
+│           ├── <a href="api/PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.html">WageTypeValueFunction</a>
+│           └── <a href="api/PayrollEngine.Client.Scripting.Function.WageTypeResultFunction.html">WageTypeResultFunction</a>
+└── <a href="api/PayrollEngine.Client.Scripting.Function.ReportFunction.html">ReportFunction</a>
+    ├── <a href="api/PayrollEngine.Client.Scripting.Function.ReportBuildFunction.html">ReportBuildFunction</a>
+    ├── <a href="api/PayrollEngine.Client.Scripting.Function.ReportStartFunction.html">ReportStartFunction</a>
+    └── <a href="api/PayrollEngine.Client.Scripting.Function.ReportEndFunction.html">ReportEndFunction</a>
+</pre>
 
 ### Case Functions
 
