@@ -9,14 +9,38 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Test if a wage type is available (default: true) for a payrun</summary>
+/// <summary>
+/// Determines whether a specific wage type is evaluated for an employee in the current payrun (default: <c>true</c>).
+/// </summary>
+/// <remarks>
+/// This function is evaluated once per wage type per employee, before
+/// <see cref="WageTypeValueFunction"/> runs. Returning <c>false</c> skips the wage type
+/// entirely for this employee in this payrun run: no value is calculated, no result is
+/// stored, and no collectors are fed by that wage type.
+/// <para>The current wage type is identified by <see cref="WageTypeNumber"/>.
+/// Use this to write a single function body that handles multiple wage types differently
+/// based on their number.</para>
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Restrict a bonus wage type to a specific period, for example December only.</item>
+///   <item>Skip a wage type for employees who do not qualify (e.g. no relevant case value).</item>
+///   <item>Disable a wage type during retro runs by testing <see cref="PayrunFunction.IsRetroPayrun"/>.</item>
+/// </list>
+/// <para><strong>Return value:</strong> Return <c>true</c> or <c>null</c> to evaluate the wage type.
+/// Return <c>false</c> to skip it.</para>
+/// </remarks>
 /// <example>
 /// <code language="c#">
-/// // Example with payrun period
+/// // Only evaluate wage type 2250 in December
 /// WageTypeNumber == 2250 &amp;&amp; PeriodStart.Month == 12
 /// </code>
+/// <code language="c#">
+/// // Skip any wage type for employees without a salary case value
+/// GetCaseValue&lt;decimal?&gt;("Salary").HasValue
+/// </code>
 /// </example>
-/// <seealso cref="PayrunEmployeeAvailableFunction">Payrun Employee Available Function</seealso>
+/// <seealso cref="PayrunEmployeeAvailableFunction"/>
+/// <seealso cref="WageTypeValueFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class PayrunWageTypeAvailableFunction : PayrunFunction
 {

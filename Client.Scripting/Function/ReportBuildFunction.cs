@@ -13,7 +13,53 @@ using PayrollEngine.Client.Scripting.Report;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Report build function</summary>
+/// <summary>
+/// Configures the report before it is executed: populates parameter lists, sets defaults, and controls parameter visibility.
+/// </summary>
+/// <remarks>
+/// This function runs when the user opens a report to prepare the parameter form.
+/// It is called every time the form is refreshed. Use it to dynamically populate
+/// drop-down lists, pre-select defaults, and show or hide parameters based on other
+/// parameter values or the user context.
+/// <para>Key capabilities:</para>
+/// <list type="bullet">
+///   <item><strong>Set a parameter value:</strong> <see cref="SetParameter"/> / <see cref="SetParameter{T}"/>.</item>
+///   <item><strong>Show/hide parameters:</strong> <see cref="ShowParameter"/> / <see cref="HideParameter"/>.
+///   Use <see cref="SetParameterReadOnly"/> to make a single-option parameter non-editable.</item>
+///   <item><strong>Populate a list:</strong> <see cref="ExecuteInputListQuery"/> queries the API and
+///   sets the <c>List</c> and <c>ListValues</c> parameter attributes in one call.
+///   <see cref="BuildInputList"/> does the same from an already-fetched <see cref="System.Data.DataTable"/>.</item>
+///   <item><strong>Mark as invalid:</strong> <see cref="BuildInvalid"/> blocks report execution
+///   (e.g. when a required lookup is missing).</item>
+/// </list>
+/// <para><strong>Return value:</strong> Return <c>null</c> to indicate a successful build and
+/// allow the user to edit parameters. Return <c>false</c> to mark the report as not buildable.</para>
+/// <para>For queries, data assembly, and result post-processing see
+/// <see cref="ReportStartFunction"/> and <see cref="ReportEndFunction"/>.</para>
+/// </remarks>
+/// <example>
+/// <code language="c#">
+/// // Resolve the payroll id from the PayrollId parameter, then build an employee list
+/// var payrollId = ResolveParameterPayrollId() ?? 0;
+/// ExecuteInputListQuery(
+///     "QueryEmployees",
+///     new QueryParameters()
+///         .ActiveStatus()
+///         .Parameter("TenantId", TenantId)
+///         .Parameter("PayrollId", payrollId),
+///     "EmployeeId",
+///     row =&gt; row.GetValue&lt;int&gt;("EmployeeId"),
+///     row =&gt; row.GetValue&lt;string&gt;("LastName") + ", " + row.GetValue&lt;string&gt;("FirstName"));
+/// </code>
+/// <code language="c#">
+/// // Hide a parameter when only one payroll exists
+/// var payrollId = ResolveParameterPayrollId();
+/// if (payrollId.HasValue)
+///     HideParameter("PayrollId");
+/// </code>
+/// </example>
+/// <seealso cref="ReportStartFunction"/>
+/// <seealso cref="ReportEndFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class ReportBuildFunction : ReportFunction
 {

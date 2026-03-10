@@ -6,7 +6,32 @@ using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Base class for collector functions</summary>
+/// <summary>
+/// Abstract base class for collector functions, providing access to collector state, statistics,
+/// result attributes, custom results, and retro payrun scheduling.
+/// </summary>
+/// <remarks>
+/// <para>This class extends <see cref="PayrunFunction"/> with collector-specific facilities.
+/// It is the common ancestor of <see cref="CollectorStartFunction"/>, <see cref="CollectorApplyFunction"/>,
+/// and <see cref="CollectorEndFunction"/>.</para>
+/// <para><strong>Collector state:</strong></para>
+/// <list type="bullet">
+///   <item><see cref="CollectorName"/> — identifies the collector.</item>
+///   <item><see cref="CollectorResult"/> — the current committed result value.</item>
+///   <item><see cref="CollectorSummary"/>, <see cref="CollectorCount"/>, <see cref="CollectorMinimum"/>,
+///   <see cref="CollectorMaximum"/>, <see cref="CollectorAverage"/> — running statistics over all applied values.</item>
+///   <item><see cref="CollectorThreshold"/>, <see cref="CollectorMinResult"/>, <see cref="CollectorMaxResult"/> —
+///   configured limits from the regulation definition.</item>
+///   <item><see cref="CollectMode"/> — controls how values are accumulated (sum, replace, etc.).</item>
+///   <item><see cref="Negated"/> — when <c>true</c>, the collected value is negated before accumulation.</item>
+/// </list>
+/// <para><strong>Cross-collector access:</strong> the <see cref="Collector"/> indexer reads the current
+/// value of another collector by name.</para>
+/// <para><strong>Result attributes:</strong> <see cref="ResultAttribute"/> / <see cref="ResultAttributePayrollValue"/>
+/// store metadata on the collector result for consumption by reports.</para>
+/// <para><see cref="AddCustomResult(string, decimal, System.Collections.Generic.IEnumerable{string}, System.Collections.Generic.Dictionary{string, object}, ValueType?, string)"/>
+/// and <see cref="ScheduleRetroPayrun"/> work identically to their counterparts in <see cref="WageTypeFunction"/>.</para>
+/// </remarks>
 // ReSharper disable once PartialTypeWithSinglePart
 public abstract partial class CollectorFunction : PayrunFunction
 {
@@ -138,9 +163,9 @@ public abstract partial class CollectorFunction : PayrunFunction
     public T GetCollectorAttribute<T>(string attributeName, T defaultValue = default) =>
         ChangeValueType(Runtime.GetCollectorAttribute(attributeName), defaultValue);
 
-    /// <summary>Get consolidated and current period employee collector results by query</summary>
+    /// <summary>Returns the sum of historical consolidated and current-period collector values for all collectors in the query</summary>
     /// <param name="query">The result query</param>
-    /// <returns>Consolidated employee collector results</returns>
+    /// <returns>Total of consolidated historical results plus the current in-memory collector values</returns>
     public decimal GetCollectorCurrentConsolidatedValue(CollectorConsolidatedResultQuery query)
     {
         var value = GetConsolidatedCollectorResults(query).Sum();

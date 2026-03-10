@@ -13,7 +13,37 @@ using PayrollEngine.Client.Scripting.Report;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Report start function</summary>
+/// <summary>
+/// Executes at the start of report data collection, after parameters are finalized and before the data set is assembled.
+/// </summary>
+/// <remarks>
+/// This function runs once per report execution, after <see cref="ReportBuildFunction"/> has
+/// configured the parameters and the user has confirmed the inputs. It is the primary hook
+/// for overriding parameter values programmatically and registering custom query strings that
+/// the report engine will use when populating the data set.
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Derive or override parameter values based on other parameters
+///   (<see cref="SetParameter{T}"/>).</item>
+///   <item>Register custom query strings via <see cref="SetQuery"/> so the engine
+///   uses them when populating the data set tables.</item>
+///   <item>Validate parameter combinations and abort execution by returning <c>false</c>.</item>
+/// </list>
+/// <para><strong>Return value:</strong> Return <c>null</c> to proceed with data assembly.
+/// Return <c>false</c> to abort the report before any data is fetched.</para>
+/// <para>For parameter form setup see <see cref="ReportBuildFunction"/>.
+/// For post-processing the assembled data set see <see cref="ReportEndFunction"/>.</para>
+/// </remarks>
+/// <example>
+/// <code language="c#">
+/// // Resolve a payroll id from the parameter and store the division for downstream use
+/// var payrollId = ResolveParameterPayrollId() ?? 0;
+/// var divisionId = ExecutePayrollDivisionIdQuery(payrollId);
+/// SetParameter("DivisionId", divisionId);
+/// </code>
+/// </example>
+/// <seealso cref="ReportBuildFunction"/>
+/// <seealso cref="ReportEndFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class ReportStartFunction : ReportFunction
 {

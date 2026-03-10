@@ -10,46 +10,66 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Calculate the wage type value</summary>
+/// <summary>
+/// Calculates the monetary value of a wage type for an employee in the current payrun period.
+/// </summary>
+/// <remarks>
+/// This is the core calculation function of the payrun. It runs once per wage type per
+/// employee (or multiple times if <see cref="RestartExecution"/> is called). The returned
+/// value becomes the wage type result and is fed to all collectors that reference this wage type.
+/// <para>Available data sources within this function:</para>
+/// <list type="bullet">
+///   <item>Employee case values via <c>Employee["FieldName"]</c> or
+///   <see cref="PayrollFunction.GetCaseValue{T}"/>.</item>
+///   <item>Running collector values via <see cref="WageTypeFunction.Collector"/> indexer.</item>
+///   <item>Values from other wage types already calculated via <see cref="WageTypeFunction.WageType"/> indexer.</item>
+///   <item>Lookup tables via <see cref="PayrollFunction.GetLookup{T}(string, string, string)"/> and
+///   <see cref="PayrollFunction.GetRangeLookup{T}(string, decimal, string, string)"/>.</item>
+///   <item>Historical wage type results via <see cref="PayrunFunction.GetWageTypeResults(WageTypeRangeResultQuery)"/> or
+///   <see cref="PayrunFunction.GetConsolidatedWageTypeResults"/>.</item>
+/// </list>
+/// <para><strong>Return value:</strong> Return a <c>decimal</c> value to set the wage type result.
+/// Return <c>null</c> to produce no result for this wage type (no result stored, no collector fed).
+/// Return <see cref="PayrollValue.Empty"/> to commit an explicit zero with metadata.</para>
+/// <para><strong>Custom results:</strong> Use <see cref="WageTypeFunction.AddCustomResult(string, decimal, System.Collections.Generic.IEnumerable{string}, System.Collections.Generic.Dictionary{string, object}, ValueType?, string)"/>
+/// to attach supplementary breakdown results (e.g. per cost-centre amounts) alongside the
+/// primary result.</para>
+/// <para><strong>Retro runs:</strong> Use <see cref="WageTypeFunction.ScheduleRetroPayrun"/> to
+/// trigger a retrospective correction payrun for a prior period.</para>
+/// <para><strong>Low-Code / No-Code:</strong> The wage type value can be derived entirely through
+/// action expressions using <c>WageTypeValueAction</c> attributes — no C# scripting required.
+/// The <see cref="GetValue"/> entry point invokes all registered actions before executing
+/// any inline script body.</para>
+/// </remarks>
 /// <example>
 /// <code language="c#">
-/// // Example from case value
-/// Employee["Wage"]
+/// // Simple: return a case value as the wage type result
+/// Employee["Salary"]
 /// </code>
 /// <code language="c#">
-/// // Example from conditional case payroll value
-/// (int)Employee["Wage"] > 0 ? Employee["ManagementWage"] : PayrollValue.Empty
+/// // Conditional: only return if a prerequisite wage type is positive
+/// (decimal)WageType[2300] &gt; 0 ? Employee["Bonus"] : PayrollValue.Empty
 /// </code>
 /// <code language="c#">
-/// // Example from running collector.
-/// Collector["MyCollector"]
+/// // Lookup-driven calculation
+/// (decimal)Employee["Salary"] * GetLookup&lt;decimal&gt;("SocialRates", "Standard")
 /// </code>
 /// <code language="c#">
-/// // Example from running wage type
-/// WageType[2300]
+/// // With a custom breakdown result per cost centre
+/// var total = (decimal)Employee["Salary"];
+/// AddCustomResult("CostCenter1", total * 0.6m);
+/// AddCustomResult("CostCenter2", total * 0.4m);
+/// return total;
 /// </code>
 /// <code language="c#">
-/// // Example with custom wage type result
-/// SetResult("MyResult", 5300); return WageType[2300]
-/// </code>
-/// <code language="c#">
-/// // Example with custom wage type result including the value type
-/// SetResult("MyResult", 5300, 2); return WageType[2300]
-/// </code>
-/// <code language="c#">
-/// // Example with custom wage type result including the value description
-/// SetResult("MyResult", 5300, "KST1"); return WageType[2300]
-/// </code>
-/// <code language="c#">
-/// // Example with custom wage type result including the value type and description
-/// SetResult("MyResult", 5300, 2, "KST1"); return WageType[2300]
-/// </code>
-/// <code language="c#">
-/// // Example with average wage type result from the last 3 periods on complete payrun jobs
-/// GetWageTypeResults(2300, new PeriodResultQuery(3, PayrunJobStatus.Complete)).DefaultIfEmpty().Average()
+/// // Average of the last 3 completed periods
+/// GetWageTypeResults(WageTypeNumber,
+///     new WageTypePeriodResultQuery(3, PayrunJobStatus.Complete))
+///     .DefaultIfEmpty().Average()
 /// </code>
 /// </example>
-/// <seealso cref="WageTypeResultFunction">Wage Type Result Function</seealso>
+/// <seealso cref="WageTypeResultFunction"/>
+/// <seealso cref="PayrunWageTypeAvailableFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class WageTypeValueFunction : WageTypeFunction
 {

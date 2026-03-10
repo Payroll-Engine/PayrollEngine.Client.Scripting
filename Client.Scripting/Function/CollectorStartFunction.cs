@@ -10,7 +10,35 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Start the collector</summary>
+/// <summary>
+/// Executes when a collector is first activated in a payrun, before any wage type values are applied.
+/// </summary>
+/// <remarks>
+/// This function runs once per collector per employee, at the moment the collector is
+/// initialised. It is used to set an initial state or override the starting value set.
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Override the initial value set with <see cref="SetValues"/> — for example, to carry
+///   a residual amount forward from a previous period.</item>
+///   <item>Read an employee runtime value (<see cref="PayrunFunction.GetEmployeeRuntimeValue"/>)
+///   to seed the collector from pre-computed data.</item>
+///   <item>Log collector initialisation for audit purposes.</item>
+/// </list>
+/// <para><strong>Return value:</strong> Return <c>null</c> to proceed normally.
+/// Return any numeric value to override the initial collector value directly.
+/// Returning <c>false</c> (cast to object) suppresses further processing for this collector.</para>
+/// <para><strong>Low-Code / No-Code:</strong> Simple initialization can be expressed through
+/// <c>CollectorStartAction</c> attributes. The <see cref="Start"/> entry point invokes all
+/// registered actions before executing any inline script body.</para>
+/// </remarks>
+/// <example>
+/// <code language="c#">
+/// // Carry forward a residual amount from the previous period
+/// SetValues(new[] { GetCaseValue&lt;decimal&gt;("CollectorCarry") });
+/// </code>
+/// </example>
+/// <seealso cref="CollectorApplyFunction"/>
+/// <seealso cref="CollectorEndFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class CollectorStartFunction : CollectorFunction
 {

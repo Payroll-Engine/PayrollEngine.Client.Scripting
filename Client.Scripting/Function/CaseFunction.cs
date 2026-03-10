@@ -2,7 +2,19 @@
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Base class for case functions</summary>
+/// <summary>
+/// Base class for all case scripting functions.
+/// </summary>
+/// <remarks>
+/// Provides access to the current case name and type, and read access to case attributes.
+/// Derives from <see cref="PayrollFunction"/>, which supplies the full payroll context:
+/// tenant, user, employee, payroll period, cycle, case values, and lookups.
+/// <para>Two concrete sub-hierarchies inherit from this class:</para>
+/// <list type="bullet">
+///   <item><see cref="CaseAvailableFunction"/> — determines whether the case is offered for input.</item>
+///   <item><see cref="CaseChangeFunction"/> — base for <see cref="CaseBuildFunction"/> and <see cref="CaseValidateFunction"/>.</item>
+/// </list>
+/// </remarks>
 // ReSharper disable once PartialTypeWithSinglePart
 public abstract partial class CaseFunction : PayrollFunction
 {

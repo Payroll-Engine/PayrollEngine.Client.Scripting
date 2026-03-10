@@ -11,21 +11,41 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Build a case (default: true), optionally considering related source cases</summary>
+/// <summary>
+/// Populates case fields before the input form is displayed to the user.
+/// </summary>
+/// <remarks>
+/// This function executes every time the case form is opened or refreshed. It is used to
+/// pre-fill default values, derive field content from existing case data, apply lookups,
+/// compute dates, and control which fields are shown or hidden.
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Set <c>Start["Field"]</c> and <c>End["Field"]</c> to default the value period.</item>
+///   <item>Pre-fill <c>Value["Field"]</c> from existing case values or lookups.</item>
+///   <item>Show or hide fields with <see cref="CaseChangeFunction.ShowCaseField"/> / <see cref="CaseChangeFunction.HideCaseField"/>.</item>
+///   <item>Mark the form as invalid with <see cref="BuildInvalid"/> to block submission.</item>
+/// </list>
+/// <para><strong>Return value:</strong> Return <c>null</c> to indicate a successful build.
+/// Return <c>false</c> to mark the case as not buildable (equivalent to <see cref="BuildInvalid"/>).</para>
+/// <para><strong>Low-Code / No-Code:</strong> Field population can also be expressed through
+/// action expressions using <c>CaseBuildAction</c> attributes — no C# scripting required.
+/// The <see cref="Build"/> entry point invokes all registered actions before executing
+/// any inline script body.</para>
+/// </remarks>
 /// <example>
 /// <code language="c#">
-/// // Example with case value
-/// (int)Employee["Level"] >= 2
+/// // Set the start date to today and derive a salary value
+/// Start["Salary"] = PeriodStart;
+/// Value["Salary"] = GetCaseValue&lt;decimal&gt;("BaseSalary") * 1.05m;
 /// </code>
 /// <code language="c#">
-/// // Example with related case value
-/// HasCaseValue("Wage")
-/// </code>
-/// <code language="c#">
-/// // Example with optional related case value
-/// HasCaseValue("Wage") ? (int)Employee["Level"] >= 2 : false
+/// // Hide a field that is not applicable
+/// if ((string)Employee["ContractType"] != "Management")
+///     HideCaseField("ManagementBonus");
 /// </code>
 /// </example>
+/// <seealso cref="CaseAvailableFunction"/>
+/// <seealso cref="CaseValidateFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class CaseBuildFunction : CaseChangeFunction
 {
@@ -46,20 +66,14 @@ public partial class CaseBuildFunction : CaseChangeFunction
 
     #region Validation
 
-    /// <summary>
-    /// Set case build to valid
-    /// </summary>
+    /// <summary>Marks the case form as valid; submission is permitted</summary>
     public void BuildValid() => BuildValidity(true);
 
-    /// <summary>
-    /// Set case build to invalid
-    /// </summary>
+    /// <summary>Marks the case form as invalid; submission is blocked</summary>
     public void BuildInvalid() => BuildValidity(false);
 
-    /// <summary>
-    /// Set case build validity
-    /// </summary>
-    /// <param name="valid">Build validity</param>
+    /// <summary>Sets the validity state of the case form</summary>
+    /// <param name="valid"><c>true</c> to permit submission; <c>false</c> to block it</param>
     public void BuildValidity(bool valid) =>
         SetCaseAttribute(InputAttributes.Validity, valid);
 
@@ -67,11 +81,9 @@ public partial class CaseBuildFunction : CaseChangeFunction
 
     #region Info
 
-    /// <summary>
-    /// Add build info
-    /// </summary>
-    /// <param name="name">Info name</param>
-    /// <param name="value">Info value</param>
+    /// <summary>Adds or updates a named entry in the case form's edit-info attribute</summary>
+    /// <param name="name">The info entry name</param>
+    /// <param name="value">The info entry value</param>
     public void AddInfo(string name, object value)
     {
         // info values
@@ -87,10 +99,8 @@ public partial class CaseBuildFunction : CaseChangeFunction
         SetCaseAttribute(InputAttributes.EditInfo, JsonSerializer.Serialize(values));
     }
 
-    /// <summary>
-    /// Remove build info
-    /// </summary>
-    /// <param name="name">Info name</param>
+    /// <summary>Removes a named entry from the case form's edit-info attribute</summary>
+    /// <param name="name">The info entry name to remove</param>
     public void RemoveInfo(string name)
     {
         // info values

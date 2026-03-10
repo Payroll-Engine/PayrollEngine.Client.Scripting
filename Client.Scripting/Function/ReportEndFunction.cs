@@ -14,7 +14,39 @@ using PayrollEngine.Client.Scripting.Report;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Report end function</summary>
+/// <summary>
+/// Post-processes the assembled report data set after all queries have been executed.
+/// </summary>
+/// <remarks>
+/// This function runs once per report execution, after the report engine has populated
+/// the <see cref="DataSet"/> from all registered queries. It receives the complete data set
+/// and can add, remove, or transform tables, define inter-table relations, and execute
+/// supplementary queries.
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Execute supplementary queries and add the results as new tables
+///   (<see cref="ExecuteResultQuery(string, string, System.Collections.Generic.Dictionary{string, string})"/>).</item>
+///   <item>Remove intermediate or temporary tables that should not appear in the output
+///   (<see cref="RemoveTables"/>).</item>
+///   <item>Add parent-child relations between tables for hierarchical reports
+///   (<see cref="AddRelation(string, string, string, string)"/>).</item>
+///   <item>Compute aggregates or derived values directly on the data set
+///   (<see cref="Compute{T}"/>).</item>
+///   <item>Merge additional data into an existing table via
+///   <see cref="ExecuteMergeQuery(string, string, string, System.Collections.Generic.Dictionary{string, string}, DataMergeSchemaChange)"/>.</item>
+/// </list>
+/// <para><strong>Return value:</strong> Return <c>null</c> to deliver the data set to the renderer.
+/// Return <c>false</c> to abort report delivery after data assembly.</para>
+/// </remarks>
+/// <example>
+/// <code language="c#">
+/// // Remove a staging table and add a parent-child relation
+/// RemoveTable("TempEmployees");
+/// AddRelation("PayrollEmployees", "Payrolls", "WageTypeResults", "PayrollResultId");
+/// </code>
+/// </example>
+/// <seealso cref="ReportBuildFunction"/>
+/// <seealso cref="ReportStartFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class ReportEndFunction : ReportFunction
 {

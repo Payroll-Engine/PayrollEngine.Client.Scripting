@@ -9,7 +9,39 @@ using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Validate related case, considering related source case values, see <see cref="CaseRelationFunction.SourceValue"/> and <see cref="CaseRelationFunction.HasSourceValue"/></summary>
+/// <summary>
+/// Validates the combined state of source and target case fields within a case relation.
+/// </summary>
+/// <remarks>
+/// This function runs after <see cref="CaseRelationBuildFunction"/> has populated the target
+/// case fields. It can inspect both source and target values to detect invalid combinations
+/// and report issues.
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Ensure that a target value derived from the source is within allowed limits.</item>
+///   <item>Verify that the source slot is eligible to create the target relation.</item>
+///   <item>Cross-case consistency checks that cannot be expressed at the individual case level.</item>
+/// </list>
+/// <para><strong>Adding issues:</strong> Use <see cref="AddCaseIssue"/> for relation-level messages
+/// and <see cref="AddCaseFieldIssue"/> to attach an issue to a specific target field.
+/// Localised messages can be referenced via <see cref="AddCaseAttributeIssue"/> and
+/// <see cref="AddAttributeIssue"/>.</para>
+/// <para><strong>Return value:</strong> Return <c>null</c> to pass validation.
+/// Return <c>false</c> to reject the relation without an explicit message.
+/// The submission is blocked if any issue is present.</para>
+/// <para><strong>Low-Code / No-Code:</strong> Simple relation validations can be expressed
+/// through action expressions using <c>CaseRelationValidateAction</c> attributes.
+/// The <see cref="Validate"/> entry point invokes registered actions before the script body.</para>
+/// </remarks>
+/// <example>
+/// <code language="c#">
+/// // Ensure the derived target wage does not exceed the global cap
+/// var cap = GetLookup&lt;decimal&gt;("WageCap", "Max");
+/// if ((decimal)TargetValue["Wage"] > cap)
+///     AddCaseFieldIssue("Wage", $"Derived wage exceeds the allowed cap of {cap}.");
+/// </code>
+/// </example>
+/// <seealso cref="CaseRelationBuildFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class CaseRelationValidateFunction : CaseRelationFunction
 {

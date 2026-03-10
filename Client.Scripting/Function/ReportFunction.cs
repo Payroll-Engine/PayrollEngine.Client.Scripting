@@ -65,7 +65,32 @@ public class CaseValueColumn
 
 #endregion
 
-/// <summary>Base class for report functions</summary>
+/// <summary>
+/// Abstract base class for report functions, providing access to the report name,
+/// parameters, attributes, API query execution, lookup resolution, and case value retrieval.
+/// </summary>
+/// <remarks>
+/// <para>This class is the common ancestor of the three report lifecycle functions:</para>
+/// <list type="bullet">
+///   <item><see cref="ReportBuildFunction"/> — configures the parameter form before the report is executed.</item>
+///   <item><see cref="ReportStartFunction"/> — prepares queries and parameters at execution start.</item>
+///   <item><see cref="ReportEndFunction"/> — post-processes the assembled data set.</item>
+/// </list>
+/// <para><strong>Parameters:</strong> <see cref="HasParameter"/> / <see cref="GetParameter{T}"/> read
+/// user-supplied report inputs. <see cref="GetParameterAttribute{T}"/> accesses parameter-level
+/// metadata such as input-list definitions. <see cref="ParameterHidden"/> tests visibility.</para>
+/// <para><strong>Attributes:</strong> <see cref="GetReportAttribute{T}"/> / <see cref="SetReportAttribute"/>
+/// read and write report-scoped key/value metadata that persists across build/start/end phases.</para>
+/// <para><strong>Query execution:</strong> <see cref="ExecuteQuery(string, string, string, System.Collections.Generic.Dictionary{string, string})"/>
+/// calls REST API endpoints and returns results as a <see cref="System.Data.DataTable"/>.
+/// Specialised overloads cover global/national/company/employee case values, wage type results,
+/// collector results, and payrun results.</para>
+/// <para><strong>Lookup resolution:</strong> <see cref="ExecuteLookupQuery(int, string, string, System.DateTime?, System.DateTime?)"/>
+/// returns a key/value dictionary for a named lookup, suitable for code-to-label translation in reports.</para>
+/// <para><strong>Parameter resolution helpers:</strong> <see cref="ResolveParameterEmployeeId"/>,
+/// <see cref="ResolveParameterPayrollId"/>, <see cref="ResolveParameterRegulationId"/>, etc.
+/// accept either an integer id or a name/identifier string and resolve to the canonical object id.</para>
+/// </remarks>
 // ReSharper disable once PartialTypeWithSinglePart
 public abstract partial class ReportFunction : Function
 {
@@ -89,7 +114,6 @@ public abstract partial class ReportFunction : Function
     #region Report
 
     /// <summary>Gets the report name</summary>
-    /// <value>The name of the case</value>
     public string ReportName { get; }
 
     /// <summary>Get report attribute value</summary>
@@ -98,11 +122,11 @@ public abstract partial class ReportFunction : Function
     public object GetReportAttribute(string attributeName) =>
         Runtime.GetReportAttribute(attributeName);
 
-    /// <summary>Get report attribute typed value</summary>
-    /// <typeparam name="T"></typeparam>
+    /// <summary>Gets a report attribute as a typed value</summary>
+    /// <typeparam name="T">The target value type</typeparam>
     /// <param name="attributeName">Name of the attribute</param>
     /// <param name="defaultValue">The default value</param>
-    /// <returns>The report attribute value</returns>
+    /// <returns>The report attribute value cast to <typeparamref name="T"/></returns>
     public T GetReportAttribute<T>(string attributeName, T defaultValue = default) =>
         ChangeValueType(GetReportAttribute(attributeName), defaultValue);
 
@@ -137,12 +161,12 @@ public abstract partial class ReportFunction : Function
     public object GetParameterAttribute(string parameterName, string attributeName) =>
         Runtime.GetParameterAttribute(parameterName, attributeName);
 
-    /// <summary>Get report parameter attribute typed value</summary>
-    /// <typeparam name="T"></typeparam>
+    /// <summary>Gets a report parameter attribute as a typed value</summary>
+    /// <typeparam name="T">The target value type</typeparam>
     /// <param name="parameterName">The parameter name</param>
     /// <param name="attributeName">Name of the attribute</param>
     /// <param name="defaultValue">The default value</param>
-    /// <returns>The report attribute value</returns>
+    /// <returns>The parameter attribute value cast to <typeparamref name="T"/></returns>
     public T GetParameterAttribute<T>(string parameterName, string attributeName, T defaultValue = default) =>
         ChangeValueType(GetParameterAttribute(parameterName, attributeName), defaultValue);
 
@@ -263,32 +287,32 @@ public abstract partial class ReportFunction : Function
     public Dictionary<string, string> ExecuteLookupValueQuery(int regulationId, string lookupName, string keyAttribute, string valueAttribute) =>
         Runtime.ExecuteLookupValueQuery(regulationId, lookupName, keyAttribute, valueAttribute);
 
-    /// <summary>Execute global case value query on the Api web method</summary>
+    /// <summary>Queries global case values and returns the result as a data table</summary>
     /// <param name="tableName">Target table name</param>
-    /// <param name="query">The query</param>
-    /// <returns>Resulting data table, existing will be removed</returns>
+    /// <param name="query">Optional query filter</param>
+    /// <returns>Data table containing the matching case value rows</returns>
     public DataTable ExecuteGlobalCaseValueQuery(string tableName, ReportQuery query = null) =>
      Runtime.ExecuteGlobalCaseValueQuery(tableName, ReportQueryToTuple(query));
 
-    /// <summary>Execute national case value query on the Api web method</summary>
+    /// <summary>Queries national case values and returns the result as a data table</summary>
     /// <param name="tableName">Target table name</param>
-    /// <param name="query">The query</param>
-    /// <returns>Resulting data table, existing will be removed</returns>
+    /// <param name="query">Optional query filter</param>
+    /// <returns>Data table containing the matching case value rows</returns>
     public DataTable ExecuteNationalCaseValueQuery(string tableName, ReportQuery query = null) =>
         Runtime.ExecuteNationalCaseValueQuery(tableName, ReportQueryToTuple(query));
 
-    /// <summary>Execute company case value query on the Api web method</summary>
+    /// <summary>Queries company case values and returns the result as a data table</summary>
     /// <param name="tableName">Target table name</param>
-    /// <param name="query">The query</param>
-    /// <returns>Resulting data table, existing will be removed</returns>
+    /// <param name="query">Optional query filter</param>
+    /// <returns>Data table containing the matching case value rows</returns>
     public DataTable ExecuteCompanyCaseValueQuery(string tableName, ReportQuery query = null) =>
         Runtime.ExecuteCompanyCaseValueQuery(tableName, ReportQueryToTuple(query));
 
-    /// <summary>Execute employee case value query on the Api web method</summary>
+    /// <summary>Queries case values for a specific employee and returns the result as a data table</summary>
     /// <param name="tableName">Target table name</param>
     /// <param name="employeeId">The employee id</param>
-    /// <param name="query">The query</param>
-    /// <returns>Resulting data table, existing will be removed</returns>
+    /// <param name="query">Optional query filter</param>
+    /// <returns>Data table containing the matching case value rows</returns>
     public DataTable ExecuteEmployeeCaseValueQuery(string tableName, int employeeId, ReportQuery query = null) =>
         Runtime.ExecuteEmployeeCaseValueQuery(tableName, employeeId, ReportQueryToTuple(query));
 
@@ -401,12 +425,12 @@ public abstract partial class ReportFunction : Function
         return result.Rows[0].GetValue<T>(attributeName);
     }
 
-    /// <summary>Execute a value query on the Api web method</summary>
+    /// <summary>Executes a scalar query on the API and returns a typed value with a fallback</summary>
     /// <param name="methodName">The query name</param>
-    /// <param name="attributeName">Name of the attribute</param>
-    /// <param name="parameters">The method parameters</param>
-    /// <param name="defaultValue">The method parameters</param>
-    /// <returns>Resulting data table, existing will be removed</returns>
+    /// <param name="attributeName">The column name to read from the single result row</param>
+    /// <param name="parameters">The query parameters</param>
+    /// <param name="defaultValue">The value returned when the result is empty or has no matching row</param>
+    /// <returns>The typed column value, or <paramref name="defaultValue"/> if no row exists</returns>
     public T ExecuteValueQuery<T>(string methodName, string attributeName,
         Dictionary<string, string> parameters, T defaultValue)
     {
@@ -427,17 +451,19 @@ public abstract partial class ReportFunction : Function
 
     #region Lookups
 
-    /// <summary>Get lookup values, grouped by lookup</summary>
+    /// <summary>Returns a key/value dictionary for a single named lookup</summary>
     /// <param name="payrollId">The payroll id</param>
-    /// <param name="culture">The culture</param>
     /// <param name="lookupName">The lookup name</param>
-    /// <param name="regulationDate">The regulation date</param>
-    /// <param name="evaluationDate">The evaluation date</param>
-    /// <returns>Lookup values dictionary by lookup name, value is a key/value dictionary</returns>
-    /// <code>
-    /// var lookup = ExecuteLookupQuery(1, "MyLookupName", Language.Italian);
-    /// var lookupValue = lookup["MyLookupKey"];
+    /// <param name="culture">The culture used for localised values</param>
+    /// <param name="regulationDate">The regulation date (default: UTC now)</param>
+    /// <param name="evaluationDate">The evaluation date (default: UTC now)</param>
+    /// <returns>Dictionary mapping lookup keys to their string values; empty if the lookup is not found</returns>
+    /// <example>
+    /// <code language="c#">
+    /// var lookup = ExecuteLookupQuery(payrollId, "TaxRates", UserCulture);
+    /// var rate = lookup["Standard"];
     /// </code>
+    /// </example>
     public Dictionary<string, string> ExecuteLookupQuery(int payrollId,
         string lookupName, string culture,
         DateTime? regulationDate = null, DateTime? evaluationDate = null)
@@ -1029,8 +1055,7 @@ public abstract partial class ReportFunction : Function
         return null;
     }
 
-    /// <summary>Resolve the object id from the name/id parameter</summary>
-    /// <summary>Get the object id from the parameter</summary>
+    /// <summary>Resolves the object id from a report parameter that may contain an integer id or a name string</summary>
     /// <param name="queryName">The query name</param>
     /// <param name="parameterName">The parameter name</param>
     /// <returns>The object id, null for unknown payrun</returns>
@@ -1081,11 +1106,9 @@ public abstract partial class ReportFunction : Function
 
     #region Info
 
-    /// <summary>
-    /// Add build info
-    /// </summary>
-    /// <param name="name">Info name</param>
-    /// <param name="value">Info value</param>
+    /// <summary>Adds or updates a named entry in the report's edit-info attribute</summary>
+    /// <param name="name">The info entry name</param>
+    /// <param name="value">The info entry value</param>
     public void AddInfo(string name, object value)
     {
         // info values
@@ -1101,10 +1124,8 @@ public abstract partial class ReportFunction : Function
         SetReportAttribute(InputAttributes.EditInfo, JsonSerializer.Serialize(values));
     }
 
-    /// <summary>
-    /// Remove build info
-    /// </summary>
-    /// <param name="name">Info name</param>
+    /// <summary>Removes a named entry from the report's edit-info attribute</summary>
+    /// <param name="name">The info entry name to remove</param>
     public void RemoveInfo(string name)
     {
         // info values

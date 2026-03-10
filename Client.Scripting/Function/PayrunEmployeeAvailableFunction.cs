@@ -9,18 +9,39 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Test if an employee is available (default: true) for a payrun</summary>
+/// <summary>
+/// Determines whether an employee participates in the current payrun (default: <c>true</c>).
+/// </summary>
+/// <remarks>
+/// This function is evaluated once per employee, before any wage types or collectors are
+/// processed for that employee. Returning <c>false</c> skips the employee entirely: no
+/// <see cref="PayrunEmployeeStartFunction"/>, no wage types, no collectors, no
+/// <see cref="PayrunEmployeeEndFunction"/> will execute for the skipped employee.
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Exclude employees based on a case field attribute (e.g. employment status, level).</item>
+///   <item>Restrict processing to specific periods or cycle phases (e.g. annual bonus payrun).</item>
+///   <item>Skip employees without a required case value in the current period.</item>
+/// </list>
+/// <para><strong>Return value:</strong> Return <c>true</c> or <c>null</c> to include the employee.
+/// Return <c>false</c> to exclude the employee from this payrun.</para>
+/// </remarks>
 /// <example>
 /// <code language="c#">
-/// // Example with employee case value
+/// // Include only senior employees
 /// (int)Employee["Level"] >= 2
 /// </code>
 /// <code language="c#">
-/// // Example with payrun period
-/// PeriodStart.Month == 12
+/// // Include only in the last period of the cycle (e.g. annual bonus payrun)
+/// LastCyclePeriod
+/// </code>
+/// <code language="c#">
+/// // Exclude employees without an active contract case value
+/// GetCaseValue&lt;string&gt;("ContractStatus") == "Active"
 /// </code>
 /// </example>
-/// <seealso cref="PayrunWageTypeAvailableFunction">Payrun Wage Type Available Function</seealso>
+/// <seealso cref="PayrunWageTypeAvailableFunction"/>
+/// <seealso cref="PayrunEmployeeStartFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class PayrunEmployeeAvailableFunction : PayrunFunction
 {

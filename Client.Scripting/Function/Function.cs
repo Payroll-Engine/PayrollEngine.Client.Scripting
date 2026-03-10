@@ -67,12 +67,12 @@ public abstract partial class Function : IDisposable
     /// <summary>The user type</summary>
     public UserType UserType { get; }
 
-    /// <summary>Test for self employee self-service (user is employee)</summary>
+    /// <summary>Tests whether the current user is an employee acting in self-service context</summary>
     [ActionProperty("Test for self service user")]
     public bool SelfServiceUser =>
         UserType == UserType.Employee;
 
-    /// <summary>Test for user type</summary>
+    /// <summary>Tests whether the current user has administrator-level access</summary>
     public bool AdminUser =>
         UserType >= UserType.TenantAdministrator;
 
@@ -88,42 +88,36 @@ public abstract partial class Function : IDisposable
 
     #region Culture and Calendar
 
-    /// <summary>Gets the derived culture name by priority:
-    /// - employee (optional)
-    /// - division (optional)
-    /// - tenant (fallback)</summary>
-    /// <param name="divisionId">The division id, use 0 to ignore the division culture (mandatory with employee id)</param>
-    /// <param name="employeeId">The employee id, use 0 to ignore the employee culture</param>
+    /// <summary>Returns the most specific culture name available in the context</summary>
+    /// <remarks>Resolution order: employee culture → division culture → tenant culture (fallback).</remarks>
+    /// <param name="divisionId">The division id; pass 0 to skip the division level</param>
+    /// <param name="employeeId">The employee id; pass 0 to skip the employee level</param>
     /// <returns>The most derived culture name</returns>
     public string GetDerivedCulture(int divisionId = 0, int employeeId = 0) =>
         Runtime.GetDerivedCulture(divisionId, employeeId);
 
-    /// <summary>Gets the derived calendar name by priority:
-    /// - employee (optional)
-    /// - division (optional)
-    /// - tenant (fallback)</summary>
-    /// <param name="divisionId">The division id, use 0 to ignore the division culture</param>
-    /// <param name="employeeId">The employee id, use 0 to ignore the employee culture</param>
+    /// <summary>Returns the most specific calendar name available in the context</summary>
+    /// <remarks>Resolution order: employee calendar → division calendar → tenant calendar (fallback).</remarks>
+    /// <param name="divisionId">The division id; pass 0 to skip the division level</param>
+    /// <param name="employeeId">The employee id; pass 0 to skip the employee level</param>
     /// <returns>The most derived calendar name</returns>
     public string GetDerivedCalendar(int divisionId = 0, int employeeId = 0) =>
         Runtime.GetDerivedCalendar(divisionId, employeeId);
 
-    /// <summary>
-    /// Count the calendar days from a date period
-    /// </summary>
+    /// <summary>Counts calendar days in the given period using the tenant calendar</summary>
     /// <param name="start">The period start date</param>
     /// <param name="end">The period end date</param>
-    /// <param name="culture">The calendar culture</param>
+    /// <param name="culture">The calendar culture (default: tenant culture)</param>
+    /// <returns>Number of calendar days in the period</returns>
     public int GetCalendarDayCount(DateTime start, DateTime end, string culture = null) =>
         GetCalendarDayCount(GetDerivedCalendar(), start, end, culture);
 
-    /// <summary>
-    /// Count the calendar days from a date period
-    /// </summary>
+    /// <summary>Counts calendar days in the given period using a named calendar</summary>
     /// <param name="calendarName">The calendar name</param>
     /// <param name="start">The period start date</param>
     /// <param name="end">The period end date</param>
-    /// <param name="culture">The calendar culture</param>
+    /// <param name="culture">The calendar culture (default: tenant culture)</param>
+    /// <returns>Number of calendar days in the period</returns>
     public int GetCalendarDayCount(string calendarName, DateTime start, DateTime end, string culture = null) =>
         Runtime.GetCalendarDayCount(calendarName, start, end, culture);
 
@@ -262,12 +256,18 @@ public abstract partial class Function : IDisposable
     public void Log(LogLevel level, string message, string error = null, string comment = null) =>
         Runtime.AddLog((int)level, message, error, comment);
 
-    /// <summary>Add task</summary>
-    /// <param name="name">The task name</param>
-    /// <param name="instruction">The task instruction</param>
-    /// <param name="scheduleDate">The task schedule date</param>
-    /// <param name="category">The task category</param>
-    /// <param name="attributes">The task attributes</param>
+    /// <summary>Creates a scheduled task that is visible in the PayrollEngine task list after the function completes</summary>
+    /// <param name="name">The task name, displayed in the task list</param>
+    /// <param name="instruction">Free-text instructions for the user who will process the task</param>
+    /// <param name="scheduleDate">The date on which the task is due</param>
+    /// <param name="category">Optional grouping category for filtering tasks</param>
+    /// <param name="attributes">Optional key/value metadata attached to the task</param>
+    /// <remarks>
+    /// Tasks are a lightweight way to trigger manual follow-up work from within a function.
+    /// They are written to the task store when the function exits and do not affect the payrun result.
+    /// Common uses: document request after a case change, approval reminder after a payrun, compliance
+    /// alert when a threshold is exceeded.
+    /// </remarks>
     public void AddTask(string name, string instruction, DateTime scheduleDate, string category = null,
         Dictionary<string, object> attributes = null) =>
         Runtime.AddTask(name, instruction, scheduleDate, category, attributes);
@@ -276,10 +276,17 @@ public abstract partial class Function : IDisposable
 
     #region Webhooks
 
-    /// <summary>Invoke report webhook</summary>
-    /// <param name="requestOperation">The request operation</param>
-    /// <param name="requestMessage">The webhook request message</param>
-    /// <returns>The webhook response object</returns>
+    /// <summary>Sends a synchronous webhook request to an external endpoint and returns the deserialized response</summary>
+    /// <typeparam name="T">The expected response type; the JSON response body is deserialized into this type</typeparam>
+    /// <param name="requestOperation">The operation name that identifies the target webhook endpoint</param>
+    /// <param name="requestMessage">Optional request payload; serialized to JSON before sending</param>
+    /// <returns>The deserialized response, or <c>default(T)</c> when the response body is empty</returns>
+    /// <remarks>
+    /// Webhooks are configured on the tenant and mapped to operation names.
+    /// The call is synchronous — the function waits for the HTTP response before continuing.
+    /// Use this to integrate external systems (e.g. send a notification, query an HR system) from within any function.
+    /// Errors are propagated as exceptions.
+    /// </remarks>
     public T InvokeWebhook<T>(string requestOperation, object requestMessage = null)
     {
         if (string.IsNullOrWhiteSpace(requestOperation))
@@ -335,9 +342,9 @@ public abstract partial class Function : IDisposable
     /// <param name="value">Value to change</param>
     /// <param name="defaultValue">Default value</param>
     /// <param name="provider">Format provider (default <see cref="CultureInfo.InvariantCulture"/>) </param>
-    /// <remarks>Supports json elements</remarks>
-    /// <remarks>Handles JsonElement null values and Nullable&lt;T&gt; target types,
-    /// which Convert.ChangeType does not support natively.</remarks>
+    /// <remarks>Handles <see cref="System.Text.Json.JsonElement"/> values, <c>null</c> inputs, and
+    /// <c>Nullable&lt;T&gt;</c> target types, which <see cref="System.Convert.ChangeType(object, System.Type)"/> does not support natively.
+    /// Uses <see cref="System.Globalization.CultureInfo.InvariantCulture"/> by default.</remarks>
     public T ChangeValueType<T>(object value, T defaultValue = default, IFormatProvider provider = null)
     {
         if (value == null)

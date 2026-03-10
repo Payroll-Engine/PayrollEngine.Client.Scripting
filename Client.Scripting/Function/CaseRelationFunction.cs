@@ -4,7 +4,28 @@ using System;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Base class for case relation functions</summary>
+/// <summary>
+/// Base class for case relation functions that operate on a source/target case pair.
+/// </summary>
+/// <remarks>
+/// A case relation links a source case to a target case. When a user submits the source case,
+/// the engine evaluates the relation and can propagate or transform values into the target case.
+/// <para>This base class exposes two symmetric sets of accessors:</para>
+/// <list type="bullet">
+///   <item><strong>Source</strong> — read-only: <see cref="SourceValue"/>, <see cref="SourceStart"/>,
+///   <see cref="SourceEnd"/>, <see cref="GetSourceFieldNames"/>, and related test/attribute methods.</item>
+///   <item><strong>Target</strong> — read-write: <see cref="TargetValue"/>, <see cref="TargetStart"/>,
+///   <see cref="TargetEnd"/>, <see cref="InitTargetValue"/>, and related methods.</item>
+/// </list>
+/// <para>Helper methods <see cref="CopyValue"/>, <see cref="CopyStart"/>, <see cref="CopyEnd"/>,
+/// <see cref="InitValue"/>, <see cref="InitStart"/>, and <see cref="InitEnd"/> simplify direct
+/// field-to-field transfer between source and target.</para>
+/// <para>Two concrete functions inherit from this class:</para>
+/// <list type="bullet">
+///   <item><see cref="CaseRelationBuildFunction"/> — populates target fields from source values.</item>
+///   <item><see cref="CaseRelationValidateFunction"/> — validates the combined source/target state.</item>
+/// </list>
+/// </remarks>
 // ReSharper disable once PartialTypeWithSinglePart
 public abstract partial class CaseRelationFunction : PayrollFunction
 {
@@ -94,7 +115,7 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     public T GetSourceValue<T>(string caseFieldName, T defaultValue) =>
         HasSourceValue(caseFieldName) ? GetSourceValue<T>(caseFieldName) : defaultValue;
 
-    /// <summary>Get source case field <see cref="PayrollValue"/> by the case field name</summary>
+    /// <summary>Gets the source case field value wrapped as <see cref="PayrollValue"/>, indexed by field name</summary>
     public ScriptDictionary<string, PayrollValue> SourcePayrollValue { get; }
 
     /// <summary>Get source case field <see cref="PayrollValue"/> by the case field name</summary>
@@ -171,7 +192,7 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     public object GetSourceCaseAttribute(string attributeName) =>
         Runtime.GetSourceCaseAttribute(attributeName);
 
-    /// <summary>Get attribute value</summary>
+    /// <summary>Gets a source case attribute as a typed value</summary>
     /// <param name="attributeName">The attribute name</param>
     /// <param name="defaultValue">The default value</param>
     public T GetSourceCaseAttribute<T>(string attributeName, T defaultValue = default) =>
@@ -282,9 +303,9 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     /// <param name="caseFieldName">The case field name</param>
     public PayrollValue GetTargetPayrollValue(string caseFieldName) => new(GetTargetValue(caseFieldName));
 
-    /// <summary>Set target case value by the case field name</summary>
+    /// <summary>Sets the target case value from a <see cref="PayrollValue"/></summary>
     /// <param name="caseFieldName">The case field name</param>
-    /// <param name="value">The target value</param>
+    /// <param name="value">The payroll value to write</param>
     public void SetTargetPayrollValue(string caseFieldName, PayrollValue value) => SetTargetValue(caseFieldName, value.Value);
 
     /// <summary>Get period of a target case field</summary>
@@ -368,7 +389,7 @@ public abstract partial class CaseRelationFunction : PayrollFunction
         return value != null && value.ContainsCsvToken(token);
     }
 
-    /// <summary>Test a string target case value containing a csv token, matching the target slot</summary>
+    /// <summary>Tests whether a target case field's CSV value contains the current source case slot identifier</summary>
     /// <param name="caseFieldName">The case field name</param>
     public bool TargetValueHasSourceSlotCsvToken(string caseFieldName) =>
         TargetValueContainsCsvToken(caseFieldName, SourceCaseSlot);
@@ -390,7 +411,9 @@ public abstract partial class CaseRelationFunction : PayrollFunction
     /// <summary>Get target case attribute value</summary>
     public object GetTargetCaseAttribute(string attributeName) => Runtime.GetTargetCaseAttribute(attributeName);
 
-    /// <summary>Get attribute value</summary>
+    /// <summary>Gets a target case attribute as a typed value</summary>
+    /// <param name="attributeName">The attribute name</param>
+    /// <param name="defaultValue">The default value</param>
     public T GetTargetCaseAttribute<T>(string attributeName, T defaultValue = default) =>
         ChangeValueType(Runtime.GetTargetCaseAttribute(attributeName), defaultValue);
 
@@ -424,27 +447,42 @@ public abstract partial class CaseRelationFunction : PayrollFunction
 
     #region Init and Copy
 
-    /// <summary>Initializes the target case field start date from the source case field</summary>
+    /// <summary>Sets the target case field start date from the source case field, only if no start date is currently set on the target</summary>
+    /// <param name="sourceFieldName">The source case field name</param>
+    /// <param name="targetFieldName">The target case field name</param>
+    /// <remarks>Use <see cref="CopyStart"/> to overwrite unconditionally.</remarks>
     public void InitStart(string sourceFieldName, string targetFieldName) =>
         Runtime.InitStart(sourceFieldName, targetFieldName);
 
-    /// <summary>Copy the case field start date from source to target/// </summary>
+    /// <summary>Copies the case field start date from source to target, overwriting any existing value</summary>
+    /// <param name="sourceFieldName">The source case field name</param>
+    /// <param name="targetFieldName">The target case field name</param>
     public void CopyStart(string sourceFieldName, string targetFieldName) =>
         Runtime.CopyStart(sourceFieldName, targetFieldName);
 
-    /// <summary>Initializes the target case field end date from the source case field</summary>
+    /// <summary>Sets the target case field end date from the source case field, only if no end date is currently set on the target</summary>
+    /// <param name="sourceFieldName">The source case field name</param>
+    /// <param name="targetFieldName">The target case field name</param>
+    /// <remarks>Use <see cref="CopyEnd"/> to overwrite unconditionally.</remarks>
     public void InitEnd(string sourceFieldName, string targetFieldName) =>
         Runtime.InitEnd(sourceFieldName, targetFieldName);
 
-    /// <summary>Copy the case field end date from source to target</summary>
+    /// <summary>Copies the case field end date from source to target, overwriting any existing value</summary>
+    /// <param name="sourceFieldName">The source case field name</param>
+    /// <param name="targetFieldName">The target case field name</param>
     public void CopyEnd(string sourceFieldName, string targetFieldName) =>
         Runtime.CopyEnd(sourceFieldName, targetFieldName);
 
-    /// <summary>Initializes the target case value from the source case field</summary>
+    /// <summary>Sets the target case value from the source case field, only if no value is currently set on the target</summary>
+    /// <param name="sourceFieldName">The source case field name</param>
+    /// <param name="targetFieldName">The target case field name</param>
+    /// <remarks>Use <see cref="CopyValue"/> to overwrite unconditionally.</remarks>
     public void InitValue(string sourceFieldName, string targetFieldName) =>
         Runtime.InitValue(sourceFieldName, targetFieldName);
 
-    /// <summary>Copy the case value from source to target</summary>
+    /// <summary>Copies the case value from source to target, overwriting any existing value</summary>
+    /// <param name="sourceFieldName">The source case field name</param>
+    /// <param name="targetFieldName">The target case field name</param>
     public void CopyValue(string sourceFieldName, string targetFieldName) =>
         Runtime.CopyValue(sourceFieldName, targetFieldName);
 

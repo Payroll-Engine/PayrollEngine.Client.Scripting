@@ -6,7 +6,28 @@ using System.Collections.Generic;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Base class for wage type functions</summary>
+/// <summary>
+/// Abstract base class for wage type functions, providing access to wage type identity,
+/// cross-wage-type and collector values, result attributes, custom results, and retro payrun scheduling.
+/// </summary>
+/// <remarks>
+/// <para>This class extends <see cref="PayrunFunction"/> with wage-type-specific facilities.
+/// It is the common ancestor of <see cref="WageTypeValueFunction"/> (value calculation) and
+/// <see cref="WageTypeResultFunction"/> (result post-processing).</para>
+/// <para><strong>Key features:</strong></para>
+/// <list type="bullet">
+///   <item><strong>Identity:</strong> <see cref="WageTypeNumber"/>, <see cref="WageTypeName"/>,
+///   <see cref="WageTypeDescription"/>, <see cref="WageTypeCalendar"/>.</item>
+///   <item><strong>Cross-wage-type access:</strong> the <see cref="WageType"/> indexer reads the
+///   computed value of another wage type by number; <see cref="Collector"/> reads a named collector value.</item>
+///   <item><strong>Result attributes:</strong> <see cref="Attribute"/> / <see cref="AttributePayrollValue"/>
+///   store arbitrary metadata on the wage type result for downstream consumption by reports.</item>
+///   <item><strong>Custom results:</strong> <see cref="AddCustomResult(string, decimal, System.Collections.Generic.IEnumerable{string}, System.Collections.Generic.Dictionary{string, object}, ValueType?, string)"/>
+///   writes supplementary payroll result entries (e.g. cost-centre breakdowns) alongside the primary result.</item>
+///   <item><strong>Retro runs:</strong> <see cref="ScheduleRetroPayrun"/> triggers a correction run for a past period.
+///   Cannot be combined with Exchange-import payrun invocations.</item>
+/// </list>
+/// </remarks>
 // ReSharper disable once PartialTypeWithSinglePart
 public abstract partial class WageTypeFunction : PayrunFunction
 {
@@ -102,7 +123,7 @@ public abstract partial class WageTypeFunction : PayrunFunction
     /// <returns>The wage type result tags</returns>
     public List<string> GetResultTags() => Runtime.GetResultTags();
 
-    /// <summary>Set the collector result tags</summary>
+    /// <summary>Sets the wage type result tags</summary>
     /// <param name="tags">The result tags</param>
     public void SetResultTags(IEnumerable<string> tags) =>
         Runtime.SetResultTags(tags.ToList());
@@ -122,11 +143,14 @@ public abstract partial class WageTypeFunction : PayrunFunction
     public void SetResultAttribute(string name, object value) =>
         Runtime.SetResultAttribute(name, value);
 
-    /// <summary>Get attribute value</summary>
+    /// <summary>Gets a wage type attribute value</summary>
+    /// <param name="attributeName">The attribute name</param>
     public object GetWageTypeAttribute(string attributeName) =>
         Runtime.GetWageTypeAttribute(attributeName);
 
-    /// <summary>Get attribute typed value</summary>
+    /// <summary>Gets a wage type attribute as a typed value</summary>
+    /// <param name="attributeName">The attribute name</param>
+    /// <param name="defaultValue">The default value</param>
     public T GetWageTypeAttribute<T>(string attributeName, T defaultValue = default) =>
         ChangeValueType(Runtime.GetWageTypeAttribute(attributeName), defaultValue);
 
@@ -143,9 +167,9 @@ public abstract partial class WageTypeFunction : PayrunFunction
         return value;
     }
 
-    /// <summary>Get consolidated and current period employee wage type results by query</summary>
+    /// <summary>Returns the sum of historical consolidated and current-period wage type values for all wage types in the query</summary>
     /// <param name="query">The result query</param>
-    /// <returns>Consolidated employee collector results</returns>
+    /// <returns>Total of consolidated historical results plus the current in-memory wage type values</returns>
     public decimal GetWageTypeCurrentConsolidatedValue(WageTypeConsolidatedResultQuery query)
     {
         var value = GetConsolidatedWageTypeResults(query).Sum();

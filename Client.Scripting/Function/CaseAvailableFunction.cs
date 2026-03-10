@@ -10,21 +10,39 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Test if a case is available (default: true), optionally considering related source case values</summary>
+/// <summary>
+/// Determines whether a case is available for input (default: <c>true</c>).
+/// </summary>
+/// <remarks>
+/// This function runs before the case input form is shown. Returning <c>false</c> hides the
+/// case entirely from the user. Returning <c>true</c> or <c>null</c> makes the case visible.
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Role-based visibility: show a case only to employees with a specific attribute.</item>
+///   <item>Condition-based visibility: show a case only if a prerequisite case value exists.</item>
+///   <item>Period-based visibility: restrict input to specific months or cycle phases.</item>
+/// </list>
+/// <para><strong>Low-Code / No-Code:</strong> Case availability can also be controlled through
+/// action expressions using <c>CaseAvailableAction</c> attributes — no C# scripting required.
+/// The <see cref="IsAvailable"/> entry point invokes all registered actions before executing
+/// any inline script body.</para>
+/// </remarks>
 /// <example>
 /// <code language="c#">
-/// // Example with case value
+/// // Available only for employees with level 2 or higher
 /// (int)Employee["Level"] >= 2
 /// </code>
 /// <code language="c#">
-/// // Example with related case value
+/// // Available only if the Wage case value exists in the current period
 /// HasCaseValue("Wage")
 /// </code>
 /// <code language="c#">
-/// // Example with optional related case value
+/// // Combine both: require Wage value AND minimum level
 /// HasCaseValue("Wage") ? (int)Employee["Level"] >= 2 : false
 /// </code>
 /// </example>
+/// <seealso cref="CaseBuildFunction"/>
+/// <seealso cref="CaseValidateFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class CaseAvailableFunction : CaseFunction
 {

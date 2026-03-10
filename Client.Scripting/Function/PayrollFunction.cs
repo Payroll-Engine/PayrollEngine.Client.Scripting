@@ -130,10 +130,9 @@ public abstract partial class PayrollFunction : Function
         GetCalendarPeriod(GetDerivedCalendar(DivisionId, EmployeeId ?? 0), moment,
             offset, GetDerivedCulture(DivisionId, EmployeeId ?? 0));
 
-    /// <summary>
-    /// Count the calendar days from a date period
-    /// </summary>
-    /// <param name="culture">The calendar culture</param>
+    /// <summary>Counts calendar days in the current evaluation period using the payroll calendar</summary>
+    /// <param name="culture">The calendar culture (default: payroll culture)</param>
+    /// <returns>Number of calendar days in the current evaluation period</returns>
     public int GetCalendarDayCount(string culture = null) =>
         GetCalendarDayCount(GetDerivedCalendar(DivisionId, EmployeeId ?? 0),
             PeriodStart, PeriodEnd, culture);
@@ -190,7 +189,7 @@ public abstract partial class PayrollFunction : Function
     public int CycleEndMonth => CycleEnd.Month;
 
     /// <summary>The current cycle end day</summary>
-    [ActionProperty("Cycle edn day")]
+    [ActionProperty("Cycle end day")]
     public int CycleEndDay => CycleEnd.Day;
 
     /// <summary>The current cycle duration</summary>
@@ -210,9 +209,14 @@ public abstract partial class PayrollFunction : Function
     /// <summary>The next cycle</summary>
     public DatePeriod NextCycle { get; }
 
-    /// <summary>Get cycle by offset to the current cycle</summary>
-    /// <param name="offset">The cycle offset: 0=current, -1=previous, 1=next</param>
-    /// <returns>The offset cycle</returns>
+    /// <summary>Returns the payroll cycle at a given offset relative to the current cycle</summary>
+    /// <param name="offset">Cycle offset: <c>0</c> = current, <c>-1</c> = previous, <c>1</c> = next</param>
+    /// <returns>The <see cref="DatePeriod"/> spanning the full cycle (e.g. 1 Jan – 31 Dec for annual)</returns>
+    /// <remarks>
+    /// A cycle is typically one calendar year for a monthly payroll.
+    /// Use <see cref="GetCyclePeriods"/> to iterate over all periods within the cycle,
+    /// or <see cref="GetPastCyclePeriods"/> / <see cref="GetFutureCyclePeriods"/> for partial iteration.
+    /// </remarks>
     public DatePeriod GetCycle(int offset = 0) =>
         GetCycle(EvaluationPeriod.Start, offset);
 
@@ -269,7 +273,7 @@ public abstract partial class PayrollFunction : Function
 
     /// <summary>Test if a date is the last cycle day</summary>
     /// <param name="moment">The cycle moment</param>
-    /// <returns>Tru for the last cycle day</returns>
+    /// <returns>True for the last cycle day</returns>
     public bool IsLastCycleDay(DateTime moment) =>
         moment.IsSameDay(CycleEnd);
 
@@ -367,9 +371,14 @@ public abstract partial class PayrollFunction : Function
     /// <returns>Period from the evaluation date until the maximal date</returns>
     public DatePeriod FuturePeriod() => new(EvaluationDate.NextTick(), Date.MaxValue);
 
-    /// <summary>Get period by offset to the current period</summary>
-    /// <param name="offset">The period offset: 0=current, -1=previous, 1=next</param>
-    /// <returns>The offset period</returns>
+    /// <summary>Returns the payroll period at a given offset relative to the current evaluation period</summary>
+    /// <param name="offset">Period offset: <c>0</c> = current, <c>-1</c> = previous, <c>1</c> = next, etc.</param>
+    /// <returns>The <see cref="DatePeriod"/> for the requested offset</returns>
+    /// <remarks>
+    /// The period length (monthly, weekly, etc.) is determined by the payroll calendar.
+    /// Use negative offsets to access past periods within the same cycle for YTD calculations.
+    /// <see cref="PreviousPeriod"/> and <see cref="NextPeriod"/> are shorthand for offsets -1 and +1.
+    /// </remarks>
     public DatePeriod GetPeriod(int offset = 0) =>
         GetPeriod(EvaluationPeriod.Start, offset);
 
@@ -428,7 +437,7 @@ public abstract partial class PayrollFunction : Function
 
     /// <summary>Test if a date is the last period day</summary>
     /// <param name="moment">The period moment</param>
-    /// <returns>Tru for the last period day</returns>
+    /// <returns>True for the last period day</returns>
     public bool IsLastPeriodDay(DateTime moment) =>
         moment.IsSameDay(PeriodEnd);
 
@@ -569,11 +578,16 @@ public abstract partial class PayrollFunction : Function
     /// <summary>Get the case value tags by case field name</summary>
     public ScriptDictionary<string, List<string>> CaseValueTags { get; }
 
-    /// <summary>Get the case payroll typed value by case field name</summary>
-    /// <param name="period">The value period</param>
-    /// <param name="caseFieldName">The case field name</param>
-    /// <param name="caseSlot">The case slot</param>
-    /// <returns>A case value from the period</returns>
+    /// <summary>Returns the typed case field value active within a specific date period</summary>
+    /// <typeparam name="T">The expected value type</typeparam>
+    /// <param name="period">The date period to query</param>
+    /// <param name="caseFieldName">PascalCase name of the case field</param>
+    /// <param name="caseSlot">Optional slot name</param>
+    /// <returns>The typed value, or <c>default(T)</c> when no value exists in the period</returns>
+    /// <remarks>
+    /// Use <see cref="GetPeriod(int)"/> to build offset periods (e.g. <c>GetPeriod(-1)</c> for the
+    /// previous period). For the current period prefer <see cref="GetCaseValue{T}(string, string)"/>.
+    /// </remarks>
     public T GetPeriodCaseValue<T>(DatePeriod period, string caseFieldName, string caseSlot = null) =>
         GetPeriodCaseValue(period, caseFieldName, caseSlot).ValueAs<T>();
 
@@ -592,10 +606,10 @@ public abstract partial class PayrollFunction : Function
         return periodValues.Count == 1 ? periodValues[caseFieldName] : new(caseFieldName);
     }
 
-    /// <summary>Get multiple case values of a date period</summary>
-    /// <param name="period">The date period</param>
-    /// <param name="caseFieldNames">The case field names</param>
-    /// <returns>Dictionary of case values grouped by case field name</returns>
+    /// <summary>Returns the values of multiple case fields active within a specific date period</summary>
+    /// <param name="period">The date period to query</param>
+    /// <param name="caseFieldNames">One or more PascalCase case field names</param>
+    /// <returns>A dictionary keyed by case field name</returns>
     public CasePayrollValueDictionary GetPeriodCaseValues(DatePeriod period, params string[] caseFieldNames) =>
         TupleExtensions.TupleToCaseValuesDictionary(Runtime.GetCasePeriodValues(period.Start, period.End, caseFieldNames));
 
@@ -622,17 +636,35 @@ public abstract partial class PayrollFunction : Function
     public CasePayrollValue GetPeriodCaseValue(int periodOffset, string caseFieldName, string caseSlot = null) =>
         GetPeriodCaseValue(GetPeriod(periodOffset), caseFieldName, caseSlot);
 
-    /// <summary>Get case payroll typed value of the current period</summary>
-    /// <param name="caseFieldName">The case field name</param>
-    /// <param name="caseSlot">The case slot</param>
-    /// <returns>A case value from the current period</returns>
+    /// <summary>Returns the typed value of a case field for the current payroll period</summary>
+    /// <typeparam name="T">The expected value type (e.g. <c>decimal</c>, <c>string</c>, <c>bool</c>, <c>DateTime</c>)</typeparam>
+    /// <param name="caseFieldName">PascalCase name of the case field</param>
+    /// <param name="caseSlot">Optional slot name for multi-slot case fields</param>
+    /// <returns>The case field value cast to <typeparamref name="T"/>, or <c>default(T)</c> when no value exists in the current period</returns>
+    /// <remarks>
+    /// This is the primary method for reading employee, company, national, and global case data inside
+    /// payrun and case functions. The value returned is the one active at the end of the current period
+    /// (<see cref="PeriodEnd"/>). Use <see cref="GetPeriodCaseValue{T}(DatePeriod, string, string)"/> to
+    /// query a different period, or <see cref="GetRawCaseValue{T}"/> to read a value at a specific date.
+    /// </remarks>
+    /// <example>
+    /// <code language="c#">
+    /// var salary = GetCaseValue&lt;decimal&gt;("MonthlySalary");
+    /// var status = GetCaseValue&lt;string&gt;("ContractType");
+    /// </code>
+    /// </example>
     public T GetCaseValue<T>(string caseFieldName, string caseSlot = null) =>
         GetCaseValue(caseFieldName, caseSlot).ValueAs<T>();
 
-    /// <summary>Get case payroll value of the current period</summary>
-    /// <param name="caseFieldName">The case field name</param>
-    /// <param name="caseSlot">The case slot</param>
-    /// <returns>A case value from the current period</returns>
+    /// <summary>Returns the <see cref="CasePayrollValue"/> of a case field for the current payroll period</summary>
+    /// <param name="caseFieldName">PascalCase name of the case field</param>
+    /// <param name="caseSlot">Optional slot name for multi-slot case fields</param>
+    /// <returns>The <see cref="CasePayrollValue"/> wrapper; call <see cref="CasePayrollValue.HasValue"/> before accessing the value</returns>
+    /// <remarks>
+    /// Use the untyped overload when you need to inspect <see cref="CasePayrollValue.HasValue"/>,
+    /// <see cref="CasePayrollValue.PeriodValues"/>, or the raw value object.
+    /// For direct typed access prefer <see cref="GetCaseValue{T}(string, string)"/>.
+    /// </remarks>
     public CasePayrollValue GetCaseValue(string caseFieldName, string caseSlot = null) =>
         GetPeriodCaseValue(Period, caseFieldName, caseSlot);
 
@@ -679,10 +711,15 @@ public abstract partial class PayrollFunction : Function
         return new(values);
     }
 
-    /// <summary>Get raw case value from a specific date</summary>
-    /// <param name="caseFieldName">The case field name</param>
-    /// <param name="valueDate">The value date</param>
-    /// <returns>Raw case value from a specific date</returns>
+    /// <summary>Returns the raw <see cref="CaseValue"/> record that was active at an exact point in time</summary>
+    /// <param name="caseFieldName">PascalCase name of the case field</param>
+    /// <param name="valueDate">The exact moment at which to read the value</param>
+    /// <returns>The <see cref="CaseValue"/> record, or <c>null</c> when no value was active at that date</returns>
+    /// <remarks>
+    /// Unlike <see cref="GetCaseValue{T}(string, string)"/>, this method returns the full
+    /// database record including <c>Created</c>, <c>Start</c>, <c>End</c>, and <c>Tags</c>.
+    /// Use it for audit trails, retroactive corrections, or time-travel queries.
+    /// </remarks>
     public CaseValue GetRawCaseValue(string caseFieldName, DateTime valueDate) =>
         TupleExtensions.TupleToCaseValue(Runtime.GetCaseValue(caseFieldName, valueDate.ToUtc()));
 
@@ -833,9 +870,13 @@ public abstract partial class PayrollFunction : Function
         return objects;
     }
 
-    /// <summary>Get multiple case values of the current period</summary>
-    /// <param name="caseFieldNames">The case field names</param>
-    /// <returns>Dictionary of case values grouped by case field name</returns>
+    /// <summary>Returns the values of multiple case fields for the current period in a single call</summary>
+    /// <param name="caseFieldNames">One or more PascalCase case field names</param>
+    /// <returns>A dictionary keyed by case field name; missing fields are absent from the dictionary</returns>
+    /// <remarks>
+    /// More efficient than multiple individual <see cref="GetCaseValue{T}(string, string)"/> calls
+    /// when reading several fields at once (e.g. all fields of a salary breakdown).
+    /// </remarks>
     public CasePayrollValueDictionary GetCaseValues(params string[] caseFieldNames) =>
         GetPeriodCaseValues(Period, caseFieldNames);
 
@@ -852,9 +893,14 @@ public abstract partial class PayrollFunction : Function
     public List<string> GetCaseValueTags(string caseFieldName, DateTime valueDate) =>
         Runtime.GetCaseValueTags(caseFieldName, valueDate);
 
-    /// <summary>Get the case value slots</summary>
-    /// <param name="caseFieldName">Name of the case field</param>
-    /// <returns>The case value slot names</returns>
+    /// <summary>Returns all slot names that have a value for the given case field</summary>
+    /// <param name="caseFieldName">PascalCase name of the case field</param>
+    /// <returns>List of slot name strings; empty list when the field has no slots</returns>
+    /// <remarks>
+    /// Slots allow multiple independent values to coexist on the same case field (e.g. one entry
+    /// per insurance contract). Combine with <see cref="GetSlotValues{T}"/> to read all slot values
+    /// at once, or with <see cref="CaseFieldSlot"/> to address a specific slot.
+    /// </remarks>
     public List<string> GetCaseValueSlots(string caseFieldName) =>
         Runtime.GetCaseValueSlots(caseFieldName);
 
@@ -927,16 +973,27 @@ public abstract partial class PayrollFunction : Function
 
     #region Lookups
 
-    /// <summary>Test for existing lookup</summary>
-    /// <param name="lookupName">The lookup name</param>
-    /// <returns>True on existing lookup</returns>
+    /// <summary>Tests whether a lookup with the given name exists in the current payroll context</summary>
+    /// <param name="lookupName">PascalCase name of the lookup</param>
+    /// <returns><c>true</c> if the lookup exists; <c>false</c> otherwise</returns>
+    /// <remarks>
+    /// Use this as a guard before <see cref="GetLookup{T}(string, string, string)"/> when the lookup
+    /// is optional or may not yet be deployed in a regulation.
+    /// </remarks>
     public bool HasLookup(string lookupName) =>
         Runtime.HasLookup(lookupName);
 
-    /// <summary>Get lookup value</summary>
-    /// <param name="lookupName">The lookup name</param>
-    /// <param name="lookupKey">The lookup key</param>
-    /// <param name="culture">The culture, null for the system culture (optional)</param>
+    /// <summary>Returns the typed value stored in a lookup for the given key</summary>
+    /// <typeparam name="T">Expected value type; use <c>string</c> for raw JSON or <c>decimal</c> for numeric lookups</typeparam>
+    /// <param name="lookupName">PascalCase name of the lookup</param>
+    /// <param name="lookupKey">The exact key to look up</param>
+    /// <param name="culture">Culture for value formatting; defaults to the system culture</param>
+    /// <returns>The typed lookup value, or <c>default(T)</c> when the key is not found</returns>
+    /// <remarks>
+    /// When the stored value is a JSON object and <typeparamref name="T"/> is not <c>string</c>,
+    /// the JSON is deserialized automatically. Use <see cref="GetObjectLookup{T}(string, string, string, string)"/>
+    /// to extract a single property from a JSON-object lookup value.
+    /// </remarks>
     public T GetLookup<T>(string lookupName, string lookupKey, string culture = null)
     {
         var value = Runtime.GetLookup(lookupName, lookupKey, culture) as string;
@@ -998,11 +1055,18 @@ public abstract partial class PayrollFunction : Function
     public List<LookupRangeBracket> GetLookupProgressiveRanges(string lookupName, decimal rangeValue) =>
         GetLookupRanges(lookupName, rangeValue).Where(x => x.RangeValue.HasValue).ToList();
 
-    /// <summary>Get lookup by range value</summary>
-    /// <param name="lookupName">The lookup name</param>
-    /// <param name="rangeValue">The range value</param>
-    /// <param name="lookupKey">The lookup key (optional)</param>
-    /// <param name="culture">The culture, null for the system culture (optional)</param>
+    /// <summary>Returns the typed value from a range lookup whose bracket contains the given value</summary>
+    /// <typeparam name="T">Expected value type</typeparam>
+    /// <param name="lookupName">PascalCase name of the range lookup</param>
+    /// <param name="rangeValue">The numeric value used to select the matching range bracket</param>
+    /// <param name="lookupKey">Optional secondary key for keyed range lookups</param>
+    /// <param name="culture">Culture for value formatting; defaults to the system culture</param>
+    /// <returns>The typed lookup value for the matching bracket, or <c>default(T)</c> when no bracket matches</returns>
+    /// <remarks>
+    /// Range lookups are used for threshold tables (e.g. tax rates, AHV contribution rates).
+    /// The engine finds the bracket whose lower bound is ≤ <paramref name="rangeValue"/> and returns its value.
+    /// For progressive tax calculations use <see cref="ApplyRangeValue"/> instead.
+    /// </remarks>
     public T GetRangeLookup<T>(string lookupName, decimal rangeValue, string lookupKey = null, string culture = null)
     {
         var value = Runtime.GetRangeLookup(lookupName, rangeValue, lookupKey, culture) as string;
@@ -1031,13 +1095,23 @@ public abstract partial class PayrollFunction : Function
         return string.IsNullOrWhiteSpace(value) ? default : value.ObjectValueJson<T>(objectKey);
     }
 
-    /// <summary>Apply a range value to the lookup ranges, and multiplying the lookup value with the range amount</summary>
-    /// <param name="lookupName">The lookup name</param>
-    /// <param name="rangeValue">The range value</param>
-    /// <param name="valueFieldName">Value field name</param>
-    /// <remarks>Only numeric JSON lookup values are supported.
-    /// The first lookup range value must be zero.</remarks>
-    /// <returns>Summary of all lookup ranges</returns>
+    /// <summary>Applies a value progressively across all range brackets and returns the total tax or contribution amount</summary>
+    /// <param name="lookupName">PascalCase name of the progressive range lookup</param>
+    /// <param name="rangeValue">The gross amount to distribute across the brackets</param>
+    /// <param name="valueFieldName">Optional JSON field name when the lookup value is a JSON object (e.g. <c>"Rate"</c>)</param>
+    /// <returns>The sum of (bracket width × rate) across all brackets covered by <paramref name="rangeValue"/></returns>
+    /// <remarks>
+    /// Implements progressive (bracket-by-bracket) calculations for tax and social-contribution tables.
+    /// Each bracket's contribution = (min(rangeValue, bracketTop) - bracketBottom) × rate.
+    /// The first bracket must start at zero. Only numeric JSON lookup values are supported.
+    /// For a simple threshold lookup (flat rate per bracket) use <see cref="GetRangeLookup{T}(string, decimal, string, string)"/>.
+    /// </remarks>
+    /// <example>
+    /// <code language="c#">
+    /// // Progressive income-tax lookup: spread the taxable amount across rate brackets
+    /// var taxAmount = ApplyRangeValue("IncomeTaxRates", taxableIncome);
+    /// </code>
+    /// </example>
     public decimal ApplyRangeValue(string lookupName, decimal rangeValue, string valueFieldName = null) =>
         Runtime.ApplyRangeValue(lookupName, rangeValue, valueFieldName);
 

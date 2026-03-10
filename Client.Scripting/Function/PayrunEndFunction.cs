@@ -9,8 +9,41 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
-/// <summary>Payrun end function</summary>
-/// <seealso cref="PayrunWageTypeAvailableFunction">Payrun Wage Type Available Function</seealso>
+/// <summary>
+/// Executes once at the end of a payrun, after all employees have been processed.
+/// </summary>
+/// <remarks>
+/// This function is the global finalizer for a payrun job. It runs exactly once, after
+/// every employee's wage types, collectors, and employee-level functions have completed.
+/// <para>Typical uses:</para>
+/// <list type="bullet">
+///   <item>Aggregate cross-employee results and write payrun-level results
+///   (<see cref="PayrunFunction.SetPayrunResult(string, object, ValueType?, string, System.Collections.Generic.IEnumerable{string}, System.Collections.Generic.Dictionary{string, object}, string)"/>).</item>
+///   <item>Read all employee runtime values via <see cref="GetRuntimeValuesEmployees"/>
+///   and <see cref="GetEmployeeRuntimeValues"/> for summary calculations.</item>
+///   <item>Log payrun completion statistics or trigger downstream webhooks.</item>
+/// </list>
+/// <para><strong>Return value:</strong> This function returns <c>void</c>; there is no early-abort
+/// mechanism at payrun end.</para>
+/// <para><strong>Runtime value access:</strong> <see cref="GetPayrunRuntimeValues"/> returns all
+/// payrun-scoped key/value pairs written during the run. Per-employee values are accessible
+/// via <see cref="GetRuntimeValuesEmployees"/> (list of identifiers) and
+/// <see cref="GetEmployeeRuntimeValues"/> (values for a given employee).</para>
+/// </remarks>
+/// <example>
+/// <code language="c#">
+/// // Sum up a custom runtime value from all processed employees
+/// var total = 0m;
+/// foreach (var employeeId in GetRuntimeValuesEmployees())
+/// {
+///     var values = GetEmployeeRuntimeValues(employeeId);
+///     if (values.TryGetValue("BonusAmount", out var raw))
+///         total += decimal.Parse(raw);
+/// }
+/// SetPayrunResult("TotalBonus", total);
+/// </code>
+/// </example>
+/// <seealso cref="PayrunStartFunction"/>
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class PayrunEndFunction : PayrunFunction
 {
@@ -36,8 +69,8 @@ public partial class PayrunEndFunction : PayrunFunction
     public Dictionary<string, string> GetPayrunRuntimeValues() =>
         Runtime.GetPayrunRuntimeValues();
 
-    /// <summary>Get the employees with runtime values</summary>
-    /// <returns>Payrun runtime values</returns>
+    /// <summary>Returns the identifiers of all employees that have runtime values set during this payrun</summary>
+    /// <returns>List of employee identifiers with at least one runtime value</returns>
     public List<string> GetRuntimeValuesEmployees() =>
         Runtime.GetRuntimeValuesEmployees();
 
