@@ -210,14 +210,25 @@ public class CasePayrollValue : PayrollValue, IEnumerable<PeriodValue>
     #region Binary operators
 
     /// <summary>Find the best matching period value for a given left period.
-    /// First tries exact match; falls back to containment (right period contains left period).
-    /// Required when TimeType differs, e.g. CalendarPeriod (trimmed) vs. Period (open-ended, End=MaxValue).</summary>
+    /// Tries in order: (1) exact match, (2) right contains left, (3) left contains right.
+    /// The third branch is required for Retro-Payruns where the left side carries an open-ended
+    /// Period (End=MaxValue) and the right side carries a trimmed CalendarPeriod end.
+    /// Without it, the containment check "trimmedEnd >= MaxValue" silently returns null,
+    /// causing all binary operators to return Empty and the payrun to fail with Missing results.
+    /// </summary>
     private static PeriodValue FindMatchingPeriodValue(ReadOnlyCollection<PeriodValue> periodValues, DatePeriod leftPeriod)
     {
+        // 1. exact match
         var match = periodValues.FirstOrDefault(x => Equals(x.Period, leftPeriod));
         if (match != null) return match;
-        return periodValues.FirstOrDefault(x =>
+        // 2. right contains left (open-ended right covers trimmed CalendarPeriod left)
+        match = periodValues.FirstOrDefault(x =>
             x.Period.Start <= leftPeriod.Start && x.Period.End >= leftPeriod.End);
+        if (match != null) return match;
+        // 3. left contains right (open-ended left covers trimmed CalendarPeriod right)
+        //    NovaTechRetro bug: leftPeriod = open Period (End=MaxValue), x.Period = CalendarPeriod
+        return periodValues.FirstOrDefault(x =>
+            leftPeriod.Start <= x.Period.Start && leftPeriod.End >= x.Period.End);
     }
 
     /// <summary>Addition of two case values</summary>
