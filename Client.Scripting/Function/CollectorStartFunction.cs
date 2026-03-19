@@ -10,6 +10,7 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
+// ReSharper disable once GrammarMistakeInComment
 /// <summary>
 /// Executes when a collector is first activated in a payrun, before any wage type values are applied.
 /// </summary>

@@ -9,6 +9,7 @@ using PayrollEngine.Client.Scripting;
 
 namespace PayrollEngine.Client.Scripting.Function;
 
+// ReSharper disable once GrammarMistakeInComment
 /// <summary>
 /// Determines whether a specific wage type is evaluated for an employee in the current payrun (default: <c>true</c>).
 /// </summary>
