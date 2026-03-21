@@ -123,9 +123,329 @@ and post-processing.
 | [PayrollEngine.Action](xref:PayrollEngine.Action) | Core action infrastructure: `ActionInfo`, `ActionIssue`, `ActionMethodInfo`, parameter and property metadata |
 
 Actions allow payroll specialists to control object behaviour using text expressions in regulation
-JSON — no C# programming required. See
-[No-Code / Low-Code Development](https://payrollengine.org/roles/regulator/no-code-low-code-development)
-for the full reference.
+JSON — no C# programming required.
+
+<p align="center">
+    <img src="https://github.com/Payroll-Engine/PayrollEngine/blob/main/images/ActionSyntax.png" width="640" alt="Action syntax" />
+</p>
+
+Actions can be used to determine the behaviour of payroll objects, even without any programming
+knowledge. The following events can be controlled:
+
+- `Case`
+  - `Available` — Availability of a case
+  - `Build` — Case creation
+  - `Validate` — Case validation
+- `CaseRelation`
+  - `Build` — Creation of the case relation
+  - `Validate` — Validation of the case relation creation
+- `Collector`
+  - `Start` — Initialization of the collector
+  - `Apply` — Application of wage type result <sup>1)</sup>
+  - `End` — Completion of the collector
+- `WageType`
+  - `Value` — Wage type result <sup>1)</sup>
+  - `Result` — Additional wage type result
+
+<sup>1)</sup> Function event with return value.
+
+A list of actions is executed sequentially for each event. For events that expect a return value,
+the final action calculates the result.
+
+### Expression Fields
+
+Actions are placed in the corresponding expression field of the regulation object:
+
+| Object | Expression field | When executed |
+|:-------|:----------------|:--------------|
+| `Case` | `availableActions` | Before form displays |
+| `Case` | `buildActions` | While form is open |
+| `Case` | `validateActions` | On form submit |
+| `WageType` | `valueActions` | During payrun calculation |
+| `Collector` | `startActions` / `applyActions` / `endActions` | Collector lifecycle |
+
+> **Important:** `valueActions` and `valueExpression` are mutually exclusive.
+> `valueActions` is for No-Code expressions. `valueExpression` is for Low-Code C# scripts.
+> No-Code tokens (`^^`, `^$`, `^&`, `^#`) are not valid C# and must never appear in `valueExpression`.
+
+### Action Namespace
+
+Actions reference payroll objects by name. To distinguish objects across regulations, define a
+regulation namespace — it is added automatically. Cross-regulation references require the explicit
+namespace prefix:
+
+```yaml
+# access to case field CH.Salary (regulation namespace = CH)
+^^Salary
+# access to case field from the DE namespace
+^^DE.Salary
+```
+
+### Action Types
+
+| Type | Line start | Description |
+|:-----|:----------:|:------------|
+| Comment | `#` | Not executed |
+| Condition | `?` | Conditional action — guards remaining actions |
+| Instruction | *(any other)* | Execution action — last instruction = return value |
+
+Example: overtime pay for full-time employees only:
+
+```yaml
+# Guard: skip for part-time employees
+? ^^EmploymentLevel >= 1.0
+# Guard: only calculate when overtime hours are entered
+? ^^OvertimeHours > 0
+# Result: hours x hourly rate (Salary / 160h) x 1.25 surcharge
+^^OvertimeHours * (^^Salary / 160) * 1.25
+```
+
+### Action Conditions
+
+| Syntax | Description | Example |
+|:-------|:------------|:--------|
+| `? <cond>` | Continue condition for the next action | `? ^^EmploymentLevel >= 1.0` |
+| `? <cond> ?= <true>` | Conditional action result | `? PeriodStart.Month != 12 ?= 0` |
+| `? <cond> ?= <true> ?! <false>` | Conditional action result with fallback value | `? ^^TaxClass == 1 ?= 0.15 ?! 0.25` |
+
+Condition expressions:
+
+| Syntax | Description | Example |
+|:------:|:------------|:--------|
+| `x && y` | Logical AND | `? ^^Salary >= 500 && ^^Salary <= 25000` |
+| `x \|\| y` | Logical OR | `? ^^EmploymentLevel < 0.1 \|\| ^^EmploymentLevel > 1.0` |
+| `x ? y : z` | Ternary conditional | `^\|TaxRate = ^^GrossIncome > 10000 ? 0.25 : 0.15` |
+
+### Action References
+
+The reference to a payroll object starts with the circumflex character `^`, followed by the object
+marker.
+
+| Syntax | Target | Context | Object | Data type | Access | Example |
+|:------:|:------:|:-------:|:------:|:---------:|:------:|:--------|
+| `^#` | Lookup value | Anytime | All | any | r | `^#IncomeTax(^&GrossIncome)` |
+| `^^` | Case value | Anytime | All | any | r | `^^Salary * ^^EmploymentLevel` |
+| `^:` | Case field | Case change | `Case` | any | r/w | `^:Salary.Start < PeriodStart` |
+| `^<` | Source case field | Case change | `CaseRelation` | any | r/w | `^<EmploymentLevel < 1.0` |
+| `^>` | Target case field | Case change | `CaseRelation` | any | r/w | `^>Salary = ^<Salary * ^<EmploymentLevel` |
+| `^\|` | Runtime value | Payrun | `Collector`, `WageType` | any | r/w | `^\|GrossPay = ^^Salary * ^^EmploymentLevel` |
+| `^@` | Payrun result | Payrun | `Collector`, `WageType` | any | r/w | `^@AnnualBonus = ^^Salary * 12` |
+| `^$` | Wage type value | Payrun | `WageType` | `decimal` | r | `^$BaseSalary * 0.08` |
+| `^&` | Collector value | Payrun | `WageType` | `decimal` | r | `^&GrossIncome * ^#IncomeTax(^&GrossIncome)` |
+
+#### Lookup Reference
+
+Lookup values are referenced using `^#`. Access is possible by `key`, `rangeValue`, or both.
+For JSON object lookup values, use the `field` parameter to access a property:
+
+```yaml
+^#LookupName(key)
+^#LookupName(key, field)
+^#LookupName(rangeValue)
+^#LookupName(rangeValue, field)
+^#LookupName(key, rangeValue)
+^#LookupName(key, rangeValue, field)
+```
+
+Concrete examples:
+
+```yaml
+# Simple key lookup: holiday allowance rate for employment class A
+^#HolidayAllowance('A')
+# Range lookup: income tax rate for the current gross income bracket
+^#IncomeTax(^&GrossIncome)
+# Range lookup with JSON field: employee social security contribution rate
+^#SocialSecurity(^^Salary, 'EmployeeRate')
+```
+
+#### Case Value Reference
+
+The `^^` syntax accesses employee or company case data. When several time values are multiplied,
+overlapping periods within the payroll period are handled automatically:
+
+```yaml
+# Scale monthly salary by employment level
+^^Salary * ^^EmploymentLevel
+```
+
+> Time values are not supported when calculating a case field value against other payroll objects.
+
+#### Collector Reference
+
+Collectors are referenced using the `^&` syntax. An optional scope selector controls the time range
+of the value:
+
+| Syntax | Scope | Description |
+|:-------|:------|:------------|
+| `^&Name` | `Period` (default) | Collector value of the current payrun period |
+| `^&Name.Cycle` | `Cycle` | Year-to-date collector value across all previous payruns in the current cycle |
+
+```yaml
+# Current period gross income
+^&GrossIncome
+
+# Year-to-date gross income (previous payruns in the cycle)
+^&GrossIncome.Cycle
+
+# Income tax: gross income times bracket rate from range lookup
+^&GrossIncome * ^#IncomeTax(^&GrossIncome)
+```
+
+#### Wage Type Reference
+
+Wage types are referenced using the `^$` syntax. Wage types can be identified by name or by number.
+An optional scope selector controls which value is returned:
+
+| Syntax | Scope | Description |
+|:-------|:------|:------------|
+| `^$Name` or `^$100` | `Period` (default) | Wage type value of the current payrun period (by name or number) |
+| `^$Name.Cycle` | `Cycle` | Year-to-date wage type value across all previous payruns in the current cycle |
+| `^$Name.RetroSum` | `RetroSum` | Net sum of all pending retro corrections for the wage type within the current cycle |
+
+```yaml
+# Social security: 8% on current period base salary
+^$BaseSalary * 0.08
+
+# Reference by wage type number
+^$100 * 0.08
+
+# Year-to-date base salary (previous payruns in the cycle)
+^$BaseSalary.Cycle
+
+# Retro delta wage type: net correction for BaseSalary since last closed period
+^$BaseSalary.RetroSum
+```
+
+### Action Values
+
+Supported value types:
+
+| Type | Format |
+|:-----|:-------|
+| `String` | Text with `"double"` or `'single'` quotes |
+| `Date` | ISO 8601 UTC — e.g. `2026-01-16T16:06:00Z` |
+| `Boolean` | `true` or `false` |
+| `Int` | Signed 32-bit integer |
+| `Decimal` | 16-byte floating-point number |
+
+Operators:
+
+| Syntax | Description | Supported types | Example |
+|:------:|:------------|:----------------|:--------|
+| `+` | Addition <sup>1)</sup> | `String`, `Int`, `Decimal` | `^^Salary + ^^Bonus` |
+| `-` | Subtraction <sup>1)</sup> | `Int`, `Decimal` | `^^Salary - ^&Deductions` |
+| `*` | Multiplication <sup>2)</sup> | `Int`, `Decimal` | `^^Salary * ^^EmploymentLevel` |
+| `/` | Division <sup>2)</sup> | `Int`, `Decimal` | `^^Salary / 160` |
+| `%` | Remainder <sup>2)</sup> | `Int`, `Decimal` | `^^OvertimeHours % 8` |
+| `&` | Binary logical AND | `Boolean` | `^^IsActive & ^^HasContract` |
+| `\|` | Binary logical OR | `Boolean` | `^^IsManager \| ^^IsTeamLead` |
+| `<` | Less than | `Date`, `Int`, `Decimal` | `^^EmploymentLevel < 1.0` |
+| `<=` | Less than or equal | `Date`, `Int`, `Decimal` | `^^Salary <= 25000` |
+| `==` | Equal | All | `^^TaxClass == 1` |
+| `!=` | Not equal | All | `^^TaxClass != 3` |
+| `>=` | Greater than or equal | `Date`, `Int`, `Decimal` | `^^EmploymentLevel >= 1.0` |
+| `>` | Greater than | `Date`, `Int`, `Decimal` | `^^Salary > 5000` |
+
+<sup>1)</sup> Undefined operand value: `0`. <sup>2)</sup> Undefined operand value: `1`.
+
+Value test properties:
+
+| Property | Description | Result type | Example |
+|:---------|:------------|:-----------:|:--------|
+| `HasValue` | Test if value is defined | `Boolean` | `^^BonusRate.HasValue` |
+| `IsNull` | Test if value is undefined | `Boolean` | `^^SpecialAllowance.IsNull ? 0 : ^^SpecialAllowance` |
+| `IsString` | Test for string value | `Boolean` | `^^CostCenter.IsString` |
+| `IsInt` | Test for integer value | `Boolean` | `^^TaxClass.IsInt` |
+| `IsDecimal` | Test for decimal value | `Boolean` | `^^EmploymentLevel.IsDecimal` |
+| `IsNumeric` | Test for numeric value (int or decimal) | `Boolean` | `^^ZipCode.IsNumeric` |
+| `IsDateTime` | Test for date value | `Boolean` | `^^EntryDate.IsDateTime` |
+| `IsBool` | Test for boolean value | `Boolean` | `^^IsActive.IsBool` |
+
+Value conversion properties:
+
+| Property | Description | Result type | Example |
+|:---------|:------------|:-----------:|:--------|
+| `AsString` | Convert to string | `String` | `^^TaxClass.AsString` |
+| `AsInt` | Convert to integer | `Int` | `^^EmploymentLevel.AsInt` |
+| `AsDecimal` | Convert to decimal | `Decimal` | `^^TaxClass.AsDecimal` |
+| `AsDateTime` | Convert to date | `Date` | `^^EntryDate.AsDateTime` |
+| `AsBool` | Convert to boolean | `Boolean` | `^^IsActive.AsBool` |
+
+Math methods (numeric values):
+
+| Method | Description | Result type | Example |
+|:-------|:------------|:-----------:|:--------|
+| `Round(decimals?, rounding?)` | Round decimal value | `Decimal` | `^^Salary.Round(2)` |
+| `RoundUp(step?)` | Round up | `Decimal` | `^^Salary.RoundUp()` |
+| `RoundDown(step?)` | Round down | `Decimal` | `^^Salary.RoundDown()` |
+| `Truncate(step?)` | Truncate decimal | `Decimal` | `^^OvertimeHours.Truncate()` |
+| `Power(factor)` | Power | `Decimal` | `^^CompoundRate.Power(12)` |
+| `Abs()` | Absolute value | `Decimal` | `^^RetroCorrection.Abs()` |
+| `Sqrt()` | Square root | `Decimal` | `^^VarianceAmount.Sqrt()` |
+
+### Runtime Properties
+
+The following function properties are available in read mode within an action:
+
+| Property | Description | Data type | Function |
+|:---------|:------------|:---------:|:--------:|
+| `UserIdentifier` | User identifier | `String` | All |
+| `UserCulture` | User culture | `String` | All |
+| `SelfServiceUser` | Test for self-service user | `Boolean` | All |
+| `EmployeeIdentifier` | Employee identifier | `String` | `PayrollFunction` |
+| `Namespace` | Regulation namespace | `String` | `PayrollFunction` |
+| `CycleStart` | Payroll cycle start date | `Date` | `PayrollFunction` |
+| `CycleEnd` | Payroll cycle end date | `Date` | `PayrollFunction` |
+| `CycleDays` | Payroll cycle day count | `Decimal` | `PayrollFunction` |
+| `EvaluationDate` | Payroll evaluation date | `Date` | `PayrollFunction` |
+| `PeriodStart` | Payroll period start date | `Date` | `PayrollFunction` |
+| `PeriodEnd` | Payroll period end date | `Date` | `PayrollFunction` |
+| `PayrunName` | Payrun name | `String` | `PayrunFunction` |
+| `IsRetroPayrun` | Test for retro payrun | `Boolean` | `PayrunFunction` |
+| `IsCycleRetroPayrun` | Test for cycle retro payrun | `Boolean` | `PayrunFunction` |
+| `Forecast` | Forecast name | `String` | `PayrunFunction` |
+| `IsForecast` | Test for forecast payrun | `Boolean` | `PayrunFunction` |
+| `PeriodName` | Payrun period name | `String` | `PayrunFunction` |
+| `CollectorName` | Collector name | `String` | `CollectorFunction` |
+| `CollectMode` | Collect mode | `String` | `CollectorFunction` |
+| `Negated` | Test for negated collector | `Boolean` | `CollectorFunction` |
+| `CollectorThreshold` | Threshold value | `Decimal` | `CollectorFunction` |
+| `CollectorMinResult` | Minimum allowed result | `Decimal` | `CollectorFunction` |
+| `CollectorMaxResult` | Maximum allowed result | `Decimal` | `CollectorFunction` |
+| `CollectorResult` | Collector result value | `Decimal` | `CollectorFunction` |
+| `CollectorCount` | Collected values count | `Decimal` | `CollectorFunction` |
+| `CollectorSummary` | Summary of collected values | `Decimal` | `CollectorFunction` |
+| `CollectorMinimum` | Minimum collected value | `Decimal` | `CollectorFunction` |
+| `CollectorMaximum` | Maximum collected value | `Decimal` | `CollectorFunction` |
+| `CollectorAverage` | Average of collected values | `Decimal` | `CollectorFunction` |
+| `WageTypeNumber` | Wage type number | `Decimal` | `CollectorApplyFunction`, `WageTypeFunction` |
+| `WageTypeName` | Wage type name | `String` | `CollectorApplyFunction`, `WageTypeFunction` |
+| `WageTypeValue` | Wage type value | `Decimal` | `CollectorApplyFunction`, `WageTypeResultFunction` |
+| `WageTypeDescription` | Wage type description | `String` | `WageTypeFunction` |
+| `WageTypeCalendar` | Wage type calendar | `String` | `WageTypeFunction` |
+| `ExecutionCount` | Wage type value execution count | `Int` | `WageTypeValueFunction` |
+
+> All derived functions inherit access to their parent function's properties. For example, all
+> payrun functions can access `PayrollFunction` properties.
+
+### Integrated Actions
+
+The Payroll Engine provides a library of predefined actions. Selected examples:
+
+| Action | Description |
+|:-------|:------------|
+| `ApplyRangeLookupValue(key, rangeValue, field)` | Apply a range value to lookup brackets considering the lookup range mode |
+| `Concat(str1, ..., strN)` | Concatenate multiple strings |
+| `Contains(test, sel, ..., selN)` | Test if a value belongs to a specific value domain |
+| `IIf(expression, onTrue, onFalse)` | Return one of two values depending on an expression |
+| `Log(message, level?)` | Log a message |
+| `Min(left, right)` | Get the minimum of two values |
+| `Max(left, right)` | Get the maximum of two values |
+| `Range(value, min, max)` | Clamp a value within a range |
+
+See the [full integrated action reference](https://github.com/Payroll-Engine/PayrollEngine/blob/main/docs/PayrollEngine.Client.Scripting.md)
+for all available actions. Custom actions can be added via Low-Code;
+see [Custom Actions](https://github.com/Payroll-Engine/PayrollEngine/wiki/Custom-Actions).
 
 ---
 
