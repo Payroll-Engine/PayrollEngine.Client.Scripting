@@ -6352,7 +6352,7 @@
             <returns>The typed lookup value, or <c>default(T)</c> when the key is not found</returns>
             <remarks>
             When the stored value is a JSON object and <typeparamref name="T"/> is not <c>string</c>,
-            the JSON is deserialized automatically. Use <see cref="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetObjectLookup``1(System.String,System.String,System.String,System.String)"/>
+            the JSON is deserialized automatically. Use <see cref="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookupField``1(System.String,System.String,System.String,System.String)"/>
             to extract a single property from a JSON-object lookup value.
             </remarks>
         </member>
@@ -6362,12 +6362,13 @@
             <param name="lookupKeyValues">The lookup key values (serialized to JSON string)</param>
             <param name="culture">The culture, null for the system culture (optional)</param>
         </member>
-        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetObjectLookup``1(System.String,System.String,System.String,System.String)">
-            <summary>Get object lookup by range value</summary>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookupField``1(System.String,System.String,System.String,System.String)">
+            <summary>Get a single field from a JSON-object lookup entry</summary>
             <param name="lookupName">The lookup name</param>
-            <param name="objectKey">The object key</param>
-            <param name="lookupKey">The lookup key (optional)</param>
+            <param name="lookupKey">The exact key to look up</param>
+            <param name="fieldName">The JSON property name to extract from the object</param>
             <param name="culture">The culture, null for the system culture (optional)</param>
+            <returns>The typed field value, or <c>default(T)</c> when the lookup, key, or field is not found</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetLookupRanges(System.String,System.Nullable{System.Decimal})">
             <summary>Get payroll lookup range brackets</summary>

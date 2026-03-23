@@ -87,10 +87,10 @@ public partial class PayrollFunction
                 lookupKey: keyOrRangeValue));
         }
         // object field lookup value
-        return new(GetObjectLookup<object>(
+        return new(GetLookupField<object>(
             lookupName: lookup,
             lookupKey: keyOrRangeValue,
-            objectKey: field));
+            fieldName: field));
     }
 
     /// <summary>Get lookup value by key and range value</summary>

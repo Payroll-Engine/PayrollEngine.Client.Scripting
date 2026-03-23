@@ -991,7 +991,7 @@ public abstract partial class PayrollFunction : Function
     /// <returns>The typed lookup value, or <c>default(T)</c> when the key is not found</returns>
     /// <remarks>
     /// When the stored value is a JSON object and <typeparamref name="T"/> is not <c>string</c>,
-    /// the JSON is deserialized automatically. Use <see cref="GetObjectLookup{T}(string, string, string, string)"/>
+    /// the JSON is deserialized automatically. Use <see cref="GetLookupField{T}(string, string, string, string)"/>
     /// to extract a single property from a JSON-object lookup value.
     /// </remarks>
     public T GetLookup<T>(string lookupName, string lookupKey, string culture = null)
@@ -1022,16 +1022,16 @@ public abstract partial class PayrollFunction : Function
         return GetLookup<T>(lookupName, JsonSerializer.Serialize(lookupKeyValues), culture);
     }
 
-    /// <summary>Get object lookup by range value</summary>
+    /// <summary>Get a single field from a JSON-object lookup entry</summary>
     /// <param name="lookupName">The lookup name</param>
-    /// <param name="objectKey">The object key</param>
-    /// <param name="lookupKey">The lookup key (optional)</param>
+    /// <param name="lookupKey">The exact key to look up</param>
+    /// <param name="fieldName">The JSON property name to extract from the object</param>
     /// <param name="culture">The culture, null for the system culture (optional)</param>
-    public T GetObjectLookup<T>(string lookupName, string objectKey,
-        string lookupKey = null, string culture = null)
+    /// <returns>The typed field value, or <c>default(T)</c> when the lookup, key, or field is not found</returns>
+    public T GetLookupField<T>(string lookupName, string lookupKey, string fieldName, string culture = null)
     {
         var value = GetLookup<string>(lookupName, lookupKey, culture);
-        return string.IsNullOrWhiteSpace(value) ? default : value.ObjectValueJson<T>(objectKey);
+        return string.IsNullOrWhiteSpace(value) ? default : value.ObjectValueJson<T>(fieldName);
     }
     
     /// <summary>Get payroll lookup range brackets</summary>
