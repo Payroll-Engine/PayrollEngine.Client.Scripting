@@ -7669,6 +7669,17 @@
             <param name="query">The query</param>
             <returns>Payrun result data table, null on empty collection</returns>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.ExecuteConsolidatedQuery(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>Executes a query across all provider tenants that have granted Consolidation permission
+            to the current tenant. Results are merged into a single table.
+            Use this in ReportEndFunction to aggregate cross-tenant payroll results (e.g. Benelux consolidation).
+            TenantId in parameters is overridden per share — do not set it manually.</summary>
+            <param name="tableName">Target table name for the merged result</param>
+            <param name="methodName">The API query method name (e.g. QueryPayrollResultValues)</param>
+            <param name="mergeColumn">Column used as primary key for row merging</param>
+            <param name="parameters">Base query parameters; TenantId is overridden per share</param>
+            <returns>Merged data table, empty table when no Consolidation shares exist</returns>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.ReportFunction.GetOperationBaseName(System.String)">
             <summary>Get operation base name</summary>
             <param name="operation">The operation name</param>
@@ -11046,6 +11057,20 @@
             <param name="message">The log message</param>
             <param name="key">The log key</param>
             <param name="reportDate">The report date (default: now)</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IReportRuntime.ExecuteConsolidatedQuery(System.String,System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>Executes a query across all provider tenants that have granted
+            Consolidation permission to the current tenant via regulation sharing.
+            For each share, the query is executed with the provider tenant's id
+            and the results are merged into a single table.
+            Use this in ReportEndFunction scripts to aggregate cross-tenant payroll results.
+            Example: collecting COM-normalized results from NL and BE tenants into one table.</summary>
+            <param name="tableName">Target table name for the merged result</param>
+            <param name="methodName">The API query method name (e.g. QueryPayrollResultValues)</param>
+            <param name="culture">The content culture</param>
+            <param name="mergeColumn">Column used as primary key for merging — must be unique across all tenants</param>
+            <param name="parameters">Base query parameters; TenantId is overridden per share iteration</param>
+            <returns>Merged data table containing rows from all provider tenants, empty table when no shares exist</returns>
         </member>
         <member name="T:PayrollEngine.Client.Scripting.Runtime.IReportStartRuntime">
             <summary>Runtime for the report start function <see cref="T:PayrollEngine.Client.Scripting.Function.ReportStartFunction"/></summary>

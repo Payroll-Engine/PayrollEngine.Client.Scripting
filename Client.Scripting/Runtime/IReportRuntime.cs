@@ -158,4 +158,23 @@ public interface IReportRuntime : IRuntime
 
     #endregion
 
+    #region Consolidation
+
+    /// <summary>Executes a query across all provider tenants that have granted
+    /// Consolidation permission to the current tenant via regulation sharing.
+    /// For each share, the query is executed with the provider tenant's id
+    /// and the results are merged into a single table.
+    /// Use this in ReportEndFunction scripts to aggregate cross-tenant payroll results.
+    /// Example: collecting COM-normalized results from NL and BE tenants into one table.</summary>
+    /// <param name="tableName">Target table name for the merged result</param>
+    /// <param name="methodName">The API query method name (e.g. QueryPayrollResultValues)</param>
+    /// <param name="culture">The content culture</param>
+    /// <param name="mergeColumn">Column used as primary key for merging — must be unique across all tenants</param>
+    /// <param name="parameters">Base query parameters; TenantId is overridden per share iteration</param>
+    /// <returns>Merged data table containing rows from all provider tenants, empty table when no shares exist</returns>
+    DataTable ExecuteConsolidatedQuery(string tableName, string methodName, string culture,
+        string mergeColumn, Dictionary<string, string> parameters);
+
+    #endregion
+
 }

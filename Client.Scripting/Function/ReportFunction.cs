@@ -373,6 +373,19 @@ public abstract partial class ReportFunction : Function
     public DataTable ExecutePayrunResultQuery(string tableName, int payrollResultId, ReportQuery query = null) =>
         Runtime.ExecutePayrunResultQuery(tableName, payrollResultId, ReportQueryToTuple(query));
 
+    /// <summary>Executes a query across all provider tenants that have granted Consolidation permission
+    /// to the current tenant. Results are merged into a single table.
+    /// Use this in ReportEndFunction to aggregate cross-tenant payroll results (e.g. Benelux consolidation).
+    /// TenantId in parameters is overridden per share — do not set it manually.</summary>
+    /// <param name="tableName">Target table name for the merged result</param>
+    /// <param name="methodName">The API query method name (e.g. QueryPayrollResultValues)</param>
+    /// <param name="mergeColumn">Column used as primary key for row merging</param>
+    /// <param name="parameters">Base query parameters; TenantId is overridden per share</param>
+    /// <returns>Merged data table, empty table when no Consolidation shares exist</returns>
+    public DataTable ExecuteConsolidatedQuery(string tableName, string methodName,
+        string mergeColumn, Dictionary<string, string> parameters = null) =>
+        Runtime.ExecuteConsolidatedQuery(tableName, methodName, UserCulture, mergeColumn, parameters);
+
     private static Tuple<int?, string, string, string, long?, long?> ReportQueryToTuple(ReportQuery query)
     {
         if (query == null)
