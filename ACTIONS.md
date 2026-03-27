@@ -153,14 +153,27 @@ Collectors are referenced using the `^&` syntax. An optional scope selector cont
 | Syntax | Scope | Description |
 |:-------|:------|:------------|
 | `^&Name` | `Period` (default) | Collector value of the current payrun period |
+| `^&Name.PrevPeriod` | `PrevPeriod` | Collector value of the previous period |
+| `^&Name.NextPeriod` | `NextPeriod` | Collector value of the next period |
 | `^&Name.Cycle` | `Cycle` | Year-to-date collector value across all previous payruns in the current cycle |
+| `^&Name.PrevCycle` | `PrevCycle` | Total collector value across all payruns of the previous cycle |
+| `^&Name.NextCycle` | `NextCycle` | Total collector value across all payruns of the next cycle |
+
+> `PrevPeriod`, `NextPeriod`, `PrevCycle` and `NextCycle` read from persisted payrun results.
+> The payrun job must have been executed with `storeEmptyResults: true` for the referenced periods.
 
 ```yaml
 # Current period gross income
 ^&GrossIncome
 
-# Year-to-date gross income (previous payruns in the cycle)
+# Previous period gross income
+^&GrossIncome.PrevPeriod
+
+# Year-to-date gross income (previous payruns in the current cycle)
 ^&GrossIncome.Cycle
+
+# Total gross income of the previous cycle (e.g. for holiday pay based on prior year earnings)
+^&GrossIncome.PrevCycle
 
 # Income tax: gross income times bracket rate from range lookup
 ^&GrossIncome * ^#IncomeTax(^&GrossIncome)
@@ -173,8 +186,15 @@ Wage types are referenced using the `^$` syntax. Wage types can be identified by
 | Syntax | Scope | Description |
 |:-------|:------|:------------|
 | `^$Name` or `^$100` | `Period` (default) | Wage type value of the current payrun period (by name or number) |
+| `^$Name.PrevPeriod` | `PrevPeriod` | Wage type value of the previous period |
+| `^$Name.NextPeriod` | `NextPeriod` | Wage type value of the next period |
 | `^$Name.Cycle` | `Cycle` | Year-to-date wage type value across all previous payruns in the current cycle |
+| `^$Name.PrevCycle` | `PrevCycle` | Total wage type value across all payruns of the previous cycle |
+| `^$Name.NextCycle` | `NextCycle` | Total wage type value across all payruns of the next cycle |
 | `^$Name.RetroSum` | `RetroSum` | Net sum of all pending retro corrections for the wage type within the current cycle |
+
+> `PrevPeriod`, `NextPeriod`, `PrevCycle` and `NextCycle` read from persisted payrun results.
+> The payrun job must have been executed with `storeEmptyResults: true` for the referenced periods.
 
 ```yaml
 # Social security: 8% on current period base salary
@@ -183,8 +203,15 @@ Wage types are referenced using the `^$` syntax. Wage types can be identified by
 # Reference by wage type number
 ^$100 * 0.08
 
-# Year-to-date base salary (previous payruns in the cycle)
+# Year-to-date base salary (previous payruns in the current cycle)
 ^$BaseSalary.Cycle
+
+# Total base salary of the previous cycle (e.g. for annual bonus based on prior year earnings)
+^$BaseSalary.PrevCycle
+
+# Holiday pay: 8% of prior year gross income, paid out in May
+? PeriodStart.Month == 5
+^&GrossIncome.PrevCycle * 0.08
 
 # Retro delta wage type: net correction for BaseSalary since last closed period
 ^$BaseSalary.RetroSum

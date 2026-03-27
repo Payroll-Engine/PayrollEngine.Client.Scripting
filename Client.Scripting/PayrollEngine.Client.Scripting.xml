@@ -6673,6 +6673,44 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetCycleWageTypeValue(System.String)">
             <summary>Get wage type year-to-date value by wage type name</summary>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetPrevPeriodWageTypeValue(System.Decimal)">
+            <summary>Get wage type value of the previous period by wage type number</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetPrevPeriodWageTypeValue(System.String)">
+            <summary>Get wage type value of the previous period by wage type name</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetNextPeriodWageTypeValue(System.Decimal)">
+            <summary>Get wage type value of the next period by wage type number</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetNextPeriodWageTypeValue(System.String)">
+            <summary>Get wage type value of the next period by wage type name</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetPrevCycleWageTypeValue(System.Decimal)">
+            <summary>Get wage type total value of the previous cycle by wage type number</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetPrevCycleWageTypeValue(System.String)">
+            <summary>Get wage type total value of the previous cycle by wage type name</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetNextCycleWageTypeValue(System.Decimal)">
+            <summary>Get wage type total value of the next cycle by wage type number</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetNextCycleWageTypeValue(System.String)">
+            <summary>Get wage type total value of the next cycle by wage type name</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetConsolidatedWageTypeValue(System.Decimal,System.Int32)">
+            <summary>
+            Get consolidated wage type value by number from a period offset to the current period.
+            Uses the start date of the offset period as the consolidation moment.
+            A negative offset covers past periods; for example, -11 consolidates the 12 most recent periods.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetConsolidatedWageTypeValue(System.String,System.Int32)">
+            <summary>
+            Get consolidated wage type value by name from a period offset to the current period.
+            Uses the start date of the offset period as the consolidation moment.
+            A negative offset covers past periods; for example, -11 consolidates the 12 most recent periods.
+            </summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetRetroWageTypeValueSumByNumber(System.Decimal)">
             <summary>Get sum of retro corrections for a wage type by number</summary>
         </member>
@@ -6681,7 +6719,173 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetCycleCollectorValue(System.String)">
             <summary>Get collector year-to-date value</summary>
-            <param name="name">Collector name</param>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetPrevPeriodCollectorValue(System.String)">
+            <summary>Get collector value of the previous period</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetNextPeriodCollectorValue(System.String)">
+            <summary>Get collector value of the next period</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetPrevCycleCollectorValue(System.String)">
+            <summary>Get collector total value of the previous cycle</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetNextCycleCollectorValue(System.String)">
+            <summary>Get collector total value of the next cycle</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetConsolidatedCollectorValue(System.String,System.Int32)">
+            <summary>
+            Get consolidated collector value from a period offset to the current period.
+            Uses the start date of the offset period as the consolidation moment.
+            A negative offset covers past periods; for example, -11 consolidates the 12 most recent periods.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.AnnualProjection(System.Decimal,System.String)">
+            <summary>
+            Project a per-period amount to a cycle basis, apply a progressive range lookup,
+            and return the per-period share of the result.
+            Formula: Round(ApplyRangeValue(lookup, amount × PeriodsInCycle) / PeriodsInCycle, 2)
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.CycleToPeriod(System.Decimal)">
+            <summary>
+            Convert a cycle amount to the equivalent per-period amount.
+            Formula: cycleAmount / PeriodsInCycle
+            Applies to any amount defined on a full-cycle basis that must be distributed
+            evenly across the payrun periods in the cycle.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.PeriodToCycle(System.Decimal)">
+            <summary>
+            Convert a per-period amount to the equivalent cycle amount.
+            Formula: periodAmount × PeriodsInCycle
+            Applies to any amount defined per period that must be projected to the full cycle
+            for limit checks, rate lookups, or cycle-level reporting.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.RoundToFraction(System.Decimal,System.Decimal)">
+            <summary>
+            Round an amount to the nearest fraction defined by a denominator.
+            Formula: Round(amount × denominator) / denominator
+            Common denominators: 100 = cents, 20 = twentieth, 4 = quarter, 2 = half.
+            Returns 0 when denominator is 0 or negative.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.CappedContribution(System.Decimal,System.Decimal,System.Decimal)">
+            <summary>
+            Calculate a contribution on a capped cycle basis and return the per-period amount.
+            Formula: Round(Min(periodAmount × PeriodsInCycle, cycleCap) / PeriodsInCycle × rate, 2)
+            Returns 0 when cycleCap is 0 or negative.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.RateContribution(System.Decimal,System.Decimal)">
+            <summary>
+            Apply a flat rate to a wage and return the rounded contribution amount.
+            Formula: Round(wage × rate, 2)
+            Returns 0 when wage or rate is 0.
+            Use when the contribution base is already the correct period amount and no
+            cycle projection or capping is required.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.LookupRateContribution(System.Decimal,System.String,System.String)">
+            <summary>
+            Read a rate from a lookup table and apply it to a wage.
+            Formula: Round(wage × GetLookup(lookup, key), 2)
+            Returns 0 when the lookup value is not found or the wage is 0.
+            Use when the contribution rate is stored in a data regulation lookup and may
+            change from cycle to cycle without requiring a script update.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.PhaseOut(System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
+            <summary>
+            Single-phase income-dependent reduction (phase-out).
+            Formula: Max(0, maxAmount - Max(0, income - threshold) × phaseOutRate)
+            Returns 0 when the income exceeds the point at which the reduction is fully phased out.
+            Both input and output use the same unit; the caller is responsible for any period conversion.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.LinearPhaseOut(System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
+            <summary>
+            Linear phase-out of an amount between a full-value threshold and a zero threshold.
+            Returns maxAmount when value is at or below fullUpTo, zero when value is at or above zeroFrom,
+            and a linearly interpolated amount in between.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.PhaseIn(System.Decimal,System.Decimal[])">
+            <summary>
+            Multiphase build-up: accumulates an amount across ordered income thresholds, each with its own rate.
+            Phases are evaluated in ascending order; each phase covers the income between its lower and upper bound.
+            The first phase starts at 0. The phases parameter is a flat array of alternating (upperBound, rate) pairs.
+            The caller is responsible for any period conversion of the result.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.ProRateByDays(System.Decimal,System.Decimal,System.Decimal)">
+            <summary>
+            Pro-rate an amount from actual days to target days.
+            Formula: actualDays > 0 ? Round(amount / actualDays × targetDays, 2) : 0
+            Returns 0 when actualDays is 0 or negative, avoiding division by zero.
+            Typical use: extrapolate a partial-period amount to a full reference period,
+            or scale a full-period amount down to effective worked days.
+            </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.InsuranceWage(System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
+             <summary>
+             Calculate the insurance wage for a period based on accumulated collector and prior wage,
+             bounded by pro-rated annual minimum and maximum wage limits.
+             This implements the standard SV insurance wage calculation pattern used across
+             multiple insurance types and jurisdictions.
+            
+             The annual limits are pro-rated to the accumulated SV days using the configured
+             days-in-year basis (e.g. 360 for Swiss, 365 for other jurisdictions).
+            
+             Behaviour by accumulated collector value:
+               collector ≥ pro-rated max  → result = proRatedMax − proRatedMin − prevWage
+               collector ≥ pro-rated min  → result = collector − proRatedMin − prevWage
+               collector ≥ 0              → result = 0 − prevWage  (only a refund of prior overpayment)
+               collector &lt; 0           → result = collector − prevWage  (negative correction)
+            
+             Returns 0 when collector is 0.
+             </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.D2Delta(System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
+             <summary>
+             Calculate the period delta for an accumulating tax or contribution using the D2 correction formula.
+             Formula: (ytdWage + currentWage) × rate − ytdAlreadyPaid
+            
+             Returns a positive value when the cumulative liability increases (additional deduction),
+             and a negative value when it decreases (refund, e.g. after a downward correction).
+            
+             Typical use: income tax and social-contribution calculations that accumulate over the
+             cycle and must produce the exact delta for the current period rather than a flat rate
+             applied to the current period's income alone.
+            
+             The caller supplies:
+               ytdWage         — sum of the taxable wage from all prior periods (via ^$.Cycle or GetConsolidatedWageTypeValue)
+               currentWage     — taxable wage of the current period
+               ytdAlreadyPaid  — sum of the tax or contribution already deducted in prior periods (via ^$.Cycle)
+               rate            — applicable rate for the current period (from lookup or case value)
+             </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.MinMaxContribution(System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
+             <summary>
+             Clamp a wage to an optional minimum and maximum, then apply a contribution rate.
+             Formula: Round(Min(Max(wage, minWage), maxWage) × rate, 2)
+            
+             The wage is first raised to minWage if it falls below it (e.g. statutory minimum wage floor),
+             then capped at maxWage if it exceeds it (e.g. social insurance ceiling).
+             Pass 0 for minWage to skip the minimum, or 0 for maxWage to skip the maximum.
+            
+             Returns 0 when wage is 0.
+             </summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.ContributionIfObligated(System.Decimal,System.Decimal,System.String)">
+             <summary>
+             Apply a contribution rate to a wage only when a boolean case field indicates obligation.
+             Returns Round(wage × rate, 2) when the obligation field is true, and 0 otherwise.
+            
+             Typical use: social insurance contributions that are only applicable to certain
+             employee categories (e.g. mandatory pension, unemployment insurance, accident insurance),
+             where the obligation status is stored as a case field and may change over time.
+             </summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetRuntimeValue(System.String)">
             <summary>Get runtime action value</summary>
