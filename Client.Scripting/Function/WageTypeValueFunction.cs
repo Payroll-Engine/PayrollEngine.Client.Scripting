@@ -1,4 +1,4 @@
-﻿/* WageTypeValueFunction */
+/* WageTypeValueFunction */
 
 // ReSharper disable RedundantUsingDirective
 using System;
@@ -94,6 +94,15 @@ public partial class WageTypeValueFunction : WageTypeFunction
 
     /// <summary>Restart execution of wage type calculation</summary>
     public void RestartExecution() => Runtime.RestartExecution();
+
+    /// <summary>
+    /// Aborts the wage type sequence for the current employee immediately.
+    /// All subsequent wage types are skipped for this employee in this payrun.
+    /// CollectorEnd and PayrunEmployeeEnd continue normally.
+    /// </summary>
+    /// <param name="reason">Optional reason written to the payrun log.</param>
+    public void AbortExecution(string reason = null) =>
+        Runtime.AbortExecution(reason);
 
     #region Action
     #endregion

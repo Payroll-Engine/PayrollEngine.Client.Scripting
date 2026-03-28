@@ -8429,6 +8429,14 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.RestartExecution">
             <summary>Restart execution of wage type calculation</summary>
         </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.AbortExecution(System.String)">
+            <summary>
+            Aborts the wage type sequence for the current employee immediately.
+            All subsequent wage types are skipped for this employee in this payrun.
+            CollectorEnd and PayrunEmployeeEnd continue normally.
+            </summary>
+            <param name="reason">Optional reason written to the payrun log.</param>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.WageTypeValueFunction.GetValue">
             <summary>Entry point for the runtime</summary>
             <remarks>Internal usage only, do not call this method</remarks>
@@ -11500,6 +11508,14 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IWageTypeValueRuntime.RestartExecution">
             <summary>Restart execution of wage type calculation</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IWageTypeValueRuntime.AbortExecution(System.String)">
+            <summary>
+            Aborts the wage type sequence for the current employee immediately.
+            All subsequent wage types are skipped. CollectorEnd and PayrunEmployeeEnd
+            continue normally.
+            </summary>
+            <param name="reason">Optional reason written to the payrun log.</param>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IWageTypeValueRuntime.GetValueActions">
             <summary>Get wage type value actions</summary>
