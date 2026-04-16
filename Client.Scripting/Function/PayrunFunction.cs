@@ -1,4 +1,4 @@
-﻿/* PayrunFunction */
+/* PayrunFunction */
 
 using System;
 using System.Linq;
@@ -291,8 +291,13 @@ public abstract partial class PayrunFunction : PayrollFunction
         }
 
         var source = GetType().Name;
-        var json = JsonSerializer.Serialize(value);
         valueType ??= value.GetValueType();
+        // when the value type is String and the value is already a string,
+        // pass it through directly to avoid double-encoding
+        // (e.g. a JSON array "[{...}]" being re-serialized to "\"[{...}]\"")
+        var json = valueType == ValueType.String && value is string str
+            ? str
+            : JsonSerializer.Serialize(value);
         Runtime.SetPayrunResult(source, name, json, (int)valueType.Value, startDate, endDate, slot, tags?.ToList(), attributes, culture);
     }
 
