@@ -5939,6 +5939,18 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.EvaluationPeriod">
             <summary>The evaluation period</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayDate">
+            <summary>The pay date of the current period: the payrun job pay date,
+            or the calendar pay date outside of a payrun</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayDateYear">
+            <summary>The pay date year, the tax year of pay-date based regulations</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetPayDate(System.DateTime)">
+            <summary>Get the calendar pay date of a period</summary>
+            <param name="periodMoment">The period moment</param>
+            <returns>The period end date plus the calendar pay date offset</returns>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.Periods">
             <summary>Periods by offset</summary>
         </member>
@@ -10762,6 +10774,15 @@
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetEvaluationPeriod">
             <summary>Get evaluation period</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.PayDate">
+            <summary>The pay date of the evaluation period: the payrun job pay date,
+            or the calendar pay date outside of a payrun</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetPayDate(System.DateTime)">
+            <summary>Get the calendar pay date of a period: period end date plus the calendar pay date offset</summary>
+            <param name="periodMoment">The period moment</param>
+            <returns>The calendar pay date of the period including the moment</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetPeriod(System.DateTime,System.Int32)">
             <summary>Get period by moment and offset</summary>

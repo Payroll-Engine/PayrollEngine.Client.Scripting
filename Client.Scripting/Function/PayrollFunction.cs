@@ -58,6 +58,7 @@ public abstract partial class PayrollFunction : Function
         EvaluationDate = Runtime.EvaluationDate;
         var (start, end) = (Tuple<DateTime, DateTime>)Runtime.GetEvaluationPeriod();
         EvaluationPeriod = new(start, end);
+        PayDate = Runtime.PayDate;
 
         // cycle
         Cycle = GetCycle();
@@ -287,6 +288,21 @@ public abstract partial class PayrollFunction : Function
 
     /// <summary>The evaluation period</summary>
     public DatePeriod EvaluationPeriod { get; }
+
+    /// <summary>The pay date of the current period: the payrun job pay date,
+    /// or the calendar pay date outside of a payrun</summary>
+    [ActionProperty("Pay date")]
+    public DateTime PayDate { get; }
+
+    /// <summary>The pay date year, the tax year of pay-date based regulations</summary>
+    [ActionProperty("Pay date year")]
+    public int PayDateYear => PayDate.Year;
+
+    /// <summary>Get the calendar pay date of a period</summary>
+    /// <param name="periodMoment">The period moment</param>
+    /// <returns>The period end date plus the calendar pay date offset</returns>
+    public DateTime GetPayDate(DateTime periodMoment) =>
+        Runtime.GetPayDate(periodMoment);
 
     /// <summary>Periods by offset</summary>
     public ScriptDictionary<int, DatePeriod> Periods { get; }

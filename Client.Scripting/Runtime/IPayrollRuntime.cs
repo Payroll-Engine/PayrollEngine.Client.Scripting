@@ -58,6 +58,15 @@ public interface IPayrollRuntime : IRuntime
     /// <summary>Get evaluation period</summary>
     Tuple<DateTime, DateTime> GetEvaluationPeriod();
 
+    /// <summary>The pay date of the evaluation period: the payrun job pay date,
+    /// or the calendar pay date outside of a payrun</summary>
+    DateTime PayDate { get; }
+
+    /// <summary>Get the calendar pay date of a period: period end date plus the calendar pay date offset</summary>
+    /// <param name="periodMoment">The period moment</param>
+    /// <returns>The calendar pay date of the period including the moment</returns>
+    DateTime GetPayDate(DateTime periodMoment);
+
     /// <summary>Get period by moment and offset</summary>
     /// <param name="periodMoment">The period moment</param>
     /// <param name="offset">The period offset: 0=current, -1=previous, 1=next</param>
