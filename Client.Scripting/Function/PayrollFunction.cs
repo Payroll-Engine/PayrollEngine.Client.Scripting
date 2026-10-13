@@ -63,6 +63,7 @@ public abstract partial class PayrollFunction : Function
         // calendar
         CycleTimeUnit = (CalendarTimeUnit)Runtime.CycleTimeUnit;
         PeriodTimeUnit = (CalendarTimeUnit)Runtime.PeriodTimeUnit;
+        TimeMap = (CalendarTimeMap)Runtime.TimeMap;
 
         // cycle
         CycleDate = Runtime.CycleDate;
@@ -133,6 +134,10 @@ public abstract partial class PayrollFunction : Function
 
     /// <summary>The calendar period time unit, the enum value is the number of periods per year</summary>
     public CalendarTimeUnit PeriodTimeUnit { get; }
+
+    /// <summary>The calendar time map: <see cref="CalendarTimeMap.Cycle"/> divides calendar period
+    /// case values by the periods per cycle</summary>
+    public CalendarTimeMap TimeMap { get; }
 
     /// <summary>Gets the calendar period</summary>
     /// <param name="moment">Moment within the period (default: today)</param>

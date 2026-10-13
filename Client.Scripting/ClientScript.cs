@@ -97,6 +97,15 @@ public enum CalendarTimeUnit
     Week = 52
 }
 
+/// <summary>The calendar time map: scaling of calendar period case values to the payrun period</summary>
+public enum CalendarTimeMap
+{
+    /// <summary>The case value applies to the period</summary>
+    Period = 0,
+    /// <summary>The case value applies to the cycle and is divided by the periods per cycle</summary>
+    Cycle = 1
+}
+
 /// <summary>Specifies the meaning and relative importance of a log event</summary>
 public enum LogLevel
 {

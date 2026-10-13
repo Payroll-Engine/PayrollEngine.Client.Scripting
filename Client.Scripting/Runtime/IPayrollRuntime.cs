@@ -73,6 +73,9 @@ public interface IPayrollRuntime : IRuntime
     /// <summary>The calendar period time unit (<see cref="CalendarTimeUnit"/>)</summary>
     int PeriodTimeUnit { get; }
 
+    /// <summary>The calendar time map (<see cref="CalendarTimeMap"/>)</summary>
+    int TimeMap { get; }
+
     /// <summary>Get period by moment and offset</summary>
     /// <param name="periodMoment">The period moment</param>
     /// <param name="offset">The period offset: 0=current, -1=previous, 1=next</param>

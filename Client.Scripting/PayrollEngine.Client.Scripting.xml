@@ -577,6 +577,15 @@
         <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.Week">
             <summary>Week</summary>
         </member>
+        <member name="T:PayrollEngine.Client.Scripting.CalendarTimeMap">
+            <summary>The calendar time map: scaling of calendar period case values to the payrun period</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeMap.Period">
+            <summary>The case value applies to the period</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeMap.Cycle">
+            <summary>The case value applies to the cycle and is divided by the periods per cycle</summary>
+        </member>
         <member name="T:PayrollEngine.Client.Scripting.LogLevel">
             <summary>Specifies the meaning and relative importance of a log event</summary>
         </member>
@@ -5862,6 +5871,10 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodTimeUnit">
             <summary>The calendar period time unit, the enum value is the number of periods per year</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.TimeMap">
+            <summary>The calendar time map: <see cref="F:PayrollEngine.Client.Scripting.CalendarTimeMap.Cycle"/> divides calendar period
+            case values by the periods per cycle</summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCalendarPeriod(System.Nullable{System.DateTime},System.Int32)">
             <summary>Gets the calendar period</summary>
             <param name="moment">Moment within the period (default: today)</param>
@@ -10849,6 +10862,9 @@
         </member>
         <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.PeriodTimeUnit">
             <summary>The calendar period time unit (<see cref="T:PayrollEngine.Client.Scripting.CalendarTimeUnit"/>)</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.TimeMap">
+            <summary>The calendar time map (<see cref="T:PayrollEngine.Client.Scripting.CalendarTimeMap"/>)</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetPeriod(System.DateTime,System.Int32)">
             <summary>Get period by moment and offset</summary>
