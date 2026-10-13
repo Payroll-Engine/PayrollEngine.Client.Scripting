@@ -79,6 +79,15 @@ public interface IPayrollRuntime : IRuntime
     /// <returns>The offset cycle including the moment</returns>
     Tuple<DateTime, DateTime> GetCycle(DateTime cycleMoment, int offset);
 
+    /// <summary>The cycle date of the evaluation period, depending on the calendar cycle assignment:
+    /// the pay date (payrun job pay date or calendar pay date) or the period end</summary>
+    DateTime CycleDate { get; }
+
+    /// <summary>Get the start of the first period assigned to a cycle</summary>
+    /// <param name="cycleStart">The cycle start</param>
+    /// <returns>The start of the first period with a cycle date at or after the cycle start</returns>
+    DateTime GetCyclePeriodStart(DateTime cycleStart);
+
     #endregion
 
     #region Case Field and Case Value

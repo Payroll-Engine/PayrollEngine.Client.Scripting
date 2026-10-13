@@ -61,6 +61,7 @@ public abstract partial class PayrollFunction : Function
         PayDate = Runtime.PayDate;
 
         // cycle
+        CycleDate = Runtime.CycleDate;
         Cycle = GetCycle();
         PreviousCycle = GetCycle(-1);
         NextCycle = GetCycle(1);
@@ -69,8 +70,8 @@ public abstract partial class PayrollFunction : Function
         Period = GetPeriod();
         PreviousPeriod = GetPeriod(-1);
         NextPeriod = GetPeriod(1);
-        CycleStartOffset = GetPeriodOffset(CycleStart);
-        CycleEndOffset = GetPeriodOffset(CycleEnd);
+        CycleStartOffset = GetPeriodOffset(Runtime.GetCyclePeriodStart(CycleStart));
+        CycleEndOffset = GetPeriodOffset(Runtime.GetCyclePeriodStart(NextCycle.Start)) - 1;
 
         Periods = new(GetPeriod);
         CaseValue = new(x => GetCaseValue(x));
@@ -161,6 +162,11 @@ public abstract partial class PayrollFunction : Function
 
     #region Cycle
 
+    /// <summary>The cycle date of the current period, depending on the calendar cycle assignment:
+    /// the pay date or the period end</summary>
+    [ActionProperty("Cycle date")]
+    public DateTime CycleDate { get; }
+
     /// <summary>The current cycle start date</summary>
     [ActionProperty("Cycle start date")]
     public DateTime CycleStart => Cycle.Start;
@@ -215,11 +221,28 @@ public abstract partial class PayrollFunction : Function
     /// <returns>The <see cref="DatePeriod"/> spanning the full cycle (e.g. 1 Jan – 31 Dec for annual)</returns>
     /// <remarks>
     /// A cycle is typically one calendar year for a monthly payroll.
+    /// The current cycle includes the <see cref="CycleDate"/> of the current period.
     /// Use <see cref="GetCyclePeriods"/> to iterate over all periods within the cycle,
     /// or <see cref="GetPastCyclePeriods"/> / <see cref="GetFutureCyclePeriods"/> for partial iteration.
     /// </remarks>
     public DatePeriod GetCycle(int offset = 0) =>
-        GetCycle(EvaluationPeriod.Start, offset);
+        GetCycle(CycleDate, offset);
+
+    /// <summary>Returns the date range of the periods assigned to a cycle,
+    /// from the start of the first period to the end of the last period</summary>
+    /// <param name="offset">Cycle offset: <c>0</c> = current, <c>-1</c> = previous, <c>1</c> = next</param>
+    /// <returns>The <see cref="DatePeriod"/> spanning all periods of the cycle</returns>
+    /// <remarks>
+    /// Equals the cycle for periods aligned to the cycle (e.g. monthly periods in an annual cycle).
+    /// Weekly and bi-weekly periods, or a pay date after the period end, can shift the range.
+    /// </remarks>
+    public DatePeriod GetCyclePeriodRange(int offset = 0)
+    {
+        var cycle = GetCycle(offset);
+        var nextCycle = GetCycle(cycle.Start, 1);
+        return new(Runtime.GetCyclePeriodStart(cycle.Start),
+            Runtime.GetCyclePeriodStart(nextCycle.Start).PreviousTick());
+    }
 
     /// <summary>Get cycle by moment</summary>
     /// <param name="moment">The cycle moment</param>
@@ -357,10 +380,10 @@ public abstract partial class PayrollFunction : Function
     public DatePeriod NextPeriod { get; }
 
     /// <summary>Test for the first cycle period</summary>
-    public bool FirstCyclePeriod => CycleStart == PeriodStart;
+    public bool FirstCyclePeriod => CycleStartOffset == 0;
 
     /// <summary>Test for the last cycle period</summary>
-    public bool LastCyclePeriod => PeriodEnd == CycleEnd;
+    public bool LastCyclePeriod => CycleEndOffset == 0;
 
     /// <summary>Offset of the current period to the start of the current cycle,<br />
     /// 0 for the first cycle period, -1 for the previous period, and so on</summary>
@@ -377,7 +400,7 @@ public abstract partial class PayrollFunction : Function
     public int FutureCyclePeriods => CycleEndOffset;
 
     /// <summary>The number of periods within a cycle</summary>
-    public int PeriodsInCycle => CycleStartOffset + CycleEndOffset + 1;
+    public int PeriodsInCycle => PastCyclePeriods + FutureCyclePeriods + 1;
 
     /// <summary>Get period before the evaluation date</summary>
     /// <returns>Period from the minimal date until the evaluation date</returns>

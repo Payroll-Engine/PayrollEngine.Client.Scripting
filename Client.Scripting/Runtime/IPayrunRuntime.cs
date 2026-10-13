@@ -132,6 +132,13 @@ public interface IPayrunRuntime : IPayrollRuntime
         IList<decimal> wageTypeNumbers, DateTime start, DateTime end,
         string forecast = null, int? jobStatus = null, IList<string> tags = null);
 
+    /// <summary>Gets the consolidated period starts: all periods before the current period
+    /// with a cycle date (pay date or period end) at or after the period moment.
+    /// With pay date assignment, periods paid after the current pay date are excluded</summary>
+    /// <param name="periodMoment">The period moment, typically the cycle start</param>
+    /// <returns>The period start dates, ordered by date</returns>
+    List<DateTime> GetConsolidatedPeriodStarts(DateTime periodMoment);
+
     /// <summary>Gets the consolidated wage type results, from the period moment until the current period</summary>
     /// <param name="wageTypeNumbers">The wage type numbers</param>
     /// <param name="periodMoment">The period moment</param>

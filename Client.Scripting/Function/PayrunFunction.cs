@@ -326,7 +326,7 @@ public abstract partial class PayrunFunction : PayrollFunction
     /// </remarks>
     public IList<WageTypeResult> GetWageTypeCycleResults(WageTypeCycleResultQuery query)
     {
-        var period = GetCycle(query.CycleCount * -1);
+        var period = GetCyclePeriodRange(query.CycleCount * -1);
         return GetWageTypeResults(query.WageTypes, period.Start, period.End, query.Forecast, query.JobStatus, query.Tags);
     }
 
@@ -362,6 +362,15 @@ public abstract partial class PayrunFunction : PayrollFunction
         string forecast = null, PayrunJobStatus? jobStatus = null, IEnumerable<string> tags = null) =>
         TupleExtensions.TupleToWageTypeResults(Runtime.GetWageTypeResults(wageTypeNumbers.ToList(), start, end,
             forecast, (int?)jobStatus, tags?.ToList()));
+
+    /// <summary>Returns the consolidated period starts: all periods before the current period
+    /// with a cycle date (pay date or period end) at or after the period moment</summary>
+    /// <param name="periodMoment">The period moment, typically the cycle start</param>
+    /// <returns>The period start dates, ordered by date</returns>
+    /// <remarks>The periods covered by consolidated result queries with the same period moment.
+    /// With pay date assignment, periods paid after the current pay date are excluded.</remarks>
+    public List<DateTime> GetConsolidatedPeriodStarts(DateTime periodMoment) =>
+        Runtime.GetConsolidatedPeriodStarts(periodMoment);
 
     /// <summary>Returns consolidated wage type results for the current employee, merging retro corrections into the base values</summary>
     /// <param name="query">Query specifying wage type numbers, the reference period moment, forecast, job status, and tags</param>
@@ -446,7 +455,7 @@ public abstract partial class PayrunFunction : PayrollFunction
     /// <remarks>Collector equivalent of <see cref="GetWageTypeCycleResults"/>.</remarks>
     public IList<CollectorResult> GetCollectorCycleResults(CollectorCycleResultQuery query)
     {
-        var period = GetCycle(query.CycleCount * -1);
+        var period = GetCyclePeriodRange(query.CycleCount * -1);
         return GetCollectorResults(query.Collectors, period.Start, period.End, query.Forecast, query.JobStatus, query.Tags);
     }
 

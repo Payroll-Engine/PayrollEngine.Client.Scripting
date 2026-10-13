@@ -5848,6 +5848,10 @@
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetEmployeeAttribute``1(System.String,``0)">
             <summary>Get employee attribute typed value</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleDate">
+            <summary>The cycle date of the current period, depending on the calendar cycle assignment:
+            the pay date or the period end</summary>
+        </member>
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleStart">
             <summary>The current cycle start date</summary>
         </member>
@@ -5893,8 +5897,19 @@
             <returns>The <see cref="T:PayrollEngine.Client.Scripting.DatePeriod"/> spanning the full cycle (e.g. 1 Jan – 31 Dec for annual)</returns>
             <remarks>
             A cycle is typically one calendar year for a monthly payroll.
+            The current cycle includes the <see cref="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleDate"/> of the current period.
             Use <see cref="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCyclePeriods"/> to iterate over all periods within the cycle,
             or <see cref="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetPastCyclePeriods(System.Boolean)"/> / <see cref="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetFutureCyclePeriods(System.Boolean)"/> for partial iteration.
+            </remarks>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCyclePeriodRange(System.Int32)">
+            <summary>Returns the date range of the periods assigned to a cycle,
+            from the start of the first period to the end of the last period</summary>
+            <param name="offset">Cycle offset: <c>0</c> = current, <c>-1</c> = previous, <c>1</c> = next</param>
+            <returns>The <see cref="T:PayrollEngine.Client.Scripting.DatePeriod"/> spanning all periods of the cycle</returns>
+            <remarks>
+            Equals the cycle for periods aligned to the cycle (e.g. monthly periods in an annual cycle).
+            Weekly and bi-weekly periods, or a pay date after the period end, can shift the range.
             </remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCycle(System.DateTime,System.Int32)">
@@ -7136,6 +7151,14 @@
             <param name="jobStatus">Optional job status filter; <c>null</c> returns all statuses</param>
             <param name="tags">Optional tag filter; only results carrying all listed tags are returned</param>
             <returns>List of <see cref="T:PayrollEngine.Client.Scripting.WageTypeResult"/> within the date range</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetConsolidatedPeriodStarts(System.DateTime)">
+            <summary>Returns the consolidated period starts: all periods before the current period
+            with a cycle date (pay date or period end) at or after the period moment</summary>
+            <param name="periodMoment">The period moment, typically the cycle start</param>
+            <returns>The period start dates, ordered by date</returns>
+            <remarks>The periods covered by consolidated result queries with the same period moment.
+            With pay date assignment, periods paid after the current pay date are excluded.</remarks>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrunFunction.GetConsolidatedWageTypeResults(PayrollEngine.Client.Scripting.WageTypeConsolidatedResultQuery)">
             <summary>Returns consolidated wage type results for the current employee, merging retro corrections into the base values</summary>
@@ -10796,6 +10819,15 @@
             <param name="offset">The cycle offset: 0=current, -1=previous, 1=next</param>
             <returns>The offset cycle including the moment</returns>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.CycleDate">
+            <summary>The cycle date of the evaluation period, depending on the calendar cycle assignment:
+            the pay date (payrun job pay date or calendar pay date) or the period end</summary>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetCyclePeriodStart(System.DateTime)">
+            <summary>Get the start of the first period assigned to a cycle</summary>
+            <param name="cycleStart">The cycle start</param>
+            <returns>The start of the first period with a cycle date at or after the cycle start</returns>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetCaseValueType(System.String)">
             <summary>Get case value type</summary>
             <param name="caseFieldName">The case field name</param>
@@ -11020,6 +11052,13 @@
             <param name="jobStatus">The job status</param>
             <param name="tags">The result tags</param>
             <returns>The wage type date range results</returns>
+        </member>
+        <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedPeriodStarts(System.DateTime)">
+            <summary>Gets the consolidated period starts: all periods before the current period
+            with a cycle date (pay date or period end) at or after the period moment.
+            With pay date assignment, periods paid after the current pay date are excluded</summary>
+            <param name="periodMoment">The period moment, typically the cycle start</param>
+            <returns>The period start dates, ordered by date</returns>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrunRuntime.GetConsolidatedWageTypeResults(System.Collections.Generic.IList{System.Decimal},System.DateTime,System.String,System.Nullable{System.Int32},System.Collections.Generic.IList{System.String},System.Boolean)">
             <summary>Gets the consolidated wage type results, from the period moment until the current period</summary>

@@ -61,7 +61,8 @@ public partial class PayrunFunction
     [PayrunAction("GetPrevCycleWageTypeValue", "Get wage type total value of the previous cycle by number", "WageType")]
     public ActionValue GetPrevCycleWageTypeValue(decimal number)
     {
-        var results = GetWageTypeResults([number], PreviousCycle.Start, PreviousCycle.End);
+        var range = GetCyclePeriodRange(-1);
+        var results = GetWageTypeResults([number], range.Start, range.End);
         return results.Any() ? results.Sum(x => x.Value) : 0;
     }
 
@@ -156,7 +157,8 @@ public partial class PayrunFunction
     [PayrunAction("GetPrevCycleCollectorValue", "Get collector total value of the previous cycle", "Collector")]
     public ActionValue GetPrevCycleCollectorValue(string name)
     {
-        var results = GetCollectorResults([name], PreviousCycle.Start, PreviousCycle.End);
+        var range = GetCyclePeriodRange(-1);
+        var results = GetCollectorResults([name], range.Start, range.End);
         return results.Any() ? results.Sum(x => x.Value) : 0;
     }
 

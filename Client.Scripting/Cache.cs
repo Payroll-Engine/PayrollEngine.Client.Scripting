@@ -94,21 +94,13 @@ public abstract class ConsolidatedResultCacheBase
             return null;
         }
 
-        // periods: duplicated in backend domain scripting type PayrunRuntime
-        var periodStarts = new List<DateTime>();
-        var period = function.GetPeriod(query.PeriodMoment);
-        // iterate from the start period until the job period
-        while (period.Start < function.PeriodStart)
-        {
-            periodStarts.Add(period.Start);
-            // next period
-            period = function.GetPeriod(period.Start, 1);
-        }
-        var cycle = function.GetCycle(query.PeriodMoment);
-        if (!periodStarts.All(x => x >= cycle.Start && x <= function.PeriodEnd))
+        // the cache covers the periods from the cache start date
+        var cacheStartDate = GetCacheStartDate(function);
+        if (query.PeriodMoment < cacheStartDate)
         {
             return null;
         }
+        var periodStarts = function.GetConsolidatedPeriodStarts(query.PeriodMoment);
 
         // order periods from newest to oldest
         return [.. periodStarts.OrderByDescending(x => x)];
