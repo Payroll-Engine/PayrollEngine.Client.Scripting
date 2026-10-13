@@ -546,6 +546,37 @@
         <member name="F:PayrollEngine.Client.Scripting.Month.December">
             <summary>December</summary>
         </member>
+        <member name="T:PayrollEngine.Client.Scripting.CalendarTimeUnit">
+            <summary>The calendar time unit</summary>
+            <remarks>The enum value is the number of units per year</remarks>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.Year">
+            <summary>Year</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.SemiYear">
+            <summary>Semi year</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.Quarter">
+            <summary>Quarter</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.BiMonth">
+            <summary>Bi month</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.CalendarMonth">
+            <summary>Calendar month</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.LunisolarMonth">
+            <summary>Lunisolar month</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.SemiMonth">
+            <summary>Semi month</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.BiWeek">
+            <summary>Bi week</summary>
+        </member>
+        <member name="F:PayrollEngine.Client.Scripting.CalendarTimeUnit.Week">
+            <summary>Week</summary>
+        </member>
         <member name="T:PayrollEngine.Client.Scripting.LogLevel">
             <summary>Specifies the meaning and relative importance of a log event</summary>
         </member>
@@ -5825,6 +5856,12 @@
         <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PayrollCulture">
             <summary>The payroll culture</summary>
         </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.CycleTimeUnit">
+            <summary>The calendar cycle time unit</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Function.PayrollFunction.PeriodTimeUnit">
+            <summary>The calendar period time unit, the enum value is the number of periods per year</summary>
+        </member>
         <member name="M:PayrollEngine.Client.Scripting.Function.PayrollFunction.GetCalendarPeriod(System.Nullable{System.DateTime},System.Int32)">
             <summary>Gets the calendar period</summary>
             <param name="moment">Moment within the period (default: today)</param>
@@ -10806,6 +10843,12 @@
             <summary>Get the calendar pay date of a period: period end date plus the calendar pay date offset</summary>
             <param name="periodMoment">The period moment</param>
             <returns>The calendar pay date of the period including the moment</returns>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.CycleTimeUnit">
+            <summary>The calendar cycle time unit (<see cref="T:PayrollEngine.Client.Scripting.CalendarTimeUnit"/>)</summary>
+        </member>
+        <member name="P:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.PeriodTimeUnit">
+            <summary>The calendar period time unit (<see cref="T:PayrollEngine.Client.Scripting.CalendarTimeUnit"/>)</summary>
         </member>
         <member name="M:PayrollEngine.Client.Scripting.Runtime.IPayrollRuntime.GetPeriod(System.DateTime,System.Int32)">
             <summary>Get period by moment and offset</summary>

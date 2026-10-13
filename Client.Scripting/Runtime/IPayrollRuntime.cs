@@ -67,6 +67,12 @@ public interface IPayrollRuntime : IRuntime
     /// <returns>The calendar pay date of the period including the moment</returns>
     DateTime GetPayDate(DateTime periodMoment);
 
+    /// <summary>The calendar cycle time unit (<see cref="CalendarTimeUnit"/>)</summary>
+    int CycleTimeUnit { get; }
+
+    /// <summary>The calendar period time unit (<see cref="CalendarTimeUnit"/>)</summary>
+    int PeriodTimeUnit { get; }
+
     /// <summary>Get period by moment and offset</summary>
     /// <param name="periodMoment">The period moment</param>
     /// <param name="offset">The period offset: 0=current, -1=previous, 1=next</param>

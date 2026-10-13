@@ -60,6 +60,10 @@ public abstract partial class PayrollFunction : Function
         EvaluationPeriod = new(start, end);
         PayDate = Runtime.PayDate;
 
+        // calendar
+        CycleTimeUnit = (CalendarTimeUnit)Runtime.CycleTimeUnit;
+        PeriodTimeUnit = (CalendarTimeUnit)Runtime.PeriodTimeUnit;
+
         // cycle
         CycleDate = Runtime.CycleDate;
         Cycle = GetCycle();
@@ -123,6 +127,12 @@ public abstract partial class PayrollFunction : Function
     #endregion
 
     #region Calendar
+
+    /// <summary>The calendar cycle time unit</summary>
+    public CalendarTimeUnit CycleTimeUnit { get; }
+
+    /// <summary>The calendar period time unit, the enum value is the number of periods per year</summary>
+    public CalendarTimeUnit PeriodTimeUnit { get; }
 
     /// <summary>Gets the calendar period</summary>
     /// <param name="moment">Moment within the period (default: today)</param>
